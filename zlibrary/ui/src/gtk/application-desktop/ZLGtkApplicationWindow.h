@@ -30,6 +30,13 @@
 #include "../../../../core/src/desktop/application/ZLDesktopApplicationWindow.h"
 #include "../optionView/ZLGtkOptionViewHolder.h"
 
+#include <nano-X.h>
+#include <nxcolors.h>
+
+ 	GR_WINDOW_ID win;
+ 	GR_GC_ID gc;
+ 	GR_FONT_ID fontid;
+
 class ZLOptionView;
 
 class ZLGtkApplicationWindow : public ZLDesktopApplicationWindow { 
@@ -64,6 +71,7 @@ public:
 	GtkWindow *getMainWindow() { return myMainWindow; }
 
 private:
+
 	GtkWindow *myMainWindow;
 
 	GtkWidget *myVBox;

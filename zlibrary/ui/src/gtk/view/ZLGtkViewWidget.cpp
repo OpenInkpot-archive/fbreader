@@ -88,13 +88,16 @@ static void mouseMoved(GtkWidget*, GdkEventMotion *event, gpointer data) {
 
 static void doPaint(GtkWidget*, GdkEventExpose *event, gpointer data) {
 	((ZLGtkViewWidget*)data)->doPaint();
+	GrPrint_Apollo();
 }
 
 int ZLGtkViewWidget::width() const {
+	return 600;
 	return (myArea != 0) ? myArea->allocation.width : 0;
 }
 
 int ZLGtkViewWidget::height() const {
+	return 800;
 	return (myArea != 0) ? myArea->allocation.height : 0;
 }
 
@@ -139,6 +142,7 @@ void ZLGtkViewWidget::trackStylus(bool track) {
 
 void ZLGtkViewWidget::repaint()	{
 	gtk_widget_queue_draw(myArea);
+	GrPrint_Apollo();
 }
 
 void ZLGtkViewWidget::doPaint()	{
