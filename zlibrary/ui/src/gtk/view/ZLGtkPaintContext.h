@@ -26,6 +26,13 @@
 
 #include <ZLPaintContext.h>
 
+#include <nano-X.h>
+#include <nxcolors.h>
+extern GR_WINDOW_ID win;
+extern GR_GC_ID gc;
+extern GR_FONT_ID fontid;
+
+
 class ZLGtkPaintContext : public ZLPaintContext {
 
 public:
