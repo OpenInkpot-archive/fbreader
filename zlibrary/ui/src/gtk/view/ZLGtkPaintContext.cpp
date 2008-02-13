@@ -194,6 +194,8 @@ void ZLGtkPaintContext::setFont(const std::string &family, int size, bool bold, 
 		myStringHeight = -1;
 		mySpaceWidth = -1;
 	}
+
+	GrSetFontSize(fontid, size);
 }
 
 void ZLGtkPaintContext::setColor(ZLColor color, LineStyle style) {
@@ -225,7 +227,15 @@ void ZLGtkPaintContext::setFillColor(ZLColor color, FillStyle style) {
 }
 
 int ZLGtkPaintContext::stringWidth(const char *str, int len) const {
-	if (myContext == 0) {
+	GR_SIZE w, h, b;
+
+	GrGetGCTextSize(gc, (void *)str, len, GR_TFUTF8, &w, &h, &b); 
+
+	printf("w h b: %d %d %d\n", w, h, b);
+	return w;
+
+	
+/*	if (myContext == 0) {
 		return 0;
 	}
 
@@ -237,6 +247,7 @@ int ZLGtkPaintContext::stringWidth(const char *str, int len) const {
 	PangoRectangle logicalRectangle;
 	pango_glyph_string_extents(myString, myAnalysis.font, 0, &logicalRectangle);
 	return (logicalRectangle.width + PANGO_SCALE / 2) / PANGO_SCALE;
+*/	
 }
 
 int ZLGtkPaintContext::spaceWidth() const {
@@ -247,13 +258,27 @@ int ZLGtkPaintContext::spaceWidth() const {
 }
 
 int ZLGtkPaintContext::stringHeight() const {
-	if (myFontDescription == 0) {
+	GR_FONT_INFO fi;
+
+
+	GrGetFontInfo(fontid, &fi);
+	return fi.height;
+//FIXME	
+	if (myStringHeight == -1) {
+		GrGetFontInfo(fontid, &fi);
+		myStringHeight = fi.height;
+	}
+	return myStringHeight;
+	
+
+/*	if (myFontDescription == 0) {
 		return 0;
 	}
 	if (myStringHeight == -1) {
 		myStringHeight = pango_font_description_get_size(myFontDescription) / PANGO_SCALE + 2;
 	}
 	return myStringHeight;
+*/	
 }
 
 int ZLGtkPaintContext::descent() const {
@@ -268,11 +293,9 @@ void ZLGtkPaintContext::drawString(int x, int y, const char *str, int len) {
 	pango_shape(str, len, &myAnalysis, myString);
 	gdk_draw_glyphs(myPixmap, myTextGC, myAnalysis.font, x, y, myString);
 
-	printf(">>%s<<\n", str);
+//	printf(">>%s<<\n", str);
 
  	GrText_Apollo(win, gc, x, y, (void *)str, len, GR_TFUTF8);
-
-//	GrPrint_Apollo();
 }
 
 void ZLGtkPaintContext::drawImage(int x, int y, const ZLImageData &image) {
@@ -322,6 +345,13 @@ void ZLGtkPaintContext::fillRectangle(int x0, int y0, int x1, int y1) {
 	gdk_draw_rectangle(myPixmap, myFillGC, true,
 										 x0, y0,
 										 x1 - x0 + 1, y1 - y0 + 1);
+//	GrFillRect(win, gc,
+//						 x0, y0,
+//						 x1 - x0 + 1, y1 - y0 + 1);
+						
+	GrRect_Apollo(win, gc,
+						 x0, y0,
+						 x1 - x0 + 1, y1 - y0 + 1);
 }
 
 void ZLGtkPaintContext::drawFilledCircle(int x, int y, int r) {
