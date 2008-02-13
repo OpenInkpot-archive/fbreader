@@ -13,6 +13,7 @@ endif
 SUBDIRS_ALL = src/win32/library src/win32/encoding src/win32/view src/win32/filesystem src/win32/time src/win32/w32widgets src/win32/dialogs src/win32/application src/win32/image src/win32/config src/win32/message
 QTSUBDIRS_ALL = src/qt/time src/qtopia/message src/qtopia/application src/qtopia/dialogs src/qtopia/optionView src/qtopia/view src/qt/dialogs src/qt/view src/qt/image src/qt/util src/opie/view src/opie/dialogs src/opie/application src/qt/application-desktop src/qt/application-pdaxrom src/opie/library src/qt/library src/qtopia/library src/qt/filesystem src/qt4/time src/qt4/dialogs src/qt4/view src/qt4/image src/qt4/util src/qt4/application src/qt4/library src/qt4/filesystem
 GTKSUBDIRS_ALL = src/gtk/time src/gtk/dialogs src/gtk/optionView src/gtk/view src/gtk/image src/gtk/util src/maemo/dialogs src/maemo/optionView src/maemo/view src/gpe/dialogs src/gpe/view src/gtk/application-desktop src/gtk/application-pdaxrom src/maemo/application src/gpe/application src/maemo/library src/gtk/library src/gpe/library src/gtk/filesystem src/maemo/message src/maemo/message src/gtk/pixbuf
+NXSUBDIRS_ALL = src/nanox/application-desktop src/nanox/application-lbook src/nanox/dialogs src/nanox/library src/nanox/view
 
 SUBDIRS =
 
@@ -30,6 +31,10 @@ endif
 
 ifeq "$(UI_TYPE)" "gpe"
   GTKSUBDIRS = src/gpe/library src/gtk/time src/gpe/dialogs src/gpe/application src/gtk/image src/gtk/util src/gpe/view src/gtk/filesystem src/gtk/pixbuf
+endif
+
+ifeq "$(UI_TYPE)" "nanox"
+  NXSUBDIRS = src/nanox/application-$(TARGET_ARCH) src/nanox/dialogs src/nanox/library src/nanox/view
 endif
 
 ifeq "$(UI_TYPE)" "opie"
@@ -66,6 +71,13 @@ endif
 	@for subdir in $(GTKSUBDIRS); do \
 		if [ -d $$subdir ]; then \
 			if ! $(LIBMAKE) -C $$subdir -f $(MAKEFILESDIR)/gtksubdir.mk; then \
+				exit 1; \
+			fi; \
+		fi; \
+	done;
+	@for subdir in $(NXSUBDIRS); do \
+		if [ -d $$subdir ]; then \
+			if ! $(LIBMAKE) -C $$subdir -f $(MAKEFILESDIR)/nxsubdir.mk; then \
 				exit 1; \
 			fi; \
 		fi; \
@@ -114,6 +126,11 @@ clean:
 	@for subdir in $(GTKSUBDIRS_ALL); do \
 		if [ -d $$subdir ]; then \
 			$(MAKE) -C $$subdir -f $(MAKEFILESDIR)/gtksubdir.mk clean; \
+		fi; \
+	done;
+	@for subdir in $(NXSUBDIRS_ALL); do \
+		if [ -d $$subdir ]; then \
+			$(MAKE) -C $$subdir -f $(MAKEFILESDIR)/nxsubdir.mk clean; \
 		fi; \
 	done;
 	@$(RM) *.so *.so.* *.a
