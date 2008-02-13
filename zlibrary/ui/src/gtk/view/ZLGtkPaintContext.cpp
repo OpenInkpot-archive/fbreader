@@ -231,7 +231,7 @@ int ZLGtkPaintContext::stringWidth(const char *str, int len) const {
 
 	GrGetGCTextSize(gc, (void *)str, len, GR_TFUTF8, &w, &h, &b); 
 
-	printf("w h b: %d %d %d\n", w, h, b);
+//	printf("w h b: %d %d %d\n", w, h, b);
 	return w;
 
 	
