@@ -35,6 +35,12 @@ ifeq "$(UI_TYPE)" "gtk"
   UILIBS = $(shell pkg-config --libs gtk+-2.0) -lpng -ljpeg
 endif
 
+ifeq "$(UI_TYPE)" "nanox"
+  UILIBS = -L$(ROOTDIR)/v3/i386/lib -lnano-X
+  NXINCLUDE = -I$(ROOTDIR)/v3/include/nanox/
+  ZLSHARED = ""
+endif
+
 XML_LIB = -lexpat
 ARCHIVER_LIB = -lz -lbz2
 

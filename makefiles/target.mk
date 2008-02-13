@@ -1,3 +1,6 @@
+#TARGET_ARCH = lbook
+#UI_TYPE = nanox
+
 #TARGET_ARCH = openzaurus
 #UI_TYPE = opie
 #UI_TYPE = gpe
@@ -16,7 +19,8 @@
 #UI_TYPE = nanoX
 
 TARGET_ARCH = desktop
-UI_TYPE = gtk
+UI_TYPE = nanox
+#UI_TYPE = gtk
 #UI_TYPE = qt
 #UI_TYPE = qt4
 

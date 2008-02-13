@@ -28,14 +28,14 @@ ifeq "$(TARGET_STATUS)" "profile"
 	CFLAGS += -O3 -g -pg
 endif
 
-ZINCLUDE = -I $(ROOTDIR)/zlibrary/core/include -I $(ROOTDIR)/zlibrary/text/include -I$(ROOTDIR)/v3/include/nanox/
+ZINCLUDE = -I $(ROOTDIR)/zlibrary/core/include -I $(ROOTDIR)/zlibrary/text/include
 
 ZLSHARED ?= yes
 
 ifeq "$(ZLSHARED)" "yes"
-  CORE_LIBS = -lm -L$(ROOTDIR)/zlibrary/core -lzlcore $(XML_LIB) $(ARCHIVER_LIB) -ldl -L$(ROOTDIR)/v3/i386/lib -lnano-X
+  CORE_LIBS = -lm -L$(ROOTDIR)/zlibrary/core -lzlcore $(XML_LIB) $(ARCHIVER_LIB) -ldl
 else
-  CORE_LIBS = -lm -L$(ROOTDIR)/zlibrary/ui -L$(ROOTDIR)/zlibrary/core -lzlcore -lzlui-$(UI_TYPE) -lzlcore $(UILIBS) $(XML_LIB) $(ARCHIVER_LIB) -L$(ROOTDIR)/v3/i386/lib -lnano-X
+  CORE_LIBS = -lm -L$(ROOTDIR)/zlibrary/ui -L$(ROOTDIR)/zlibrary/core -lzlcore -lzlui-$(UI_TYPE) -lzlcore $(UILIBS) $(XML_LIB) $(ARCHIVER_LIB) 
 
 endif
 
