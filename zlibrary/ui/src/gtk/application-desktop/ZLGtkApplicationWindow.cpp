@@ -107,7 +107,7 @@ ZLGtkApplicationWindow::ZLGtkApplicationWindow(ZLApplication *application) :
 
 	GrOpen();
  	win = GrNewWindow_Apollo(2, 0, 0, 600, 800, 0, GR_COLOR_WHITE, 0);
-	GrMapWindow(win);
+//	GrMapWindow(win);
  
  	GrSetFocus(win);
  
@@ -115,7 +115,7 @@ ZLGtkApplicationWindow::ZLGtkApplicationWindow(ZLApplication *application) :
 
  	GrSetGCBackground(gc, GR_COLOR_WHITE);
     GrSetGCForeground (gc, GR_COLOR_BLACK);
- 	GrSetGCUseBackground(gc, GR_FALSE);
+// 	GrSetGCUseBackground(gc, GR_FALSE);
  
 	GrClearShareMem_Apollo(win, gc, 0xff);
 
