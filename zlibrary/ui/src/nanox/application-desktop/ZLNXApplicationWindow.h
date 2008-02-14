@@ -42,7 +42,6 @@ class ZLNXApplicationWindow : public ZLDesktopApplicationWindow {
 
 	private:
 		ZLViewWidget *createViewWidget();
-		void addToolbarItem(ZLApplication::Toolbar::ItemPtr item);
 		void init();
 		void close();
 

@@ -22,7 +22,7 @@ ifeq "$(TARGET_STATUS)" "release"
 	LDFLAGS += -s
 endif
 ifeq "$(TARGET_STATUS)" "debug"
-	CFLAGS += -O0 -g
+	CFLAGS += -O0 -ggdb3
 endif
 ifeq "$(TARGET_STATUS)" "profile"
 	CFLAGS += -O3 -g -pg

@@ -64,3 +64,6 @@ void ZLNXViewWidget::repaint()	{
 	ZLNXPaintContext &NXContext = (ZLNXPaintContext&)view()->context();
 	view()->paint();
 }
+
+void ZLNXViewWidget::trackStylus(bool track) {
+}
