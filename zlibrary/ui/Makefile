@@ -34,7 +34,7 @@ ifeq "$(UI_TYPE)" "gpe"
 endif
 
 ifeq "$(UI_TYPE)" "nanox"
-  NXSUBDIRS = src/nanox/application-$(TARGET_ARCH) src/nanox/dialogs src/nanox/library src/nanox/view
+  NXSUBDIRS = src/nanox/application-$(TARGET_ARCH) src/nanox/library src/nanox/view
 endif
 
 ifeq "$(UI_TYPE)" "opie"
@@ -87,7 +87,7 @@ $(TARGET): .objects
 	@echo -n "Creating $@ ..."
 	@$(RM_QUIET) $(TARGET)
 ifeq "$(ZLSHARED)" "yes"
-	@$(LD) $(LDFLAGS) -shared -Wl,-soname,$(TARGET) -o $(TARGET) $(patsubst %, %/*.o, $(SUBDIRS) $(QTSUBDIRS) $(GTKSUBDIRS)) $(UILIBS) $(CORE_LIBS)
+	@$(LD) $(LDFLAGS) -shared -Wl,-soname,$(TARGET) -o $(TARGET) $(patsubst %, %/*.o, $(SUBDIRS) $(QTSUBDIRS) $(GTKSUBDIRS) $(NXSUBDIRS)) $(UILIBS) $(CORE_LIBS)
 else
 	@$(AR) $(TARGET) $(patsubst %, %/*.o, $(SUBDIRS) $(QTSUBDIRS) $(GTKSUBDIRS))
 endif
