@@ -39,9 +39,6 @@ class ZLNXViewWidget : public ZLViewWidget {
 		void trackStylus(bool track);
 		void repaint();
 
-		void cleanOriginalPixbuf();
-		void cleanRotatedPixbuf();
-
 		ZLApplication *myApplication;
 };
 

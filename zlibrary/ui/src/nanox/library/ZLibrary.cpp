@@ -26,6 +26,7 @@
 #include "../../../../core/src/unix/xmlconfig/XMLConfig.h"
 #include "../../../../core/src/unix/iconv/IConvEncodingConverter.h"
 
+#include "../filesystem/ZLNXFSManager.h"
 #include "../view/ZLNXPaintContext.h"
 
 class ZLNXLibraryImplementation : public ZLibraryImplementation {
@@ -36,13 +37,16 @@ class ZLNXLibraryImplementation : public ZLibraryImplementation {
 };
 
 void initLibrary() {
+	printf("initLibrary\n");
 	new ZLNXLibraryImplementation();
 }
 
 void ZLNXLibraryImplementation::init(int &argc, char **&argv) {
+	printf("init\n");
 	ZLibrary::parseArguments(argc, argv);
 
 	XMLConfigManager::createInstance();
+	ZLNXFSManager::createInstance();
 	ZLUnixCommunicationManager::createInstance();
 	ZLEncodingCollection::instance().registerProvider(new IConvEncodingConverterProvider());
 }
@@ -53,6 +57,8 @@ ZLPaintContext *ZLNXLibraryImplementation::createContext() {
 
 void ZLNXLibraryImplementation::run(ZLApplication *application) {
 //	ZLDialogManager::instance().createApplicationWindow(application);
+
+	printf("run\n");
 	application->initWindow();
 
 	sleep(10);

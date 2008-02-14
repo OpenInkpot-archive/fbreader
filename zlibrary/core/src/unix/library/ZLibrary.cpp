@@ -103,6 +103,7 @@ bool ZLibrary::init(int &argc, char **&argv) {
 		}
 
 		if (handle == 0) {
+			printf("%s\n", dlerror());
 			return false;
 		}
 	}
