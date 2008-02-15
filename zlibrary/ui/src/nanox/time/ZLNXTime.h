@@ -22,6 +22,12 @@
 
 #include <map>
 
+#include <sys/types.h>
+#include <sys/time.h>
+#include <unistd.h>
+#include <signal.h>
+#include <error.h>
+
 #include "../../../../core/src/unix/time/ZLUnixTime.h"
 
 class ZLNXTimeManager : public ZLUnixTimeManager {
@@ -33,7 +39,7 @@ public:
 	void removeTask(shared_ptr<ZLRunnable> task);
 
 private:
-	std::map<shared_ptr<ZLRunnable>,int> myHandlers;
+	std::map<shared_ptr<ZLRunnable>,timer_t> myHandlers;
 };
 
 #endif /* __ZLNXTIME_H__ */
