@@ -26,18 +26,23 @@ shared_ptr<ZLOptionsDialog> ZLNXDialogManager::createOptionsDialog(const ZLResou
 }
 
 void ZLNXDialogManager::informationBox(const ZLResourceKey &key, const std::string &message) const {
+	printf("informationBox: %s\n", message.c_str());
 }
 
 void ZLNXDialogManager::errorBox(const ZLResourceKey &key, const std::string &message) const {
+	printf("errorBox: %s\n", message.c_str());
 }
 
 int ZLNXDialogManager::questionBox(const ZLResourceKey &key, const std::string &message, const ZLResourceKey &button0, const ZLResourceKey &button1, const ZLResourceKey &button2) const {
+	printf("questionBox: %s\n", message.c_str());
 }
 
 bool ZLNXDialogManager::selectionDialog(const ZLResourceKey &key, ZLTreeHandler &handler) const {
 }
 
 void ZLNXDialogManager::wait(const ZLResourceKey &key, ZLRunnable &runnable) const {
+	printf("wait\n");
+	runnable.run();
 }
 
 bool ZLNXDialogManager::isClipboardSupported(ClipboardType) const {

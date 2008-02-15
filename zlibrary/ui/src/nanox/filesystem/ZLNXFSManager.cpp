@@ -23,9 +23,9 @@ std::string ZLNXFSManager::convertFilenameToUtf8(const std::string &name) const 
 	if (name.empty()) {
 		return name;
 	}
+	printf("filename: %s\n", name.c_str());
 
-	return name;
-
-	std::string convertedName;
+	std::string convertedName = name;
+	printf("converted filename: %s\n", convertedName.c_str());
 	return convertedName;
 }

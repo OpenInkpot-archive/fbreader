@@ -54,11 +54,8 @@ ZLNXApplicationWindow::ZLNXApplicationWindow(ZLApplication *application) :
  	GrSetGCFont(gc, fontid);
  	GrSetFontAttr(fontid, GR_TFKERNING | GR_TFANTIALIAS, 0);
 
- 	GrText_Apollo(win, gc, 5, 20, (void *)"init", 5, GR_TFUTF8);
+ 	GrText_Apollo(win, gc, 5, 20, (void *)"init", 4, GR_TFUTF8);
 	GrPrint_Apollo();
-	sleep(3);
-	
-
 }
 
 void ZLNXApplicationWindow::init() {
@@ -106,3 +103,40 @@ void ZLNXApplicationWindow::grabAllKeys(bool) {
 void ZLNXDialogManager::createApplicationWindow(ZLApplication *application) const {
 	ZLNXApplicationWindow *mw = new ZLNXApplicationWindow(application);
 }
+
+
+#define KEY_BASE 48 
+#define KEY_0 (KEY_BASE)
+#define KEY_9 (9+KEY_BASE)
+#define KEY_PREV KEY_9
+#define KEY_NEXT KEY_0
+#define KEY_CANCEL 'n'
+#define KEY_OK 'y'
+
+void mainLoop(ZLApplication *application)
+{
+	GR_EVENT event;
+	std::string x;
+
+	while (1) {
+    	GrGetNextEvent(&event);
+		switch (event.type) {
+			case GR_EVENT_TYPE_KEY_DOWN:
+				switch(event.keystroke.ch) {		
+					case KEY_NEXT:
+						x = "<PageDown>";
+						application->doActionByKey(x);
+						break;
+
+					case KEY_PREV:
+						x = "<PageUp>";
+						application->doActionByKey(x);
+						break;
+
+					case KEY_CANCEL:
+						return;
+				}
+		}
+	}
+}
+	
