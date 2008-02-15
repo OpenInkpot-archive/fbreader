@@ -56,7 +56,7 @@ void ZLNXTimeManager::addTask(shared_ptr<ZLRunnable> task, int interval) {
 		val.it_value.tv_sec = 0;
 		val.it_value.tv_nsec = interval * 1000;
 		val.it_interval.tv_sec = 0;
-		val.it_interval.tv_nsec = 0;
+		val.it_interval.tv_nsec = interval * 1000;
 
 		if(timer_settime(t_id, 0, &val, 0) == -1) {
 			perror("timer_settime");

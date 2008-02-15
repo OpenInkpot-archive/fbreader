@@ -63,6 +63,7 @@ ZLNXViewWidget::~ZLNXViewWidget() {
 void ZLNXViewWidget::repaint()	{
 	ZLNXPaintContext &NXContext = (ZLNXPaintContext&)view()->context();
 	view()->paint();
+	GrPrint_Apollo();
 }
 
 void ZLNXViewWidget::trackStylus(bool track) {

@@ -31,6 +31,8 @@
 #include "../view/ZLNXPaintContext.h"
 #include "../dialogs/ZLNXDialogManager.h"
 
+extern void mainLoop(ZLApplication *application);
+
 
 class ZLNXLibraryImplementation : public ZLibraryImplementation {
 	private:
@@ -66,11 +68,7 @@ void ZLNXLibraryImplementation::run(ZLApplication *application) {
 	printf("run\n");
 	application->initWindow();
 
-	sleep(3);
-	std::string x("largeScrollForward");
-	application->doActionByKey(x);
-
-	sleep(10);
+	mainLoop(application);
 
 	delete application;
 }
