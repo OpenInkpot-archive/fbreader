@@ -30,6 +30,7 @@
 #include "../time/ZLNXTime.h"
 #include "../view/ZLNXPaintContext.h"
 #include "../dialogs/ZLNXDialogManager.h"
+#include "../image/ZLNXImageManager.h"
 
 extern void mainLoop(ZLApplication *application);
 
@@ -55,6 +56,7 @@ void ZLNXLibraryImplementation::init(int &argc, char **&argv) {
 	ZLNXTimeManager::createInstance();
 	ZLNXDialogManager::createInstance();
 	ZLUnixCommunicationManager::createInstance();
+	ZLNXImageManager::createInstance();
 	ZLEncodingCollection::instance().registerProvider(new IConvEncodingConverterProvider());
 }
 
