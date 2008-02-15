@@ -27,7 +27,10 @@
 #include "../../../../core/src/unix/iconv/IConvEncodingConverter.h"
 
 #include "../filesystem/ZLNXFSManager.h"
+#include "../time/ZLNXTime.h"
 #include "../view/ZLNXPaintContext.h"
+#include "../dialogs/ZLNXDialogManager.h"
+
 
 class ZLNXLibraryImplementation : public ZLibraryImplementation {
 	private:
@@ -47,6 +50,8 @@ void ZLNXLibraryImplementation::init(int &argc, char **&argv) {
 
 	XMLConfigManager::createInstance();
 	ZLNXFSManager::createInstance();
+	ZLNXTimeManager::createInstance();
+	ZLNXDialogManager::createInstance();
 	ZLUnixCommunicationManager::createInstance();
 	ZLEncodingCollection::instance().registerProvider(new IConvEncodingConverterProvider());
 }
@@ -56,10 +61,14 @@ ZLPaintContext *ZLNXLibraryImplementation::createContext() {
 }
 
 void ZLNXLibraryImplementation::run(ZLApplication *application) {
-//	ZLDialogManager::instance().createApplicationWindow(application);
+	ZLDialogManager::instance().createApplicationWindow(application);
 
 	printf("run\n");
 	application->initWindow();
+
+	sleep(3);
+	std::string x("largeScrollForward");
+	application->doActionByKey(x);
 
 	sleep(10);
 

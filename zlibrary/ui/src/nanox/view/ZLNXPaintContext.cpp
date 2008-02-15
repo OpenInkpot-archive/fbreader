@@ -57,6 +57,8 @@ int ZLNXPaintContext::stringWidth(const char *str, int len) const {
 
 	GrGetGCTextSize(gc, (void *)str, len, GR_TFUTF8, &w, &h, &b); 
 
+	printf("w: %d\n", w);
+
 	return w;
 }
 
@@ -81,6 +83,7 @@ int ZLNXPaintContext::descent() const {
 }
 
 void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
+	printf("x %d, y %d: %s\n", str);
  	GrText_Apollo(win, gc, x, y, (void *)str, len, GR_TFUTF8);
 }
 

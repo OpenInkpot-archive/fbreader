@@ -38,6 +38,7 @@ endif
 ifeq "$(UI_TYPE)" "nanox"
   UILIBS = -L$(ROOTDIR)/v3/i386/lib -lnano-X
   NXINCLUDE = -I$(ROOTDIR)/v3/include/nanox/
+  ZLSHARED = no
 endif
 
 XML_LIB = -lexpat

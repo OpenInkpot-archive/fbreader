@@ -23,6 +23,7 @@
 
 #include "../view/ZLNXViewWidget.h"
 #include "../../../../core/src/dialogs/ZLOptionView.h"
+#include "../dialogs/ZLNXDialogManager.h"
 
 #include <nano-X.h>
 #include <nxcolors.h>
@@ -53,9 +54,10 @@ ZLNXApplicationWindow::ZLNXApplicationWindow(ZLApplication *application) :
  	GrSetGCFont(gc, fontid);
  	GrSetFontAttr(fontid, GR_TFKERNING | GR_TFANTIALIAS, 0);
 
-/* 	GrText_Apollo(win, gc, 5, 20, (void *)"init", 5, GR_TFUTF8);
+ 	GrText_Apollo(win, gc, 5, 20, (void *)"init", 5, GR_TFUTF8);
 	GrPrint_Apollo();
-*/	
+	sleep(3);
+	
 
 }
 
@@ -76,10 +78,12 @@ ZLNXApplicationWindow::~ZLNXApplicationWindow() {
 	GrClose();
 }
 
-/*bool ZLNXApplicationWindow::onButtonPress() {
-		application().doActionByKey(ZLNXKeyUtil::keyName(event));
-}*/
+void ZLNXApplicationWindow::onButtonPress() {
+//		application().doActionByKey(ZLNXKeyUtil::keyName(event));
+}
 
+void ZLNXApplicationWindow::addToolbarItem(ZLApplication::Toolbar::ItemPtr item) {
+}
 
 void ZLNXApplicationWindow::setFullscreen(bool fullscreen) {
 }
@@ -97,4 +101,8 @@ void ZLNXApplicationWindow::close() {
 }
 
 void ZLNXApplicationWindow::grabAllKeys(bool) {
+}
+
+void ZLNXDialogManager::createApplicationWindow(ZLApplication *application) const {
+	ZLNXApplicationWindow *mw = new ZLNXApplicationWindow(application);
 }
