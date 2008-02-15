@@ -17,41 +17,23 @@
  * 02110-1301, USA.
  */
 
-#ifndef __ZLNXAPPLICATIONWINDOW_H__
-#define __ZLNXAPPLICATIONWINDOW_H__
+#ifndef __ZLNXTIME_H__
+#define __ZLNXTIME_H__
 
-#include <vector>
 #include <map>
 
-#include "../../../../core/src/desktop/application/ZLDesktopApplicationWindow.h"
+#include "../../../../core/src/unix/time/ZLUnixTime.h"
 
-#include <nano-X.h>
-#include <nxcolors.h>
+class ZLNXTimeManager : public ZLUnixTimeManager {
 
-GR_WINDOW_ID win;
-GR_GC_ID gc;
-GR_FONT_ID fontid;
+public:
+	static void createInstance() { ourInstance = new ZLNXTimeManager(); }
 
-class ZLNXApplicationWindow : public ZLDesktopApplicationWindow { 
+	void addTask(shared_ptr<ZLRunnable> task, int interval);
+	void removeTask(shared_ptr<ZLRunnable> task);
 
-	public:
-		ZLNXApplicationWindow(ZLApplication *application);
-		~ZLNXApplicationWindow();
-
-		void onButtonPress();
-
-	private:
-		ZLNXApplicationWindow *myWindow;
-		ZLViewWidget *createViewWidget();
-		void init();
-		void close();
-
-		void grabAllKeys(bool grab);
-		void addToolbarItem(ZLApplication::Toolbar::ItemPtr item);
-		void setCaption(const std::string &caption) { }
-
-		bool isFullscreen() const;
-		void setFullscreen(bool fullscreen);
+private:
+	std::map<shared_ptr<ZLRunnable>,int> myHandlers;
 };
 
-#endif /* __ZLNXAPPLICATIONWINDOW_H__ */
+#endif /* __ZLNXTIME_H__ */
