@@ -50,6 +50,6 @@ UI_TYPE = nanox
 #TARGET_ARCH = palm
 #UI_TYPE = palm
 
-#TARGET_STATUS = release
-TARGET_STATUS = debug
+TARGET_STATUS = release
+#TARGET_STATUS = debug
 #TARGET_STATUS = profile

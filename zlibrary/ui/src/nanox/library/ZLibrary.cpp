@@ -32,7 +32,8 @@
 #include "../dialogs/ZLNXDialogManager.h"
 #include "../image/ZLNXImageManager.h"
 
-extern void mainLoop(ZLApplication *application);
+class ZLApplication;
+ZLApplication *mainApplication;
 
 
 class ZLNXLibraryImplementation : public ZLibraryImplementation {
@@ -67,10 +68,10 @@ ZLPaintContext *ZLNXLibraryImplementation::createContext() {
 void ZLNXLibraryImplementation::run(ZLApplication *application) {
 	ZLDialogManager::instance().createApplicationWindow(application);
 
-	printf("run\n");
+	printf("ZLNXLibraryImplementation::rrun\n");
 	application->initWindow();
 
-	mainLoop(application);
+	mainApplication = application;
 
-	delete application;
+	//delete application;
 }
