@@ -30,9 +30,6 @@
 #include "../view/ZLGtkViewWidget.h"
 #include "../../../../core/src/dialogs/ZLOptionView.h"
 
-#include <nano-X.h>
-#include <nxcolors.h>
-
 void ZLGtkDialogManager::createApplicationWindow(ZLApplication *application) const {
 	myWindow = (new ZLGtkApplicationWindow(application))->getMainWindow();
 }
@@ -103,35 +100,6 @@ ZLGtkApplicationWindow::ZLGtkApplicationWindow(ZLApplication *application) :
 
 	ZLGtkSignalUtil::connectSignal(GTK_OBJECT(myMainWindow), "key_press_event", G_CALLBACK(handleKeyEvent), this);
 	ZLGtkSignalUtil::connectSignal(GTK_OBJECT(myMainWindow), "scroll_event", G_CALLBACK(handleScrollEvent), this);
-
-
-	GrOpen();
- 	win = GrNewWindow_Apollo(2, 0, 0, 600, 800, 0, GR_COLOR_WHITE, 0);
-//	GrMapWindow(win);
- 
- 	GrSetFocus(win);
- 
- 	gc = GrNewGC_Apollo();
-
-	GrSetGCBackground(gc, GR_COLOR_WHITE);
-	GrSetGCForeground (gc, GR_COLOR_BLACK);
-// 	GrSetGCUseBackground(gc, GR_FALSE);
- 
-	GrClearShareMem_Apollo(win, gc, 0xff);
-
- 	GrSelectEvents(win, GR_EVENT_MASK_KEY_DOWN |
- 		GR_EVENT_MASK_CLOSE_REQ | GR_EVENT_MASK_EXPOSURE);
- 
-   	unsigned char fontname[] = "arial";
- 
- 	fontid = GrCreateFont(fontname, 20, NULL);
- 
- 	GrSetGCFont(gc, fontid);
- 	GrSetFontAttr(fontid, GR_TFKERNING | GR_TFANTIALIAS, 0);
- 	GrText_Apollo(win, gc, 5, 20, (void *)"init", 5, GR_TFUTF8);
-
-	GrPrint_Apollo();
-
 }
 
 void ZLGtkApplicationWindow::init() {
