@@ -19,8 +19,8 @@ all: .resources
 		fi; \
 	done;
 	@echo -n "Linking $(TARGET) ..."
-	@$(LD) $(LDFLAGS) -o $(TARGET) `find src -name *.o` -L$(ROOTDIR)/zlibrary/text -lzltext $(CORE_LIBS)
-	@$(LD) $(LDFLAGS) -o $(TARGET) `find src -name *.o` -L$(ROOTDIR)/zlibrary/text -lzltext $(CORE_LIBS)
+#	@$(LD) $(LDFLAGS) -o $(TARGET) `find src -name *.o` -L$(ROOTDIR)/zlibrary/text -lzltext $(CORE_LIBS)
+#	@$(LD) $(LDFLAGS) -o $(TARGET) `find src -name *.o` -L$(ROOTDIR)/zlibrary/text -lzltext $(CORE_LIBS)
 	$(LD) $(LDFLAGS) -shared -Wl,-soname,$(TARGET).so -o $(TARGET).so `find src -name *.o` -L$(ROOTDIR)/zlibrary/text -lzltext $(CORE_LIBS) $(ROOTDIR)/zlibrary/ui/src/nanox/application-desktop/Viewer.o
 	@echo " OK"
 
