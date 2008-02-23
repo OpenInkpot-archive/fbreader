@@ -115,6 +115,8 @@ int Prev()
 	std::string x;
 	x = "<PageUp>";
 	mainApplication->doActionByKey(x);	
+
+	return 1;
 }
 int Next()
 {
@@ -123,6 +125,8 @@ int Next()
 	std::string x;
 	x = "<PageDown>";
 	mainApplication->doActionByKey(x);	
+
+	return 1;
 }
 
 int IsStandardStatusBarVisible() { return 0; }
