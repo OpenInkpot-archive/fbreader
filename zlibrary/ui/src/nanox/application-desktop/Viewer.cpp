@@ -56,6 +56,17 @@ int InitDoc(char *fileName)
 		}
     }
 #endif
+    char *file;
+
+	if(strstr(fileName, ".pdb.fb2")) {         
+		char buf[200];
+		sprintf(buf, "cp -f %s /root/abook/tmp.pdb", fileName);
+		system(buf);
+		char *pdbFile = "/root/abook/tmp.pdb";
+		file = pdbFile;
+	} else
+		file = fileName;
+
 
 	printf("plugin init\n");
 
@@ -68,7 +79,7 @@ int InitDoc(char *fileName)
 	if (!ZLibrary::init(argc, argv)) {
 		return 0;
 	}
-	ZLibrary::run(new FBReader(fileName));
+	ZLibrary::run(new FBReader(file));
 
 
 	printf("plugin init end\n");
