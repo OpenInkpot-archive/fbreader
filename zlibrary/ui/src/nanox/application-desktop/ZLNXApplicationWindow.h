@@ -25,12 +25,6 @@
 
 #include "../../../../core/src/desktop/application/ZLDesktopApplicationWindow.h"
 
-#include <nano-X.h>
-#include <nxcolors.h>
-
-GR_WINDOW_ID win;
-GR_GC_ID gc;
-GR_FONT_ID fontid;
 
 class ZLNXApplicationWindow : public ZLDesktopApplicationWindow { 
 

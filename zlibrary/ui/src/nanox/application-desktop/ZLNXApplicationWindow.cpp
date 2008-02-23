@@ -25,30 +25,9 @@
 #include "../../../../core/src/dialogs/ZLOptionView.h"
 #include "../dialogs/ZLNXDialogManager.h"
 
-#include <nano-X.h>
-#include <nxcolors.h>
-
 
 ZLNXApplicationWindow::ZLNXApplicationWindow(ZLApplication *application) :
 	ZLDesktopApplicationWindow(application) {
-
-   	unsigned char fontname[] = "arial";
-
-	GrOpen();
- 	gc = GrNewGC();
-
-	GrSetGCForeground(gc, GR_COLOR_BLACK);
-	GrSetGCBackground(gc, GR_COLOR_WHITE);
- 	fontid = GrCreateFont(fontname, 20, 0);
- 	GrSetFontAttr(fontid, GR_TFKERNING | GR_TFANTIALIAS, 0);
-	GrSetBitmapExDepth_Apollo(2);
- 	GrSetGCFont(gc, fontid);
-
- 	win = GrNewWindow_Apollo(GR_APOLLO_ROOT_WINDOW_ID, 0, 0, 600, 800, 0, GR_COLOR_WHITE, 0);
-	printf("win: %d\n", win);
-
-// 	GrText_Apollo(win, gc, 5, 20, (void *)"init", 4, GR_TFUTF8);
-//	GrPrint_Apollo();
 }
 
 void ZLNXApplicationWindow::init() {
@@ -65,7 +44,7 @@ void ZLNXApplicationWindow::init() {
 }
 
 ZLNXApplicationWindow::~ZLNXApplicationWindow() {
-	GrClose();
+	//GrClose();
 }
 
 void ZLNXApplicationWindow::onButtonPress() {

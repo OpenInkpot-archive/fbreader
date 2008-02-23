@@ -14,8 +14,8 @@ CFLAGS = -pipe -fno-exceptions -Wall -Wno-ctor-dtor-privacy -W -DLIBICONV_PLUG -
 LDFLAGS =
 
 ifeq "$(UI_TYPE)" "nanox"
-  UILIBS = -L$(ROOTDIR)/v3/arm/lib -lnano-X -lrt -lpthread
-  NXINCLUDE = -I$(ROOTDIR)/v3/include/nanox/
+  UILIBS = -L$(ROOTDIR)/v3/arm/lib -lfreetype -lrt -lpthread
+  NXINCLUDE = -I$(ROOTDIR)/v3/include/
   EXTERNALINCLUDE = -I$(ROOTDIR)/v3/include/
   ZLSHARED = no
 endif

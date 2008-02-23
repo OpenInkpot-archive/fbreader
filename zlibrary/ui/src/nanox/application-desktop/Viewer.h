@@ -1,8 +1,7 @@
 ///////////////////////////////////////////////////////////
 // Jinke/LBook parser/viewer interface header file
 
-#include <nano-X.h>
-#include <nxcolors.h>
+#include <nanox/nano-X.h>
 
 #ifdef __cplusplus
 extern "C"

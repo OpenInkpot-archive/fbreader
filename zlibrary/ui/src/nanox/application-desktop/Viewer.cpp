@@ -37,13 +37,7 @@ int page;
 
 extern ZLApplication *mainApplication;
 
-extern GR_WINDOW_ID win;
-extern GR_GC_ID gc;
-extern GR_FONT_ID fontid;
-GR_PIXELVAL *pix;
-
 unsigned char *buf;
-
 
 int InitDoc(char *fileName)
 {
@@ -64,15 +58,10 @@ int InitDoc(char *fileName)
 #endif
 
 	printf("plugin init\n");
-	printf("pid: %d\n", getpid());
 
-	int i = 1;
 	page = 0;
-//	while(i) { sleep(1); }
-
 
 	buf = (unsigned char *)malloc(800*600/4);
-	pix = (GR_PIXELVAL*)malloc(600*800*4); 
 
 	int argc = 1;
 	char **argv = NULL;
@@ -90,61 +79,6 @@ int InitDoc(char *fileName)
 void GetPageData(void **data)
 {
 	printf("GetPageData\n");
-	
-//	sleep(1);
-	
-	GrReadArea(win, 0, 0, 600, 800, (GR_PIXELVAL*)pix); 
-
-	unsigned char *h = (unsigned char*)pix;
-	unsigned char *d = buf;
-	int val, f;
-
-#ifdef ARM
-	f = 6;
-	*d = 0;
-	for(int i=0; i < 800*600; i++) {
-//		*d &= ~(0x3 << f);
-		if(f == 6) 
-			*d = 0;
-		
-		*d |= (h[i] << f);
-
-		f -= 2;
-		if(f < 0) {
-			f = 6;
-			d++;
-		}
-	}
-#else	
-
-	f = 6;
-	for(int i=0; i < 800*600; i++) {
-		val = 0.222 * (int)*h + 0.707 * (int)*(h+1) + 0.071 * (int)*(h+2);
-		if(f == 6) 
-			*d = 0;
-//		*d &= ~(0x3 << f);
-		if(val < 0x2a)
-			;							
-		else if(val < 0x7f) 
-			*d |= (0x1 << f);
-		else if(val < 0xd4)
-			*d |= (0x2 << f);
-		else if(val <= 0xff)
-			*d |= (0x3 << f);
-
-		h += 4;
-		f -= 2;		
-		if(f < 0) {
-			f = 6;
-			d++;			
-		}
-	}
-	
-#endif
-
-	//GrClearShareMem_Apollo(wid, gc, 0xff);	 
-
-
 	*data = (void *)buf;
 	printf("GetPageData3\n");
 
@@ -198,7 +132,6 @@ void   vEndDoc()
 {
 	printf("vEndDoc\n");
 	free(buf);
-	free(pix);
 	delete mainApplication;
 	ZLibrary::shutdown();
 }

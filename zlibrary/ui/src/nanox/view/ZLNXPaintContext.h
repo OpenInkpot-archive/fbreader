@@ -20,13 +20,13 @@
 #ifndef __ZLNXPAINTCONTEXT_H__
 #define __ZLNXPAINTCONTEXT_H__
 
-#include <nano-X.h>
-#include <nxcolors.h>
-extern GR_WINDOW_ID win;
-extern GR_GC_ID gc;
-extern GR_FONT_ID fontid;
-
 #include <ZLPaintContext.h>
+
+#include <ft2build.h>
+#include <freetype/freetype.h>
+#include <freetype/ftglyph.h>
+
+#define FTCACHESIZE	1024
 
 class ZLNXPaintContext : public ZLPaintContext {
 
@@ -61,13 +61,18 @@ public:
 private:
 	int myWidth, myHeight;
 
-//	GR_FONT_INFO myFontDescription;
+
+	FT_Library library;
+	FT_Face	face;
+
 
 	std::vector<std::string> myFontFamilies;
 
 	mutable int myStringHeight;
 	mutable int mySpaceWidth;
 	int myDescent;
+
+	void drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y);
 };
 
 #endif /* __ZLNXPAINTCONTEXT_H__ */

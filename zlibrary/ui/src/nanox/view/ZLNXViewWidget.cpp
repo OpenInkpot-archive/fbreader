@@ -20,8 +20,6 @@
 #include "ZLNXViewWidget.h"
 #include "ZLNXPaintContext.h"
 
-extern GR_WINDOW_ID win;
-
 void ZLNXViewWidget::updateCoordinates(int &x, int &y) {
 	switch (rotation()) {
 		default:
@@ -66,9 +64,8 @@ void ZLNXViewWidget::repaint()	{
 	ZLNXPaintContext &NXContext = (ZLNXPaintContext&)view()->context();
 	
 	printf("repaint\n");
-	GrClearShareMem_Apollo(win, gc, 0xff);	 
+	memset(buf, 0xff, 800*600/4);
 	view()->paint();
-//	GrPrint_Apollo();
 }
 
 void ZLNXViewWidget::trackStylus(bool track) {

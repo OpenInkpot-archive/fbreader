@@ -20,10 +20,10 @@
 #ifndef __ZLNXVIEWWIDGET_H__
 #define __ZLNXVIEWWIDGET_H__
 
-#include <nano-X.h>
-
 #include <ZLView.h>
 #include <ZLApplication.h>
+
+extern char *buf;
 
 class ZLNXViewWidget : public ZLViewWidget {
 	public:
