@@ -29,6 +29,7 @@
 #include "Viewer.h"
 #include <sys/types.h>
 
+#include <sys/time.h>
 
 int page;
 
@@ -124,8 +125,24 @@ int Next()
 	page++;
 	std::string x;
 	x = "<PageDown>";
+
+
+	struct timeval tv1, tv2;
+	int sec, usec;
+	gettimeofday(&tv1, NULL);
+
+
 	mainApplication->doActionByKey(x);	
 
+	gettimeofday(&tv2, NULL);
+	sec = tv2.tv_sec - tv1.tv_sec;
+	usec = tv2.tv_usec - tv1.tv_usec;
+	if(usec < 0) {
+		sec--;
+		usec = -usec;
+	}
+	printf("Next: %d.%06d\n", sec, usec);
+		
 	return 1;
 }
 

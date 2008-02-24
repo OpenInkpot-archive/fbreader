@@ -19,6 +19,10 @@
 
 #include <algorithm>
 
+#include <iostream>
+#include <vector>
+#include <map>
+
 #include <ZLUnicodeUtil.h>
 #include <ZLImage.h>
 
@@ -69,15 +73,19 @@ void ZLNXPaintContext::setFillColor(ZLColor color, FillStyle style) {
 
 int ZLNXPaintContext::stringWidth(const char *str, int len) const {
 	int w = 0;
+	int ch_w;
 	char *p = (char *)str;
 	unsigned long         codepoint;
 	unsigned char         in_code;
 	int                   expect;
 	FT_UInt glyph_idx = 0;
 
+
 	while ( *p && len-- > 0)
 	{
 		in_code = *p++ ;
+		if(in_code == 'ü')
+			printf("len %d, in_code %c, in_code_x  %x, expect %d, codepoint %u\n", len, in_code, in_code, expect, codepoint);
 
 		if ( in_code >= 0xC0 )
 		{
@@ -117,11 +125,20 @@ int ZLNXPaintContext::stringWidth(const char *str, int len) const {
 
 //		len--;
 
-		glyph_idx = FT_Get_Char_Index(face, codepoint);
+		if(charWidthCache.find(codepoint) != charWidthCache.end()) {
+			w += charWidthCache[codepoint];
+			continue;
+		}
+
+		glyph_idx = FT_Get_Char_Index(face, codepoint);	
+//		printf("symbol found: codepoint %u, glyph_idx %d\n", codepoint, glyph_idx);
 
 		if(!FT_Load_Glyph(face, glyph_idx,  FT_LOAD_DEFAULT)) {
-			w += ROUND_26_6_TO_INT(face->glyph->advance.x);
-		}
+			ch_w = ROUND_26_6_TO_INT(face->glyph->advance.x);
+			w += ch_w;
+			charWidthCache.insert(std::make_pair(codepoint, ch_w));
+		} else
+			printf("huj glyph %d\n", glyph_idx);
 	}
 
 
@@ -138,7 +155,7 @@ int ZLNXPaintContext::spaceWidth() const {
 int ZLNXPaintContext::stringHeight() const {
 	if (myStringHeight == -1) {
 		//FIXME
-		myStringHeight = 20;
+		myStringHeight = 24;
 	}
 	return myStringHeight;
 }
@@ -268,6 +285,7 @@ void ZLNXPaintContext::drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y)
 		s =  (i & 3) << 1;
 		val = bitmap->buffer[q * bitmap->width + p];
 		*c &= ~(0xc0 >> s);
+
 		if(val < 0x2a)
 			*c |= (0xc0 >> s);
 		else if(val < 0x7f) 
@@ -276,6 +294,7 @@ void ZLNXPaintContext::drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y)
 			*c |= (0x40 >> s);
 		else if(val <= 0xff)
 			;
+
 	}
   }
 }

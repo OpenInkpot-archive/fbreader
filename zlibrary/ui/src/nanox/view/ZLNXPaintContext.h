@@ -22,11 +22,11 @@
 
 #include <ZLPaintContext.h>
 
+#include <map>
+
 #include <ft2build.h>
 #include <freetype/freetype.h>
 #include <freetype/ftglyph.h>
-
-#define FTCACHESIZE	1024
 
 class ZLNXPaintContext : public ZLPaintContext {
 
@@ -71,6 +71,9 @@ private:
 	mutable int myStringHeight;
 	mutable int mySpaceWidth;
 	int myDescent;
+
+	mutable std::map<unsigned long, int> charWidthCache;
+	mutable std::map<unsigned long, FT_Glyph> glyphCache;
 
 	void drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y);
 };
