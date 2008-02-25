@@ -10,7 +10,7 @@ CC = arm-linux-gcc
 AR = arm-linux-ar rsu
 LD = arm-linux-g++
 
-CFLAGS = -pipe -fno-exceptions -Wall -Wno-ctor-dtor-privacy -W -DLIBICONV_PLUG -DARM
+CFLAGS = -pipe -fno-exceptions -Wall -Wno-ctor-dtor-privacy -W -DLIBICONV_PLUG -DARM -DXMLCONFIGHOMEDIR=\"/home\"
 LDFLAGS =
 
 ifeq "$(UI_TYPE)" "nanox"
