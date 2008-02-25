@@ -63,6 +63,7 @@ const std::string ZLNXPaintContext::realFontFamilyName(std::string &fontFamily) 
 }
 
 void ZLNXPaintContext::setFont(const std::string &family, int size, bool bold, bool italic) {
+	printf("setFont: %s, %d, %d, %d\n", family.c_str(), size, bold?1:0, italic?1:0);
 }
 
 void ZLNXPaintContext::setColor(ZLColor color, LineStyle style) {
@@ -280,9 +281,14 @@ void ZLNXPaintContext::drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y)
            i >= myWidth || j >= myHeight )
         continue;
 
-		c = buf + i / 4 + myWidth * j / 4;
 
+		c = buf + i / 4 + myWidth * j / 4;
 		s =  (i & 3) << 1;
+
+/* rotation - 90	  
+		c = buf + i * myHeight / 4 + (myHeight - j - 1) / 4;
+		s = (3  - j & 3) * 2;
+*/		
 		val = bitmap->buffer[q * bitmap->width + p];
 		*c &= ~(0xc0 >> s);
 
