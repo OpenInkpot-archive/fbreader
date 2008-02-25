@@ -98,10 +98,10 @@ void GetPageData(void **data)
 
 void vSetDisplayState(Apollo_State *state) {printf("1\n");}
 extern "C"{
-void vSetCurPage(int p) {printf("2\n");}
-int bGetRotate() {printf("3\n"); return 0;}
-void vSetRotate(int rot) {printf("4\n");}
-void vGetTotalPage(int *iTotalPage) { *iTotalPage = 5; }
+void vSetCurPage(int p) { printf("vSetCurPage: %d\n", p);}
+int bGetRotate() {printf("GetRotate\n"); return 0;}
+void vSetRotate(int rot) { printf("vSetRotate: %d\n", rot); }
+void vGetTotalPage(int *iTotalPage) { printf("vGetTotalPage\n"); *iTotalPage = 100; }
 int GetPageIndex() { return 1; }
 int Origin() {printf("6\n");}
 void vFontBigger() {printf("7\n");}
@@ -147,10 +147,10 @@ int Next()
 }
 
 int IsStandardStatusBarVisible() { return 0; }
-int GotoPage(int index) {printf("12\n");}
+int GotoPage(int index) { printf("GotoPage: %d\n", index); }
 void Release() {printf("13\n");}
 void GetPageDimension(int *width, int *height) { *width = 600; *height = 800; }
-void SetPageDimension(int width, int height) {printf("14\n"); printf("setpagedimension: %dx%d\n", width, height);}
+void SetPageDimension(int width, int height) {printf("setpagedimension: %dx%d\n", width, height);}
 double dGetResizePro() {printf("15\n");}
 void vSetResizePro(double dSetPro) {printf("16\n");}
 int GetPageNum() { return page; }
@@ -159,7 +159,7 @@ void vSetUserData(void *vUserData, int iUserDataLength){printf("18\n");}
 int iGetDocPageWidth(){printf("19\n"); return 600;}
 int iGetDocPageHeight(){printf("20\n"); return 800;}
 unsigned short usGetLeftBarFlag(){printf("21\n");}
-void   vEndInit(int iEndStyle){printf("22\n");}
+void   vEndInit(int iEndStyle) { printf("vEndInit: %d\n", iEndStyle); }
 void   vEndDoc()
 {
 	printf("vEndDoc\n");
@@ -167,7 +167,7 @@ void   vEndDoc()
 	delete mainApplication;
 	ZLibrary::shutdown();
 }
-int  iInitDocF(char *filename,int pageNo, int flag){printf("24\n"); return 0;}
+int  iInitDocF(char *filename,int pageNo, int flag) { printf("iInitDocF: %c %d %d\n", filename, pageNo, flag); return 0;}
 void   vFirstBmp(char *fileName, int pageNo){printf("25\n");}
 int	iGetCurDirPage(int idx, int level){printf("26\n");}
 int	iCreateDirList() { printf("huj\n"); return 0;}
