@@ -135,7 +135,7 @@ int ZLNXPaintContext::stringWidth(const char *str, int len) const {
 //		printf("symbol found: codepoint %u, glyph_idx %d\n", codepoint, glyph_idx);
 
 		if(!FT_Load_Glyph(face, glyph_idx,  FT_LOAD_DEFAULT)) {
-			ch_w = ROUND_26_6_TO_INT(face->glyph->advance.x);
+			ch_w = ROUND_26_6_TO_INT(face->glyph->advance.x); // or face->glyph->metrics->horiAdvance << 6
 			w += ch_w;
 			charWidthCache.insert(std::make_pair(codepoint, ch_w));
 		} else
@@ -166,7 +166,7 @@ int ZLNXPaintContext::descent() const {
 }
 
 void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
-	FT_GlyphSlot  slot;
+	FT_GlyphSlot  slot = face->glyph;
 	FT_BitmapGlyph glyph;
 	FT_Matrix     matrix;                 /* transformation matrix */
 	FT_Vector     pen;                    /* untransformed origin  */
@@ -229,13 +229,12 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 		  continue;
 	  }
 
-	  drawGlyph( &face->glyph->bitmap,
-			  pen.x + face->glyph->bitmap_left,
-			  pen.y - face->glyph->bitmap_top);
+	  drawGlyph( &slot->bitmap,
+			  pen.x + slot->bitmap_left,
+			  pen.y - slot->bitmap_top);
 
 	  /* increment pen position */
-	  pen.x += face->glyph->advance.x >> 6;
-	  pen.y += face->glyph->advance.y >> 6;
+	  pen.x += slot->advance.x >> 6;
 
 	}
 	
