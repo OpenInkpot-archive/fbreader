@@ -63,8 +63,19 @@ private:
 
 
 	FT_Library library;
-	FT_Face	face;
 
+	FT_Face	*face;
+	FT_Face faceNormal, faceBold, faceItalic, faceItalicBold;
+
+	int fCurSize;
+	bool fItalic;
+	bool fBold;
+
+	mutable std::map<int, std::map<unsigned long, int> > charWidthCacheAll;
+	mutable std::map<unsigned long, int> *charWidthCache;
+
+	mutable std::map<int, std::map<unsigned long, FT_BitmapGlyph> > glyphCacheAll;
+	mutable std::map<unsigned long, FT_BitmapGlyph> *glyphCache;
 
 	std::vector<std::string> myFontFamilies;
 
@@ -72,8 +83,6 @@ private:
 	mutable int mySpaceWidth;
 	int myDescent;
 
-	mutable std::map<unsigned long, int> charWidthCache;
-	mutable std::map<unsigned long, FT_Glyph> glyphCache;
 
 	void drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y);
 };

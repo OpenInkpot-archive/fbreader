@@ -39,18 +39,32 @@ ZLNXPaintContext::ZLNXPaintContext() {
 	mySpaceWidth = -1;
 	myDescent = 0;
 
+	fCurSize = 0;
+	fItalic = false;
+	fBold = false;
+
 	char *fontname ="/root/fonts/truetype/arial.ttf";
 	FT_Error error;
 
 	error = FT_Init_FreeType( &library );
-	error = FT_New_Face( library, fontname, 0, &face );
-	error = FT_Set_Char_Size( face, 12 * 64, 0, 160, 0 ); 
+	error = FT_New_Face( library, "/root/fonts/truetype/arial.ttf", 0, &faceNormal );
+	error = FT_New_Face( library, "/root/fonts/truetype/ariali.ttf", 0, &faceItalic );
+	error = FT_New_Face( library, "/root/fonts/truetype/arialbd.ttf", 0, &faceBold );
+	error = FT_New_Face( library, "/root/fonts/truetype/arialbi.ttf", 0, &faceItalicBold );
+
+
 }
 
 ZLNXPaintContext::~ZLNXPaintContext() {
-	if(face)
-		FT_Done_Face(face);
-	
+	if(faceNormal)
+		FT_Done_Face(faceNormal);
+	if(faceItalic)
+		FT_Done_Face(faceItalic);
+	if(faceBold)
+		FT_Done_Face(faceBold);
+	if(faceItalicBold)
+		FT_Done_Face(faceItalicBold);
+
 	if(library)
 		FT_Done_FreeType(library);
 }
@@ -63,7 +77,37 @@ const std::string ZLNXPaintContext::realFontFamilyName(std::string &fontFamily) 
 }
 
 void ZLNXPaintContext::setFont(const std::string &family, int size, bool bold, bool italic) {
-	printf("setFont: %s, %d, %d, %d\n", family.c_str(), size, bold?1:0, italic?1:0);
+	//printf("setFont: %s, %d, %d, %d\n", family.c_str(), size, bold?1:0, italic?1:0);
+/*	if(fItalic != italic)
+		fItalic = italic;
+
+	if(fBold != bold)
+		fBold = bold;
+*/
+
+
+	if(fItalic && fBold)
+		face = &faceItalicBold;
+	else if(fItalic)
+		face = &faceItalic;
+	else if(fBold)
+		face = &faceBold;
+	else
+		face = &faceNormal;
+
+
+	if(fCurSize != size) {	
+		if(!FT_Set_Char_Size( *face, size * 64, 0, 160, 160 )) 
+			fCurSize = size;
+	}
+
+
+	charWidthCache = &charWidthCacheAll[fCurSize * 10 + (fItalic ? 1 : 0) + (fBold ? 2 : 0)];
+
+	glyphCache = &glyphCacheAll[fCurSize * 10 + (fItalic ? 1 : 0) + (fBold ? 2 : 0)];
+
+	myStringHeight = fCurSize * 2;
+	mySpaceWidth = -1;
 }
 
 void ZLNXPaintContext::setColor(ZLColor color, LineStyle style) {
@@ -80,13 +124,16 @@ int ZLNXPaintContext::stringWidth(const char *str, int len) const {
 	unsigned char         in_code;
 	int                   expect;
 	FT_UInt glyph_idx = 0;
+	FT_UInt previous;
+	FT_Bool use_kerning;
+	FT_Vector delta; 
+	int kerning = 0;
 
+	use_kerning = (*face)->face_flags & FT_FACE_FLAG_KERNING;
 
 	while ( *p && len-- > 0)
 	{
 		in_code = *p++ ;
-		if(in_code == 'ü')
-			printf("len %d, in_code %c, in_code_x  %x, expect %d, codepoint %u\n", len, in_code, in_code, expect, codepoint);
 
 		if ( in_code >= 0xC0 )
 		{
@@ -124,22 +171,27 @@ int ZLNXPaintContext::stringWidth(const char *str, int len) const {
 		else                              /* ASCII, U+0000 - U+007F */
 			codepoint = in_code;
 
-//		len--;
+		glyph_idx = FT_Get_Char_Index(*face, codepoint);	
+		if ( use_kerning && previous && glyph_idx ) { 
+			FT_Get_Kerning( *face, previous, glyph_idx, FT_KERNING_DEFAULT, &delta ); 
+			kerning = delta.x >> 6;
+		} else 
+			kerning = 0;
 
-		if(charWidthCache.find(codepoint) != charWidthCache.end()) {
-			w += charWidthCache[codepoint];
-			continue;
+		if(charWidthCache->find(codepoint) != charWidthCache->end()) {
+			w += (*charWidthCache)[codepoint] + kerning;
+		} else {
+			//		printf("symbol found: codepoint %u, glyph_idx %d\n", codepoint, glyph_idx);
+
+			if(!FT_Load_Glyph(*face, glyph_idx,  FT_LOAD_DEFAULT)) {
+				ch_w = ROUND_26_6_TO_INT((*face)->glyph->advance.x); // or face->glyph->metrics->horiAdvance >> 6
+				w += ch_w + kerning;
+				charWidthCache->insert(std::make_pair(codepoint, ch_w));
+			} else
+				printf("glyph %d not found\n", glyph_idx);
 		}
+		previous = glyph_idx;
 
-		glyph_idx = FT_Get_Char_Index(face, codepoint);	
-//		printf("symbol found: codepoint %u, glyph_idx %d\n", codepoint, glyph_idx);
-
-		if(!FT_Load_Glyph(face, glyph_idx,  FT_LOAD_DEFAULT)) {
-			ch_w = ROUND_26_6_TO_INT(face->glyph->advance.x); // or face->glyph->metrics->horiAdvance << 6
-			w += ch_w;
-			charWidthCache.insert(std::make_pair(codepoint, ch_w));
-		} else
-			printf("huj glyph %d\n", glyph_idx);
 	}
 
 
@@ -156,7 +208,8 @@ int ZLNXPaintContext::spaceWidth() const {
 int ZLNXPaintContext::stringHeight() const {
 	if (myStringHeight == -1) {
 		//FIXME
-		myStringHeight = 24;
+//		myStringHeight = (*face)->size->metrics.height >> 6;
+//		printf("myStringHeight: %d\n", myStringHeight);
 	}
 	return myStringHeight;
 }
@@ -166,12 +219,19 @@ int ZLNXPaintContext::descent() const {
 }
 
 void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
-	FT_GlyphSlot  slot = face->glyph;
+	FT_GlyphSlot  slot = (*face)->glyph;
 	FT_BitmapGlyph glyph;
+	FT_BitmapGlyph *pglyph;
 	FT_Matrix     matrix;                 /* transformation matrix */
 	FT_Vector     pen;                    /* untransformed origin  */
 
 	FT_UInt glyph_idx = 0;
+	FT_UInt previous;
+	FT_Bool use_kerning;
+	FT_Vector delta; 
+	int kerning = 0;
+
+	use_kerning = (*face)->face_flags & FT_FACE_FLAG_KERNING;
 
     char *p = (char *)str;
     unsigned long         codepoint;
@@ -223,20 +283,40 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
       else                              /* ASCII, U+0000 - U+007F */
         codepoint = in_code;
 
-	  glyph_idx = FT_Get_Char_Index(face, codepoint);
+	  glyph_idx = FT_Get_Char_Index(*face, codepoint);	
+	  if ( use_kerning && previous && glyph_idx ) { 
+		  FT_Get_Kerning( *face, previous, glyph_idx, FT_KERNING_DEFAULT, &delta ); 
+		  kerning = delta.x >> 6;
+	  } else 
+		  kerning = 0;
 
-	  if(FT_Load_Glyph(face, glyph_idx,  FT_LOAD_RENDER |  FT_LOAD_TARGET_NORMAL)){
-		  continue;
+	  if(glyphCache->find(codepoint) != glyphCache->end()) { 
+		  pglyph = &(*glyphCache)[codepoint];
+	  } else {
+		  if(FT_Load_Glyph(*face, glyph_idx,  FT_LOAD_RENDER |  FT_LOAD_TARGET_NORMAL)){
+			  continue;
+		  }	
+
+		  FT_Get_Glyph(slot, (FT_Glyph*)&glyph);
+	  		
+		  glyph->root.advance.x = slot->advance.x;	  
+
+		  (*glyphCache)[codepoint] = glyph;		  
+		  pglyph = &glyph;
 	  }
+	
 
-	  drawGlyph( &slot->bitmap,
-			  pen.x + slot->bitmap_left,
-			  pen.y - slot->bitmap_top);
+
+	  drawGlyph( &(*pglyph)->bitmap,
+			  pen.x + (*pglyph)->left,
+			  pen.y - (*pglyph)->top);
+
 
 	  /* increment pen position */
-	  pen.x += slot->advance.x >> 6;
+	  pen.x += (*pglyph)->root.advance.x >> 6;
 
 	}
+	previous = glyph_idx;
 	
 }
 
