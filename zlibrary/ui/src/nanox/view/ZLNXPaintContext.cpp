@@ -43,6 +43,7 @@ ZLNXPaintContext::ZLNXPaintContext() {
 	fItalic = false;
 	fBold = false;
 
+
 	char *fontname ="/root/fonts/truetype/arial.ttf";
 	FT_Error error;
 
@@ -64,6 +65,16 @@ ZLNXPaintContext::~ZLNXPaintContext() {
 		FT_Done_Face(faceBold);
 	if(faceItalicBold)
 		FT_Done_Face(faceItalicBold);
+
+	std::map<int, std::map<unsigned long, FT_BitmapGlyph> >::iterator piter = glyphCacheAll.begin();
+	while(piter != glyphCacheAll.end()) {
+		std::map<unsigned long, FT_BitmapGlyph>::iterator piter2 = piter->second.begin();
+		while(piter2 != piter->second.end()) {
+			FT_Bitmap_Done(library, (FT_Bitmap*)&(piter2->second->bitmap));			
+			piter2++;
+		}
+		piter++;
+	}
 
 	if(library)
 		FT_Done_FreeType(library);
@@ -243,77 +254,77 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 	pen.y = y;
 
 
-    while ( *p && len--)
-    {
-      in_code = *p++ ;
+	while ( *p && len--)
+	{
+		in_code = *p++ ;
 
-      if ( in_code >= 0xC0 )
-      {
-        if ( in_code < 0xE0 )           /*  U+0080 - U+07FF   */
-        {
-          expect = 1;
-          codepoint = in_code & 0x1F;
-        }
-        else if ( in_code < 0xF0 )      /*  U+0800 - U+FFFF   */
-        {
-          expect = 2;
-          codepoint = in_code & 0x0F;
-        }
-        else if ( in_code < 0xF8 )      /* U+10000 - U+10FFFF */
-        {
-          expect = 3;
-          codepoint = in_code & 0x07;
-        }
-        continue;
-      }
-      else if ( in_code >= 0x80 )
-      {
-        --expect;
+		if ( in_code >= 0xC0 )
+		{
+			if ( in_code < 0xE0 )           /*  U+0080 - U+07FF   */
+			{
+				expect = 1;
+				codepoint = in_code & 0x1F;
+			}
+			else if ( in_code < 0xF0 )      /*  U+0800 - U+FFFF   */
+			{
+				expect = 2;
+				codepoint = in_code & 0x0F;
+			}
+			else if ( in_code < 0xF8 )      /* U+10000 - U+10FFFF */
+			{
+				expect = 3;
+				codepoint = in_code & 0x07;
+			}
+			continue;
+		}
+		else if ( in_code >= 0x80 )
+		{
+			--expect;
 
-        if ( expect >= 0 )
-        {
-          codepoint <<= 6;
-          codepoint  += in_code & 0x3F;
-        }
-        if ( expect >  0 )
-          continue;
+			if ( expect >= 0 )
+			{
+				codepoint <<= 6;
+				codepoint  += in_code & 0x3F;
+			}
+			if ( expect >  0 )
+				continue;
 
-        expect = 0;
-      }
-      else                              /* ASCII, U+0000 - U+007F */
-        codepoint = in_code;
+			expect = 0;
+		}
+		else                              /* ASCII, U+0000 - U+007F */
+			codepoint = in_code;
 
-	  glyph_idx = FT_Get_Char_Index(*face, codepoint);	
-	  if ( use_kerning && previous && glyph_idx ) { 
-		  FT_Get_Kerning( *face, previous, glyph_idx, FT_KERNING_DEFAULT, &delta ); 
-		  kerning = delta.x >> 6;
-	  } else 
-		  kerning = 0;
+		glyph_idx = FT_Get_Char_Index(*face, codepoint);	
+		if ( use_kerning && previous && glyph_idx ) { 
+			FT_Get_Kerning( *face, previous, glyph_idx, FT_KERNING_DEFAULT, &delta ); 
+			kerning = delta.x >> 6;
+		} else 
+			kerning = 0;
 
-	  if(glyphCache->find(codepoint) != glyphCache->end()) { 
-		  pglyph = &(*glyphCache)[codepoint];
-	  } else {
-		  if(FT_Load_Glyph(*face, glyph_idx,  FT_LOAD_RENDER |  FT_LOAD_TARGET_NORMAL)){
-			  continue;
-		  }	
+		if(glyphCache->find(codepoint) != glyphCache->end()) { 
+			pglyph = &(*glyphCache)[codepoint];
+		} else {
+			if(FT_Load_Glyph(*face, glyph_idx,  FT_LOAD_RENDER |  FT_LOAD_TARGET_NORMAL)){
+				continue;
+			}	
 
-		  FT_Get_Glyph(slot, (FT_Glyph*)&glyph);
-	  		
-		  glyph->root.advance.x = slot->advance.x;	  
+			FT_Get_Glyph(slot, (FT_Glyph*)&glyph);
 
-		  (*glyphCache)[codepoint] = glyph;		  
-		  pglyph = &glyph;
-	  }
-	
+			glyph->root.advance.x = slot->advance.x;	  
 
-
-	  drawGlyph( &(*pglyph)->bitmap,
-			  pen.x + (*pglyph)->left,
-			  pen.y - (*pglyph)->top);
+			(*glyphCache)[codepoint] = glyph;		  
+			pglyph = &glyph;
+		}
 
 
-	  /* increment pen position */
-	  pen.x += (*pglyph)->root.advance.x >> 6;
+
+		drawGlyph( &(*pglyph)->bitmap,
+				pen.x + (*pglyph)->left,
+				pen.y - (*pglyph)->top);
+
+
+		/* increment pen position */
+		pen.x += (*pglyph)->root.advance.x >> 6;
 
 	}
 	previous = glyph_idx;
