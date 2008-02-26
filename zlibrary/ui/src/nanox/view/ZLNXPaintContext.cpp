@@ -48,10 +48,10 @@ ZLNXPaintContext::ZLNXPaintContext() {
 	FT_Error error;
 
 	error = FT_Init_FreeType( &library );
-	error = FT_New_Face( library, "/root/fonts/truetype/arial.ttf", 0, &faceNormal );
-	error = FT_New_Face( library, "/root/fonts/truetype/ariali.ttf", 0, &faceItalic );
-	error = FT_New_Face( library, "/root/fonts/truetype/arialbd.ttf", 0, &faceBold );
-	error = FT_New_Face( library, "/root/fonts/truetype/arialbi.ttf", 0, &faceItalicBold );
+	error = FT_New_Face( library, "/root/fonts/truetype/times.ttf", 0, &faceNormal );
+	error = FT_New_Face( library, "/root/fonts/truetype/timesi.ttf", 0, &faceItalic );
+	error = FT_New_Face( library, "/root/fonts/truetype/timesbd.ttf", 0, &faceBold );
+	error = FT_New_Face( library, "/root/fonts/truetype/timesbi.ttf", 0, &faceItalicBold );
 
 
 }
@@ -89,13 +89,11 @@ const std::string ZLNXPaintContext::realFontFamilyName(std::string &fontFamily) 
 
 void ZLNXPaintContext::setFont(const std::string &family, int size, bool bold, bool italic) {
 	//printf("setFont: %s, %d, %d, %d\n", family.c_str(), size, bold?1:0, italic?1:0);
-/*	if(fItalic != italic)
+	if(fItalic != italic)
 		fItalic = italic;
 
 	if(fBold != bold)
 		fBold = bold;
-*/
-
 
 	if(fItalic && fBold)
 		face = &faceItalicBold;
@@ -107,15 +105,14 @@ void ZLNXPaintContext::setFont(const std::string &family, int size, bool bold, b
 		face = &faceNormal;
 
 
-	if(fCurSize != size) {	
-		if(!FT_Set_Char_Size( *face, size * 64, 0, 160, 160 )) 
-			fCurSize = size;
-	}
+	fCurSize = size;
+	FT_Set_Char_Size( *face, fCurSize * 64, 0, 160, 0 );
 
 
-	charWidthCache = &charWidthCacheAll[fCurSize * 10 + (fItalic ? 1 : 0) + (fBold ? 2 : 0)];
+	int key = fCurSize * 10 + (fItalic ? 1 : 0) + (fBold ? 2 : 0);
 
-	glyphCache = &glyphCacheAll[fCurSize * 10 + (fItalic ? 1 : 0) + (fBold ? 2 : 0)];
+	charWidthCache = &charWidthCacheAll[key];
+	glyphCache = &glyphCacheAll[key];
 
 	myStringHeight = fCurSize * 2;
 	mySpaceWidth = -1;
@@ -192,14 +189,13 @@ int ZLNXPaintContext::stringWidth(const char *str, int len) const {
 		if(charWidthCache->find(codepoint) != charWidthCache->end()) {
 			w += (*charWidthCache)[codepoint] + kerning;
 		} else {
-			//		printf("symbol found: codepoint %u, glyph_idx %d\n", codepoint, glyph_idx);
-
 			if(!FT_Load_Glyph(*face, glyph_idx,  FT_LOAD_DEFAULT)) {
 				ch_w = ROUND_26_6_TO_INT((*face)->glyph->advance.x); // or face->glyph->metrics->horiAdvance >> 6
 				w += ch_w + kerning;
 				charWidthCache->insert(std::make_pair(codepoint, ch_w));
-			} else
-				printf("glyph %d not found\n", glyph_idx);
+			} 
+		//	else
+		//		printf("glyph %d not found\n", glyph_idx);
 		}
 		previous = glyph_idx;
 
@@ -240,7 +236,6 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 	FT_UInt previous;
 	FT_Bool use_kerning;
 	FT_Vector delta; 
-	int kerning = 0;
 
 	use_kerning = (*face)->face_flags & FT_FACE_FLAG_KERNING;
 
@@ -297,9 +292,8 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 		glyph_idx = FT_Get_Char_Index(*face, codepoint);	
 		if ( use_kerning && previous && glyph_idx ) { 
 			FT_Get_Kerning( *face, previous, glyph_idx, FT_KERNING_DEFAULT, &delta ); 
-			kerning = delta.x >> 6;
-		} else 
-			kerning = 0;
+			pen.x += delta.x >> 6;		
+		}
 
 		if(glyphCache->find(codepoint) != glyphCache->end()) { 
 			pglyph = &(*glyphCache)[codepoint];
@@ -310,13 +304,11 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 
 			FT_Get_Glyph(slot, (FT_Glyph*)&glyph);
 
-			glyph->root.advance.x = slot->advance.x;	  
+			glyph->root.advance.x = slot->advance.x;	  			
 
 			(*glyphCache)[codepoint] = glyph;		  
 			pglyph = &glyph;
 		}
-
-
 
 		drawGlyph( &(*pglyph)->bitmap,
 				pen.x + (*pglyph)->left,
@@ -325,7 +317,6 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 
 		/* increment pen position */
 		pen.x += (*pglyph)->root.advance.x >> 6;
-
 	}
 	previous = glyph_idx;
 	
@@ -380,16 +371,14 @@ void ZLNXPaintContext::drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y)
 		s = (3  - j & 3) * 2;
 */		
 		val = bitmap->buffer[q * bitmap->width + p];
-		*c &= ~(0xc0 >> s);
 
-		if(val < 0x2a)
-			*c |= (0xc0 >> s);
-		else if(val < 0x7f) 
-			*c |= (0x80 >> s);
-		else if(val < 0xd4)
-			*c |= (0x40 >> s);
-		else if(val <= 0xff)
-			;
+		if(val >= 0x2a) {
+			*c &= ~(0xc0 >> s);
+			if(val < 0x7f)
+				*c |= (0x80 >> s);
+			else if(val < 0xd4)
+				*c |= (0x40 >> s);
+		}
 
 	}
   }
