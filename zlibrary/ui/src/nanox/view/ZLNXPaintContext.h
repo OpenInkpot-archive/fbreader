@@ -25,8 +25,9 @@
 #include <map>
 
 #include <ft2build.h>
-#include <freetype/freetype.h>
-#include <freetype/ftglyph.h>
+#include FT_FREETYPE_H
+#include FT_GLYPH_H
+#include FT_BITMAP_H
 
 class ZLNXPaintContext : public ZLPaintContext {
 
