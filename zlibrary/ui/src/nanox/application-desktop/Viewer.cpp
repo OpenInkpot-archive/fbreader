@@ -154,7 +154,16 @@ void SetPageDimension(int width, int height) {printf("setpagedimension: %dx%d\n"
 double dGetResizePro() {printf("15\n");}
 void vSetResizePro(double dSetPro) {printf("16\n");}
 int GetPageNum() { return page; }
-void bGetUserData(void **vUserData, int *iUserDataLength) {printf("17\n");}
+void bGetUserData(void **vUserData, int *iUserDataLength) {
+/*    static int testData[] = {1, 2, 3, 4};
+
+    *vUserData = testData;
+    *iUserDataLength = 1;
+*/	
+
+// WTF?
+	vEndDoc();
+}
 void vSetUserData(void *vUserData, int iUserDataLength){printf("18\n");}
 int iGetDocPageWidth(){printf("19\n"); return 600;}
 int iGetDocPageHeight(){printf("20\n"); return 800;}
@@ -162,8 +171,8 @@ unsigned short usGetLeftBarFlag(){printf("21\n");}
 void   vEndInit(int iEndStyle) { printf("vEndInit: %d\n", iEndStyle); }
 void   vEndDoc()
 {
-	printf("vEndDoc\n");
 	free(buf);
+
 	delete mainApplication;
 	ZLibrary::shutdown();
 }
