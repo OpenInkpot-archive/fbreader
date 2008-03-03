@@ -43,17 +43,9 @@ ZLNXPaintContext::ZLNXPaintContext() {
 	fItalic = false;
 	fBold = false;
 
-
-	char *fontname ="/root/fonts/truetype/arial.ttf";
 	FT_Error error;
 
 	error = FT_Init_FreeType( &library );
-	error = FT_New_Face( library, "/root/fonts/truetype/times.ttf", 0, &faceNormal );
-	error = FT_New_Face( library, "/root/fonts/truetype/timesi.ttf", 0, &faceItalic );
-	error = FT_New_Face( library, "/root/fonts/truetype/timesbd.ttf", 0, &faceBold );
-	error = FT_New_Face( library, "/root/fonts/truetype/timesbi.ttf", 0, &faceItalicBold );
-
-
 }
 
 ZLNXPaintContext::~ZLNXPaintContext() {
@@ -89,6 +81,36 @@ const std::string ZLNXPaintContext::realFontFamilyName(std::string &fontFamily) 
 
 void ZLNXPaintContext::setFont(const std::string &family, int size, bool bold, bool italic) {
 	//printf("setFont: %s, %d, %d, %d\n", family.c_str(), size, bold?1:0, italic?1:0);
+
+	static bool fontInit = false;
+
+	if(!fontInit) {		
+		fontInit = true;
+		FT_Error error;
+
+		std::string fname;
+		fname = "/root/fonts/truetype/" + family + ".ttf";
+		error = FT_New_Face( library, fname.c_str(), 0, &faceNormal );
+		if(error) {
+			error = FT_New_Face( library, "/root/fonts/truetype/arial.ttf", 0, &faceNormal );
+		}
+		fname = "/root/fonts/truetype/" + family + "i.ttf";
+		error = FT_New_Face( library, fname.c_str(), 0, &faceItalic );
+		if(error) {
+			error = FT_New_Face( library, "/root/fonts/truetype/ariali.ttf", 0, &faceItalic );
+		}
+		fname = "/root/fonts/truetype/" + family + "bd.ttf";
+		error = FT_New_Face( library, fname.c_str(), 0, &faceBold );
+		if(error) {
+			error = FT_New_Face( library, "/root/fonts/truetype/arialbd.ttf", 0, &faceBold);
+		}
+		fname = "/root/fonts/truetype/" + family + "bi.ttf";
+		error = FT_New_Face( library, fname.c_str(), 0, &faceItalicBold );
+		if(error) {
+			error = FT_New_Face( library, "/root/fonts/truetype/arialbi.ttf", 0, &faceItalicBold );
+		}
+	}
+
 	if(fItalic != italic)
 		fItalic = italic;
 
@@ -105,7 +127,11 @@ void ZLNXPaintContext::setFont(const std::string &family, int size, bool bold, b
 		face = &faceNormal;
 
 
-	fCurSize = size;
+	if(size >= 6)
+		fCurSize = size;
+	else
+		fCurSize = 6; 
+
 	FT_Set_Char_Size( *face, fCurSize * 64, 0, 160, 0 );
 
 
@@ -372,11 +398,11 @@ void ZLNXPaintContext::drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y)
 */		
 		val = bitmap->buffer[q * bitmap->width + p];
 
-		if(val >= 0x2a) {
+		if(val >= 64) {
 			*c &= ~(0xc0 >> s);
-			if(val < 0x7f)
+			if(val < 128)
 				*c |= (0x80 >> s);
-			else if(val < 0xd4)
+			else if(val < 192)
 				*c |= (0x40 >> s);
 		}
 
