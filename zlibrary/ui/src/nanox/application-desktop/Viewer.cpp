@@ -65,6 +65,12 @@ int InitDoc(char *fileName)
 		system(buf);
 		char *pdbFile = "/root/abook/tmp.pdb";
 		file = pdbFile;
+	} else if(strstr(fileName, ".prc.fb2")) {         
+		char buf[200];
+		sprintf(buf, "cp -f %s /root/abook/tmp.prc", fileName);
+		system(buf);
+		char *prcFile = "/root/abook/tmp.prc";
+		file = prcFile;
 	} else
 		file = fileName;
 
