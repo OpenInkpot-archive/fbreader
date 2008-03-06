@@ -26,8 +26,8 @@
 class ZLNXImageData : public ZLImageData {
 
 	public:
-		ZLNXImageData() {}
-		~ZLNXImageData() {}
+		ZLNXImageData() : myImageData(0) {}
+		~ZLNXImageData() { if(myImageData != 0) free(myImageData); }
 
 		unsigned int width() const;
 		unsigned int height() const;
@@ -40,10 +40,15 @@ class ZLNXImageData : public ZLImageData {
 
 		void copyFrom(const ZLImageData &source, unsigned int targetX, unsigned int targetY);
 
+		char *getImageData() { return myImageData; }
+
 	private:
-		unsigned char *myImageData;
+		char *myImageData;
 		int myRowStride;
-		unsigned char *myPosition;
+		int myWidth, myHeight;
+
+		char *myPosition;
+		int myShift;
 
 		friend class ZLNXImageManager;
 };
