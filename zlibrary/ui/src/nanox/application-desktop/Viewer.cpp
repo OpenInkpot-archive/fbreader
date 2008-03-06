@@ -20,6 +20,7 @@
 #include <ZLibrary.h>
 #include <ZLApplication.h>
 #include "../../../../../fbreader/src/fbreader/FBReader.h"
+#include "../../../../../fbreader/src/fbreader/BookTextView.h""
 
 #include <unistd.h>
 #include <stdio.h>
@@ -32,6 +33,7 @@
 #include <sys/time.h>
 
 int page;
+bool init;
 
 
 #define ALLOW_RUN_EXE 1
@@ -43,6 +45,9 @@ unsigned char *buf;
 int InitDoc(char *fileName)
 {
 	printf("InitDoc\n");
+
+	init = true;
+
 #ifdef ALLOW_RUN_EXE
     __pid_t pid;
     if( strstr(fileName, ".exe.txt") || strstr(fileName, ".exe.fb2")) {
@@ -96,19 +101,25 @@ int InitDoc(char *fileName)
 
 void GetPageData(void **data)
 {
-	printf("GetPageData\n");
 	*data = (void *)buf;
-	printf("GetPageData3\n");
-
 }
 
 void vSetDisplayState(Apollo_State *state) {printf("1\n");}
 extern "C"{
-void vSetCurPage(int p) { printf("vSetCurPage: %d\n", p);}
+void vSetCurPage(int p) { 
+	if(init)
+		return;
+	((FBReader *)mainApplication)->bookTextView().gotoPage(p + 1);
+	mainApplication->refreshWindow();	
+}
 int bGetRotate() {printf("GetRotate\n"); return 0;}
 void vSetRotate(int rot) { printf("vSetRotate: %d\n", rot); }
-void vGetTotalPage(int *iTotalPage) { printf("vGetTotalPage\n"); *iTotalPage = 100; }
-int GetPageIndex() { return 1; }
+void vGetTotalPage(int *iTotalPage) {  *iTotalPage = 0;}
+
+int GetPageIndex() {
+	return ((FBReader *)mainApplication)->bookTextView().pageNumber();
+}
+
 int Origin() {printf("6\n");}
 void vFontBigger() {printf("7\n");}
 int Bigger() {printf("8\n");}
@@ -155,8 +166,6 @@ int Next()
 int IsStandardStatusBarVisible() { return 0; }
 int GotoPage(int index) { 
 	printf("GotoPage: %d\n", index);
-//	((FBReader *)mainApplication)->bookTextView().gotoPage(100);
-//	mainApplication->refreshWindow();	
 }
 void Release() {printf("13\n");}
 void GetPageDimension(int *width, int *height) { *width = 600; *height = 800; }
@@ -175,8 +184,8 @@ void bGetUserData(void **vUserData, int *iUserDataLength) {
 	vEndDoc();
 }
 void vSetUserData(void *vUserData, int iUserDataLength){printf("18\n");}
-int iGetDocPageWidth(){printf("19\n"); return 600;}
-int iGetDocPageHeight(){printf("20\n"); return 800;}
+int iGetDocPageWidth(){ return 600;}
+int iGetDocPageHeight(){ return 800;}
 unsigned short usGetLeftBarFlag(){printf("21\n");}
 void   vEndInit(int iEndStyle) { printf("vEndInit: %d\n", iEndStyle); }
 void   vEndDoc()
@@ -186,7 +195,7 @@ void   vEndDoc()
 	delete mainApplication;
 	ZLibrary::shutdown();
 }
-int  iInitDocF(char *filename,int pageNo, int flag) { printf("iInitDocF: %c %d %d\n", filename, pageNo, flag); return 0;}
+int  iInitDocF(char *filename,int pageNo, int flag) { init = false; printf("iInitDocF: %c %d %d\n", filename, pageNo, flag); return 0;}
 void   vFirstBmp(char *fileName, int pageNo){printf("25\n");}
 int	iGetCurDirPage(int idx, int level){printf("26\n");}
 int	iCreateDirList() { printf("huj\n"); return 0;}
