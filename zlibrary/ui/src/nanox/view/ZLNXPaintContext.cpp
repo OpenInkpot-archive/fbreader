@@ -25,6 +25,7 @@
 
 #include <ZLUnicodeUtil.h>
 #include <ZLImage.h>
+#include "../image/ZLNXImageManager.h"
 
 #include "ZLNXPaintContext.h"
 
@@ -145,9 +146,14 @@ void ZLNXPaintContext::setFont(const std::string &family, int size, bool bold, b
 }
 
 void ZLNXPaintContext::setColor(ZLColor color, LineStyle style) {
+	printf("setColor\n");
 }
 
 void ZLNXPaintContext::setFillColor(ZLColor color, FillStyle style) {
+	printf("setFillColor\n");
+	fColor = (0.299 * color.Red + 0.587 * color.Green + 0.114 * color.Blue ) / 64;
+	fColor &= 3;
+	fColor <<= 6;
 }
 
 int ZLNXPaintContext::stringWidth(const char *str, int len) const {
@@ -349,15 +355,106 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 }
 
 void ZLNXPaintContext::drawImage(int x, int y, const ZLImageData &image) {
+	printf("drawImage: %d %d\n", image.width(), image.height());
+	if((image.width() + x) > myWidth || (image.height() + y) > myHeight)
+		return;
+
+	char *c;
+	char *c_src;
+	int s, s_src;
+
+	ZLNXImageData *source_image = (ZLNXImageData *)&image;
+
+	char *src = source_image->getImageData();
+
+	for(int i = 0; i < image.width(); i++)
+		for(int j = 0; j < image.height(); j++) {
+			c_src = src + i / 4 + image.width() * j / 4;
+			s_src = (i & 3) << 1;
+
+			c = buf + (i + x) / 4 + myWidth * (j + y) /4;
+			s = ((i + x)  & 3) << 1;
+
+			*c &= ~(0xc0 >> s);
+			*c |= (((*c_src << s_src) & 0xc0) >> s);
+		}
 }
 
 void ZLNXPaintContext::drawLine(int x0, int y0, int x1, int y1) {
+	drawLine(x0, y0, x1, y1, false);
+}
+
+void ZLNXPaintContext::drawLine(int x0, int y0, int x1, int y1, bool fill) {
+	printf("drawLine: %d %d %d %d\n", x0, y0, x1, y1);
+	int i, j;
+	int k, s;
+	int p;
+	char *c = buf;
+
+	if(x1 != x0) {
+		k = (y1 - y0) / (x1 - x0);
+		j = y0;
+		i = x0;
+
+		do {
+			c = buf + i / 4 + myWidth * j /4;
+			s = (i & 3) << 1;
+		
+			*c &= ~(0xc0 >> s);
+
+			if(fill)
+				*c |= (fColor >> s);
+
+
+			j += k;
+
+			if(x1 > x0)
+				i++;
+			else 
+				i--;
+
+		} while(i != x1);
+
+	} else {
+		i = x0;
+		j = y0;
+		s = (i & 3) << 1;
+
+		do {
+			c = buf + i / 4 + myWidth * j /4;
+			*c &= ~(0xc0 >> s);
+
+			if(fill)
+				*c |= (fColor >> s);
+
+			if(y1 > y0)
+				j++;
+			else if(y1 < y0)
+				j--;
+
+		} while(j != y1);
+	}
 }
 
 void ZLNXPaintContext::fillRectangle(int x0, int y0, int x1, int y1) {
+	printf("fillRectangle\n");
+
+	int j;
+	
+	j = y0;
+	do {
+		drawLine(x0, j, x1, j, true);
+
+		if(y1 > y0)
+			j++;
+		else if(y1 < y0)
+			j--;
+	} while(( y1 > y0) && ( j <= y1 )  ||
+			(j <= y0));
 }
 
 void ZLNXPaintContext::drawFilledCircle(int x, int y, int r) {
+	printf("drawFilledCircle\n");
 }
 
 void ZLNXPaintContext::clear(ZLColor color) {

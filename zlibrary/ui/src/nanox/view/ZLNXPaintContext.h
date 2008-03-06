@@ -56,6 +56,7 @@ public:
 	void drawImage(int x, int y, const ZLImageData &image);
 
 	void drawLine(int x0, int y0, int x1, int y1);
+	void drawLine(int x0, int y0, int x1, int y1, bool fill);
 	void fillRectangle(int x0, int y0, int x1, int y1);
 	void drawFilledCircle(int x, int y, int r);
 
@@ -71,6 +72,8 @@ private:
 	int fCurSize;
 	bool fItalic;
 	bool fBold;
+
+	int fColor;
 
 	mutable std::map<int, std::map<unsigned long, int> > charWidthCacheAll;
 	mutable std::map<unsigned long, int> *charWidthCache;
