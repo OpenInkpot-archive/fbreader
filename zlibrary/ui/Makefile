@@ -34,7 +34,7 @@ ifeq "$(UI_TYPE)" "gpe"
 endif
 
 ifeq "$(UI_TYPE)" "nanox"
-  NXSUBDIRS = src/nanox/application-$(TARGET_ARCH) src/nanox/library src/nanox/view src/nanox/filesystem src/nanox/time src/nanox/dialogs src/nanox/image
+  NXSUBDIRS = src/nanox/application-$(TARGET_ARCH) src/nanox/library src/nanox/view src/nanox/filesystem src/nanox/time src/nanox/dialogs src/nanox/image src/unix/message
 endif
 
 ifeq "$(UI_TYPE)" "opie"
