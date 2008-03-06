@@ -86,6 +86,8 @@ public:
 	void setMode(ViewMode mode);
 	ViewMode getMode() const;
 
+	void clearTextCaches();
+
 private:
 	void initWindow();
 
@@ -93,7 +95,7 @@ private:
 
 	bool runBookInfoDialog(const std::string &fileName);
 
-	void clearTextCaches();
+//	void clearTextCaches();
 
 	void restorePreviousMode();
 

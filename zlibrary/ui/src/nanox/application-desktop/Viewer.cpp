@@ -20,7 +20,7 @@
 #include <ZLibrary.h>
 #include <ZLApplication.h>
 #include "../../../../../fbreader/src/fbreader/FBReader.h"
-#include "../../../../../fbreader/src/fbreader/BookTextView.h""
+#include "../../../../../fbreader/src/fbreader/BookTextView.h"
 
 #include <unistd.h>
 #include <stdio.h>
@@ -107,6 +107,7 @@ void GetPageData(void **data)
 void vSetDisplayState(Apollo_State *state) {printf("1\n");}
 extern "C"{
 void vSetCurPage(int p) { 
+	printf("vSetCurPage: %d\n", p);
 	if(init)
 		return;
 	((FBReader *)mainApplication)->bookTextView().gotoPage(p + 1);
@@ -121,7 +122,22 @@ int GetPageIndex() {
 }
 
 int Origin() {printf("6\n");}
-void vFontBigger() {printf("7\n");}
+void vFontBigger() {
+	ZLIntegerRangeOption &option = ZLTextStyleCollection::instance().baseStyle().FontSizeOption;
+
+	int size = option.value();
+	if(size % 2)
+		size += 3;
+	else
+		size += 2;
+
+	if(size > 14)
+		size = 8;
+
+	option.setValue(size);
+	((FBReader *)mainApplication)->clearTextCaches();
+	mainApplication->refreshWindow();
+}
 int Bigger() {printf("8\n");}
 int Smaller() {printf("9\n");}
 int Rotate() {printf("10\n");}
