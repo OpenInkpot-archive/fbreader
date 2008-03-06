@@ -25,6 +25,8 @@
 #include "ZLTextView.h"
 #include "ZLTextStyle.h"
 
+extern int glb_page;
+
 /*
  * Calculates m0 * m1 / d
  *   We assume m0 <= d or m1 <= d so result is small enough for size_t
@@ -148,7 +150,9 @@ size_t ZLTextView::PositionIndicator::sizeOfTextBeforeCursor() const {
 
 std::string ZLTextView::PositionIndicator::textPositionString() const {
 	std::string buffer;
-	ZLStringUtil::appendNumber(buffer, 1 + sizeOfTextBeforeCursor() / 2048);
+	glb_page = 1 + sizeOfTextBeforeCursor() / 2048;
+	ZLStringUtil::appendNumber(buffer, glb_page);
+	//ZLStringUtil::appendNumber(buffer, 1 + sizeOfTextBeforeCursor() / 2048);
 	buffer += '/';
 	ZLStringUtil::appendNumber(buffer, 1 + sizeOfTextBeforeParagraph(endTextIndex()) / 2048);
 

@@ -32,7 +32,7 @@
 
 #include <sys/time.h>
 
-int page;
+int glb_page;
 bool init;
 
 
@@ -82,7 +82,7 @@ int InitDoc(char *fileName)
 
 	printf("plugin init\n");
 
-	page = 0;
+	glb_page = 0;
 
 	buf = (unsigned char *)malloc(800*600/4);
 
@@ -115,10 +115,12 @@ void vSetCurPage(int p) {
 }
 int bGetRotate() {printf("GetRotate\n"); return 0;}
 void vSetRotate(int rot) { printf("vSetRotate: %d\n", rot); }
-void vGetTotalPage(int *iTotalPage) {  *iTotalPage = 0;}
+void vGetTotalPage(int *iTotalPage) {  
+	*iTotalPage = ((FBReader *)mainApplication)->bookTextView().pageNumber();
+}
 
 int GetPageIndex() {
-	return ((FBReader *)mainApplication)->bookTextView().pageNumber();
+	return glb_page - 1;
 }
 
 int Origin() {printf("6\n");}
@@ -145,7 +147,6 @@ int Fit() {printf("11\n");}
 int Prev()
 { 
 	printf("prev\n");
-	page--;
 	std::string x;
 	x = "<PageUp>";
 	mainApplication->doActionByKey(x);	
@@ -155,7 +156,6 @@ int Prev()
 int Next()
 {
 	printf("next\n");
-	page++;
 	std::string x;
 	x = "<PageDown>";
 
@@ -188,7 +188,9 @@ void GetPageDimension(int *width, int *height) { *width = 600; *height = 800; }
 void SetPageDimension(int width, int height) {printf("setpagedimension: %dx%d\n", width, height);}
 double dGetResizePro() {printf("15\n");}
 void vSetResizePro(double dSetPro) {printf("16\n");}
-int GetPageNum() { return page; }
+int GetPageNum() { 
+	return ((FBReader *)mainApplication)->bookTextView().pageNumber();	
+}
 void bGetUserData(void **vUserData, int *iUserDataLength) {
 /*    static int testData[] = {1, 2, 3, 4};
 
