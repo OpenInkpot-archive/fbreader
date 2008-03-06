@@ -153,7 +153,11 @@ int Next()
 }
 
 int IsStandardStatusBarVisible() { return 0; }
-int GotoPage(int index) { printf("GotoPage: %d\n", index); }
+int GotoPage(int index) { 
+	printf("GotoPage: %d\n", index);
+//	((FBReader *)mainApplication)->bookTextView().gotoPage(100);
+//	mainApplication->refreshWindow();	
+}
 void Release() {printf("13\n");}
 void GetPageDimension(int *width, int *height) { *width = 600; *height = 800; }
 void SetPageDimension(int width, int height) {printf("setpagedimension: %dx%d\n", width, height);}
