@@ -141,7 +141,8 @@ void ZLNXPaintContext::setFont(const std::string &family, int size, bool bold, b
 	charWidthCache = &charWidthCacheAll[key];
 	glyphCache = &glyphCacheAll[key];
 
-	myStringHeight = fCurSize * 2;
+	myStringHeight = fCurSize * 160 / 72;
+	myDescent = (abs((*face)->size->metrics.descender) + 63 ) >> 6;
 	mySpaceWidth = -1;
 }
 
