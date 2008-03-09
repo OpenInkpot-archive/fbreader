@@ -21,6 +21,7 @@
 #include <ZLApplication.h>
 #include "../../../../../fbreader/src/fbreader/FBReader.h"
 #include "../../../../../fbreader/src/fbreader/BookTextView.h"
+#include "../../../../../fbreader/src/fbreader/FBReaderActions.h"
 
 #include <unistd.h>
 #include <stdio.h>
@@ -110,8 +111,15 @@ void vSetCurPage(int p) {
 	printf("vSetCurPage: %d\n", p);
 	if(init)
 		return;
-	((FBReader *)mainApplication)->bookTextView().gotoPage(p + 1);
-	mainApplication->refreshWindow();	
+
+	if(p == 0)
+		mainApplication->doAction(ActionCode::SCROLL_TO_START_OF_TEXT);
+	else if((p + 1)  == ((FBReader *)mainApplication)->bookTextView().pageNumber())
+		mainApplication->doAction(ActionCode::SCROLL_TO_END_OF_TEXT);
+	else {
+		((FBReader *)mainApplication)->bookTextView().gotoPage(p + 1);
+		mainApplication->refreshWindow();	
+	}
 }
 int bGetRotate() {printf("GetRotate\n"); return 0;}
 void vSetRotate(int rot) { printf("vSetRotate: %d\n", rot); }
@@ -146,36 +154,12 @@ int Rotate() {printf("10\n");}
 int Fit() {printf("11\n");}
 int Prev()
 { 
-	printf("prev\n");
-	std::string x;
-	x = "<PageUp>";
-	mainApplication->doActionByKey(x);	
-
+	mainApplication->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
 	return 1;
 }
 int Next()
 {
-	printf("next\n");
-	std::string x;
-	x = "<PageDown>";
-
-
-	struct timeval tv1, tv2;
-	int sec, usec;
-	gettimeofday(&tv1, NULL);
-
-
-	mainApplication->doActionByKey(x);	
-
-	gettimeofday(&tv2, NULL);
-	sec = tv2.tv_sec - tv1.tv_sec;
-	usec = tv2.tv_usec - tv1.tv_usec;
-	if(usec < 0) {
-		sec--;
-		usec = -usec;
-	}
-	printf("Next: %d.%06d\n", sec, usec);
-		
+	mainApplication->doAction(ActionCode::LARGE_SCROLL_FORWARD);
 	return 1;
 }
 
@@ -216,7 +200,10 @@ void   vEndDoc()
 int  iInitDocF(char *filename,int pageNo, int flag) { init = false; printf("iInitDocF: %c %d %d\n", filename, pageNo, flag); return 0;}
 void   vFirstBmp(char *fileName, int pageNo){printf("25\n");}
 int	iGetCurDirPage(int idx, int level){printf("26\n");}
-int	iCreateDirList() { printf("huj\n"); return 0;}
+int	iCreateDirList() { 
+	mainApplication->doAction(ActionCode::SHOW_CONTENTS);
+	
+	return 0;}
 int	iGetDirNumber(){printf("27\n");}
 unsigned short* usGetCurDirNameAndLen(int pos, int * len){printf("28\n");}
 unsigned short* usGetCurDirName(int level, int index){printf("29\n");}
