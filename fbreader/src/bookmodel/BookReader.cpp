@@ -22,6 +22,16 @@
 #include "BookReader.h"
 #include "BookModel.h"
 
+struct xxx_toc_entry {
+	int paragraph;
+	std::string text;
+};
+
+extern std::vector<struct xxx_toc_entry> xxx_myTOC;
+int xxx_paragraph;
+std::string xxx_paragraph_data;
+
+
 BookReader::BookReader(BookModel &model) : myModel(model) {
 	myCurrentTextModel = 0;
 	myLastTOCParagraphIsEmpty = false;
@@ -146,12 +156,16 @@ void BookReader::addData(const std::string &data) {
 			mySectionContainsRegularContents = true;
 		}
 		myBuffer.push_back(data);
+
+
 	}
 }
 
 void BookReader::addContentsData(const std::string &data) {
 	if (!data.empty() && !myTOCStack.empty()) {
 		myContentsBuffer.push_back(data);
+
+		xxx_paragraph_data += " " + data;
 	}
 }
 
@@ -209,7 +223,9 @@ void BookReader::beginContentsParagraph(int referenceNumber) {
 			contentsModel.addText(myContentsBuffer);
 			myContentsBuffer.clear();
 			myLastTOCParagraphIsEmpty = false;
+
 		}
+
 		if (myLastTOCParagraphIsEmpty) {
 			contentsModel.addText("...");
 		}
@@ -219,6 +235,16 @@ void BookReader::beginContentsParagraph(int referenceNumber) {
 		myTOCStack.push(para);
 		myLastTOCParagraphIsEmpty = true;
 		myContentsParagraphExists = true;
+
+		if(xxx_paragraph >= 0 && !xxx_paragraph_data.empty()) {
+			struct xxx_toc_entry x;
+			x.paragraph = xxx_paragraph;
+			x.text = xxx_paragraph_data;
+			xxx_myTOC.push_back(x);
+		}
+
+		xxx_paragraph = referenceNumber;
+		xxx_paragraph_data = "";
 	}
 }
 
