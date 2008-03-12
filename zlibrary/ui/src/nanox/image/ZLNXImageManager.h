@@ -26,8 +26,10 @@
 class ZLNXImageData : public ZLImageData {
 
 	public:
-		ZLNXImageData() : myImageData(0) {}
-		~ZLNXImageData() { if(myImageData != 0) free(myImageData); }
+		ZLNXImageData() : myImageData(0), myX(0), myY(0) {}
+		~ZLNXImageData() { 
+			if(myImageData != 0) free(myImageData); 
+		}
 
 		unsigned int width() const;
 		unsigned int height() const;
@@ -47,6 +49,7 @@ class ZLNXImageData : public ZLImageData {
 		int myRowStride;
 		int myWidth, myHeight;
 
+		unsigned int myX, myY;
 		char *myPosition;
 		int myShift;
 

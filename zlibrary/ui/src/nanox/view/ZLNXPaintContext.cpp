@@ -356,24 +356,26 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 }
 
 void ZLNXPaintContext::drawImage(int x, int y, const ZLImageData &image) {
-	//printf("drawImage: %d %d\n", image.width(), image.height());
-	if((image.width() + x) > myWidth || (image.height() + y) > myHeight)
-		return;
-
+//	printf("drawImage: %d %d %d %d\n", image.width(), image.height(), x, y);
 	char *c;
 	char *c_src;
 	int s, s_src;
+	int iW = image.width();
+	int iH = image.height();
+
+	if((iW + x) > myWidth || y > myHeight)
+		return;
 
 	ZLNXImageData *source_image = (ZLNXImageData *)&image;
 
 	char *src = source_image->getImageData();
 
-	for(int i = 0; i < image.width(); i++)
-		for(int j = 0; j < image.height(); j++) {
-			c_src = src + i / 4 + image.width() * j / 4;
+	for(int j = 0; j < iH; j++)
+		for(int i = 0; i < iW; i++) {
+			c_src = src + i / 4 + iW * j / 4;
 			s_src = (i & 3) << 1;
 
-			c = buf + (i + x) / 4 + myWidth * (j + y) /4;
+			c = buf + (i + x) / 4 + myWidth * (j + (y - iH)) /4;
 			s = ((i + x)  & 3) << 1;
 
 			*c &= ~(0xc0 >> s);
