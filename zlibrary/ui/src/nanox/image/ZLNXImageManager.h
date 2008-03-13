@@ -67,6 +67,8 @@ class ZLNXImageManager : public ZLImageManager {
 	protected:
 		shared_ptr<ZLImageData> createData() const;
 		void convertImageDirect(const std::string &stringData, ZLImageData &imageData) const;
+		void convertImageDirectJpeg(const std::string &stringData, ZLImageData &imageData) const;
+		void convertImageDirectPng(const std::string &stringData, ZLImageData &imageData) const;
 };
 
 #endif /* __ZLNXIMAGEMANAGER_H__ */
