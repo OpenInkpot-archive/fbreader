@@ -35,7 +35,7 @@
 
 #include <sys/time.h>
 
-#define _DEBUG 1
+//#define _DEBUG 1
 
 int glb_page;
 bool init;
@@ -92,9 +92,17 @@ int InitDoc(char *fileName)
 	} else
 		file = fileName;
 
-
-	//TODO!
 	//.FBReader/
+	system("mv -f /home/.FBReader/UI.XML /home/.FBReader/ui.xml_ ; \
+			mv -f /home/.FBReader/ui.xml_ /home/.FBReader/ui.xml ; \
+			mv -f /home/.FBReader/BOOKS.XML /home/.FBReader/books.xml_; \
+			mv -f /home/.FBReader/books.xml_ /home/.FBReader/books.xml; \
+			mv -f /home/.FBReader/OPTIONS.XML /home/.FBReader/options.xml_; \
+			mv -f /home/.FBReader/options.xml_ /home/.FBReader/options.xml; \
+			mv -f /home/.FBReader/STATE.XML /home/.FBReader/state.xml_; \
+			mv -f /home/.FBReader/state.xml_ /home/.FBReader/state.xml; \
+			mv -f /home/.FBReader/SYSTEM.XML /home/.FBReader/system.xml_; \
+			mv -f /home/.FBReader/system.xml_ /home/.FBReader/system.xml");
 
 	glb_page = 0;
 	toc_jump = false;
