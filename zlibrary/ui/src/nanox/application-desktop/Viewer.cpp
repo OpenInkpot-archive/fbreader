@@ -93,6 +93,8 @@ int InitDoc(char *fileName)
 		file = fileName;
 
 
+	//TODO!
+	//.FBReader/
 
 	glb_page = 0;
 	toc_jump = false;
@@ -106,14 +108,14 @@ int InitDoc(char *fileName)
 	}
 	ZLibrary::run(new FBReader(file));
 
-
-
 	return 1;
 }
 
 void GetPageData(void **data)
 {
+#ifdef _DEBUG
 	printf("getpagedata\n");
+#endif
 	*data = (void *)buf;
 }
 
@@ -124,12 +126,13 @@ void vSetDisplayState(Apollo_State *state) {
 }
 extern "C"{
 void vSetCurPage(int p) { 
+#ifdef _DEBUG
 	printf("vSetCurPage: %d\n", p);
+#endif
 	if(init)
 		return;
 
 	if(toc_jump) {
-		printf("toc_jump\n");
 		((FBReader *)mainApplication)->bookTextView().gotoParagraph(p);
 		mainApplication->refreshWindow();	
 		
@@ -138,15 +141,8 @@ void vSetCurPage(int p) {
 	}
 
 	if(p <= 0) {
-//		((FBReader *)mainApplication)->bookTextView().gotoPage(p + 1);
-//		mainApplication->refreshWindow();	
-//
-		//mainApplication->doAction(ActionCode::SCROLL_TO_START_OF_TEXT);
 		((FBReader *)mainApplication)->bookTextView().scrollToStartOfText();
-//		((FBReader *)mainApplication)->bookTextView().gotoParagraph(0);
-//		mainApplication->refreshWindow();	
 	} else if((p + 1)  == ((FBReader *)mainApplication)->bookTextView().pageNumber())
-		//mainApplication->doAction(ActionCode::SCROLL_TO_END_OF_TEXT);
 		 ((FBReader *)mainApplication)->bookTextView().scrollToEndOfText();
 	else {
 		((FBReader *)mainApplication)->bookTextView().gotoPage(p + 1);
@@ -171,7 +167,9 @@ void vGetTotalPage(int *iTotalPage) {
 }
 
 int GetPageIndex() {
+#ifdef _DEBUG
 	printf("getpageindex >%d\n", glb_page-1);
+#endif
 	return glb_page - 1;
 }
 
