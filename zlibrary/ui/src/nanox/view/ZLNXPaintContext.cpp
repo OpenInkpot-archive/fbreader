@@ -22,12 +22,15 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <dirent.h>
 
 #include <ZLUnicodeUtil.h>
 #include <ZLImage.h>
 #include "../image/ZLNXImageManager.h"
 
 #include "ZLNXPaintContext.h"
+
+using namespace std;
 
 extern char *buf;
 #define ROUND_26_6_TO_INT(valuetoround) (((valuetoround) + 63) >> 6)
@@ -40,33 +43,47 @@ ZLNXPaintContext::ZLNXPaintContext() {
 	mySpaceWidth = -1;
 	myDescent = 0;
 
+	fCurFamily = "";
 	fCurSize = 0;
-	fItalic = false;
-	fBold = false;
+	fCurItalic = false;
+	fCurBold = false;
 
 	FT_Error error;
 
 	error = FT_Init_FreeType( &library );
+
+	fPath.push_back("/mnt/fbreader/fonts/");
+	fPath.push_back("/mnt/crengine/fonts/");
+	fPath.push_back("/root/fbreader/fonts/");
+	fPath.push_back("/root/crengine/fonts/");
+	fPath.push_back("/root/fonts/truetype/");
+
+	cacheFonts();
 }
 
 ZLNXPaintContext::~ZLNXPaintContext() {
-	if(faceNormal)
-		FT_Done_Face(faceNormal);
-	if(faceItalic)
-		FT_Done_Face(faceItalic);
-	if(faceBold)
-		FT_Done_Face(faceBold);
-	if(faceItalicBold)
-		FT_Done_Face(faceItalicBold);
 
-	std::map<int, std::map<unsigned long, FT_BitmapGlyph> >::iterator piter = glyphCacheAll.begin();
-	while(piter != glyphCacheAll.end()) {
-		std::map<unsigned long, FT_BitmapGlyph>::iterator piter2 = piter->second.begin();
-		while(piter2 != piter->second.end()) {
-			FT_Bitmap_Done(library, (FT_Bitmap*)&(piter2->second->bitmap));			
-			piter2++;
+	for(std::map<std::string, std::map<int, Font> >::iterator x = fontCache.begin();
+			x != fontCache.end();
+			x++) {
+
+		for(std::map<int, Font>::iterator y = x->second.begin();
+				y != x->second.end();
+				y++) {
+
+			std::map<int, std::map<unsigned long, FT_BitmapGlyph> >::iterator piter = y->second.glyphCacheAll.begin();
+			while(piter != y->second.glyphCacheAll.end()) {
+				std::map<unsigned long, FT_BitmapGlyph>::iterator piter2 = piter->second.begin();
+				while(piter2 != piter->second.end()) {
+					FT_Bitmap_Done(library, (FT_Bitmap*)&(piter2->second->bitmap));			
+					piter2++;
+				}
+				piter++;
+			}
+
+			if(y->second.myFace != NULL)
+				FT_Done_Face(y->second.myFace);
 		}
-		piter++;
 	}
 
 	if(library)
@@ -77,56 +94,133 @@ ZLNXPaintContext::~ZLNXPaintContext() {
 void ZLNXPaintContext::fillFamiliesList(std::vector<std::string> &families) const {
 }
 
+void ZLNXPaintContext::cacheFonts() const {
+	DIR *dir_p;
+	struct dirent *dp;
+	int idx;
+	bool bold, italic;
+	int bi_hash;
+
+	FT_Error error;
+	FT_Face lFace;
+
+	for(std::vector<std::string>::iterator it = fPath.begin();
+			it != fPath.end();
+			it++) {
+
+		dir_p = NULL;
+		dir_p = opendir(it->c_str());	
+		if(dir_p == NULL)
+			continue;
+
+		while((dp = readdir(dir_p)) != NULL) {
+			idx = strlen(dp->d_name);
+
+			if(idx <= 4)
+				continue;
+
+			idx -= 4;
+			if(strncasecmp(dp->d_name + idx, ".TTF", 4))
+				continue;
+
+
+			std::string fFullName = it->c_str();
+			fFullName += "/";
+			fFullName += dp->d_name;					
+
+			for(int i = 0 ;; i++) {
+				error = FT_New_Face(library, fFullName.c_str(), i, &lFace);
+				if(error)
+					break;
+
+				if(FT_IS_SCALABLE(lFace)) {
+					bold = lFace->style_flags & FT_STYLE_FLAG_BOLD;				
+					italic = lFace->style_flags & FT_STYLE_FLAG_ITALIC;				
+					bi_hash = (bold?2:0) + (italic?1:0);
+
+					Font *fc = &(fontCache[lFace->family_name])[bi_hash];
+
+					if(fc->fileName.length() == 0) {
+						fc->familyName = lFace->family_name;
+						fc->fileName = fFullName;
+						fc->index = i;
+						fc->isBold = bold;
+						fc->isItalic = italic;
+					}
+				}
+
+				FT_Done_Face(lFace);
+			}
+		}
+
+/*		cout << "---------------------" << endl;
+
+		for(std::map<std::string, std::map<int, Font> >::iterator x = fontCache.begin();
+				x != fontCache.end();
+				x++) {
+			cout << "family: " << x->first << endl;
+
+			for(std::map<int, Font>::iterator y = x->second.begin();
+					y != x->second.end();
+					y++) {
+				cout << "	hash: " << y->first << endl;
+				cout << "	file: " << y->second.fileName << endl;
+				cout << "	index: " << y->second.index << endl;
+				cout << "	b:	"	<< y->second.isBold << endl;
+				cout << "	i:	"	<< y->second.isItalic << endl;
+				cout << endl;
+			}
+		}
+*/		
+
+		closedir(dir_p);
+	}
+}
+
 const std::string ZLNXPaintContext::realFontFamilyName(std::string &fontFamily) const {
 }
 
 void ZLNXPaintContext::setFont(const std::string &family, int size, bool bold, bool italic) {
 	//printf("setFont: %s, %d, %d, %d\n", family.c_str(), size, bold?1:0, italic?1:0);
+	FT_Error error;
 
-	static bool fontInit = false;
-
-	if(!fontInit) {		
-		fontInit = true;
-		FT_Error error;
-
-		std::string fname;
-		fname = "/root/fonts/truetype/" + family + ".ttf";
-		error = FT_New_Face( library, fname.c_str(), 0, &faceNormal );
-		if(error) {
-			error = FT_New_Face( library, "/root/fonts/truetype/arial.ttf", 0, &faceNormal );
-		}
-		fname = "/root/fonts/truetype/" + family + "i.ttf";
-		error = FT_New_Face( library, fname.c_str(), 0, &faceItalic );
-		if(error) {
-			error = FT_New_Face( library, "/root/fonts/truetype/ariali.ttf", 0, &faceItalic );
-		}
-		fname = "/root/fonts/truetype/" + family + "bd.ttf";
-		error = FT_New_Face( library, fname.c_str(), 0, &faceBold );
-		if(error) {
-			error = FT_New_Face( library, "/root/fonts/truetype/arialbd.ttf", 0, &faceBold);
-		}
-		fname = "/root/fonts/truetype/" + family + "bi.ttf";
-		error = FT_New_Face( library, fname.c_str(), 0, &faceItalicBold );
-		if(error) {
-			error = FT_New_Face( library, "/root/fonts/truetype/arialbi.ttf", 0, &faceItalicBold );
-		}
+	if((family == fCurFamily ) && (bold == fCurBold) && (italic == fCurItalic) && (size == fCurSize)) {
+		return;
 	}
 
-	if(fItalic != italic)
-		fItalic = italic;
+	fCurFamily = family;
+	fCurBold = bold;
+	fCurItalic = italic;
 
-	if(fBold != bold)
-		fBold = bold;
+	int bi_hash = (bold?2:0) + (italic?1:0);
+	std::map<std::string, std::map<int, Font> >::iterator it = fontCache.find(family);
+	if(it == fontCache.end()) {
+		std::string defFont("Arial");
+		it = fontCache.find(defFont);
+	}
 
-	if(fItalic && fBold)
-		face = &faceItalicBold;
-	else if(fItalic)
-		face = &faceItalic;
-	else if(fBold)
-		face = &faceBold;
-	else
-		face = &faceNormal;
+	Font *fc = &((it->second)[bi_hash]);
 
+	/*
+	   cout << "	hash: " << bi_hash << endl;
+	   cout << "	family: " << fc->familyName << endl;
+	   cout << "	file: " << fc->fileName << endl;
+	   cout << "	index: " << fc->index << endl;
+	   cout << "	b:	"	<< fc->isBold << endl;
+	   cout << "	i:	"	<< fc->isItalic << endl;
+	   cout << endl;
+	   */
+
+	if(fc->fileName.size() == 0)
+		fc = &((it->second)[0]);
+
+	if(fc->myFace == NULL) {
+		error = FT_New_Face(library, fc->fileName.c_str(), fc->index, &fc->myFace);
+		if(error)
+			return;
+	}
+
+	face = &(fc->myFace);
 
 	if(size >= 6)
 		fCurSize = size;
@@ -135,11 +229,8 @@ void ZLNXPaintContext::setFont(const std::string &family, int size, bool bold, b
 
 	FT_Set_Char_Size( *face, fCurSize * 64, 0, 160, 0 );
 
-
-	int key = fCurSize * 10 + (fItalic ? 1 : 0) + (fBold ? 2 : 0);
-
-	charWidthCache = &charWidthCacheAll[key];
-	glyphCache = &glyphCacheAll[key];
+	charWidthCache = &(fc->charWidthCacheAll[fCurSize]);
+	glyphCache = &(fc->glyphCacheAll[fCurSize]);
 
 	myStringHeight = fCurSize * 160 / 72;
 	myDescent = (abs((*face)->size->metrics.descender) + 63 ) >> 6;
@@ -227,8 +318,8 @@ int ZLNXPaintContext::stringWidth(const char *str, int len) const {
 				w += ch_w + kerning;
 				charWidthCache->insert(std::make_pair(codepoint, ch_w));
 			} 
-		//	else
-		//		printf("glyph %d not found\n", glyph_idx);
+			//	else
+			//		printf("glyph %d not found\n", glyph_idx);
 		}
 		previous = glyph_idx;
 
@@ -248,8 +339,8 @@ int ZLNXPaintContext::spaceWidth() const {
 int ZLNXPaintContext::stringHeight() const {
 	if (myStringHeight == -1) {
 		//FIXME
-//		myStringHeight = (*face)->size->metrics.height >> 6;
-//		printf("myStringHeight: %d\n", myStringHeight);
+		//		myStringHeight = (*face)->size->metrics.height >> 6;
+		//		printf("myStringHeight: %d\n", myStringHeight);
 	}
 	return myStringHeight;
 }
@@ -272,10 +363,10 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 
 	use_kerning = (*face)->face_flags & FT_FACE_FLAG_KERNING;
 
-    char *p = (char *)str;
-    unsigned long         codepoint;
-    unsigned char         in_code;
-    int                   expect;
+	char *p = (char *)str;
+	unsigned long         codepoint;
+	unsigned char         in_code;
+	int                   expect;
 
 
 	pen.x = x;
@@ -352,11 +443,11 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 		pen.x += (*pglyph)->root.advance.x >> 6;
 	}
 	previous = glyph_idx;
-	
+
 }
 
 void ZLNXPaintContext::drawImage(int x, int y, const ZLImageData &image) {
-//	printf("drawImage: %d %d %d %d\n", image.width(), image.height(), x, y);
+	//	printf("drawImage: %d %d %d %d\n", image.width(), image.height(), x, y);
 	char *c;
 	char *c_src;
 	int s, s_src;
@@ -406,7 +497,7 @@ void ZLNXPaintContext::drawLine(int x0, int y0, int x1, int y1, bool fill) {
 
 			c = buf + i / 4 + myWidth * j /4;
 			s = (i & 3) << 1;
-		
+
 			*c &= ~(0xc0 >> s);
 
 			if(fill)
@@ -450,7 +541,7 @@ void ZLNXPaintContext::fillRectangle(int x0, int y0, int x1, int y1) {
 	//printf("fillRectangle\n");
 
 	int j;
-	
+
 	j = y0;
 	do {
 		drawLine(x0, j, x1, j, true);
@@ -481,38 +572,38 @@ int ZLNXPaintContext::height() const {
 
 void ZLNXPaintContext::drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y)
 {
-  FT_Int  i, j, p, q;
-  FT_Int  x_max = x + bitmap->width;
-  FT_Int  y_max = y + bitmap->rows;
-  char *c = buf;
-  unsigned char val;
-  int s;
+	FT_Int  i, j, p, q;
+	FT_Int  x_max = x + bitmap->width;
+	FT_Int  y_max = y + bitmap->rows;
+	char *c = buf;
+	unsigned char val;
+	int s;
 
-  for ( i = x, p = 0; i < x_max; i++, p++ ) {
-    for ( j = y, q = 0; j < y_max; j++, q++ ) {
+	for ( i = x, p = 0; i < x_max; i++, p++ ) {
+		for ( j = y, q = 0; j < y_max; j++, q++ ) {
 
-      if ( i < 0      || j < 0       ||
-           i >= myWidth || j >= myHeight )
-        continue;
+			if ( i < 0      || j < 0       ||
+					i >= myWidth || j >= myHeight )
+				continue;
 
 
-		c = buf + i / 4 + myWidth * j / 4;
-		s =  (i & 3) << 1;
+			c = buf + i / 4 + myWidth * j / 4;
+			s =  (i & 3) << 1;
 
-/* rotation - 90	  
-		c = buf + i * myHeight / 4 + (myHeight - j - 1) / 4;
-		s = (3  - j & 3) * 2;
-*/		
-		val = bitmap->buffer[q * bitmap->width + p];
+			/* rotation - 90	  
+			   c = buf + i * myHeight / 4 + (myHeight - j - 1) / 4;
+			   s = (3  - j & 3) * 2;
+			   */		
+			val = bitmap->buffer[q * bitmap->width + p];
 
-		if(val >= 64) {
-			*c &= ~(0xc0 >> s);
-			if(val < 128)
-				*c |= (0x80 >> s);
-			else if(val < 192)
-				*c |= (0x40 >> s);
+			if(val >= 64) {
+				*c &= ~(0xc0 >> s);
+				if(val < 128)
+					*c |= (0x80 >> s);
+				else if(val < 192)
+					*c |= (0x40 >> s);
+			}
+
 		}
-
 	}
-  }
 }

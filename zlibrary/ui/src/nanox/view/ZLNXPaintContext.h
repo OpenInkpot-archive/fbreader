@@ -22,6 +22,9 @@
 
 #include <ZLPaintContext.h>
 
+#include <algorithm>
+#include <iostream>
+#include <vector>
 #include <map>
 
 #include <ft2build.h>
@@ -41,6 +44,7 @@ public:
 	void clear(ZLColor color);
 
 	void fillFamiliesList(std::vector<std::string> &families) const;
+	void cacheFonts() const;
 	const std::string realFontFamilyName(std::string &fontFamily) const;
 
 	void setFont(const std::string &family, int size, bool bold, bool italic);
@@ -63,23 +67,44 @@ public:
 private:
 	int myWidth, myHeight;
 
+	class Font {
+		public:
+			Font() : 
+				familyName(""),
+				fileName(""),
+				index(0),
+				myFace(NULL),
+				isBold(false),
+				isItalic(false) {}
 
-	FT_Library library;
+			~Font() { if(myFace) FT_Done_Face(myFace); }
+	
+			std::string familyName;
+			std::string fileName;
+			int index;
+
+			FT_Face myFace;
+			bool isBold;
+			bool isItalic;
+
+			std::map<int, std::map<unsigned long, int> > charWidthCacheAll;
+			std::map<int, std::map<unsigned long, FT_BitmapGlyph> > glyphCacheAll;
+	};
+	
+
+	mutable std::vector<std::string> fPath;
+	mutable std::map<std::string, std::map<int, Font> > fontCache;
+	mutable std::map<unsigned long, int> *charWidthCache;
+	mutable std::map<unsigned long, FT_BitmapGlyph> *glyphCache;
 
 	FT_Face	*face;
-	FT_Face faceNormal, faceBold, faceItalic, faceItalicBold;
-
+	std::string fCurFamily;
 	int fCurSize;
-	bool fItalic;
-	bool fBold;
-
+	bool fCurItalic;
+	bool fCurBold;
 	int fColor;
 
-	mutable std::map<int, std::map<unsigned long, int> > charWidthCacheAll;
-	mutable std::map<unsigned long, int> *charWidthCache;
-
-	mutable std::map<int, std::map<unsigned long, FT_BitmapGlyph> > glyphCacheAll;
-	mutable std::map<unsigned long, FT_BitmapGlyph> *glyphCache;
+	FT_Library library;
 
 	std::vector<std::string> myFontFamilies;
 
