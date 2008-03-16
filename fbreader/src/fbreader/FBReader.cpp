@@ -286,7 +286,7 @@ void FBReader::tryShowFootnoteView(const std::string &id, bool external) {
 			}
 		}
 	} else {
-		if ((myMode == BOOK_TEXT_MODE) && (myModel != 0)) {
+		if (((myMode == BOOK_TEXT_MODE) || (myMode == FOOTNOTE_MODE)) && (myModel != 0)) {
 			BookModel::Label label = myModel->label(id);
 			if (!label.Model.isNull()) {
 				if (label.Model == myModel->bookTextModel()) {

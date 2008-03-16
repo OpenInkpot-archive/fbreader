@@ -51,6 +51,8 @@ std::vector<xxx_toc_entry> xxx_myTOC;
 
 bool toc_jump;
 
+std::vector<std::string> xxx_notes;
+
 #define ALLOW_RUN_EXE 1
 
 extern ZLApplication *mainApplication;
@@ -140,6 +142,8 @@ void vSetCurPage(int p) {
 	if(init)
 		return;
 
+	xxx_notes.clear();
+
 	if(toc_jump) {
 		((FBReader *)mainApplication)->bookTextView().gotoParagraph(p);
 		mainApplication->refreshWindow();	
@@ -210,12 +214,14 @@ int Rotate() {//printf("10\n");
 int Fit() {//printf("11\n");
 }
 int Prev()
-{ 
+{  
+	xxx_notes.clear();
 	mainApplication->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
 	return 1;
 }
 int Next()
 {
+	xxx_notes.clear();
 	mainApplication->doAction(ActionCode::LARGE_SCROLL_FORWARD);
 	return 1;
 }
@@ -283,6 +289,9 @@ void   vEndInit(int iEndStyle) {
 }
 void   vEndDoc()
 {
+	if(((FBReader *)mainApplication)->getMode() == FBReader::FOOTNOTE_MODE)
+		mainApplication->doAction(ActionCode::CANCEL);
+
 	free(buf);
 
 	delete mainApplication;
@@ -425,9 +434,40 @@ void   vFreeDir(){
 }
 
 
-/*int OnKeyPressed(int keyId, int state)
+int OnKeyPressed(int keyId, int state)
 {
+	static std::vector<std::string>::iterator it;
+	switch ( keyId ) {
+		case KEY_7:
+			if(xxx_notes.size() != 0) {
+				it = xxx_notes.begin();
+				((FBReader *)mainApplication)->tryShowFootnoteView(*it, false);
+				return 1;
+			}
+			break;
+
+		case KEY_CANCEL:
+			if(((FBReader *)mainApplication)->getMode() == FBReader::FOOTNOTE_MODE) {
+				mainApplication->doAction(ActionCode::CANCEL);
+
+				return 1;
+			}
+			break;
+
+		case KEY_OK:
+			if(((FBReader *)mainApplication)->getMode() == FBReader::FOOTNOTE_MODE) {				
+				if((it == xxx_notes.end()) || (++it == xxx_notes.end()))
+					it = xxx_notes.begin();
+
+				//mainApplication->doAction(ActionCode::CANCEL);
+				((FBReader *)mainApplication)->tryShowFootnoteView(*it, false);
+
+				return 1;
+			}
+			break;
+	}
+	return 0;
 }
-*/
+
 
 }; //extern "C"

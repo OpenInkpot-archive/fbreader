@@ -22,6 +22,8 @@
 #include "ZLTextView.h"
 #include "ZLTextLineInfo.h"
 
+extern std::vector<std::string> xxx_notes;
+
 void ZLTextView::paint() {
 	preparePaintInfo();
 
@@ -187,6 +189,12 @@ void ZLTextView::drawTextLine(const ZLTextLineInfo &info, size_t from, size_t to
 				context().drawImage(x, y, ((const ZLTextImageElement&)element).image());
 			}
 			++it;
+		} else if(kind == ZLTextElement::CONTROL_ELEMENT) {
+			const ZLTextControlEntry &control = ((const ZLTextControlElement&)element).entry();
+			if (control.isHyperlink() && (control.kind() == 16)) {
+				std::string id = ((const ZLTextHyperlinkControlEntry&)control).label();
+				xxx_notes.push_back(id);
+			}
 		}
 	}
 	if (it != toIt) {
