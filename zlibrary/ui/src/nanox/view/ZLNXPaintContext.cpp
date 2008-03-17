@@ -441,9 +441,8 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 
 		/* increment pen position */
 		pen.x += (*pglyph)->root.advance.x >> 6;
+		previous = glyph_idx;
 	}
-	previous = glyph_idx;
-
 }
 
 void ZLNXPaintContext::drawImage(int x, int y, const ZLImageData &image) {
