@@ -44,7 +44,7 @@ class ZLNXLibraryImplementation : public ZLibraryImplementation {
 };
 
 void initLibrary() {
-	printf("initLibrary\n");
+	//printf("initLibrary\n");
 	new ZLNXLibraryImplementation();
 }
 

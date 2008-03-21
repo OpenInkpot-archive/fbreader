@@ -63,7 +63,7 @@ ZLNXViewWidget::~ZLNXViewWidget() {
 void ZLNXViewWidget::repaint()	{
 	ZLNXPaintContext &NXContext = (ZLNXPaintContext&)view()->context();
 	
-	printf("repaint\n");
+	//printf("repaint\n");
 //	memset(buf, 0xff, 800*600/4);
 	view()->paint();
 }

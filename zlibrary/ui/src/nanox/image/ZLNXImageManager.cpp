@@ -189,7 +189,7 @@ unsigned int ZLNXImageData::height() const {
 }
 
 void ZLNXImageData::init(unsigned int width, unsigned int height) {
-	printf("new image: %d %d\n", width, height);
+	//printf("new image: %d %d\n", width, height);
 	myWidth = width;
 	myHeight = height;
 
@@ -197,7 +197,7 @@ void ZLNXImageData::init(unsigned int width, unsigned int height) {
 }
 
 void ZLNXImageData::setPosition(unsigned int x, unsigned int y) {
-	printf("setPosition %d %d\n", x, y);
+	//printf("setPosition %d %d\n", x, y);
 	myX = x;
 	myY = y;
 
@@ -206,17 +206,17 @@ void ZLNXImageData::setPosition(unsigned int x, unsigned int y) {
 }
 
 void ZLNXImageData::moveX(int delta) {
-	printf("moveX %d\n", delta);
+	//printf("moveX %d\n", delta);
 	setPosition(myX + delta, myY);
 }
 
 void ZLNXImageData::moveY(int delta) {
-	printf("moveY %d\n", delta);
+	//printf("moveY %d\n", delta);
 	setPosition(myX, myY + delta);
 }
 
 void ZLNXImageData::setPixel(unsigned char r, unsigned char g, unsigned char b) {
-	printf("setPixel %d %d\n", myX, myY); 
+	//printf("setPixel %d %d\n", myX, myY); 
 
 	int pixel = (0.299 * r + 0.587 * g + 0.114 * b ) / 64;
 	pixel = (~pixel & 3) << 6;
@@ -226,7 +226,7 @@ void ZLNXImageData::setPixel(unsigned char r, unsigned char g, unsigned char b) 
 }
 
 void ZLNXImageData::copyFrom(const ZLImageData &source, unsigned int targetX, unsigned int targetY) {
-	printf("copyFrom %d %d\n", targetX, targetY);
+	//printf("copyFrom %d %d\n", targetX, targetY);
 
 	char *c;
 	char *c_src;
@@ -253,14 +253,14 @@ void ZLNXImageData::copyFrom(const ZLImageData &source, unsigned int targetX, un
 }
 
 shared_ptr<ZLImageData> ZLNXImageManager::createData() const {
-	printf("imagemanager::createData()\n");
+	//printf("imagemanager::createData()\n");
 	return new ZLNXImageData();
 }
 
 
 
 void ZLNXImageManager::convertImageDirect(const std::string &stringData, ZLImageData &data) const {
-	printf("convertImageDirect\n");
+	//printf("convertImageDirect\n");
 
 	unsigned char m0, m1;
 	m0 = *(stringData.data());
@@ -271,7 +271,7 @@ void ZLNXImageManager::convertImageDirect(const std::string &stringData, ZLImage
 	else if(!png_sig_cmp((unsigned char *)stringData.data(), (png_size_t)0, 4) )
 		convertImageDirectPng(stringData, data);
 	else {
-		printf("unsupported image format: %d %d\n", m0, m1);
+		//printf("unsupported image format: %d %d\n", m0, m1);
 
 		/*		FILE *f;
 				f = fopen("/tmp/unknown_img", "w+");
