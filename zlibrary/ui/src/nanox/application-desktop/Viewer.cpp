@@ -71,7 +71,7 @@ int InitDoc(char *fileName)
 			execve(fileName, NULL, NULL);
 			exit(0);
 		} else {
-//			waitpid(pid, NULL, 0);
+			waitpid(pid, NULL, 0);
 			exit(0);
 			//return 0;
 		}
