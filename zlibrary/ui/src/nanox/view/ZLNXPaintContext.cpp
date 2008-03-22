@@ -32,6 +32,12 @@
 
 using namespace std;
 
+struct xxx_link {
+	int x1, y1, x2, y2;
+	std::string id;
+};
+extern std::vector<std::string> xxx_notes;
+extern std::vector<xxx_link> xxx_page_links;
 extern char *buf;
 #define ROUND_26_6_TO_INT(valuetoround) (((valuetoround) + 63) >> 6)
 
@@ -368,6 +374,8 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 	unsigned char         in_code;
 	int                   expect;
 
+//	bool mark = false;
+
 
 	pen.x = x;
 	pen.y = y;
@@ -439,10 +447,18 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 				pen.y - (*pglyph)->top);
 
 
+/*		if(!mark) {
+			drawLine(pen.x + (*pglyph)->left, y+1, pen.x + ((*pglyph)->root.advance.x >> 6), y+1);
+			mark = true;
+		}
+*/		
+
 		/* increment pen position */
 		pen.x += (*pglyph)->root.advance.x >> 6;
 		previous = glyph_idx;
 	}
+
+
 }
 
 void ZLNXPaintContext::drawImage(int x, int y, const ZLImageData &image) {
@@ -559,6 +575,9 @@ void ZLNXPaintContext::drawFilledCircle(int x, int y, int r) {
 
 void ZLNXPaintContext::clear(ZLColor color) {
 	memset(buf, 0xff, 800*600/4);
+
+	xxx_page_links.clear();
+	xxx_notes.clear();
 }
 
 int ZLNXPaintContext::width() const {

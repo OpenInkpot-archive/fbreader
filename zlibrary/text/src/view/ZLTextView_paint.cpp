@@ -22,7 +22,12 @@
 #include "ZLTextView.h"
 #include "ZLTextLineInfo.h"
 
+struct xxx_link {
+	int x1, y1, x2, y2;
+	std::string id;
+};
 extern std::vector<std::string> xxx_notes;
+extern std::vector<xxx_link> xxx_page_links;
 
 void ZLTextView::paint() {
 	preparePaintInfo();
@@ -173,6 +178,11 @@ void ZLTextView::drawTextLine(const ZLTextLineInfo &info, size_t from, size_t to
 		drawTreeLines(*info.NodeInfo, info.Height, info.Descent + info.VSpaceAfter);
 	}
 	ZLTextElementIterator it = fromIt;
+
+	struct xxx_link cur_link;
+	cur_link.x1 = 600;
+	cur_link.x2 = 0;
+
 	for (ZLTextWordCursor pos = info.RealStart; !pos.equalWordNumber(info.End); pos.nextWord()) {
 		const ZLTextElement &element = paragraph[pos.wordNumber()];
 		ZLTextElement::Kind kind = element.kind();
@@ -184,19 +194,55 @@ void ZLTextView::drawTextLine(const ZLTextLineInfo &info, size_t from, size_t to
 			const int x = it->XStart;
 			const int y = it->YEnd - myStyle.elementDescent(element) - myStyle.textStyle()->verticalShift();
 			if (kind == ZLTextElement::WORD_ELEMENT) {
+
 				drawWord(x, y, (const ZLTextWord&)element, pos.charNumber(), -1, false);
+
+				if(!cur_link.id.empty()) {
+					if(x < cur_link.x1) cur_link.x1 = x;
+					if(it->XEnd > cur_link.x2) cur_link.x2 = it->XEnd;				
+					cur_link.y1 = y;
+					//image = false;
+				}
 			} else {
 				context().drawImage(x, y, ((const ZLTextImageElement&)element).image());
+
+				if(!cur_link.id.empty()) {
+					if(x < cur_link.x1) cur_link.x1 = x;
+					if(x > cur_link.x2) cur_link.x2 = x;				
+					cur_link.y1 = y;
+					//image = true;
+				}
 			}
-			++it;
+			++it;		
+
 		} else if(kind == ZLTextElement::CONTROL_ELEMENT) {
 			const ZLTextControlEntry &control = ((const ZLTextControlElement&)element).entry();
-			if (control.isHyperlink() && (control.kind() == 16)) {
-				std::string id = ((const ZLTextHyperlinkControlEntry&)control).label();
-				xxx_notes.push_back(id);
+			if (control.isHyperlink()) {
+				if(control.kind() == 16) {
+					std::string id = ((const ZLTextHyperlinkControlEntry&)control).label();
+					xxx_notes.push_back(id);
+				} 
+				/*else {
+					printf("control.kind() %d\n", control.kind());
+				}
+				*/
+				
+				else if(control.kind() == 15) {
+					cur_link.id = ((const ZLTextHyperlinkControlEntry&)control).label();
+				}
 			}
 		}
 	}
+
+	if(!cur_link.id.empty()) {
+		cur_link.y2 = cur_link.y1 + 2;
+		cur_link.y1 = cur_link.y2 - info.Height;
+
+		xxx_page_links.push_back(cur_link);	
+
+		context().drawLine(cur_link.x1, cur_link.y2, cur_link.x2, cur_link.y2);
+	}
+
 	if (it != toIt) {
 		if (it->ChangeStyle) {
 			myStyle.setTextStyle(it->Style);

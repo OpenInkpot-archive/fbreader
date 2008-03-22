@@ -51,13 +51,31 @@ std::vector<xxx_toc_entry> xxx_myTOC;
 
 bool toc_jump;
 
+enum state_t {
+	ST_NORMAL = 0,
+	ST_LINK_NAV = 1
+};
+
+state_t cur_state;
+
 std::vector<std::string> xxx_notes;
+
+struct xxx_link {
+	int x1, y1, x2, y2;
+	std::string id;
+};
+
+std::vector<struct xxx_link> xxx_page_links;
+
+int cur_link_idx;
 
 #define ALLOW_RUN_EXE 1
 
 extern ZLApplication *mainApplication;
 
 unsigned char *buf;
+
+static CallbackFunction * v3_cb = NULL;
 
 int InitDoc(char *fileName)
 {
@@ -109,6 +127,8 @@ int InitDoc(char *fileName)
 	glb_page = 0;
 	toc_jump = false;
 
+	cur_state = ST_NORMAL;
+
 	buf = (unsigned char *)malloc(800*600/4);
 
 	int argc = 1;
@@ -142,7 +162,8 @@ void vSetCurPage(int p) {
 	if(init)
 		return;
 
-	xxx_notes.clear();
+	//xxx_notes.clear();
+	//xxx_page_links.clear();
 
 	if(toc_jump) {
 		((FBReader *)mainApplication)->bookTextView().gotoParagraph(p);
@@ -215,15 +236,41 @@ int Fit() {//printf("11\n");
 }
 int Prev()
 {  
-	xxx_notes.clear();
+	//xxx_notes.clear();
+	//xxx_page_links.clear();
 	mainApplication->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
 	return 1;
 }
 int Next()
 {
-	xxx_notes.clear();
-	mainApplication->doAction(ActionCode::LARGE_SCROLL_FORWARD);
+	//xxx_notes.clear();
+	//xxx_page_links.clear();
+	mainApplication->doAction(ActionCode::LARGE_SCROLL_FORWARD);	
+
 	return 1;
+}
+
+void end_link_state()
+{
+	int x, y, w, h;	
+
+	if(cur_link_idx < 0)
+		return;
+
+	xxx_link cur_link = xxx_page_links.at(cur_link_idx);
+	for(int i = cur_link.x1/4; i <= (cur_link.x2 + 3)/4; i++) 
+		for(int j = cur_link.y1; j <= cur_link.y2; j++)
+			buf[i+j*150] = ~buf[i+j*150];
+
+	x = cur_link.x1;
+	y = cur_link.y1;
+	w = cur_link.x2 - cur_link.x1;
+	h = cur_link.y2-cur_link.y1, buf;
+
+	v3_cb->BeginDialog();
+	v3_cb->BlitBitmap(x, y, w, h, x, y, 600, 800, buf);
+	v3_cb->PartialPrint();
+	v3_cb->EndDialog();
 }
 
 int IsStandardStatusBarVisible() { return 0; }
@@ -436,8 +483,87 @@ void   vFreeDir(){
 
 int OnKeyPressed(int keyId, int state)
 {
+
+	if(cur_state == ST_LINK_NAV) {		
+		switch ( keyId ) {
+			case KEY_OK: {
+				xxx_link cur_link = xxx_page_links.at(cur_link_idx);
+
+				end_link_state();
+				cur_state = ST_NORMAL;
+				((FBReader *)mainApplication)->bookTextView()._onStylusPress((cur_link.x1 + cur_link.x2)/2, (cur_link.y1 + cur_link.y2)/2);
+				return 1;
+				break;
+						 }
+
+			case KEY_CANCEL:			
+				cur_state = ST_NORMAL;
+				end_link_state();
+				return 2;
+				break;
+
+			case KEY_0:
+			case KEY_9: {
+NEXT:			int x, y, w, h;	
+				xxx_link cur_link;
+
+				v3_cb->BeginDialog();
+				if(cur_link_idx >= 0) {
+					cur_link = xxx_page_links.at(cur_link_idx);
+					for(int i = cur_link.x1/4; i <= (cur_link.x2+3)/4; i++) 
+						for(int j = cur_link.y1; j <= cur_link.y2; j++)
+							buf[i+j*150] = ~buf[i+j*150];
+
+					x = cur_link.x1;
+					y = cur_link.y1;
+					w = cur_link.x2 - cur_link.x1;
+					h = cur_link.y2-cur_link.y1, buf;
+					v3_cb->BlitBitmap(x, y, w, h, x, y, 600, 800, buf);
+					//v3_cb->PartialPrint();
+				}
+
+				if((keyId == KEY_0) || (cur_link_idx == -1)) {
+					cur_link_idx++;
+					if(cur_link_idx >= xxx_page_links.size())
+						cur_link_idx = 0;
+				} else {
+					cur_link_idx--;
+					if(cur_link_idx < 0)
+						cur_link_idx = xxx_page_links.size() - 1;
+				}
+
+				cur_link = xxx_page_links.at(cur_link_idx);
+				for(int i = cur_link.x1/4; i <= (cur_link.x2+3)/4; i++) 
+					for(int j = cur_link.y1; j <= cur_link.y2; j++)
+						buf[i+j*150] = ~buf[i+j*150];
+
+				x = cur_link.x1;
+				y = cur_link.y1;
+				w = cur_link.x2 - cur_link.x1;
+				h = cur_link.y2 - cur_link.y1;
+				//v3_cb->BlitBitmap(0, 0, 600, 800, 0, 0, 600, 800, buf);
+				v3_cb->BlitBitmap(x, y, w, h, x, y, 600, 800, buf);
+				v3_cb->PartialPrint();
+				v3_cb->EndDialog();
+
+				return 2;
+				break;
+						}
+		}
+		return 2;		
+	}
+
 	static std::vector<std::string>::iterator it;
 	switch ( keyId ) {
+		case LONG_KEY_7:
+			if(!xxx_page_links.empty()) {
+				cur_state = ST_LINK_NAV;
+				cur_link_idx = -1;
+				goto NEXT;
+				return 2;
+			}
+			break;
+
 		case KEY_7:
 			if(xxx_notes.size() != 0) {
 				it = xxx_notes.begin();
@@ -465,9 +591,34 @@ int OnKeyPressed(int keyId, int state)
 				return 1;
 			}
 			break;
+
+		case KEY_NEXT:
+		case KEY_PREV:
+			if(((FBReader *)mainApplication)->getMode() == FBReader::FOOTNOTE_MODE) {				
+				if(keyId == KEY_NEXT)
+					if((it == xxx_notes.end()) || (++it == xxx_notes.end()))
+						it = xxx_notes.begin();
+				else {
+					if(it == xxx_notes.begin())
+						it = xxx_notes.end();
+					it--;
+				}
+
+
+				((FBReader *)mainApplication)->tryShowFootnoteView(*it, false);
+
+				return 1;
+			}
+
+			break;
+
 	}
 	return 0;
 }
 
+void SetCallbackFunction(struct CallbackFunction *cb)
+{
+    v3_cb = cb;
+}
 
 }; //extern "C"
