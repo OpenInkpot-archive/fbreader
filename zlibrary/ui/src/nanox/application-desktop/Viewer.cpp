@@ -502,6 +502,8 @@ int OnKeyPressed(int keyId, int state)
 				return 2;
 				break;
 
+			case KEY_UP:
+			case KEY_DOWN:
 			case KEY_0:
 			case KEY_9: {
 NEXT:			int x, y, w, h;	
@@ -522,7 +524,7 @@ NEXT:			int x, y, w, h;
 					//v3_cb->PartialPrint();
 				}
 
-				if((keyId == KEY_0) || (cur_link_idx == -1)) {
+				if((keyId == KEY_0) || (keyId == KEY_UP) || (cur_link_idx == -1)) {
 					cur_link_idx++;
 					if(cur_link_idx >= xxx_page_links.size())
 						cur_link_idx = 0;
@@ -594,6 +596,7 @@ NEXT:			int x, y, w, h;
 			}
 			break;
 
+		case KEY_DOWN:
 		case KEY_NEXT:
 			if(((FBReader *)mainApplication)->getMode() == FBReader::FOOTNOTE_MODE) {				
 				if((it == xxx_notes.end()) || (++it == xxx_notes.end()))
@@ -606,6 +609,7 @@ NEXT:			int x, y, w, h;
 
 			break;
 
+		case KEY_UP:
 		case KEY_PREV:
 			if(((FBReader *)mainApplication)->getMode() == FBReader::FOOTNOTE_MODE) {				
 				if(it == xxx_notes.begin())
