@@ -36,7 +36,6 @@ struct xxx_link {
 	int x1, y1, x2, y2;
 	std::string id;
 };
-extern std::vector<std::string> xxx_notes;
 extern std::vector<xxx_link> xxx_page_links;
 extern char *buf;
 #define ROUND_26_6_TO_INT(valuetoround) (((valuetoround) + 63) >> 6)
@@ -577,7 +576,6 @@ void ZLNXPaintContext::clear(ZLColor color) {
 	memset(buf, 0xff, 800*600/4);
 
 	xxx_page_links.clear();
-	xxx_notes.clear();
 }
 
 int ZLNXPaintContext::width() const {

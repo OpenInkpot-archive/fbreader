@@ -162,7 +162,7 @@ void vSetCurPage(int p) {
 	if(init)
 		return;
 
-	//xxx_notes.clear();
+	xxx_notes.clear();
 	//xxx_page_links.clear();
 
 	if(toc_jump) {
@@ -236,14 +236,14 @@ int Fit() {//printf("11\n");
 }
 int Prev()
 {  
-	//xxx_notes.clear();
+	xxx_notes.clear();
 	//xxx_page_links.clear();
 	mainApplication->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
 	return 1;
 }
 int Next()
 {
-	//xxx_notes.clear();
+	xxx_notes.clear();
 	//xxx_page_links.clear();
 	mainApplication->doAction(ActionCode::LARGE_SCROLL_FORWARD);	
 
@@ -564,8 +564,10 @@ NEXT:			int x, y, w, h;
 			}
 			break;
 
-		case KEY_7:
-			if(xxx_notes.size() != 0) {
+		case KEY_7:			
+			if(((FBReader *)mainApplication)->getMode() == FBReader::FOOTNOTE_MODE)
+				return 2;
+			else if(xxx_notes.size() != 0) {
 				it = xxx_notes.begin();
 				((FBReader *)mainApplication)->tryShowFootnoteView(*it, false);
 				return 1;
@@ -593,17 +595,22 @@ NEXT:			int x, y, w, h;
 			break;
 
 		case KEY_NEXT:
+			if(((FBReader *)mainApplication)->getMode() == FBReader::FOOTNOTE_MODE) {				
+				if((it == xxx_notes.end()) || (++it == xxx_notes.end()))
+					it = xxx_notes.begin();
+
+				((FBReader *)mainApplication)->tryShowFootnoteView(*it, false);
+
+				return 1;
+			}
+
+			break;
+
 		case KEY_PREV:
 			if(((FBReader *)mainApplication)->getMode() == FBReader::FOOTNOTE_MODE) {				
-				if(keyId == KEY_NEXT)
-					if((it == xxx_notes.end()) || (++it == xxx_notes.end()))
-						it = xxx_notes.begin();
-				else {
-					if(it == xxx_notes.begin())
-						it = xxx_notes.end();
-					it--;
-				}
-
+				if(it == xxx_notes.begin())
+					it = xxx_notes.end();
+				it--;
 
 				((FBReader *)mainApplication)->tryShowFootnoteView(*it, false);
 
