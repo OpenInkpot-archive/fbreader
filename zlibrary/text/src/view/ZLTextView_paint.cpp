@@ -189,13 +189,18 @@ void ZLTextView::drawTextLine(const ZLTextLineInfo &info, size_t from, size_t to
 	cur_link.next = false;
 	static bool link_not_terminated = false;
 
-	//printf("xxxxxxxxxxxxxxxxxxxxxxxxx\n");
-	for (ZLTextWordCursor pos = info.RealStart; !pos.equalWordNumber(info.End); pos.nextWord()) {
+//	printf("xxxxxxxxxxxxxxxxxxxxxxxxx\n");
+	bool started = false;
+	for (ZLTextWordCursor pos = info.Start; //RealStart; 
+			!pos.equalWordNumber(info.End); pos.nextWord()) {
 		const ZLTextElement &element = paragraph[pos.wordNumber()];
 		ZLTextElement::Kind kind = element.kind();
 	
-		//printf("kind: %d\n", element.kind());
-		if ((kind == ZLTextElement::WORD_ELEMENT) || (kind == ZLTextElement::IMAGE_ELEMENT)) {
+
+//		printf("kind: %d\n", element.kind());
+		if(pos.equalWordNumber(info.RealStart))
+			started = true;
+		if (started && (kind == ZLTextElement::WORD_ELEMENT) || (kind == ZLTextElement::IMAGE_ELEMENT)) {
 			if (it->ChangeStyle) {
 				myStyle.setTextStyle(it->Style);
 			}
@@ -210,7 +215,7 @@ void ZLTextView::drawTextLine(const ZLTextLineInfo &info, size_t from, size_t to
 
 		} else if(kind == ZLTextElement::CONTROL_ELEMENT) {
 			const ZLTextControlEntry &control = ((const ZLTextControlElement&)element).entry();
-			//printf("control.kind(): %d, isHyperlink: %s\n", control.kind(), control.isHyperlink()?"true":"false");
+//			printf("control.kind(): %d, isHyperlink: %s\n", control.kind(), control.isHyperlink()?"true":"false");
 
 			if (control.isHyperlink()) {
 				if(control.kind() == 16) {
@@ -247,9 +252,14 @@ void ZLTextView::drawTextLine(const ZLTextLineInfo &info, size_t from, size_t to
 					if(cur_link.id.empty() || link_not_terminated)
 						cur_link.x1 = fromIt->XStart;
 
-					const int y = (it-1)->YEnd - myStyle.elementDescent(element) - myStyle.textStyle()->verticalShift();
 
-					cur_link.x2 = (it-1)->XEnd;
+					ZLTextElementIterator lit = it;
+					if(lit != fromIt)
+						lit--;
+					
+					const int y = lit->YEnd - myStyle.elementDescent(element) - myStyle.textStyle()->verticalShift();
+
+					cur_link.x2 = lit->XEnd;
 					cur_link.y2 = y;
 					cur_link.y1 = y - info.Height;
 
@@ -265,16 +275,19 @@ void ZLTextView::drawTextLine(const ZLTextLineInfo &info, size_t from, size_t to
 	}
 
 	if(!cur_link.id.empty() || link_not_terminated) {
+		ZLTextElementIterator lit = it;
+		if(lit != fromIt)
+			lit--;
+
 		ZLTextWordCursor pos = info.RealStart;		
 
-		const ZLTextElement &element = paragraph[pos.wordNumber()];
-		const int y = (it-1)->YEnd - myStyle.elementDescent(element) - myStyle.textStyle()->verticalShift();
-		
+		const ZLTextElement &element = paragraph[info.End.wordNumber()];
+		const int y = lit->YEnd - myStyle.elementDescent(element) - myStyle.textStyle()->verticalShift();
 		if(cur_link.id.empty()) {
 			cur_link.x1 = fromIt->XStart;
 		}
 
-		cur_link.x2 = (it-1)->XEnd;
+		cur_link.x2 = lit->XEnd;
 		cur_link.y2 = y;
 		cur_link.y1 = y - info.Height;
 		cur_link.next = true;

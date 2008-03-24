@@ -163,7 +163,10 @@ void vSetCurPage(int p) {
 	if(init)
 		return;
 
-	xxx_notes.clear();
+	
+	if(((FBReader *)mainApplication)->getMode() != FBReader::FOOTNOTE_MODE)
+		xxx_notes.clear();
+
 	//xxx_page_links.clear();
 
 	if(toc_jump) {
@@ -237,14 +240,16 @@ int Fit() {//printf("11\n");
 }
 int Prev()
 {  
-	xxx_notes.clear();
+	if(((FBReader *)mainApplication)->getMode() != FBReader::FOOTNOTE_MODE)
+		xxx_notes.clear();
 	//xxx_page_links.clear();
 	mainApplication->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
 	return 1;
 }
 int Next()
 {
-	xxx_notes.clear();
+	if(((FBReader *)mainApplication)->getMode() != FBReader::FOOTNOTE_MODE)
+		xxx_notes.clear();
 	//xxx_page_links.clear();
 	mainApplication->doAction(ActionCode::LARGE_SCROLL_FORWARD);	
 
@@ -604,8 +609,8 @@ NEXT:			int x, y, w, h;
 				return 2;
 			else if(xxx_notes.size() != 0) {
 				it = xxx_notes.begin();
+				((FBReader *)mainApplication)->setMode(FBReader::FOOTNOTE_MODE);
 				((FBReader *)mainApplication)->tryShowFootnoteView(*it, false);
-			//	((FBReader *)mainApplication)->setMode(FBReader::FOOTNOTE_MODE);
 				return 1;
 			}
 			break;
@@ -630,9 +635,12 @@ NEXT:			int x, y, w, h;
 			}
 			break;
 
-		case KEY_DOWN:
-		case KEY_NEXT:
-			if(((FBReader *)mainApplication)->getMode() == FBReader::FOOTNOTE_MODE) {				
+//		case LONG_KEY_DOWN:
+		case LONG_KEY_NEXT:
+			mainApplication->doAction(ActionCode::REDO);
+			return 1;
+
+/*			if(((FBReader *)mainApplication)->getMode() == FBReader::FOOTNOTE_MODE) {				
 				if((it == xxx_notes.end()) || (++it == xxx_notes.end()))
 					it = xxx_notes.begin();
 
@@ -640,12 +648,15 @@ NEXT:			int x, y, w, h;
 
 				return 1;
 			}
-
+*/
 			break;
 
-		case KEY_UP:
-		case KEY_PREV:
-			if(((FBReader *)mainApplication)->getMode() == FBReader::FOOTNOTE_MODE) {				
+
+//		case LONG_KEY_UP:
+		case LONG_KEY_PREV:
+			mainApplication->doAction(ActionCode::UNDO);
+			return 1;
+/*			if(((FBReader *)mainApplication)->getMode() == FBReader::FOOTNOTE_MODE) {				
 				if(it == xxx_notes.begin())
 					it = xxx_notes.end();
 				it--;
@@ -654,8 +665,9 @@ NEXT:			int x, y, w, h;
 
 				return 1;
 			}
-
+*/
 			break;
+			
 
 		case LONG_KEY_CANCEL:
 			mainApplication->doAction(ActionCode::CANCEL);
