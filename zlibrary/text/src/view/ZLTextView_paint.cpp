@@ -25,6 +25,7 @@
 struct xxx_link {
 	int x1, y1, x2, y2;
 	std::string id;
+	bool next;
 };
 extern std::vector<std::string> xxx_notes;
 extern std::vector<xxx_link> xxx_page_links;
@@ -180,13 +181,20 @@ void ZLTextView::drawTextLine(const ZLTextLineInfo &info, size_t from, size_t to
 	ZLTextElementIterator it = fromIt;
 
 	struct xxx_link cur_link;
-	cur_link.x1 = 600;
+	cur_link.id.erase();
+	cur_link.x1 = 0;
 	cur_link.x2 = 0;
+	cur_link.y1 = 0;
+	cur_link.y2 = 0;
+	cur_link.next = false;
+	static bool link_not_terminated = false;
 
+	//printf("xxxxxxxxxxxxxxxxxxxxxxxxx\n");
 	for (ZLTextWordCursor pos = info.RealStart; !pos.equalWordNumber(info.End); pos.nextWord()) {
 		const ZLTextElement &element = paragraph[pos.wordNumber()];
 		ZLTextElement::Kind kind = element.kind();
 	
+		//printf("kind: %d\n", element.kind());
 		if ((kind == ZLTextElement::WORD_ELEMENT) || (kind == ZLTextElement::IMAGE_ELEMENT)) {
 			if (it->ChangeStyle) {
 				myStyle.setTextStyle(it->Style);
@@ -194,54 +202,90 @@ void ZLTextView::drawTextLine(const ZLTextLineInfo &info, size_t from, size_t to
 			const int x = it->XStart;
 			const int y = it->YEnd - myStyle.elementDescent(element) - myStyle.textStyle()->verticalShift();
 			if (kind == ZLTextElement::WORD_ELEMENT) {
-
 				drawWord(x, y, (const ZLTextWord&)element, pos.charNumber(), -1, false);
-
-				if(!cur_link.id.empty()) {
-					if(x < cur_link.x1) cur_link.x1 = x;
-					if(it->XEnd > cur_link.x2) cur_link.x2 = it->XEnd;				
-					cur_link.y1 = y;
-					//image = false;
-				}
 			} else {
 				context().drawImage(x, y, ((const ZLTextImageElement&)element).image());
-
-				if(!cur_link.id.empty()) {
-					if(x < cur_link.x1) cur_link.x1 = x;
-					if(x > cur_link.x2) cur_link.x2 = x;				
-					cur_link.y1 = y;
-					//image = true;
-				}
 			}
 			++it;		
 
 		} else if(kind == ZLTextElement::CONTROL_ELEMENT) {
 			const ZLTextControlEntry &control = ((const ZLTextControlElement&)element).entry();
+			//printf("control.kind(): %d, isHyperlink: %s\n", control.kind(), control.isHyperlink()?"true":"false");
+
 			if (control.isHyperlink()) {
 				if(control.kind() == 16) {
+					//FOOTNOTE					
 					std::string id = ((const ZLTextHyperlinkControlEntry&)control).label();
+					//printf("id: %s\n", id.c_str());
 					xxx_notes.push_back(id);
-				} 
-				/*else {
-					printf("control.kind() %d\n", control.kind());
-				}
-				*/
-				
-				else if(control.kind() == 15) {
+
+				} else if(control.kind() == 15) {
+					//INTERNAL_HYPERLINK
+					//printf("hyperlink start\n");
+
+					if(!cur_link.id.empty()) {
+						const int y = it->YEnd - myStyle.elementDescent(element) - myStyle.textStyle()->verticalShift();
+
+						cur_link.x2 = it->XEnd;
+						cur_link.y2 = y;
+						cur_link.y1 = y - info.Height;
+
+						xxx_page_links.push_back(cur_link);	
+
+						context().drawLine(cur_link.x1, cur_link.y2, cur_link.x2, cur_link.y2);
+					}
+
 					cur_link.id = ((const ZLTextHyperlinkControlEntry&)control).label();
+					cur_link.x1 = it->XStart;
+				}
+				else {
+					//printf("control.kind() %d, id: %s\n", control.kind(), ((const ZLTextHyperlinkControlEntry&)control).label().c_str());
+				}
+				
+			} else {
+				if(control.kind() == 15) {
+					if(cur_link.id.empty() || link_not_terminated)
+						cur_link.x1 = fromIt->XStart;
+
+					const int y = (it-1)->YEnd - myStyle.elementDescent(element) - myStyle.textStyle()->verticalShift();
+
+					cur_link.x2 = (it-1)->XEnd;
+					cur_link.y2 = y;
+					cur_link.y1 = y - info.Height;
+
+					xxx_page_links.push_back(cur_link);	
+
+					context().drawLine(cur_link.x1, cur_link.y2, cur_link.x2, cur_link.y2);
+
+					cur_link.id.erase();
+					link_not_terminated = false;
 				}
 			}
 		}
 	}
 
-	if(!cur_link.id.empty()) {
-		cur_link.y2 = cur_link.y1 + 2;
-		cur_link.y1 = cur_link.y2 - info.Height;
+	if(!cur_link.id.empty() || link_not_terminated) {
+		ZLTextWordCursor pos = info.RealStart;		
+
+		const ZLTextElement &element = paragraph[pos.wordNumber()];
+		const int y = (it-1)->YEnd - myStyle.elementDescent(element) - myStyle.textStyle()->verticalShift();
+		
+		if(cur_link.id.empty()) {
+			cur_link.x1 = fromIt->XStart;
+		}
+
+		cur_link.x2 = (it-1)->XEnd;
+		cur_link.y2 = y;
+		cur_link.y1 = y - info.Height;
+		cur_link.next = true;
 
 		xxx_page_links.push_back(cur_link);	
 
 		context().drawLine(cur_link.x1, cur_link.y2, cur_link.x2, cur_link.y2);
+
+		link_not_terminated = true;
 	}
+	
 
 	if (it != toIt) {
 		if (it->ChangeStyle) {

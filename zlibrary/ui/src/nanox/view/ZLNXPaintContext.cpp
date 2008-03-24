@@ -35,6 +35,7 @@ using namespace std;
 struct xxx_link {
 	int x1, y1, x2, y2;
 	std::string id;
+	bool next;
 };
 extern std::vector<xxx_link> xxx_page_links;
 extern char *buf;

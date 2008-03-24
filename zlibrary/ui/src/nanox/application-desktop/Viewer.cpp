@@ -63,6 +63,7 @@ std::vector<std::string> xxx_notes;
 struct xxx_link {
 	int x1, y1, x2, y2;
 	std::string id;
+	bool next;
 };
 
 std::vector<struct xxx_link> xxx_page_links;
@@ -257,18 +258,25 @@ void end_link_state()
 	if(cur_link_idx < 0)
 		return;
 
-	xxx_link cur_link = xxx_page_links.at(cur_link_idx);
-	for(int i = cur_link.x1/4; i <= (cur_link.x2 + 3)/4; i++) 
-		for(int j = cur_link.y1; j <= cur_link.y2; j++)
-			buf[i+j*150] = ~buf[i+j*150];
-
-	x = cur_link.x1;
-	y = cur_link.y1;
-	w = cur_link.x2 - cur_link.x1;
-	h = cur_link.y2-cur_link.y1, buf;
-
 	v3_cb->BeginDialog();
-	v3_cb->BlitBitmap(x, y, w, h, x, y, 600, 800, buf);
+	for(int tmp_idx = cur_link_idx; 
+			(tmp_idx >= 0) && (tmp_idx < xxx_page_links.size());
+			tmp_idx++) {					
+
+		xxx_link cur_link = xxx_page_links.at(tmp_idx);
+		for(int i = cur_link.x1/4; i <= (cur_link.x2 + 3)/4; i++) 
+			for(int j = cur_link.y1; j <= cur_link.y2; j++)
+				buf[i+j*150] = ~buf[i+j*150];
+
+		x = cur_link.x1;
+		y = cur_link.y1;
+		w = cur_link.x2 - cur_link.x1;
+		h = cur_link.y2-cur_link.y1, buf;
+		v3_cb->BlitBitmap(x, y, w, h, x, y, 600, 800, buf);
+
+					if(!cur_link.next)
+						break;
+	}
 	v3_cb->PartialPrint();
 	v3_cb->EndDialog();
 }
@@ -491,7 +499,8 @@ int OnKeyPressed(int keyId, int state)
 
 				end_link_state();
 				cur_state = ST_NORMAL;
-				((FBReader *)mainApplication)->bookTextView()._onStylusPress((cur_link.x1 + cur_link.x2)/2, (cur_link.y1 + cur_link.y2)/2);
+//				((FBReader *)mainApplication)->bookTextView()._onStylusPress((cur_link.x1 + cur_link.x2)/2, (cur_link.y1 + cur_link.y2)/2);
+				((FBReader *)mainApplication)->tryShowFootnoteView(cur_link.id, false);
 				return 1;
 				break;
 						 }
@@ -510,8 +519,12 @@ NEXT:			int x, y, w, h;
 				xxx_link cur_link;
 
 				v3_cb->BeginDialog();
-				if(cur_link_idx >= 0) {
-					cur_link = xxx_page_links.at(cur_link_idx);
+
+				for(int tmp_idx = cur_link_idx; 
+						(tmp_idx >= 0) && (tmp_idx < xxx_page_links.size());
+						tmp_idx++) {					
+
+					cur_link = xxx_page_links.at(tmp_idx);
 					for(int i = cur_link.x1/4; i <= (cur_link.x2+3)/4; i++) 
 						for(int j = cur_link.y1; j <= cur_link.y2; j++)
 							buf[i+j*150] = ~buf[i+j*150];
@@ -522,29 +535,49 @@ NEXT:			int x, y, w, h;
 					h = cur_link.y2-cur_link.y1, buf;
 					v3_cb->BlitBitmap(x, y, w, h, x, y, 600, 800, buf);
 					//v3_cb->PartialPrint();
+
+					if(!cur_link.next)
+						break;
 				}
 
 				if((keyId == KEY_0) || (keyId == KEY_UP) || (cur_link_idx == -1)) {
+					if((cur_link_idx >= 0) && xxx_page_links.at(cur_link_idx).next) 
+						while(++cur_link_idx && (cur_link_idx < xxx_page_links.size()) && xxx_page_links.at(cur_link_idx).next);
 					cur_link_idx++;
+
 					if(cur_link_idx >= xxx_page_links.size())
 						cur_link_idx = 0;
 				} else {
-					cur_link_idx--;
-					if(cur_link_idx < 0)
+					--cur_link_idx;
+					while(--cur_link_idx && (cur_link_idx >= 0) && xxx_page_links.at(cur_link_idx).next);
+
+					if(cur_link_idx == -1)
+						cur_link_idx = 0;
+					else if(cur_link_idx < 0)
 						cur_link_idx = xxx_page_links.size() - 1;
+					else
+						++cur_link_idx;
 				}
 
-				cur_link = xxx_page_links.at(cur_link_idx);
-				for(int i = cur_link.x1/4; i <= (cur_link.x2+3)/4; i++) 
-					for(int j = cur_link.y1; j <= cur_link.y2; j++)
-						buf[i+j*150] = ~buf[i+j*150];
+				for(int tmp_idx = cur_link_idx; 
+						(tmp_idx >= 0) && (tmp_idx < xxx_page_links.size());
+						tmp_idx++) {					
 
-				x = cur_link.x1;
-				y = cur_link.y1;
-				w = cur_link.x2 - cur_link.x1;
-				h = cur_link.y2 - cur_link.y1;
-				//v3_cb->BlitBitmap(0, 0, 600, 800, 0, 0, 600, 800, buf);
-				v3_cb->BlitBitmap(x, y, w, h, x, y, 600, 800, buf);
+					cur_link = xxx_page_links.at(tmp_idx);
+					for(int i = cur_link.x1/4; i <= (cur_link.x2+3)/4; i++) 
+						for(int j = cur_link.y1; j <= cur_link.y2; j++)
+							buf[i+j*150] = ~buf[i+j*150];
+
+					x = cur_link.x1;
+					y = cur_link.y1;
+					w = cur_link.x2 - cur_link.x1;
+					h = cur_link.y2 - cur_link.y1;
+					//v3_cb->BlitBitmap(0, 0, 600, 800, 0, 0, 600, 800, buf);
+					v3_cb->BlitBitmap(x, y, w, h, x, y, 600, 800, buf);
+
+					if(!cur_link.next)
+						break;
+				}
 				v3_cb->PartialPrint();
 				v3_cb->EndDialog();
 
@@ -572,6 +605,7 @@ NEXT:			int x, y, w, h;
 			else if(xxx_notes.size() != 0) {
 				it = xxx_notes.begin();
 				((FBReader *)mainApplication)->tryShowFootnoteView(*it, false);
+			//	((FBReader *)mainApplication)->setMode(FBReader::FOOTNOTE_MODE);
 				return 1;
 			}
 			break;
@@ -622,6 +656,12 @@ NEXT:			int x, y, w, h;
 			}
 
 			break;
+
+		case LONG_KEY_CANCEL:
+			mainApplication->doAction(ActionCode::CANCEL);
+			return 1;
+			break;
+			
 
 	}
 	return 0;
