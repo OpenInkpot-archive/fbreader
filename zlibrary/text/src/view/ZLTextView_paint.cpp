@@ -29,6 +29,7 @@ struct xxx_link {
 };
 extern std::vector<std::string> xxx_notes;
 extern std::vector<xxx_link> xxx_page_links;
+bool link_not_terminated;
 
 void ZLTextView::paint() {
 	preparePaintInfo();
@@ -40,6 +41,8 @@ void ZLTextView::paint() {
 	if (empty()) {
 		return;
 	}
+
+	link_not_terminated = false;
 
 	std::vector<size_t> labels;
 	labels.reserve(myLineInfos.size() + 1);
@@ -187,7 +190,6 @@ void ZLTextView::drawTextLine(const ZLTextLineInfo &info, size_t from, size_t to
 	cur_link.y1 = 0;
 	cur_link.y2 = 0;
 	cur_link.next = false;
-	static bool link_not_terminated = false;
 
 //	printf("xxxxxxxxxxxxxxxxxxxxxxxxx\n");
 	bool started = false;
