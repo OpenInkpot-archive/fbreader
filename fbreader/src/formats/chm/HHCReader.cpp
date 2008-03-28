@@ -22,6 +22,13 @@
 #include "HHCReader.h"
 #include "CHMReferenceCollection.h"
 
+struct xxx_toc_entry {
+	int paragraph;
+	std::string text;
+};
+
+extern std::vector<struct xxx_toc_entry> xxx_myTOC;
+
 HHCReader::HHCReader(CHMReferenceCollection &collection, BookModel &model, const std::string &encoding) : HtmlReader(encoding), myReferenceCollection(collection), myBookReader(model) {
 }
 
@@ -103,5 +110,8 @@ bool HHCReader::characterDataHandler(const char*, int, bool) {
 void HHCReader::setReferences() {
 	for (size_t i = 0; i < myReferenceVector.size(); ++i) {
 		myBookReader.setReference(i, myBookReader.model().label(myReferenceVector[i]).ParagraphNumber);
+
+		if(xxx_myTOC.size() > i)
+			xxx_myTOC[i].paragraph = myBookReader.model().label(myReferenceVector[i]).ParagraphNumber;
 	}
 }
