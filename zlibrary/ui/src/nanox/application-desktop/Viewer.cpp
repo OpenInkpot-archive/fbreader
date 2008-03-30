@@ -356,6 +356,7 @@ void   vEndDoc()
 
 	delete mainApplication;
 	ZLibrary::shutdown();
+	sync();
 }
 int  iInitDocF(char *filename,int pageNo, int flag) { 	
 	init = false; 
