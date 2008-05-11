@@ -58,8 +58,10 @@ ZLNXPaintContext::ZLNXPaintContext() {
 
 	error = FT_Init_FreeType( &library );
 
+	fPath.push_back("/mnt/fbreader/fonts/");
 	fPath.push_back("/mnt/FBREADER/FONTS/");
-	fPath.push_back("/mnt/CRENGINE/FONTS/");
+	//fPath.push_back("/mnt/CRENGINE/FONTS/");
+	//fPath.push_back("/mnt/crengine/fonts/");
 	fPath.push_back("/root/fbreader/fonts/");
 	fPath.push_back("/root/crengine/fonts/");
 	fPath.push_back("/root/fonts/truetype/");
@@ -126,7 +128,8 @@ void ZLNXPaintContext::cacheFonts() const {
 				continue;
 
 			idx -= 4;
-			if(strncasecmp(dp->d_name + idx, ".TTF", 4))
+			if(strncasecmp(dp->d_name + idx, ".TTF", 4) &&
+				strncasecmp(dp->d_name + idx, ".ttf", 4))
 				continue;
 
 
@@ -237,6 +240,8 @@ void ZLNXPaintContext::setFont(const std::string &family, int size, bool bold, b
 
 	charWidthCache = &(fc->charWidthCacheAll[fCurSize]);
 	glyphCache = &(fc->glyphCacheAll[fCurSize]);
+	kerningCache = &(fc->kerningCacheAll[fCurSize]);
+	glyphIdxCache = &(fc->glyphIdxCacheAll[fCurSize]);
 
 	myStringHeight = fCurSize * 160 / 72;
 	myDescent = (abs((*face)->size->metrics.descender) + 63 ) >> 6;
@@ -309,10 +314,27 @@ int ZLNXPaintContext::stringWidth(const char *str, int len) const {
 		else                              /* ASCII, U+0000 - U+007F */
 			codepoint = in_code;
 
-		glyph_idx = FT_Get_Char_Index(*face, codepoint);	
+		if(glyphIdxCache->find(codepoint) != glyphIdxCache->end()) {
+			glyph_idx = (*glyphIdxCache)[codepoint];
+		} else {
+			glyph_idx = FT_Get_Char_Index(*face, codepoint);
+			
+			(*glyphIdxCache)[codepoint] = glyph_idx;
+		}
+
 		if ( use_kerning && previous && glyph_idx ) { 
-			FT_Get_Kerning( *face, previous, glyph_idx, FT_KERNING_DEFAULT, &delta ); 
-			kerning = delta.x >> 6;
+			if((kerningCache->find(glyph_idx) != kerningCache->end()) &&
+				((*kerningCache)[glyph_idx].find(previous) != (*kerningCache)[glyph_idx].end())) {
+				
+				kerning = ((*kerningCache)[glyph_idx])[previous];
+			} else {
+
+				FT_Get_Kerning( *face, previous, glyph_idx, FT_KERNING_DEFAULT, &delta ); 
+				kerning = delta.x >> 6;
+
+				int *k = &((*kerningCache)[glyph_idx])[previous];
+				*k = kerning;
+			}
 		} else 
 			kerning = 0;
 
@@ -373,6 +395,7 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 	unsigned long         codepoint;
 	unsigned char         in_code;
 	int                   expect;
+	int kerning;
 
 //	bool mark = false;
 
@@ -421,10 +444,28 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 		else                              /* ASCII, U+0000 - U+007F */
 			codepoint = in_code;
 
-		glyph_idx = FT_Get_Char_Index(*face, codepoint);	
+		if(glyphIdxCache->find(codepoint) != glyphIdxCache->end()) {
+			glyph_idx = (*glyphIdxCache)[codepoint];
+		} else {
+			glyph_idx = FT_Get_Char_Index(*face, codepoint);
+			
+			(*glyphIdxCache)[codepoint] = glyph_idx;
+		}
+
 		if ( use_kerning && previous && glyph_idx ) { 
-			FT_Get_Kerning( *face, previous, glyph_idx, FT_KERNING_DEFAULT, &delta ); 
-			pen.x += delta.x >> 6;		
+			if((kerningCache->find(glyph_idx) != kerningCache->end()) &&
+				((*kerningCache)[glyph_idx].find(previous) != (*kerningCache)[glyph_idx].end())) {
+				
+				kerning = ((*kerningCache)[glyph_idx])[previous];
+			} else {
+
+				FT_Get_Kerning( *face, previous, glyph_idx, FT_KERNING_DEFAULT, &delta ); 
+				kerning = delta.x >> 6;
+
+				int *k = &((*kerningCache)[glyph_idx])[previous];
+				*k = kerning;
+			}
+			pen.x += kerning;		
 		}
 
 		if(glyphCache->find(codepoint) != glyphCache->end()) { 

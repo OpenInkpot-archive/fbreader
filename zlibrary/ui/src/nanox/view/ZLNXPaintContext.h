@@ -89,6 +89,9 @@ private:
 
 			std::map<int, std::map<unsigned long, int> > charWidthCacheAll;
 			std::map<int, std::map<unsigned long, FT_BitmapGlyph> > glyphCacheAll;
+			
+			std::map<int, std::map<FT_UInt, std::map<FT_UInt, int> > > kerningCacheAll;
+			std::map<int, std::map<unsigned long, FT_UInt> > glyphIdxCacheAll;
 	};
 	
 
@@ -96,6 +99,9 @@ private:
 	mutable std::map<std::string, std::map<int, Font> > fontCache;
 	mutable std::map<unsigned long, int> *charWidthCache;
 	mutable std::map<unsigned long, FT_BitmapGlyph> *glyphCache;
+
+	mutable std::map<FT_UInt, std::map<FT_UInt, int> > *kerningCache;
+	mutable std::map<unsigned long, FT_UInt> *glyphIdxCache;
 
 	FT_Face	*face;
 	std::string fCurFamily;
