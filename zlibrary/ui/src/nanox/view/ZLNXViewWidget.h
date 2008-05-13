@@ -23,7 +23,8 @@
 #include <ZLView.h>
 #include <ZLApplication.h>
 
-extern char *buf;
+#include <xcb/xcb.h>
+
 
 class ZLNXViewWidget : public ZLViewWidget {
 	public:
@@ -32,8 +33,12 @@ class ZLNXViewWidget : public ZLViewWidget {
 
 		int width() const;
 		int height() const;
+		void doPaint();
 
 	private:
+		xcb_gcontext_t		gc;
+
+
 		void updateCoordinates(int &x, int &y);
 
 		void trackStylus(bool track);

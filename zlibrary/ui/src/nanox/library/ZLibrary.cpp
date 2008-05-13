@@ -32,9 +32,12 @@
 #include "../dialogs/ZLNXDialogManager.h"
 #include "../image/ZLNXImageManager.h"
 
+#include "../../../../../fbreader/src/fbreader/FBReaderActions.h"
+
 class ZLApplication;
 ZLApplication *mainApplication;
 
+extern xcb_connection_t *connection;
 
 class ZLNXLibraryImplementation : public ZLibraryImplementation {
 	private:
@@ -66,12 +69,50 @@ ZLPaintContext *ZLNXLibraryImplementation::createContext() {
 }
 
 void ZLNXLibraryImplementation::run(ZLApplication *application) {
+	printf("ZLNXLibraryImplementation::rrun\n");
 	ZLDialogManager::instance().createApplicationWindow(application);
 
-	printf("ZLNXLibraryImplementation::rrun\n");
 	application->initWindow();
 
-	mainApplication = application;
+	//mainApplication = application;
+	
+//TODO	main_loop();
+	xcb_generic_event_t  *e;
+	while (1) {
+		e = xcb_poll_for_event(connection);
+		if (e) {
+			switch (e->response_type & ~0x80) {
+				case XCB_KEY_RELEASE: {
+										  xcb_key_release_event_t *ev;
 
-	//delete application;
+										  ev = (xcb_key_release_event_t *)e;
+
+										  printf("ev->detail: %d\n", ev->detail);
+										  switch (ev->detail) {
+											  /* ESC */
+											  case 9:
+												  free (e);
+												  application->doAction(ActionCode::CANCEL);
+												  goto huj;
+												  break;
+
+												case 19:
+												  application->doAction(ActionCode::LARGE_SCROLL_FORWARD);
+												  break;
+
+												case 18:
+												  application->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
+
+												  break;
+
+										  }
+									  }
+			}
+			free (e);
+		}
+	}
+
+	
+huj:
+	delete application;
 }

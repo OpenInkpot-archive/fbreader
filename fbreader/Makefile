@@ -21,7 +21,7 @@ all: .resources
 	@echo -n "Linking $(TARGET) ..."
 #	@$(LD) $(LDFLAGS) -o $(TARGET) `find src -name *.o` -L$(ROOTDIR)/zlibrary/text -lzltext $(CORE_LIBS)
 #	@$(LD) $(LDFLAGS) -o $(TARGET) `find src -name *.o` -L$(ROOTDIR)/zlibrary/text -lzltext $(CORE_LIBS)
-	$(LD) $(LDFLAGS) -shared -Wl,-soname,$(TARGET).so -o $(TARGET).so `find src -name *.o` -L$(ROOTDIR)/zlibrary/text -lzltext $(CORE_LIBS) 
+	$(LD) $(LDFLAGS)  -o $(TARGET) `find src -name *.o` -L$(ROOTDIR)/zlibrary/text -lzltext $(CORE_LIBS) 
 	@echo " OK"
 
 FBSHAREDIR = $(DESTDIR)$(subst %APPLICATION_PATH%\\\\,/,$(SHAREDIR))/FBReader

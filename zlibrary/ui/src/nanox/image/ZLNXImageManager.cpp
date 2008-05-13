@@ -28,7 +28,7 @@
 extern "C" {
 #include <stdio.h>
 #include <jpeglib.h>
-#include <setjmp.h>
+//#include <setjmp.h>
 }
 
 #include <png.h>

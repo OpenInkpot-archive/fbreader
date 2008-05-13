@@ -36,8 +36,8 @@ ifeq "$(UI_TYPE)" "gtk"
 endif
 
 ifeq "$(UI_TYPE)" "nanox"
-  UILIBS = -ljpeg -lpng -lrt -L$(ROOTDIR)/v3/i386/lib -lfreetype 
-  NXINCLUDE = -I$(ROOTDIR)/v3/include/
+  UILIBS = -ljpeg -lpng -lrt -lfreetype -lxcb
+  NXINCLUDE = -I/usr/include
   ZLSHARED = no
 endif
 

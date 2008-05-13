@@ -26,8 +26,66 @@
 #include "../dialogs/ZLNXDialogManager.h"
 
 
+xcb_connection_t     *connection;
+xcb_window_t          window;
+xcb_screen_t         *screen;
 ZLNXApplicationWindow::ZLNXApplicationWindow(ZLApplication *application) :
 	ZLDesktopApplicationWindow(application) {
+
+	xcb_screen_iterator_t screen_iter;
+	const xcb_setup_t    *setup;
+	xcb_generic_event_t  *e;
+	xcb_generic_error_t  *error;
+	xcb_void_cookie_t     cookie_window;
+	xcb_void_cookie_t     cookie_map;
+	uint32_t              mask;
+	uint32_t              values[2];
+	int                   screen_number;
+	uint8_t               is_hand = 0;
+
+	/* getting the connection */
+	connection = xcb_connect (NULL, &screen_number);
+	if (!connection) {
+		fprintf (stderr, "ERROR: can't connect to an X server\n");
+		exit(-1);
+	}
+
+	/* getting the current screen */
+	setup = xcb_get_setup (connection);
+
+	screen = NULL;
+	screen_iter = xcb_setup_roots_iterator (setup);
+	for (; screen_iter.rem != 0; --screen_number, xcb_screen_next (&screen_iter))
+		if (screen_number == 0)
+		{
+			screen = screen_iter.data;
+			break;
+		}
+	if (!screen) {
+		fprintf (stderr, "ERROR: can't get the current screen\n");
+		xcb_disconnect(connection);
+		exit(-1);
+	}
+	
+	/* creating the window */
+	window = xcb_generate_id(connection);
+	mask = XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK;
+	values[0] = screen->white_pixel;
+	values[1] =
+		XCB_EVENT_MASK_KEY_RELEASE |
+		XCB_EVENT_MASK_BUTTON_PRESS |
+		XCB_EVENT_MASK_EXPOSURE |
+		XCB_EVENT_MASK_POINTER_MOTION;
+	xcb_create_window(connection,
+			screen->root_depth,
+			window, screen->root,
+			20, 200, 600, 800,
+			0, XCB_WINDOW_CLASS_INPUT_OUTPUT,
+			screen->root_visual,
+			mask, values);
+	xcb_map_window(connection, window);
+
+	xcb_flush(connection);
 }
 
 void ZLNXApplicationWindow::init() {
@@ -44,7 +102,6 @@ void ZLNXApplicationWindow::init() {
 }
 
 ZLNXApplicationWindow::~ZLNXApplicationWindow() {
-	//GrClose();
 }
 
 void ZLNXApplicationWindow::onButtonPress() {
