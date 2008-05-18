@@ -68,6 +68,9 @@ struct xxx_link {
 
 std::vector<struct xxx_link> xxx_page_links;
 
+void updateCoord(int &x, int &y, int &w, int&h);
+void invert(int x, int y, int h, int w);
+
 int cur_link_idx;
 
 #define ALLOW_RUN_EXE 1
@@ -179,7 +182,7 @@ void vSetCurPage(int p) {
 
 	if(p <= 0) {
 		((FBReader *)mainApplication)->bookTextView().scrollToStartOfText();
-	} else if((p + 1)  == ((FBReader *)mainApplication)->bookTextView().pageNumber())
+	} else if((p + 1)  >= ((FBReader *)mainApplication)->bookTextView().pageNumber())
 		 ((FBReader *)mainApplication)->bookTextView().scrollToEndOfText();
 	else {
 		((FBReader *)mainApplication)->bookTextView().gotoPage(p + 1);
@@ -214,6 +217,7 @@ int Origin() {
 	//printf("6\n");
 }
 void vFontBigger() {
+	printf("vFontBigger\n");
 	ZLIntegerRangeOption &option = ZLTextStyleCollection::instance().baseStyle().FontSizeOption;
 
 	int size = option.value();
@@ -230,7 +234,7 @@ void vFontBigger() {
 	mainApplication->refreshWindow();
 }
 int Bigger() {
-	//printf("8\n");
+	printf("Bigger\n");
 }
 int Smaller() {//printf("9\n");
 }
@@ -243,15 +247,29 @@ int Prev()
 	if(((FBReader *)mainApplication)->getMode() != FBReader::FOOTNOTE_MODE)
 		xxx_notes.clear();
 	//xxx_page_links.clear();
-	mainApplication->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
+	
+	if((mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES90) ||
+		(mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES180))	
+
+		mainApplication->doAction(ActionCode::LARGE_SCROLL_FORWARD);	
+	else
+		mainApplication->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
+
 	return 1;
 }
 int Next()
 {
+
 	if(((FBReader *)mainApplication)->getMode() != FBReader::FOOTNOTE_MODE)
 		xxx_notes.clear();
 	//xxx_page_links.clear();
-	mainApplication->doAction(ActionCode::LARGE_SCROLL_FORWARD);	
+
+	if((mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES90) ||
+		(mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES180))	
+
+		mainApplication->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
+	else
+		mainApplication->doAction(ActionCode::LARGE_SCROLL_FORWARD);	
 
 	return 1;
 }
@@ -269,14 +287,17 @@ void end_link_state()
 			tmp_idx++) {					
 
 		xxx_link cur_link = xxx_page_links.at(tmp_idx);
-		for(int i = cur_link.x1/4; i <= (cur_link.x2 + 3)/4; i++) 
+/*		for(int i = cur_link.x1/4; i <= (cur_link.x2 + 3)/4; i++) 
 			for(int j = cur_link.y1; j <= cur_link.y2; j++)
 				buf[i+j*150] = ~buf[i+j*150];
+*/				
 
 		x = cur_link.x1;
 		y = cur_link.y1;
 		w = cur_link.x2 - cur_link.x1;
 		h = cur_link.y2-cur_link.y1, buf;
+		updateCoord(x, y, w, h);
+		invert(x, y, w, h);
 		v3_cb->BlitBitmap(x, y, w, h, x, y, 600, 800, buf);
 
 					if(!cur_link.next)
@@ -494,7 +515,6 @@ void   vFreeDir(){
 #endif
 }
 
-
 int OnKeyPressed(int keyId, int state)
 {
 
@@ -531,14 +551,19 @@ NEXT:			int x, y, w, h;
 						tmp_idx++) {					
 
 					cur_link = xxx_page_links.at(tmp_idx);
-					for(int i = cur_link.x1/4; i <= (cur_link.x2+3)/4; i++) 
+/*					for(int i = cur_link.x1/4; i <= (cur_link.x2+3)/4; i++) 
 						for(int j = cur_link.y1; j <= cur_link.y2; j++)
 							buf[i+j*150] = ~buf[i+j*150];
+*/							
 
 					x = cur_link.x1;
 					y = cur_link.y1;
 					w = cur_link.x2 - cur_link.x1;
-					h = cur_link.y2-cur_link.y1, buf;
+					h = cur_link.y2-cur_link.y1;
+
+					updateCoord(x, y, w, h);
+					invert(x, y, w, h);
+
 					v3_cb->BlitBitmap(x, y, w, h, x, y, 600, 800, buf);
 					//v3_cb->PartialPrint();
 
@@ -546,7 +571,15 @@ NEXT:			int x, y, w, h;
 						break;
 				}
 
-				if((keyId == KEY_0) || (keyId == KEY_UP) || (cur_link_idx == -1)) {
+				if((((keyId == KEY_0) || (keyId == KEY_UP) || (cur_link_idx == -1)) && 
+					((mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES0) ||
+					 (mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES270)))
+				||
+				(((keyId == KEY_9) || (keyId == KEY_UP) || (cur_link_idx == -1)) && 
+					((mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES90) ||
+					 (mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES180))))
+				{
+
 					if((cur_link_idx >= 0) && xxx_page_links.at(cur_link_idx).next) 
 						while(++cur_link_idx && (cur_link_idx < xxx_page_links.size()) && xxx_page_links.at(cur_link_idx).next);
 					cur_link_idx++;
@@ -570,14 +603,19 @@ NEXT:			int x, y, w, h;
 						tmp_idx++) {					
 
 					cur_link = xxx_page_links.at(tmp_idx);
-					for(int i = cur_link.x1/4; i <= (cur_link.x2+3)/4; i++) 
+/*					for(int i = cur_link.x1/4; i <= (cur_link.x2+3)/4; i++) 
 						for(int j = cur_link.y1; j <= cur_link.y2; j++)
-							buf[i+j*150] = ~buf[i+j*150];
+							buf[i+j*150] = ~buf[i+j*150];					
+*/							
 
 					x = cur_link.x1;
 					y = cur_link.y1;
-					w = cur_link.x2 - cur_link.x1;
-					h = cur_link.y2 - cur_link.y1;
+					w = cur_link.x2 - cur_link.x1;					
+					h = cur_link.y2 - cur_link.y1;			
+
+					updateCoord(x, y, w, h);
+					invert(x, y, w, h);
+
 					//v3_cb->BlitBitmap(0, 0, 600, 800, 0, 0, 600, 800, buf);
 					v3_cb->BlitBitmap(x, y, w, h, x, y, 600, 800, buf);
 
@@ -596,6 +634,14 @@ NEXT:			int x, y, w, h;
 
 	static std::vector<std::string>::iterator it;
 	switch ( keyId ) {
+		case KEY_8:
+			vFontBigger();
+			return 1;
+
+		case LONG_KEY_8:
+			mainApplication->doAction(ActionCode::ROTATE_SCREEN);
+			return 1;
+
 		case LONG_KEY_7:
 			if(!xxx_page_links.empty()) {
 				cur_state = ST_LINK_NAV;
@@ -637,8 +683,16 @@ NEXT:			int x, y, w, h;
 			break;
 
 //		case LONG_KEY_DOWN:
+//		case LONG_KEY_UP:
+
+
 		case LONG_KEY_NEXT:
-			mainApplication->doAction(ActionCode::REDO);
+			if((mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES90) ||
+				(mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES180))
+
+				mainApplication->doAction(ActionCode::UNDO);
+			else
+				mainApplication->doAction(ActionCode::REDO);
 			return 1;
 
 /*			if(((FBReader *)mainApplication)->getMode() == FBReader::FOOTNOTE_MODE) {				
@@ -653,9 +707,14 @@ NEXT:			int x, y, w, h;
 			break;
 
 
-//		case LONG_KEY_UP:
+
 		case LONG_KEY_PREV:
-			mainApplication->doAction(ActionCode::UNDO);
+			if((mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES90) ||
+				(mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES180))
+
+				mainApplication->doAction(ActionCode::REDO);
+			else
+				mainApplication->doAction(ActionCode::UNDO);
 			return 1;
 /*			if(((FBReader *)mainApplication)->getMode() == FBReader::FOOTNOTE_MODE) {				
 				if(it == xxx_notes.begin())
@@ -680,9 +739,54 @@ NEXT:			int x, y, w, h;
 	return 0;
 }
 
+
 void SetCallbackFunction(struct CallbackFunction *cb)
 {
     v3_cb = cb;
 }
 
 }; //extern "C"
+
+void updateCoord(int &x, int &y, int &w, int&h)
+{
+	ZLViewWidget::Angle angle = mainApplication->myViewWidget->rotation();
+	switch(angle) {
+		case ZLViewWidget::DEGREES90:
+			{
+				int tmp = x;
+				x = 600 - y - h;
+				y = tmp;
+
+				int tmp2 = w;
+				w = h;
+				h = tmp2;
+				break;
+			}
+		case ZLViewWidget::DEGREES180:
+			{
+				x = 600 - x - w;
+				y = 800 - y - h;
+				break;
+			}
+		case ZLViewWidget::DEGREES270:
+			{
+				int tmp = x;
+				x = y;
+				y = 800 - tmp - w;
+
+				int tmp2 = w;
+				w = h;
+				h = tmp2;
+				break;
+			}
+		default: break;
+	}
+}
+
+void invert(int x, int y, int w, int h)
+{
+	for(int i = x / 4; i <= (x + w + 3) / 4; i++) 
+		for(int j = y; j <= y + h; j++)
+			buf[i+j*150] = ~buf[i+j*150];
+}
+

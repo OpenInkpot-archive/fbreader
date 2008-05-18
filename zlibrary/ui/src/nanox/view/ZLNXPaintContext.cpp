@@ -42,8 +42,10 @@ extern char *buf;
 #define ROUND_26_6_TO_INT(valuetoround) (((valuetoround) + 63) >> 6)
 
 ZLNXPaintContext::ZLNXPaintContext() {
-	myWidth = 600;
-	myHeight = 800;
+//	myWidth = 600;
+//	myHeight = 800;
+	myWidth = 800;
+	myHeight = 600;
 
 	myStringHeight = -1;
 	mySpaceWidth = -1;
@@ -162,7 +164,7 @@ void ZLNXPaintContext::cacheFonts() const {
 			}
 		}
 
-/*		cout << "---------------------" << endl;
+		cout << "---------------------" << endl;
 
 		for(std::map<std::string, std::map<int, Font> >::iterator x = fontCache.begin();
 				x != fontCache.end();
@@ -180,7 +182,7 @@ void ZLNXPaintContext::cacheFonts() const {
 				cout << endl;
 			}
 		}
-*/		
+		
 
 		closedir(dir_p);
 	}
@@ -522,8 +524,9 @@ void ZLNXPaintContext::drawImage(int x, int y, const ZLImageData &image) {
 			c_src = src + i / 4 + iW * j / 4;
 			s_src = (i & 3) << 1;
 
-			c = buf + (i + x) / 4 + myWidth * (j + (y - iH)) /4;
-			s = ((i + x)  & 3) << 1;
+//			c = buf + (i + x) / 4 + myWidth * (j + (y - iH)) /4;
+//			s = ((i + x)  & 3) << 1;
+			setPixelPointer(i + x, j + (y - iH), &c, &s);
 
 			*c &= ~(0xc0 >> s);
 			*c |= (((*c_src << s_src) & 0xc0) >> s);
@@ -551,8 +554,10 @@ void ZLNXPaintContext::drawLine(int x0, int y0, int x1, int y1, bool fill) {
 			if(i == x1)
 				done = true;
 
-			c = buf + i / 4 + myWidth * j /4;
+			setPixelPointer(i, j, &c, &s);
+/*			c = buf + i / 4 + myWidth * j /4;
 			s = (i & 3) << 1;
+*/			
 
 			*c &= ~(0xc0 >> s);
 
@@ -572,13 +577,14 @@ void ZLNXPaintContext::drawLine(int x0, int y0, int x1, int y1, bool fill) {
 	} else {
 		i = x0;
 		j = y0;
-		s = (i & 3) << 1;
+//		s = (i & 3) << 1;
 
 		do {
 			if(j == y1)
 				done = true;
 
-			c = buf + i / 4 + myWidth * j /4;
+			setPixelPointer(i, j, &c, &s);
+			// c = buf + i / 4 + myWidth * j /4;
 			*c &= ~(0xc0 >> s);
 
 			if(fill)
@@ -644,14 +650,17 @@ void ZLNXPaintContext::drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y)
 					i >= myWidth || j >= myHeight )
 				continue;
 
-
+/*
 			c = buf + i / 4 + myWidth * j / 4;
 			s =  (i & 3) << 1;
+*/			
 
-			/* rotation - 90	  
+/*			 //rotation - 90	  
 			   c = buf + i * myHeight / 4 + (myHeight - j - 1) / 4;
 			   s = (3  - j & 3) * 2;
-			   */		
+*/			   
+			setPixelPointer(i, j, &c, &s);
+			   		
 			val = bitmap->buffer[q * bitmap->width + p];
 
 			if(val >= 64) {
@@ -662,6 +671,36 @@ void ZLNXPaintContext::drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y)
 					*c |= (0x40 >> s);
 			}
 
+		}
+	}
+}
+
+void ZLNXPaintContext::setPixelPointer(int x, int y, char **c, int *s)
+{
+	switch (rotation()) {
+		default:
+		{
+			*c = buf + x / 4 + myWidth * y / 4;
+			*s =  (x & 3) << 1;
+			break;
+		}
+		case DEGREES90:
+		{
+			*c = buf + x * myHeight / 4 + (myHeight - y - 1) / 4;
+			*s = (3 - y & 3) * 2;
+			break;
+		}
+		case DEGREES180:
+		{
+			*c = buf + (myWidth - x + 3) / 4 + (3 + myWidth * (myHeight - y)) / 4;
+			*s =  (3 - x & 3) << 1;
+			break;
+		}
+		case DEGREES270:
+		{
+			*c = buf +  (myWidth - x) * myHeight / 4 + y / 4;
+			*s = (y & 3) << 1;
+			break;
 		}
 	}
 }

@@ -38,6 +38,13 @@ public:
 	ZLNXPaintContext();
 	~ZLNXPaintContext();
 
+	enum Angle {
+		DEGREES0 = 0,
+		DEGREES90 = 90,
+		DEGREES180 = 180,
+		DEGREES270 = 270
+	};
+
 	int width() const;
 	int height() const;
 
@@ -64,8 +71,30 @@ public:
 	void fillRectangle(int x0, int y0, int x1, int y1);
 	void drawFilledCircle(int x, int y, int r);
 
+	void rotate(Angle rotation) { 
+		myRotation = rotation; 
+		switch (myRotation) {
+			default:
+				myWidth = 600;
+				myHeight = 800;
+				break;
+			case DEGREES90:
+			case DEGREES270:
+				myWidth = 800;
+				myHeight = 600;
+				break;
+			case DEGREES180:
+				myWidth = 600;
+				myHeight = 800;
+				break;
+		}
+	}
+	Angle rotation() const { return myRotation; }
+
+
 private:
 	int myWidth, myHeight;
+	Angle myRotation;
 
 	class Font {
 		public:
@@ -120,6 +149,7 @@ private:
 
 
 	void drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y);
+	void setPixelPointer(int x, int y, char **c, int *s);
 };
 
 #endif /* __ZLNXPAINTCONTEXT_H__ */

@@ -377,7 +377,8 @@ private:
 	void createMenubar();
 	const Menubar &menubar() const;
 
-protected:
+//protected:
+public:
 	ZLViewWidget *myViewWidget;
 
 private:

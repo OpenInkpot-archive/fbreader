@@ -46,11 +46,33 @@ void ZLNXViewWidget::updateCoordinates(int &x, int &y) {
 }
 
 int ZLNXViewWidget::width() const {
-	return 600;
+	switch (rotation()) {
+		default:
+			return 600;
+			break;
+		case ZLViewWidget::DEGREES90:
+		case ZLViewWidget::DEGREES270:
+			return 800;
+			break;
+		case ZLViewWidget::DEGREES180:
+			return 600;
+			break;
+	}
 }
 
 int ZLNXViewWidget::height() const {
-	return 800;
+	switch (rotation()) {
+		default:
+			return 800;
+			break;
+		case ZLViewWidget::DEGREES90:
+		case ZLViewWidget::DEGREES270:
+			return 600;
+			break;
+		case ZLViewWidget::DEGREES180:
+			return 800;
+			break;
+	}
 }
 
 ZLNXViewWidget::ZLNXViewWidget(ZLApplication *application, Angle initialAngle) : ZLViewWidget(initialAngle) {
@@ -62,6 +84,8 @@ ZLNXViewWidget::~ZLNXViewWidget() {
 
 void ZLNXViewWidget::repaint()	{
 	ZLNXPaintContext &NXContext = (ZLNXPaintContext&)view()->context();
+
+	NXContext.rotate((ZLNXPaintContext::Angle)rotation());
 	
 	//printf("repaint\n");
 //	memset(buf, 0xff, 800*600/4);
