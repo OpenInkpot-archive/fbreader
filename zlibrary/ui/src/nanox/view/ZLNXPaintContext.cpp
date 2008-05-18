@@ -30,9 +30,6 @@
 
 #include "ZLNXPaintContext.h"
 
-#include <xcb/xcb_aux.h>
-#include <xcb/xcb_image.h>
-
 using namespace std;
 
 extern xcb_connection_t     *connection;
@@ -68,7 +65,8 @@ ZLNXPaintContext::ZLNXPaintContext() {
 
 	error = FT_Init_FreeType( &library );
 
-	fPath.push_back("/usr/share/fonts/ttf/ms/");
+	fPath.push_back("/usr/share/fonts/ttf/");
+//	fPath.push_back("/usr/share/fonts/ttf/ms/");
 	/*	fPath.push_back("/mnt/fbreader/fonts/");
 		fPath.push_back("/mnt/FBREADER/FONTS/");
 	//fPath.push_back("/mnt/CRENGINE/FONTS/");

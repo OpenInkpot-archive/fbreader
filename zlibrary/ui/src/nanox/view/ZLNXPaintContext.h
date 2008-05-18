@@ -33,7 +33,9 @@
 #include FT_BITMAP_H
 
 #include <xcb/xcb.h>
+#define class class_
 #include <xcb/xcb_aux.h>
+#undef class
 #include <xcb/xcb_image.h>
 
 
