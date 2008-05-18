@@ -74,45 +74,40 @@ void ZLNXLibraryImplementation::run(ZLApplication *application) {
 
 	application->initWindow();
 
-	//mainApplication = application;
-	
-//TODO	main_loop();
+//key press events
+	bool end = false;
 	xcb_generic_event_t  *e;
-	while (1) {
+	while (!end) {
 		e = xcb_poll_for_event(connection);
 		if (e) {
 			switch (e->response_type & ~0x80) {
-				case XCB_KEY_RELEASE: {
-										  xcb_key_release_event_t *ev;
+				case XCB_KEY_RELEASE: 
+					{
+						xcb_key_release_event_t *ev;
 
-										  ev = (xcb_key_release_event_t *)e;
+						ev = (xcb_key_release_event_t *)e;
 
-										  printf("ev->detail: %d\n", ev->detail);
-										  switch (ev->detail) {
-											  /* ESC */
-											  case 9:
-												  free (e);
-												  application->doAction(ActionCode::CANCEL);
-												  goto huj;
-												  break;
+						//printf("ev->detail: %d\n", ev->detail);
+						switch (ev->detail) {
+							/* ESC */
+							case 9:
+								application->doAction(ActionCode::CANCEL);
+								end = true;
+								break;
 
-												case 19:
-												  application->doAction(ActionCode::LARGE_SCROLL_FORWARD);
-												  break;
+							case 19:
+								application->doAction(ActionCode::LARGE_SCROLL_FORWARD);
+								break;
 
-												case 18:
-												  application->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
-
-												  break;
-
-										  }
-									  }
+							case 18:
+								application->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
+								break;
+						}
+					}
 			}
 			free (e);
 		}
 	}
 
-	
-huj:
 	delete application;
 }

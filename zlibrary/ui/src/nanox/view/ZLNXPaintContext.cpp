@@ -30,11 +30,15 @@
 
 #include "ZLNXPaintContext.h"
 
+#include <xcb/xcb_aux.h>
+#include <xcb/xcb_image.h>
+
 using namespace std;
 
 extern xcb_connection_t     *connection;
 extern xcb_window_t          window;
 extern xcb_screen_t         *screen;
+extern unsigned int *pal;
 
 struct xxx_link {
 	int x1, y1, x2, y2;
@@ -45,6 +49,7 @@ extern std::vector<xxx_link> xxx_page_links;
 #define ROUND_26_6_TO_INT(valuetoround) (((valuetoround) + 63) >> 6)
 
 ZLNXPaintContext::ZLNXPaintContext() {
+
 	myPixmap = 0;
 
 	myWidth = 600;
@@ -64,14 +69,14 @@ ZLNXPaintContext::ZLNXPaintContext() {
 	error = FT_Init_FreeType( &library );
 
 	fPath.push_back("/usr/share/fonts/ttf/ms/");
-/*	fPath.push_back("/mnt/fbreader/fonts/");
-	fPath.push_back("/mnt/FBREADER/FONTS/");
+	/*	fPath.push_back("/mnt/fbreader/fonts/");
+		fPath.push_back("/mnt/FBREADER/FONTS/");
 	//fPath.push_back("/mnt/CRENGINE/FONTS/");
 	//fPath.push_back("/mnt/crengine/fonts/");
 	fPath.push_back("/root/fbreader/fonts/");
 	fPath.push_back("/root/crengine/fonts/");
 	fPath.push_back("/root/fonts/truetype/");
-*/
+	*/
 	cacheFonts();
 }
 
@@ -103,7 +108,7 @@ ZLNXPaintContext::~ZLNXPaintContext() {
 	if(library)
 		FT_Done_FreeType(library);
 
-    xcb_free_pixmap(connection, myPixmap);
+	xcb_free_pixmap(connection, myPixmap);
 }
 
 
@@ -137,7 +142,7 @@ void ZLNXPaintContext::cacheFonts() const {
 
 			idx -= 4;
 			if(strncasecmp(dp->d_name + idx, ".TTF", 4) &&
-				strncasecmp(dp->d_name + idx, ".ttf", 4))
+					strncasecmp(dp->d_name + idx, ".ttf", 4))
 				continue;
 
 
@@ -170,25 +175,25 @@ void ZLNXPaintContext::cacheFonts() const {
 			}
 		}
 
-/*		cout << "---------------------" << endl;
+		/*		cout << "---------------------" << endl;
 
-		for(std::map<std::string, std::map<int, Font> >::iterator x = fontCache.begin();
+				for(std::map<std::string, std::map<int, Font> >::iterator x = fontCache.begin();
 				x != fontCache.end();
 				x++) {
-			cout << "family: " << x->first << endl;
+				cout << "family: " << x->first << endl;
 
-			for(std::map<int, Font>::iterator y = x->second.begin();
-					y != x->second.end();
-					y++) {
+				for(std::map<int, Font>::iterator y = x->second.begin();
+				y != x->second.end();
+				y++) {
 				cout << "	hash: " << y->first << endl;
 				cout << "	file: " << y->second.fileName << endl;
 				cout << "	index: " << y->second.index << endl;
 				cout << "	b:	"	<< y->second.isBold << endl;
 				cout << "	i:	"	<< y->second.isItalic << endl;
 				cout << endl;
-			}
-		}
-*/		
+				}
+				}
+				*/		
 
 		closedir(dir_p);
 	}
@@ -263,8 +268,7 @@ void ZLNXPaintContext::setColor(ZLColor color, LineStyle style) {
 void ZLNXPaintContext::setFillColor(ZLColor color, FillStyle style) {
 	//printf("setFillColor\n");
 	fColor = (0.299 * color.Red + 0.587 * color.Green + 0.114 * color.Blue ) / 64;
-	fColor &= 3;
-	fColor <<= 6;
+	fColor = pal[fColor & 3];
 }
 
 int ZLNXPaintContext::stringWidth(const char *str, int len) const {
@@ -326,14 +330,14 @@ int ZLNXPaintContext::stringWidth(const char *str, int len) const {
 			glyph_idx = (*glyphIdxCache)[codepoint];
 		} else {
 			glyph_idx = FT_Get_Char_Index(*face, codepoint);
-			
+
 			(*glyphIdxCache)[codepoint] = glyph_idx;
 		}
 
 		if ( use_kerning && previous && glyph_idx ) { 
 			if((kerningCache->find(glyph_idx) != kerningCache->end()) &&
-				((*kerningCache)[glyph_idx].find(previous) != (*kerningCache)[glyph_idx].end())) {
-				
+					((*kerningCache)[glyph_idx].find(previous) != (*kerningCache)[glyph_idx].end())) {
+
 				kerning = ((*kerningCache)[glyph_idx])[previous];
 			} else {
 
@@ -386,7 +390,6 @@ int ZLNXPaintContext::descent() const {
 }
 
 void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
-	printf("drawString\n");
 	FT_GlyphSlot  slot = (*face)->glyph;
 	FT_BitmapGlyph glyph;
 	FT_BitmapGlyph *pglyph;
@@ -406,7 +409,7 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 	int                   expect;
 	int kerning;
 
-//	bool mark = false;
+	//	bool mark = false;
 
 
 	pen.x = x;
@@ -457,14 +460,14 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 			glyph_idx = (*glyphIdxCache)[codepoint];
 		} else {
 			glyph_idx = FT_Get_Char_Index(*face, codepoint);
-			
+
 			(*glyphIdxCache)[codepoint] = glyph_idx;
 		}
 
 		if ( use_kerning && previous && glyph_idx ) { 
 			if((kerningCache->find(glyph_idx) != kerningCache->end()) &&
-				((*kerningCache)[glyph_idx].find(previous) != (*kerningCache)[glyph_idx].end())) {
-				
+					((*kerningCache)[glyph_idx].find(previous) != (*kerningCache)[glyph_idx].end())) {
+
 				kerning = ((*kerningCache)[glyph_idx])[previous];
 			} else {
 
@@ -497,11 +500,11 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 				pen.y - (*pglyph)->top);
 
 
-/*		if(!mark) {
-			drawLine(pen.x + (*pglyph)->left, y+1, pen.x + ((*pglyph)->root.advance.x >> 6), y+1);
-			mark = true;
-		}
-*/		
+		/*		if(!mark) {
+				drawLine(pen.x + (*pglyph)->left, y+1, pen.x + ((*pglyph)->root.advance.x >> 6), y+1);
+				mark = true;
+				}
+				*/		
 
 		/* increment pen position */
 		pen.x += (*pglyph)->root.advance.x >> 6;
@@ -518,6 +521,7 @@ void ZLNXPaintContext::drawImage(int x, int y, const ZLImageData &image) {
 	int s, s_src;
 	int iW = image.width();
 	int iH = image.height();
+	unsigned char val;
 
 	if((iW + x) > myWidth || y > myHeight)
 		return;
@@ -526,26 +530,23 @@ void ZLNXPaintContext::drawImage(int x, int y, const ZLImageData &image) {
 
 	char *src = source_image->getImageData();
 
-	xcb_point_t points[100];
-	int cnt = 0;
-
 	for(int j = 0; j < iH; j++)
 		for(int i = 0; i < iW; i++) {
-			points[cnt].x = i;
-			points[cnt].y = j;
-			cnt++;
+			c_src = src + i / 4 + iW * j / 4;
+			s_src = (i & 3) << 1;
 
-			if((cnt % 100) == 0) {
-				xcb_poly_point(connection, XCB_COORD_MODE_ORIGIN,
-						window, gc_b, cnt, points);				
-				cnt = 0;
-			}
+			val = (*c_src << s_src) & 0xc0;
+
+			if(val == 0xc0)
+				continue;
+
+			if(val == 0x00)
+				xcb_image_put_pixel (this->image, i+x, j + (y - iH), pal[0]);
+			else if(val == 0x40)
+				xcb_image_put_pixel (this->image, i+x, j + (y - iH), pal[1]);
+			else
+				xcb_image_put_pixel (this->image, i+x, j + (y - iH), pal[2]);
 		}
-
-	if(cnt > 0)
-		xcb_poly_point(connection, XCB_COORD_MODE_ORIGIN,
-				window, gc_b, cnt, points);				
-
 }
 
 void ZLNXPaintContext::drawLine(int x0, int y0, int x1, int y1) {
@@ -554,11 +555,10 @@ void ZLNXPaintContext::drawLine(int x0, int y0, int x1, int y1) {
 
 void ZLNXPaintContext::drawLine(int x0, int y0, int x1, int y1, bool fill) {
 	//printf("drawLine: %d %d %d %d\n", x0, y0, x1, y1);
-//TODO
-/* int i, j;
+
+	int i, j;
 	int k, s;
 	int p;
-	char *c = buf;
 	bool done = false;
 
 	if(x1 != x0) {
@@ -570,14 +570,10 @@ void ZLNXPaintContext::drawLine(int x0, int y0, int x1, int y1, bool fill) {
 			if(i == x1)
 				done = true;
 
-			c = buf + i / 4 + myWidth * j /4;
-			s = (i & 3) << 1;
-
-			*c &= ~(0xc0 >> s);
-
 			if(fill)
-				*c |= (fColor >> s);
-
+				xcb_image_put_pixel (image, i, j, fColor);
+			else
+				xcb_image_put_pixel (image, i, j, pal[0]);
 
 			j += k;
 
@@ -591,17 +587,15 @@ void ZLNXPaintContext::drawLine(int x0, int y0, int x1, int y1, bool fill) {
 	} else {
 		i = x0;
 		j = y0;
-		s = (i & 3) << 1;
 
 		do {
 			if(j == y1)
 				done = true;
 
-			c = buf + i / 4 + myWidth * j /4;
-			*c &= ~(0xc0 >> s);
-
 			if(fill)
-				*c |= (fColor >> s);
+				xcb_image_put_pixel (image, i, j, fColor);
+			else
+				xcb_image_put_pixel (image, i, j, pal[0]);
 
 			if(y1 > y0)
 				j++;
@@ -610,13 +604,11 @@ void ZLNXPaintContext::drawLine(int x0, int y0, int x1, int y1, bool fill) {
 
 		} while(!done);
 	}
-	*/
 }
 
 void ZLNXPaintContext::fillRectangle(int x0, int y0, int x1, int y1) {
 	//printf("fillRectangle\n");
-//TODO
-/*	int j;
+	int j;
 
 	j = y0;
 	do {
@@ -628,7 +620,6 @@ void ZLNXPaintContext::fillRectangle(int x0, int y0, int x1, int y1) {
 			j--;
 	} while(( y1 > y0) && ( j <= y1 )  ||
 			(j <= y0));
-*/			
 }
 
 void ZLNXPaintContext::drawFilledCircle(int x, int y, int r) {
@@ -636,47 +627,7 @@ void ZLNXPaintContext::drawFilledCircle(int x, int y, int r) {
 }
 
 void ZLNXPaintContext::clear(ZLColor color) {
-	uint32_t             mask = 0;
-	uint32_t             values[2];
-
-	printf("clear\n");
-	if(myPixmap == 0) {
-		myPixmap = xcb_generate_id(connection);
-
-		xcb_create_pixmap(connection,
-				2,     /* depth of the screen */
-				myPixmap,  /* id of the pixmap */
-				window,
-				600,     /* pixel width of the window */
-				800);  /* pixel height of the window */
-
-
-		gc_b = xcb_generate_id(connection);
-		mask = XCB_GC_FOREGROUND | XCB_GC_GRAPHICS_EXPOSURES;
-		values[0] = screen->black_pixel;
-		values[1] = 0;
-		xcb_create_gc(connection, gc_b, screen->root, mask, values);
-
-		gc_w = xcb_generate_id(connection);
-		mask = XCB_GC_FOREGROUND | XCB_GC_GRAPHICS_EXPOSURES;
-		values[0] = screen->white_pixel;
-		values[1] = 0;
-		xcb_create_gc(connection, gc_w, screen->root, mask, values);
-	}
-
-	xcb_rectangle_t full;
-
-	full.x = 0;
-	full.y = 0;
-	full.width = 600;
-	full.height = 800;
-
-	xcb_poly_fill_rectangle(connection,
-			//myPixmap,
-			window,
-			gc_w,
-			1,
-			&full);
+	memset(image->data, 0xff, image->width * image->height * image->bpp / 8);
 
 	xxx_page_links.clear();
 }
@@ -697,9 +648,6 @@ void ZLNXPaintContext::drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y)
 	unsigned char val;
 	int s;
 
-	xcb_point_t points[100];
-	int cnt = 0;
-
 	for ( i = x, p = 0; i < x_max; i++, p++ ) {
 		for ( j = y, q = 0; j < y_max; j++, q++ ) {
 
@@ -709,27 +657,15 @@ void ZLNXPaintContext::drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y)
 
 			val = bitmap->buffer[q * bitmap->width + p];
 
-			if(val <= 64)
+			if(val < 64)
 				continue;
 
-			points[cnt].x = i;
-			points[cnt].y = j;
-			cnt++;
-
-			if((cnt % 100) == 0) {
-				xcb_poly_point(connection, XCB_COORD_MODE_ORIGIN,
-						//myPixmap, 
-						window,
-						gc_b, cnt, points);				
-				cnt = 0;
-			}
-
+			if(val >= 192)
+				xcb_image_put_pixel (image, i, j, pal[0]);
+			else if(val >= 128)
+				xcb_image_put_pixel (image, i, j, pal[1]);
+			else
+				xcb_image_put_pixel (image, i, j, pal[2]);
 		}
-	}
-	if(cnt > 0) {
-			xcb_poly_point(connection, XCB_COORD_MODE_ORIGIN,
-				//myPixmap, 
-				window,
-				gc_b, cnt, points);				
 	}
 }

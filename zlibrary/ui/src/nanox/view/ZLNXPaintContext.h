@@ -33,6 +33,8 @@
 #include FT_BITMAP_H
 
 #include <xcb/xcb.h>
+#include <xcb/xcb_aux.h>
+#include <xcb/xcb_image.h>
 
 
 
@@ -46,6 +48,8 @@ public:
 	int height() const;
 
 	xcb_pixmap_t *pixmap() { return &myPixmap; }
+
+	xcb_image_t     *image;
 
 	void clear(ZLColor color);
 
@@ -74,6 +78,8 @@ private:
 	xcb_pixmap_t myPixmap;
 	xcb_gcontext_t       gc_w;
 	xcb_gcontext_t       gc_b;
+	xcb_gcontext_t       gc_b1;
+	xcb_gcontext_t       gc_b2;
 
 
 	int myWidth, myHeight;

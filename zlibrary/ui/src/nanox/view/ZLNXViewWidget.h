@@ -37,6 +37,8 @@ class ZLNXViewWidget : public ZLViewWidget {
 
 	private:
 		xcb_gcontext_t		gc;
+		xcb_gcontext_t		bgcolor;
+		unsigned int pal_[4];
 
 
 		void updateCoordinates(int &x, int &y);

@@ -20,14 +20,52 @@
 #include "ZLNXViewWidget.h"
 #include "ZLNXPaintContext.h"
 
-extern xcb_connection_t     *connection;
-extern xcb_window_t          window;
-extern xcb_screen_t         *screen;
+#define XCB_ALL_PLANES ~0
+
+xcb_connection_t *connection;
+xcb_window_t window;
+xcb_screen_t *screen;
+xcb_drawable_t rect;
+unsigned int *pal;
 
 void ZLNXViewWidget::updateCoordinates(int &x, int &y) {
+	switch (rotation()) {
+		default:
+			break;
+		case ZLViewWidget::DEGREES90:
+			{
+				int tmp = x;
+				x = height() - y;
+				y = tmp;
+				break;
+			}
+		case ZLViewWidget::DEGREES180:
+			x = width() - x;
+			y = height() - y;
+			break;
+		case ZLViewWidget::DEGREES270:
+			{
+				int tmp = x;
+				x = y;
+				y = width() - tmp;
+				break;
+			}
+	}
+}
+
+int ZLNXViewWidget::width() const {
+	return 600;
+}
+
+int ZLNXViewWidget::height() const {
+	return 800;
+}
+
+ZLNXViewWidget::ZLNXViewWidget(ZLApplication *application, Angle initialAngle) : ZLViewWidget(initialAngle) {
+	myApplication = application;
+
 	xcb_screen_iterator_t screen_iter;
 	const xcb_setup_t    *setup;
-	xcb_screen_t         *screen;
 	xcb_generic_event_t  *e;
 	xcb_generic_error_t  *error;
 	xcb_void_cookie_t     cookie_window;
@@ -36,6 +74,7 @@ void ZLNXViewWidget::updateCoordinates(int &x, int &y) {
 	uint32_t              values[2];
 	int                   screen_number;
 	uint8_t               is_hand = 0;
+	xcb_rectangle_t     rect_coord = { 0, 0, 600, 800};
 
 	/* getting the connection */
 	connection = xcb_connect (NULL, &screen_number);
@@ -60,8 +99,18 @@ void ZLNXViewWidget::updateCoordinates(int &x, int &y) {
 		xcb_disconnect(connection);
 		exit(-1);
 	}
-	
+
 	gc = xcb_generate_id (connection);
+	mask = XCB_GC_FOREGROUND | XCB_GC_GRAPHICS_EXPOSURES;
+	values[0] = screen->black_pixel;
+	values[1] = 0; /* no graphics exposures */
+	xcb_create_gc (connection, gc, screen->root, mask, values);
+
+	bgcolor = xcb_generate_id (connection);
+	mask = XCB_GC_FOREGROUND | XCB_GC_GRAPHICS_EXPOSURES;
+	values[0] = screen->white_pixel;
+	values[1] = 0; /* no graphics exposures */
+	xcb_create_gc (connection, bgcolor, screen->root, mask, values);
 
 	/* creating the window */
 	window = xcb_generate_id(connection);
@@ -72,74 +121,49 @@ void ZLNXViewWidget::updateCoordinates(int &x, int &y) {
 		XCB_EVENT_MASK_BUTTON_PRESS |
 		XCB_EVENT_MASK_EXPOSURE |
 		XCB_EVENT_MASK_POINTER_MOTION;
+
+	uint8_t depth = xcb_aux_get_depth (connection, screen);
 	xcb_create_window(connection,
-			screen->root_depth,
+			depth,
 			window, screen->root,
-			20, 200, 600, 800,
+			0, 0, 600, 800,
 			0, XCB_WINDOW_CLASS_INPUT_OUTPUT,
 			screen->root_visual,
 			mask, values);
+
+	rect = xcb_generate_id (connection);
+	xcb_create_pixmap (connection, depth,
+			rect, window,
+			600, 800);
+
+
 	xcb_map_window(connection, window);
+	//	printf("depth: %d\n", screen->root_depth);
+
+	xcb_colormap_t    colormap;
+	colormap = screen->default_colormap;
+
+	xcb_alloc_color_reply_t *rep;
+	rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, 0, 0, 0), NULL);
+	pal_[0] = rep->pixel;
+	free(rep);
+	rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, 0x55<<8, 0x55<<8, 0x55<<8), NULL);
+	pal_[1] = rep->pixel;
+	free(rep);
+	rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, 0xaa<<8, 0xaa<<8, 0xaa<<8), NULL);
+	pal_[2] = rep->pixel;
+	free(rep);
+
+	pal = pal_;
 
 	xcb_flush(connection);
-
-	switch (rotation()) {
-		default:
-			break;
-		case ZLViewWidget::DEGREES90:
-		{
-			int tmp = x;
-			x = height() - y;
-			y = tmp;
-			break;
-		}
-		case ZLViewWidget::DEGREES180:
-			x = width() - x;
-			y = height() - y;
-			break;
-		case ZLViewWidget::DEGREES270:
-		{
-			int tmp = x;
-			x = y;
-			y = width() - tmp;
-			break;
-		}
-	}
-}
-
-int ZLNXViewWidget::width() const {
-	return 600;
-}
-
-int ZLNXViewWidget::height() const {
-	return 800;
-}
-
-ZLNXViewWidget::ZLNXViewWidget(ZLApplication *application, Angle initialAngle) : ZLViewWidget(initialAngle) {
-	myApplication = application;
-
-
 }
 
 ZLNXViewWidget::~ZLNXViewWidget() {
 }
 
 void ZLNXViewWidget::repaint()	{
-	ZLNXPaintContext &pContext = (ZLNXPaintContext&)view()->context();
-	
-	view()->paint();
-
-	printf("huj1\n");
-    xcb_copy_area (connection,
-                   *(pContext.pixmap()),  /* drawable we want to paste */
-                   window,  /* drawable on which we copy the previous Drawable */
-                   gc,            
-                   0,         /* top left x coordinate of the region we want to copy */
-                   0,         /* top left y coordinate of the region we want to copy */
-                   0,         /* top left x coordinate of the region where we want to copy */
-                   0,         /* top left y coordinate of the region where we want to copy */
-                   600,         /* pixel width of the region we want to copy */
-                   800);      /* pixel height of the region we want to copy */
+	doPaint();
 }
 
 void ZLNXViewWidget::trackStylus(bool track) {
@@ -148,17 +172,37 @@ void ZLNXViewWidget::trackStylus(bool track) {
 void ZLNXViewWidget::doPaint()
 {
 	ZLNXPaintContext &pContext = (ZLNXPaintContext&)view()->context();
+
+	pContext.image = xcb_image_get (connection, window,
+			0, 0, 600, 800,
+			XCB_ALL_PLANES, XCB_IMAGE_FORMAT_Z_PIXMAP);
+
 	view()->paint();
-	
-	printf("huj2\n");
-    xcb_copy_area (connection,
-                   *(pContext.pixmap()),  /* drawable we want to paste */
-                   window,  /* drawable on which we copy the previous Drawable */
-                   gc,            
-                   0,         /* top left x coordinate of the region we want to copy */
-                   0,         /* top left y coordinate of the region we want to copy */
-                   0,         /* top left x coordinate of the region where we want to copy */
-                   0,         /* top left y coordinate of the region where we want to copy */
-                   600,         /* pixel width of the region we want to copy */
-                   800);      /* pixel height of the region we want to copy */
+
+	/*
+	   for(int j = 50; j < 60; j++)
+	   for(int i = 0; i < 100; i++)
+	   xcb_image_put_pixel (pContext.image,
+	   i, j,
+	   pal[0]);
+
+	   for(int j = 65; j < 75; j++)
+	   for(int i = 0; i < 100; i++)
+	   xcb_image_put_pixel (pContext.image,
+	   i, j,
+	   pal[1]);
+
+	   for(int j = 80; j < 90; j++)
+	   for(int i = 0; i < 100; i++)
+	   xcb_image_put_pixel (pContext.image,
+	   i, j,
+	   pal[2]);
+
+*/
+
+	xcb_image_put (connection, window, gc, pContext.image,
+			0, 0, 0);
+	xcb_image_destroy(pContext.image);
+
+	xcb_flush(connection);
 }
