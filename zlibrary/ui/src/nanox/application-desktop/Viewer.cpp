@@ -242,37 +242,72 @@ int Rotate() {//printf("10\n");
 }
 int Fit() {//printf("11\n");
 }
+
+void turnPage(int cnt)
+{
+	int l_cnt = cnt;
+
+	ZLViewWidget::Angle rot = mainApplication->myViewWidget->rotation();
+	
+	if((rot == ZLViewWidget::DEGREES90) || (rot == ZLViewWidget::DEGREES180))	
+		l_cnt = -l_cnt;
+
+	ZLTextWordCursor endC = ((FBReader *)mainApplication)->bookTextView().endCursor();
+	if((l_cnt > 0) &&
+			endC.paragraphCursor().isLast() &&
+			endC.isEndOfParagraph()) {
+		mainApplication->doAction(ActionCode::GOTO_NEXT_TOC_SECTION);	
+		return;	
+	}
+	
+	ZLTextWordCursor startC = ((FBReader *)mainApplication)->bookTextView().startCursor();
+	if((l_cnt < 0) &&
+			!startC.isNull() &&
+			startC.isStartOfParagraph() &&
+			startC.paragraphCursor().isFirst()
+			) {
+		mainApplication->doAction(ActionCode::GOTO_PREVIOUS_TOC_SECTION);	
+		((FBReader *)mainApplication)->bookTextView().scrollToEndOfText();
+		return;
+	}
+
+	switch(l_cnt) {
+		case 1:
+			mainApplication->doAction(ActionCode::LARGE_SCROLL_FORWARD);	
+			break;
+		case -1:
+			mainApplication->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
+			break;
+		case 10:
+		case -10:
+			vSetCurPage(GetPageIndex() + l_cnt);
+			break;
+		default:
+			break;
+	}
+}
+
 int Prev()
 {  
 	if(((FBReader *)mainApplication)->getMode() != FBReader::FOOTNOTE_MODE)
 		xxx_notes.clear();
 	//xxx_page_links.clear();
 	
-	if((mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES90) ||
-		(mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES180))	
-
-		mainApplication->doAction(ActionCode::LARGE_SCROLL_FORWARD);	
-	else
-		mainApplication->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
+	turnPage(-1);
 
 	return 1;
 }
 int Next()
 {
-
 	if(((FBReader *)mainApplication)->getMode() != FBReader::FOOTNOTE_MODE)
 		xxx_notes.clear();
 	//xxx_page_links.clear();
 
-	if((mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES90) ||
-		(mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES180))	
-
-		mainApplication->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
-	else
-		mainApplication->doAction(ActionCode::LARGE_SCROLL_FORWARD);	
+	turnPage(1);
 
 	return 1;
 }
+
 
 void end_link_state()
 {
@@ -571,14 +606,13 @@ NEXT:			int x, y, w, h;
 						break;
 				}
 
-				if((((keyId == KEY_0) || (keyId == KEY_UP) || (cur_link_idx == -1)) && 
-					((mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES0) ||
-					 (mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES270)))
-				||
-				(((keyId == KEY_9) || (keyId == KEY_UP) || (cur_link_idx == -1)) && 
-					((mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES90) ||
-					 (mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES180))))
-				{
+				ZLViewWidget::Angle rot = mainApplication->myViewWidget->rotation();
+				bool swapkeys = (rot == ZLViewWidget::DEGREES90) || (rot == ZLViewWidget::DEGREES180);
+
+				if((keyId == KEY_UP) 
+						|| (cur_link_idx == -1) 
+						|| ((keyId == KEY_0) && !swapkeys)
+						|| ((keyId == KEY_9) && swapkeys)) {
 
 					if((cur_link_idx >= 0) && xxx_page_links.at(cur_link_idx).next) 
 						while(++cur_link_idx && (cur_link_idx < xxx_page_links.size()) && xxx_page_links.at(cur_link_idx).next);
@@ -682,14 +716,22 @@ NEXT:			int x, y, w, h;
 			}
 			break;
 
-//		case LONG_KEY_DOWN:
-//		case LONG_KEY_UP:
+		case LONG_KEY_DOWN:
+			turnPage(10);
+			return 1;
+			break;
 
+		case LONG_KEY_UP:
+			turnPage(-10);
+			return 1;
+			break;
+			
 
-		case LONG_KEY_NEXT:
-			if((mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES90) ||
-				(mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES180))
+		case LONG_KEY_NEXT: {
+			ZLViewWidget::Angle rot = mainApplication->myViewWidget->rotation();
+			bool swapkeys = (rot == ZLViewWidget::DEGREES90) || (rot == ZLViewWidget::DEGREES180);
 
+			if(swapkeys)
 				mainApplication->doAction(ActionCode::UNDO);
 			else
 				mainApplication->doAction(ActionCode::REDO);
@@ -705,13 +747,15 @@ NEXT:			int x, y, w, h;
 			}
 */
 			break;
+							}
 
 
 
-		case LONG_KEY_PREV:
-			if((mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES90) ||
-				(mainApplication->myViewWidget->rotation() == ZLViewWidget::DEGREES180))
+		case LONG_KEY_PREV: {
+			ZLViewWidget::Angle rot = mainApplication->myViewWidget->rotation();
+			bool swapkeys = (rot == ZLViewWidget::DEGREES90) || (rot == ZLViewWidget::DEGREES180);
 
+			if(swapkeys)
 				mainApplication->doAction(ActionCode::REDO);
 			else
 				mainApplication->doAction(ActionCode::UNDO);
@@ -727,6 +771,7 @@ NEXT:			int x, y, w, h;
 			}
 */
 			break;
+							}
 			
 
 		case LONG_KEY_CANCEL:

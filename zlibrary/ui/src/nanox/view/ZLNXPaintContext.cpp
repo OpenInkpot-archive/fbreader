@@ -164,6 +164,7 @@ void ZLNXPaintContext::cacheFonts() const {
 			}
 		}
 
+/*		
 		cout << "---------------------" << endl;
 
 		for(std::map<std::string, std::map<int, Font> >::iterator x = fontCache.begin();
@@ -182,7 +183,7 @@ void ZLNXPaintContext::cacheFonts() const {
 				cout << endl;
 			}
 		}
-		
+*/		
 
 		closedir(dir_p);
 	}
