@@ -23,6 +23,8 @@
 #include <ZLImageManager.h>
 #include <ZLImage.h>
 
+#include <map>
+
 class ZLNXImageData : public ZLImageData {
 
 	public:
@@ -64,11 +66,19 @@ class ZLNXImageManager : public ZLImageManager {
 	private:
 		ZLNXImageManager() {}
 
+		typedef struct{
+			int len;
+			int w;
+			int h;
+			char *d;
+		} ImageData;
+
 	protected:
 		shared_ptr<ZLImageData> createData() const;
 		void convertImageDirect(const std::string &stringData, ZLImageData &imageData) const;
 		void convertImageDirectJpeg(const std::string &stringData, ZLImageData &imageData) const;
 		void convertImageDirectPng(const std::string &stringData, ZLImageData &imageData) const;
+		void convertImageDirectGif(const std::string &stringData, ZLImageData &imageData) const;
 };
 
 #endif /* __ZLNXIMAGEMANAGER_H__ */

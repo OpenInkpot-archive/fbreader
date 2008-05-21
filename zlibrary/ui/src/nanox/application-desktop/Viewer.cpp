@@ -217,7 +217,7 @@ int Origin() {
 	//printf("6\n");
 }
 void vFontBigger() {
-	printf("vFontBigger\n");
+	//printf("vFontBigger\n");
 	ZLIntegerRangeOption &option = ZLTextStyleCollection::instance().baseStyle().FontSizeOption;
 
 	int size = option.value();
@@ -234,7 +234,7 @@ void vFontBigger() {
 	mainApplication->refreshWindow();
 }
 int Bigger() {
-	printf("Bigger\n");
+	//printf("Bigger\n");
 }
 int Smaller() {//printf("9\n");
 }
@@ -253,7 +253,8 @@ void turnPage(int cnt)
 		l_cnt = -l_cnt;
 
 	ZLTextWordCursor endC = ((FBReader *)mainApplication)->bookTextView().endCursor();
-	if((l_cnt > 0) &&
+
+	if((l_cnt > 0) &&			
 			endC.paragraphCursor().isLast() &&
 			endC.isEndOfParagraph()) {
 		mainApplication->doAction(ActionCode::GOTO_NEXT_TOC_SECTION);	

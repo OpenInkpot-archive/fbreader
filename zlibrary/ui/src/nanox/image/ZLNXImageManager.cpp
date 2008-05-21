@@ -33,6 +33,8 @@ extern "C" {
 
 #include <png.h>
 
+#include <gif_lib.h>
+
 
 static const short dither_2bpp_8x8[] = {
 	0, 32, 12, 44, 2, 34, 14, 46, 
@@ -44,6 +46,7 @@ static const short dither_2bpp_8x8[] = {
 	11, 43, 7, 39, 9, 41, 5, 37, 
 	59, 27, 55, 23, 57, 25, 53, 21, 
 };
+
 
 int Dither2BitColor( int color, int x, int y )
 {
@@ -270,18 +273,22 @@ void ZLNXImageManager::convertImageDirect(const std::string &stringData, ZLImage
 		convertImageDirectJpeg(stringData, data);
 	else if(!png_sig_cmp((unsigned char *)stringData.data(), (png_size_t)0, 4) )
 		convertImageDirectPng(stringData, data);
+	else if(!strncmp(stringData.c_str(), "GIF", 3))
+		convertImageDirectGif(stringData, data);
 	else {
 		//printf("unsupported image format: %d %d\n", m0, m1);
 
-		/*		FILE *f;
+				FILE *f;
 				f = fopen("/tmp/unknown_img", "w+");
 				fwrite(stringData.data(), 1, stringData.length(), f);
 				fclose(f);
 
 				printf("image dumped to /tmp/unknown_img\n");
-				*/		
+				
+						
 
-		data.init(1, 1);
+		data.init(10, 10);
+		bzero(((ZLNXImageData&)data).getImageData(), 25);
 
 		return;
 	}
@@ -479,4 +486,199 @@ void ZLNXImageManager::convertImageDirectPng(const std::string &stringData, ZLIm
 	png_read_end(png_ptr, info_ptr);
 
 	png_destroy_read_struct(&png_ptr, &info_ptr, png_infopp_NULL);
+}
+
+void ZLNXImageManager::convertImageDirectGif(const std::string &stringData, ZLImageData &data) const {
+	static std::map<std::string, ImageData> imgCache;
+	if(stringData.length() < 300) {
+		std::map<std::string, ImageData>::const_iterator it = imgCache.find(stringData);
+		if(it != imgCache.end()) {
+			data.init(it->second.w, it->second.h);
+			memcpy(((ZLNXImageData&)data).getImageData(), it->second.d, it->second.len);
+			return;
+		}
+	}
+
+
+	char *filename = "/tmp/image.gif";
+	FILE *f;
+	f = fopen(filename, "w");
+	fwrite(stringData.data(), 1, stringData.length(), f);
+	fclose(f);
+
+    GifFileType *GifFile;
+
+	if((GifFile = DGifOpenFileName(filename)) == NULL) {
+		data.init(10,10);
+		bzero(((ZLNXImageData&)data).getImageData(), 25);
+		unlink(filename);
+
+		return;
+	}
+
+	data.init(GifFile->SWidth, GifFile->SHeight);
+
+    int 
+		ColorMapSize = 0,
+		BackGround = 0,
+		InterlacedOffset[] = { 0, 4, 2, 1 }, /* The way Interlaced image should. */
+	    InterlacedJumps[] = { 8, 8, 4, 2 };    /* be read - offsets and jumps... */
+
+    int	i, j, Error, NumFiles, Size, Row, Col, Width, Height, ExtCode, Count;
+    GifRecordType RecordType;
+    GifByteType *Extension;
+    GifRowType *ScreenBuffer;
+	ColorMapObject *ColorMap;
+
+	int transparent;
+		
+    ScreenBuffer = (GifRowType *) malloc(GifFile->SHeight * sizeof(GifRowType *));
+
+    Size = GifFile->SWidth * sizeof(GifPixelType);/* Size in bytes one row.*/
+    ScreenBuffer[0] = (GifRowType) malloc(Size); /* First row. */
+
+    for (i = 0; i < GifFile->SWidth; i++)  /* Set its color to BackGround. */
+		ScreenBuffer[0][i] = GifFile->SBackGroundColor;
+    for (i = 1; i < GifFile->SHeight; i++) {
+		/* Allocate the other rows, and set their color to background too: */
+		ScreenBuffer[i] = (GifRowType) malloc(Size);
+
+		memcpy(ScreenBuffer[i], ScreenBuffer[0], Size);
+    }
+
+    do {
+		if (DGifGetRecordType(GifFile, &RecordType) == GIF_ERROR) {
+			memset(((ZLNXImageData&)data).getImageData(), 0x02, GifFile->SWidth * GifFile->SHeight / 4);
+
+			DGifCloseFile(GifFile);
+			unlink(filename);
+			return;			
+		}
+
+		if(RecordType == EXTENSION_RECORD_TYPE) {
+			/* Skip any extension blocks in file: */
+			if (DGifGetExtension(GifFile, &ExtCode, &Extension) == GIF_ERROR) {
+				break;
+			}
+/*			printf("%d\n", *Extension);
+			if(ExtCode == GRAPHICS_EXT_FUNC_CODE)
+				if(Extension[0] == 4 ) {
+					int flag = Extension[1];
+					transparent = (flag & 0x1) ? Extension[4] : -1;
+				}
+*/				
+			while (Extension != NULL) {
+				if (DGifGetExtensionNext(GifFile, &Extension) == GIF_ERROR) {
+					break;
+				}
+/*			printf("ExtCode: %d, %d\n", ExtCode, GRAPHICS_EXT_FUNC_CODE);
+				if(ExtCode == GRAPHICS_EXT_FUNC_CODE)
+					if(Extension[0] == 4 ) {
+						int flag = Extension[1];
+						transparent = (flag & 0x1) ? Extension[4] : -1;
+						}
+						*/
+			}
+		}
+	} while((RecordType != IMAGE_DESC_RECORD_TYPE) && (RecordType != TERMINATE_RECORD_TYPE));
+		
+	DGifGetImageDesc(GifFile);
+
+	Row = GifFile->Image.Top; /* Image Position relative to Screen. */
+	Col = GifFile->Image.Left;
+	Width = GifFile->Image.Width;
+	Height = GifFile->Image.Height;
+
+	if (GifFile->Image.Interlace) {
+		/* Need to perform 4 passes on the images: */
+		for (Count = i = 0; i < 4; i++)
+			for (j = Row + InterlacedOffset[i]; j < Row + Height;
+					j += InterlacedJumps[i])
+				DGifGetLine(GifFile, &ScreenBuffer[j][Col], Width);
+	} else
+		for (i = 0; i < Height; i++)
+			DGifGetLine(GifFile, &ScreenBuffer[Row++][Col], Width);
+
+    /* Lets display it - set the global variables required and do it: */
+    BackGround = GifFile->SBackGroundColor;
+    ColorMap = (GifFile->Image.ColorMap
+		? GifFile->Image.ColorMap
+		: GifFile->SColorMap);
+    ColorMapSize = ColorMap->ColorCount;
+	
+	char *c;	
+	int p;
+	int pixel, s;
+
+    int MinIntensity, MaxIntensity, AvgIntensity;
+    unsigned long ValueMask;
+    GifColorType *ColorMapEntry = ColorMap->Colors;
+
+    /* Let find out what are the intensities in the color map: */
+/*    MaxIntensity = 0;
+    MinIntensity = 256 * 100;
+    for (i = 0; i < ColorMapSize; i++) {
+		p = ColorMapEntry[i].Red * 30 +
+			ColorMapEntry[i].Green * 59 +
+			ColorMapEntry[i].Blue * 11;
+		if (p > MaxIntensity) MaxIntensity = p;
+		if (p < MinIntensity) MinIntensity = p;
+    }
+    AvgIntensity = (MinIntensity + MaxIntensity) / 2;
+*/	
+
+	Width = GifFile->SWidth;
+	Height = GifFile->SHeight;
+	
+	for (j = 0; j < Height; j++) {
+		for (i = 0; i < Width; i++) {
+			p = ScreenBuffer[j][i];
+			//			p = ColorMapEntry[p].Red * 30 +
+			//				ColorMapEntry[p].Green * 59 +
+			//				ColorMapEntry[p].Blue * 11 > AvgIntensity;			
+
+//			pixel = Dither2BitColor((ColorMapEntry[p].Red << 16 | ColorMapEntry[p].Green << 8 | ColorMapEntry[p].Blue << 0), i, j);
+
+
+			unsigned int x = ColorMapEntry[p].Red * 0.299 +
+							ColorMapEntry[p].Green * 0.587 +
+							ColorMapEntry[p].Blue * 0.114;			
+			if(x < 64)
+				pixel = 0x00;
+			else if(x <= 128)
+				pixel = 0x40;
+			else if(x <= 192)
+				pixel = 0x80;
+			else
+				pixel = 0xc0;
+
+
+			c = ((ZLNXImageData&)data).getImageData() + i / 4 + Width * j / 4;
+			s = (i & 3) << 1;
+
+			*c &= ~(0xc0 >> s);
+			*c |= (pixel >> s);
+		}
+	}
+
+	if(stringData.length() < 300) {
+		ImageData id;
+
+		id.w = Width;
+		id.h = Height;
+		id.len = Width * Height;
+
+
+		id.d = (char*)malloc(Width * Height);
+		memcpy(id.d, ((ZLNXImageData&)data).getImageData(), id.len);
+
+		imgCache.insert(std::pair<std::string, ImageData>(stringData, id));
+	}
+
+    for (i = GifFile->SHeight - 1 ; i >= 0 ; i--)
+		free( ScreenBuffer[ i ] );
+    free( ScreenBuffer );
+
+	DGifCloseFile(GifFile);
+	unlink(filename);
 }
