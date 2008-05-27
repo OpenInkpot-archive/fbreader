@@ -275,6 +275,8 @@ void ZLNXImageManager::convertImageDirect(const std::string &stringData, ZLImage
 		convertImageDirectPng(stringData, data);
 	else if(!strncmp(stringData.c_str(), "GIF", 3))
 		convertImageDirectGif(stringData, data);
+	else if(!strncmp(stringData.c_str(), "BM", 2))
+		convertImageDirectBmp(stringData, data);
 	else {
 		//printf("unsupported image format: %d %d\n", m0, m1);
 
@@ -488,6 +490,32 @@ void ZLNXImageManager::convertImageDirectPng(const std::string &stringData, ZLIm
 	png_destroy_read_struct(&png_ptr, &info_ptr, png_infopp_NULL);
 }
 
+struct gif_info {
+	int cpos;
+	int length;
+	const char *data;
+};
+
+int readGif(GifFileType *gf, GifByteType *buf, int len) {
+	int length;
+
+	struct gif_info *gi = (struct gif_info *)gf->UserData;
+
+	if(gi->cpos == gi->length)
+		return 0;
+
+	length = len;
+	if(gi->cpos + length > gi->length)
+		length  = gi->length - gi->cpos;
+
+
+	memcpy(buf, gi->data + gi->cpos, length);
+	gi->cpos += length;
+
+	return length;
+}
+
+
 void ZLNXImageManager::convertImageDirectGif(const std::string &stringData, ZLImageData &data) const {
 	static std::map<std::string, ImageData> imgCache;
 	if(stringData.length() < 300) {
@@ -499,22 +527,21 @@ void ZLNXImageManager::convertImageDirectGif(const std::string &stringData, ZLIm
 		}
 	}
 
-
-	char *filename = "/tmp/image.gif";
-	FILE *f;
-	f = fopen(filename, "w");
-	fwrite(stringData.data(), 1, stringData.length(), f);
-	fclose(f);
-
     GifFileType *GifFile;
 
-	if((GifFile = DGifOpenFileName(filename)) == NULL) {
+	struct gif_info gi;
+
+	gi.length = stringData.length();
+	gi.cpos = 0;
+	gi.data = stringData.c_str();
+
+	if((GifFile = DGifOpen((void*)&gi, readGif)) == NULL) {
 		data.init(10,10);
 		bzero(((ZLNXImageData&)data).getImageData(), 25);
-		unlink(filename);
 
 		return;
 	}
+	
 
 	data.init(GifFile->SWidth, GifFile->SHeight);
 
@@ -551,7 +578,6 @@ void ZLNXImageManager::convertImageDirectGif(const std::string &stringData, ZLIm
 			memset(((ZLNXImageData&)data).getImageData(), 0x02, GifFile->SWidth * GifFile->SHeight / 4);
 
 			DGifCloseFile(GifFile);
-			unlink(filename);
 			return;			
 		}
 
@@ -640,7 +666,7 @@ void ZLNXImageManager::convertImageDirectGif(const std::string &stringData, ZLIm
 //			pixel = Dither2BitColor((ColorMapEntry[p].Red << 16 | ColorMapEntry[p].Green << 8 | ColorMapEntry[p].Blue << 0), i, j);
 
 
-			unsigned int x = ColorMapEntry[p].Red * 0.299 +
+			unsigned char x = ColorMapEntry[p].Red * 0.299 +
 							ColorMapEntry[p].Green * 0.587 +
 							ColorMapEntry[p].Blue * 0.114;			
 			if(x < 64)
@@ -680,5 +706,61 @@ void ZLNXImageManager::convertImageDirectGif(const std::string &stringData, ZLIm
     free( ScreenBuffer );
 
 	DGifCloseFile(GifFile);
-	unlink(filename);
+}
+
+
+void ZLNXImageManager::convertImageDirectBmp(const std::string &stringData, ZLImageData &data) const {
+	int w, h;
+	char *p;
+	char *c;	
+	int pixel, s;
+
+	typedef union {
+		char c[4];
+		int i;
+	} cInt;
+	
+	cInt ci;
+
+	strncpy(ci.c, stringData.c_str() + 18, 4);
+	w = ci.i;
+	strncpy(ci.c, stringData.c_str() + 22, 4);
+	h = ci.i;
+
+	data.init(w, h);
+
+	p = (char*)stringData.c_str() + 54;
+
+	for (int j = h; j > 0; j--) {
+		for (int i = 0; i < w; i++) {
+			
+//			pixel = Dither2BitColor((p[0] << 16 | p[1] << 8 | p[2] << 0), i, j);
+
+
+			unsigned char x = p[2] * 0.299 +
+							p[1] * 0.587 +
+							p[0] * 0.114;
+
+
+			if(x < 64)
+				pixel = 0x00;
+			else if(x <= 128)
+				pixel = 0x40;
+			else if(x <= 192)
+				pixel = 0x80;
+			else
+				pixel = 0xc0;
+
+
+			c = ((ZLNXImageData&)data).getImageData() + i / 4 + w * j / 4;
+			s = (i & 3) << 1;
+
+			*c &= ~(0xc0 >> s);
+			*c |= (pixel >> s);
+
+			p += 3;
+		}
+		p += (w % 4);
+	}
+
 }

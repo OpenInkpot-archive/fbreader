@@ -79,6 +79,8 @@ class ZLNXImageManager : public ZLImageManager {
 		void convertImageDirectJpeg(const std::string &stringData, ZLImageData &imageData) const;
 		void convertImageDirectPng(const std::string &stringData, ZLImageData &imageData) const;
 		void convertImageDirectGif(const std::string &stringData, ZLImageData &imageData) const;
+		void convertImageDirectBmp(const std::string &stringData, ZLImageData &imageData) const;
+
 };
 
 #endif /* __ZLNXIMAGEMANAGER_H__ */
