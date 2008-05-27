@@ -84,7 +84,7 @@ ZLNXViewWidget::ZLNXViewWidget(ZLApplication *application, Angle initialAngle) :
 	}
 
 	/* getting the current screen */
-	setup = xcb_get_setup (connection);
+/*	setup = xcb_get_setup (connection);
 
 	screen = NULL;
 	screen_iter = xcb_setup_roots_iterator (setup);
@@ -99,7 +99,8 @@ ZLNXViewWidget::ZLNXViewWidget(ZLApplication *application, Angle initialAngle) :
 		xcb_disconnect(connection);
 		exit(-1);
 	}
-
+*/
+	 screen = xcb_aux_get_screen (connection, screen_number);
 	gc = xcb_generate_id (connection);
 	mask = XCB_GC_FOREGROUND | XCB_GC_GRAPHICS_EXPOSURES;
 	values[0] = screen->black_pixel;
@@ -173,6 +174,7 @@ void ZLNXViewWidget::doPaint()
 {
 	ZLNXPaintContext &pContext = (ZLNXPaintContext&)view()->context();
 
+	sleep(1);
 	pContext.image = xcb_image_get (connection, window,
 			0, 0, 600, 800,
 			XCB_ALL_PLANES, XCB_IMAGE_FORMAT_Z_PIXMAP);
