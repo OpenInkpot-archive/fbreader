@@ -78,13 +78,13 @@ ZLNXViewWidget::ZLNXViewWidget(ZLApplication *application, Angle initialAngle) :
 
 	/* getting the connection */
 	connection = xcb_connect (NULL, &screen_number);
-	if (!connection) {
+	if (xcb_connection_has_error(connection)) {
 		fprintf (stderr, "ERROR: can't connect to an X server\n");
 		exit(-1);
 	}
 
 	/* getting the current screen */
-	setup = xcb_get_setup (connection);
+/*	setup = xcb_get_setup (connection);
 
 	screen = NULL;
 	screen_iter = xcb_setup_roots_iterator (setup);
@@ -99,6 +99,8 @@ ZLNXViewWidget::ZLNXViewWidget(ZLApplication *application, Angle initialAngle) :
 		xcb_disconnect(connection);
 		exit(-1);
 	}
+*/
+	screen = xcb_aux_get_screen (connection, screen_number);
 
 	gc = xcb_generate_id (connection);
 	mask = XCB_GC_FOREGROUND | XCB_GC_GRAPHICS_EXPOSURES;

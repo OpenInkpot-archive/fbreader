@@ -52,7 +52,7 @@ void initLibrary() {
 }
 
 void ZLNXLibraryImplementation::init(int &argc, char **&argv) {
-	printf("init\n");
+	//printf("init\n");
 	ZLibrary::parseArguments(argc, argv);
 
 	XMLConfigManager::createInstance();
@@ -69,7 +69,7 @@ ZLPaintContext *ZLNXLibraryImplementation::createContext() {
 }
 
 void ZLNXLibraryImplementation::run(ZLApplication *application) {
-	printf("ZLNXLibraryImplementation::rrun\n");
+	//printf("ZLNXLibraryImplementation::rrun\n");
 	ZLDialogManager::instance().createApplicationWindow(application);
 
 	application->initWindow();
@@ -96,10 +96,14 @@ void ZLNXLibraryImplementation::run(ZLApplication *application) {
 								break;
 
 							case 19:
+							case 90:
+							case 111:
 								application->doAction(ActionCode::LARGE_SCROLL_FORWARD);
 								break;
 
 							case 18:
+							case 81:
+							case 116:
 								application->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
 								break;
 						}
