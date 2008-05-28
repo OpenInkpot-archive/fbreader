@@ -247,14 +247,14 @@ void ZLNXPaintContext::setFont(const std::string &family, int size, bool bold, b
 	else
 		fCurSize = 6; 
 
-	FT_Set_Char_Size( *face, fCurSize * 64, 0, 160, 0 );
+	FT_Set_Char_Size( *face, fCurSize * 64, fCurSize * 64, 170, 170 );
 
 	charWidthCache = &(fc->charWidthCacheAll[fCurSize]);
 	glyphCache = &(fc->glyphCacheAll[fCurSize]);
 	kerningCache = &(fc->kerningCacheAll[fCurSize]);
 	glyphIdxCache = &(fc->glyphIdxCacheAll[fCurSize]);
 
-	myStringHeight = fCurSize * 160 / 72;
+	myStringHeight = fCurSize * 170 / 72;
 	myDescent = (abs((*face)->size->metrics.descender) + 63 ) >> 6;
 	mySpaceWidth = -1;
 }
