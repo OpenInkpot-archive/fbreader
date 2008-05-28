@@ -162,6 +162,9 @@ ZLNXViewWidget::ZLNXViewWidget(ZLApplication *application, Angle initialAngle) :
 }
 
 ZLNXViewWidget::~ZLNXViewWidget() {
+	ZLNXPaintContext &pContext = (ZLNXPaintContext&)view()->context();
+	if(pContext.image != NULL)
+		xcb_image_destroy(pContext.image);
 }
 
 void ZLNXViewWidget::repaint()	{
@@ -175,9 +178,11 @@ void ZLNXViewWidget::doPaint()
 {
 	ZLNXPaintContext &pContext = (ZLNXPaintContext&)view()->context();
 
-	pContext.image = xcb_image_get (connection, window,
+	if(pContext.image == NULL) {
+		pContext.image = xcb_image_get (connection, window,
 			0, 0, 600, 800,
 			XCB_ALL_PLANES, XCB_IMAGE_FORMAT_Z_PIXMAP);
+	}
 
 	view()->paint();
 
@@ -204,7 +209,7 @@ void ZLNXViewWidget::doPaint()
 
 	xcb_image_put (connection, window, gc, pContext.image,
 			0, 0, 0);
-	xcb_image_destroy(pContext.image);
+//	xcb_image_destroy(pContext.image);
 
 	xcb_flush(connection);
 }

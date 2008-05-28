@@ -47,6 +47,7 @@ extern std::vector<xxx_link> xxx_page_links;
 
 ZLNXPaintContext::ZLNXPaintContext() {
 
+	image = NULL;
 	myPixmap = 0;
 
 	myWidth = 600;
