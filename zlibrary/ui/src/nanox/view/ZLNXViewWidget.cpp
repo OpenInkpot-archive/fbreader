@@ -20,12 +20,16 @@
 #include "ZLNXViewWidget.h"
 #include "ZLNXPaintContext.h"
 
+
+
 #define XCB_ALL_PLANES ~0
 
 xcb_connection_t *connection;
 xcb_window_t window;
 xcb_screen_t *screen;
 xcb_drawable_t rect;
+xcb_shm_segment_info_t shminfo;
+xcb_image_t *im;
 unsigned int *pal;
 
 void ZLNXViewWidget::updateCoordinates(int &x, int &y) {
@@ -157,6 +161,44 @@ ZLNXViewWidget::ZLNXViewWidget(ZLApplication *application, Angle initialAngle) :
 
 	pal = pal_;
 
+
+	xcb_shm_query_version_reply_t *rep_shm;
+
+	rep_shm = xcb_shm_query_version_reply (connection,
+			xcb_shm_query_version (connection),
+			NULL);
+	if(rep_shm) {
+		//uint8_t format; 
+		xcb_image_format_t format;              
+		int shmctl_status;
+
+		if (rep_shm->shared_pixmaps &&
+				(rep_shm->major_version > 1 || rep_shm->minor_version > 0))
+			format = (xcb_image_format_t)rep_shm->pixmap_format;
+		else
+			format = (xcb_image_format_t)0;
+
+		im = xcb_image_create_native (connection, 600, 800,
+				format, depth, NULL, ~0, NULL);
+		assert(im);
+
+		shminfo.shmid = shmget (IPC_PRIVATE,
+				im->stride*im->height,
+				IPC_CREAT | 0777);
+		assert(shminfo.shmid != -1);
+		shminfo.shmaddr = (uint8_t*)shmat (shminfo.shmid, 0, 0);
+		assert(shminfo.shmaddr);
+		im->data = shminfo.shmaddr;
+
+		shminfo.shmseg = xcb_generate_id (connection);			
+		xcb_shm_attach (connection, shminfo.shmseg,
+				shminfo.shmid, 0);
+		shmctl_status = shmctl(shminfo.shmid, IPC_RMID, 0);
+		assert(shmctl_status != -1);
+		free (rep_shm);
+	}
+
+
 	xcb_flush(connection);
 }
 
@@ -175,9 +217,17 @@ void ZLNXViewWidget::doPaint()
 	ZLNXPaintContext &pContext = (ZLNXPaintContext&)view()->context();
 
 	sleep(1);
-	pContext.image = xcb_image_get (connection, window,
+/*	pContext.image = xcb_image_get (connection, window,
 			0, 0, 600, 800,
 			XCB_ALL_PLANES, XCB_IMAGE_FORMAT_Z_PIXMAP);
+*/			
+	int i;
+	i = xcb_image_shm_get (connection, window,
+			im, shminfo,
+			0, 0,
+			XCB_ALL_PLANES);
+	assert(i);
+	pContext.image = im;
 
 	view()->paint();
 
@@ -202,9 +252,13 @@ void ZLNXViewWidget::doPaint()
 
 */
 
-	xcb_image_put (connection, window, gc, pContext.image,
-			0, 0, 0);
-	xcb_image_destroy(pContext.image);
+	xcb_image_shm_put (connection, window, gc,
+			pContext.image, shminfo,
+			0, 0, 0, 0, 600, 800, 0);
+
+//	xcb_image_put (connection, window, gc, pContext.image,
+//			0, 0, 0);
+//	xcb_image_destroy(pContext.image);
 
 	xcb_flush(connection);
 }

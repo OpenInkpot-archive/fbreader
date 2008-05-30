@@ -23,7 +23,14 @@
 #include <ZLView.h>
 #include <ZLApplication.h>
 
-#include <xcb/xcb.h>
+#include <assert.h>
+#include <sys/ipc.h>    
+#include <sys/shm.h>            
+
+extern "C" {
+#include <xcb/xcb.h>            
+#include <xcb/shm.h>
+}
 
 
 class ZLNXViewWidget : public ZLViewWidget {
