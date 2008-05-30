@@ -36,8 +36,8 @@ ifeq "$(UI_TYPE)" "gtk"
 endif
 
 ifeq "$(UI_TYPE)" "nanox"
-  UILIBS = -ljpeg -lpng -lrt -lfreetype -lxcb -lxcb-image
-  NXINCLUDE = -I/usr/include
+  UILIBS = -ljpeg -lpng -lrt -lfreetype -lxcb -lxcb-image -lxcb-aux 
+  NXINCLUDE = `pkg-config --cflags 'freetype2'`
   ZLSHARED = no
 endif
 
