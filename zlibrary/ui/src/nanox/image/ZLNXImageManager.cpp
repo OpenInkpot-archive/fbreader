@@ -21,6 +21,43 @@
  * 02110-1301, USA.
  */
 
+/* bmp support is based on:
+ *
+ * Stand alone BMP library.
+ * Copyright (c) 2006 Rene Rebe <rene@exactcode.de>
+ *
+ * based on:
+ *
+ * Project:  libtiff tools
+ * Purpose:  Convert Windows BMP files in TIFF.
+ * Author:   Andrey Kiselev, dron@remotesensing.org
+ *
+ ******************************************************************************
+ * Copyright (c) 2004, Andrey Kiselev <dron@remotesensing.org>
+ *
+ * Permission to use, copy, modify, distribute, and sell this software and 
+ * its documentation for any purpose is hereby granted without fee, provided
+ * that (i) the above copyright notices and this permission notice appear in
+ * all copies of the software and related documentation, and (ii) the names of
+ * Sam Leffler and Silicon Graphics may not be used in any advertising or
+ * publicity relating to the software without the specific, prior written
+ * permission of Sam Leffler and Silicon Graphics.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+ * 
+ * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
+ * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+ * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+ * OF THIS SOFTWARE.
+ */
+
+
+
+
 #include <ZLImage.h>
 
 #include "ZLNXImageManager.h"
@@ -708,9 +745,92 @@ void ZLNXImageManager::convertImageDirectGif(const std::string &stringData, ZLIm
 	DGifCloseFile(GifFile);
 }
 
+int last_bit_set (int v)
+{
+	unsigned int i;
+	for (i = sizeof (int) * 8 - 1; i > 0; --i) {
+		if (v & (1L << i))
+			return i;
+	}
+	return 0;
+}
+
+static void
+rearrangePixels(unsigned char* buf, uint32 width, uint32 bit_count, int row, ZLImageData &data)
+{
+  char tmp;
+  uint32 i;
+
+	char *c;	
+	int pixel, s;
+  
+	printf("bit_count: %d\n", bit_count);
+  switch(bit_count) {
+    
+  case 16:    /* FIXME: need a sample file */
+    break;
+    
+  case 24:
+    for (i = 0; i < width; i++, buf += 3) {
+		unsigned char x = buf[2] * 0.299 +
+			buf[1] * 0.587 +
+			buf[0] * 0.114;
+
+
+		if(x < 64)
+			pixel = 0x00;
+		else if(x <= 128)
+			pixel = 0x40;
+		else if(x <= 192)
+			pixel = 0x80;
+		else
+			pixel = 0xc0;
+
+
+		c = ((ZLNXImageData&)data).getImageData() + i / 4 + width * row / 4;
+		s = (i & 3) << 1;
+
+		*c &= ~(0xc0 >> s);
+		*c |= (pixel >> s);
+
+    }
+    break;
+  
+  case 32:
+    {
+      unsigned char* buf1 = buf;
+      for (i = 0; i < width; i++, buf += 4) {
+		unsigned char x = buf[2] * 0.299 +
+			buf[1] * 0.587 +
+			buf[0] * 0.114;
+
+
+		if(x < 64)
+			pixel = 0x00;
+		else if(x <= 128)
+			pixel = 0x40;
+		else if(x <= 192)
+			pixel = 0x80;
+		else
+			pixel = 0xc0;
+
+
+		c = ((ZLNXImageData&)data).getImageData() + i / 4 + width * row / 4;
+		s = (i & 3) << 1;
+
+		*c &= ~(0xc0 >> s);
+		*c |= (pixel >> s);
+      }
+    }
+    break;
+    
+  default:
+    break;
+  }
+}
 
 void ZLNXImageManager::convertImageDirectBmp(const std::string &stringData, ZLImageData &data) const {
-	int w, h;
+/*	int w, h;
 	char *p;
 	char *c;	
 	int pixel, s;
@@ -762,5 +882,440 @@ void ZLNXImageManager::convertImageDirectBmp(const std::string &stringData, ZLIm
 		}
 		p += (w % 4);
 	}
+*/
 
+	int xres, yres, w, h, spp, bps;
+
+	const char *p = stringData.c_str();
+	struct stat instat;
+
+	BMPFileHeader file_hdr;
+	BMPInfoHeader info_hdr;
+	enum BMPType bmp_type;
+
+	uint32  clr_tbl_size, n_clr_elems = 3;
+	unsigned char *clr_tbl;
+
+	uint32	row, stride;
+
+	unsigned char* xdata = 0;
+
+	memcpy(file_hdr.bType, p, 2);
+
+	if(file_hdr.bType[0] != 'B' || file_hdr.bType[1] != 'M') {
+		fprintf(stderr, "File is not a BMP\n");
+		goto bad;
+	}
+
+	/* -------------------------------------------------------------------- */
+	/*      Read the BMPFileHeader. We need iOffBits value only             */
+	/* -------------------------------------------------------------------- */
+	memcpy(&file_hdr.iOffBits, p+10, 4);
+
+	file_hdr.iSize = stringData.length();
+
+	/* -------------------------------------------------------------------- */
+	/*      Read the BMPInfoHeader.                                         */
+	/* -------------------------------------------------------------------- */
+
+	memcpy(&info_hdr.iSize, p+BFH_SIZE, 4);
+
+	if (info_hdr.iSize == BIH_WIN4SIZE)
+		bmp_type = BMPT_WIN4;
+	else if (info_hdr.iSize == BIH_OS21SIZE)
+		bmp_type = BMPT_OS21;
+	else if (info_hdr.iSize == BIH_OS22SIZE || info_hdr.iSize == 16)
+		bmp_type = BMPT_OS22;
+	else
+		bmp_type = BMPT_WIN5;
+
+	if (bmp_type == BMPT_WIN4 || bmp_type == BMPT_WIN5 || bmp_type == BMPT_OS22) {
+		p = stringData.c_str() + BFH_SIZE + 4;
+		memcpy(&info_hdr.iWidth, p, 4);
+		p += 4;
+		memcpy(&info_hdr.iHeight, p, 4);
+		p += 4;
+		memcpy(&info_hdr.iPlanes, p, 2);
+		p += 2;
+		memcpy(&info_hdr.iBitCount, p, 2);
+		p += 2;
+		memcpy(&info_hdr.iCompression, p, 4);
+		p += 4;
+		memcpy(&info_hdr.iSizeImage, p, 4);
+		p += 4;
+		memcpy(&info_hdr.iXPelsPerMeter, p, 4);
+		p += 4;
+		memcpy(&info_hdr.iYPelsPerMeter, p, 4);
+		p += 4;
+		memcpy(&info_hdr.iClrUsed, p, 4);
+		p += 4;
+		memcpy(&info_hdr.iClrImportant, p, 4);
+		p += 4;
+		memcpy(&info_hdr.iRedMask, p, 4);
+		p += 4;
+		memcpy(&info_hdr.iGreenMask, p, 4);
+		p += 4;
+		memcpy(&info_hdr.iBlueMask, p, 4);
+		p += 4;
+		memcpy(&info_hdr.iAlphaMask, p, 4);
+		p += 4;
+		n_clr_elems = 4;
+		xres = ((double)info_hdr.iXPelsPerMeter * 2.54 + 0.05) / 100;
+		yres = ((double)info_hdr.iYPelsPerMeter * 2.54 + 0.05) / 100;
+	}
+
+	if (bmp_type == BMPT_OS22) {
+		/* 
+		 * FIXME: different info in different documents
+		 * regarding this!
+		 */
+		n_clr_elems = 3;
+	}
+
+	if (bmp_type == BMPT_OS21) {
+		int16  iShort;
+
+		memcpy(&iShort, p, 2);
+		p += 2;
+		info_hdr.iWidth = iShort;
+		memcpy(&iShort, p, 2);
+		p += 2;
+		info_hdr.iHeight = iShort;
+		memcpy(&iShort, p, 2);
+		p += 2;
+		info_hdr.iPlanes = iShort;
+		memcpy(&iShort, p, 2);
+		p += 2;
+		info_hdr.iBitCount = iShort;
+		info_hdr.iCompression = BMPC_RGB;
+		n_clr_elems = 3;
+	}
+
+	if (info_hdr.iBitCount != 1  && info_hdr.iBitCount != 4  &&
+			info_hdr.iBitCount != 8  && info_hdr.iBitCount != 16 &&
+			info_hdr.iBitCount != 24 && info_hdr.iBitCount != 32) {
+		fprintf(stderr, "Cannot process BMP file with bit count %d\n",
+				info_hdr.iBitCount);
+		//   close(fd);
+		return;
+	}
+
+	w = info_hdr.iWidth;
+	h = (info_hdr.iHeight > 0) ? info_hdr.iHeight : -info_hdr.iHeight;
+
+	data.init(w, h);
+
+	switch (info_hdr.iBitCount)
+	{
+		case 1:
+		case 4:
+		case 8:
+			spp = 1;
+			bps = info_hdr.iBitCount;
+
+			/* Allocate memory for colour table and read it. */
+			if (info_hdr.iClrUsed)
+				clr_tbl_size = ((uint32)(1 << bps) < info_hdr.iClrUsed) ?
+					1 << bps : info_hdr.iClrUsed;
+			else
+				clr_tbl_size = 1 << bps;
+			clr_tbl = (unsigned char *)
+				_TIFFmalloc(n_clr_elems * clr_tbl_size);
+			if (!clr_tbl) {
+				fprintf(stderr, "Can't allocate space for color table\n");
+				goto bad;
+			}
+
+			/*printf ("n_clr_elems: %d, clr_tbl_size: %d\n",
+			  n_clr_elems, clr_tbl_size); */
+
+			p = stringData.c_str() + BFH_SIZE + info_hdr.iSize;
+			memcpy(clr_tbl, p, n_clr_elems * clr_tbl_size);
+
+			/*for(clr = 0; clr < clr_tbl_size; ++clr) {
+			  printf ("%d: r: %d g: %d b: %d\n",
+			  clr,
+			  clr_tbl[clr*n_clr_elems+2],
+			  clr_tbl[clr*n_clr_elems+1],
+			  clr_tbl[clr*n_clr_elems]);
+			  }*/
+			break;
+
+		case 16:
+		case 24:
+			spp = 3;
+			bps = info_hdr.iBitCount / spp;
+			break;
+
+		case 32:
+			spp = 3;
+			bps = 8;
+			break;
+
+		default:
+			break;
+	}
+
+	stride = (w * spp * bps + 7) / 8;
+	/*printf ("w: %d, h: %d, spp: %d, bps: %d, colorspace: %d\n",
+	 *w, *h, *spp, *bps, info_hdr.iCompression); */
+
+	// detect old style bitmask images
+	if (info_hdr.iCompression == BMPC_RGB && info_hdr.iBitCount == 16)
+	{
+		/*printf ("implicit non-RGB image\n"); */
+		info_hdr.iCompression = BMPC_BITFIELDS;
+		info_hdr.iBlueMask = 0x1f;
+		info_hdr.iGreenMask = 0x1f << 5;
+		info_hdr.iRedMask = 0x1f << 10;
+	}
+
+	/* -------------------------------------------------------------------- */
+	/*  Read uncompressed image data.                                       */
+	/* -------------------------------------------------------------------- */
+
+	switch (info_hdr.iCompression) {
+		case BMPC_BITFIELDS:
+			// we convert those to RGB for easier use
+			bps = 8;
+			stride = (w * spp * bps + 7) / 8;
+		case BMPC_RGB:
+			{
+				uint32 file_stride = ((w * info_hdr.iBitCount + 7) / 8 + 3) / 4 * 4;
+
+				/*printf ("bitcount: %d, stride: %d, file stride: %d\n",
+				  info_hdr.iBitCount, stride, file_stride);
+
+				  printf ("red mask: %x, green mask: %x, blue mask: %x\n",
+				  info_hdr.iRedMask, info_hdr.iGreenMask, info_hdr.iBlueMask); */
+
+				xdata = (unsigned char*)_TIFFmalloc (stride * h);
+
+				if (!xdata) {
+					fprintf(stderr, "Can't allocate space for image buffer\n");
+					goto bad1;
+				}
+
+				for (row = 0; row < h; row++) {
+					uint32 offset;
+
+					if (info_hdr.iHeight > 0)
+						offset = file_hdr.iOffBits + (h - row - 1) * file_stride;
+					else
+						offset = file_hdr.iOffBits + row * file_stride;
+
+					//	if (lseek(fd, offset, SEEK_SET) == (off_t)-1) {
+					//	  fprintf(stderr, "scanline %lu: Seek error\n", (unsigned long) row);
+					//	}
+					p = stringData.c_str() + offset;
+
+					memcpy(xdata + stride*row, p, stride);
+
+					// convert to RGB
+					if (info_hdr.iCompression == BMPC_BITFIELDS)
+					{
+
+						unsigned char* row_ptr = xdata + stride*row;
+						unsigned char* r16_ptr = row_ptr + file_stride - 2;
+						unsigned char* rgb_ptr = row_ptr + stride - 3;
+
+						int r_shift = last_bit_set (info_hdr.iRedMask) - 7;
+						int g_shift = last_bit_set (info_hdr.iGreenMask) - 7;
+						int b_shift = last_bit_set (info_hdr.iBlueMask) - 7;
+
+						for (int i=0 ; rgb_ptr >= row_ptr; r16_ptr -= 2, rgb_ptr -= 3, i++)
+						{
+							int val = (r16_ptr[0] << 0) + (r16_ptr[1] << 8);
+							if (r_shift > 0)
+								rgb_ptr[0] = (val & info_hdr.iRedMask) >> r_shift;
+							else
+								rgb_ptr[0] = (val & info_hdr.iRedMask) << -r_shift;
+							if (g_shift > 0)
+								rgb_ptr[1] = (val & info_hdr.iGreenMask) >> g_shift;
+							else
+								rgb_ptr[1] = (val & info_hdr.iGreenMask) << -g_shift;
+							if (b_shift > 0)
+								rgb_ptr[2] = (val & info_hdr.iBlueMask) >> b_shift;
+							else
+								rgb_ptr[2] = (val & info_hdr.iBlueMask) << -b_shift;
+						
+
+							char *c;	
+							int pixel, s;
+							unsigned char x = rgb_ptr[0] * 0.299 +
+								rgb_ptr[1] * 0.587 +
+								rgb_ptr[2] * 0.114;
+
+
+							if(x < 64)
+								pixel = 0x00;
+							else if(x <= 128)
+								pixel = 0x40;
+							else if(x <= 192)
+								pixel = 0x80;
+							else
+								pixel = 0xc0;
+
+
+							c = ((ZLNXImageData&)data).getImageData() + i / 4 + w * row / 4;
+							s = (i & 3) << 1;
+
+							*c &= ~(0xc0 >> s);
+							*c |= (pixel >> s);
+						}
+					}
+					else if(info_hdr.iBitCount == 8) {
+						unsigned char *b = xdata + stride * row;
+						for (int i = 0; i < w; i++, b++) {
+							char *c;	
+							int pixel, s;
+							unsigned char x = 
+						   		clr_tbl[*b*n_clr_elems+2] * 0.299 +
+								clr_tbl[*b*n_clr_elems+1] * 0.587 +
+								clr_tbl[*b*n_clr_elems] * 0.114;
+
+
+							if(x < 64)
+								pixel = 0x00;
+							else if(x <= 128)
+								pixel = 0x40;
+							else if(x <= 192)
+								pixel = 0x80;
+							else
+								pixel = 0xc0;
+
+
+							c = ((ZLNXImageData&)data).getImageData() + i / 4 + w * row / 4;
+							s = (i & 3) << 1;
+
+							*c &= ~(0xc0 >> s);
+							*c |= (pixel >> s);
+						}
+					}
+					else
+						rearrangePixels(xdata + stride*row, w, info_hdr.iBitCount, row, data);
+				}
+			}
+			break;
+
+			/* -------------------------------------------------------------------- */
+			/*  Read compressed image data.                                         */
+			/* -------------------------------------------------------------------- */
+		case BMPC_RLE4:
+		case BMPC_RLE8:
+			{
+				uint32		i, j, k, runlength, x;
+				uint32		compr_size, uncompr_size;
+				unsigned char   *comprbuf;
+				unsigned char   *uncomprbuf;
+
+				//printf ("RLE%s compressed\n", info_hdr.iCompression == BMPC_RLE4 ? "4" : "8");
+
+				compr_size = file_hdr.iSize - file_hdr.iOffBits;
+				uncompr_size = w * h;
+
+				comprbuf = (unsigned char *) _TIFFmalloc( compr_size );
+				if (!comprbuf) {
+					fprintf (stderr, "Can't allocate space for compressed scanline buffer\n");
+					goto bad1;
+				}
+				uncomprbuf = (unsigned char *) _TIFFmalloc( uncompr_size );
+				if (!uncomprbuf) {
+					fprintf (stderr, "Can't allocate space for uncompressed scanline buffer\n");
+					goto bad1;
+				}
+
+
+				p = stringData.c_str() + file_hdr.iOffBits;
+				memcpy(comprbuf, p, compr_size);
+				i = j = x = 0;
+
+				while( j < uncompr_size && i < compr_size ) {
+					if ( comprbuf[i] ) {
+						runlength = comprbuf[i++];
+						for ( k = 0;
+								runlength > 0 && j < uncompr_size && i < compr_size && x < w;
+								++k, ++x) {
+							if (info_hdr.iBitCount == 8)
+								uncomprbuf[j++] = comprbuf[i];
+							else {
+								if ( k & 0x01 )
+									uncomprbuf[j++] = comprbuf[i] & 0x0F;
+								else
+									uncomprbuf[j++] = (comprbuf[i] & 0xF0) >> 4;
+							}
+							runlength--;
+						}
+						i++;
+					} else {
+						i++;
+						if ( comprbuf[i] == 0 ) {         /* Next scanline */
+							i++;
+							x = 0;;
+						}
+						else if ( comprbuf[i] == 1 )    /* End of image */
+							break;
+						else if ( comprbuf[i] == 2 ) {  /* Move to... */
+							i++;
+							if ( i < compr_size - 1 ) {
+								j += comprbuf[i] + comprbuf[i+1] * w;
+								i += 2;
+							}
+							else
+								break;
+						} else {                         /* Absolute mode */
+							runlength = comprbuf[i++];
+							for ( k = 0; k < runlength && j < uncompr_size && i < compr_size; k++, x++)
+							{
+								if (info_hdr.iBitCount == 8)
+									uncomprbuf[j++] = comprbuf[i++];
+								else {
+									if ( k & 0x01 )
+										uncomprbuf[j++] = comprbuf[i++] & 0x0F;
+									else
+										uncomprbuf[j++] = (comprbuf[i] & 0xF0) >> 4;
+								}
+							}
+							/* word boundary alignment */
+							if (info_hdr.iBitCount == 4)
+								k /= 2;
+							if ( k & 0x01 )
+								i++;
+						}
+					}
+				}
+
+				_TIFFfree(comprbuf);
+				xdata = (unsigned char *) _TIFFmalloc( uncompr_size );
+				if (!xdata) {
+					fprintf (stderr, "Can't allocate space for final uncompressed scanline buffer\n");
+					goto bad1;
+				}
+
+				// TODO: suboptimal, later improve the above to yield the corrent orientation natively
+				for (row = 0; row < h; ++row) {
+					memcpy (xdata + row * w, uncomprbuf + (h - 1 - row) * w, w);
+					rearrangePixels(xdata + row * w, w, info_hdr.iBitCount, row, data);
+				}
+
+				_TIFFfree(uncomprbuf);
+				bps = 8;
+			}
+			break;
+	} /* switch */
+
+	/* export the table */
+//	*color_table = clr_tbl;
+//	*color_table_size = clr_tbl_size;
+//	*color_table_elements = n_clr_elems;
+	goto bad;
+
+bad1:
+	if (clr_tbl)
+		_TIFFfree(clr_tbl);
+	clr_tbl = NULL;
+
+bad:
+	return;
 }
+
