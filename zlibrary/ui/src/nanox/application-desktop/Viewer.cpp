@@ -385,7 +385,7 @@ void bGetUserData(void **vUserData, int *iUserDataLength) {
 */	
 
 // WTF?
-	vEndDoc();
+//	vEndDoc();
 }
 void vSetUserData(void *vUserData, int iUserDataLength){
 #ifdef _DEBUG		
