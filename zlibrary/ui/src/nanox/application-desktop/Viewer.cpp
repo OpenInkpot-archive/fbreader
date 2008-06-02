@@ -667,6 +667,9 @@ NEXT:			int x, y, w, h;
 		return 2;		
 	}
 
+	if(state != NORMALSTATE)
+		return 0;
+
 	static std::vector<std::string>::iterator it;
 	switch ( keyId ) {
 		case KEY_8:
