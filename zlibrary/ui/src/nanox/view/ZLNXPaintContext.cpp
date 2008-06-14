@@ -60,12 +60,10 @@ ZLNXPaintContext::ZLNXPaintContext() {
 
 	error = FT_Init_FreeType( &library );
 
+	fPath.push_back("/mnt/fonts/");
+	fPath.push_back("/home/fonts/");
 	fPath.push_back("/mnt/fbreader/fonts/");
-	fPath.push_back("/mnt/FBREADER/FONTS/");
-	//fPath.push_back("/mnt/CRENGINE/FONTS/");
-	//fPath.push_back("/mnt/crengine/fonts/");
-	fPath.push_back("/root/fbreader/fonts/");
-	fPath.push_back("/root/crengine/fonts/");
+	fPath.push_back("/home/fbreader/fonts/");
 	fPath.push_back("/root/fonts/truetype/");
 
 	cacheFonts();
