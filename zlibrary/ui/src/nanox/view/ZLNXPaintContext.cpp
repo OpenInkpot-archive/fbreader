@@ -513,15 +513,16 @@ void ZLNXPaintContext::drawImage(int x, int y, const ZLImageData &image) {
 	int iW = image.width();
 	int iH = image.height();
 
-	if((iW + x) > myWidth || y > myHeight)
+	// invalid image placement
+	if((x > myWidth) || (y > myHeight) || ((y - iH) < 0))
 		return;
 
 	ZLNXImageData *source_image = (ZLNXImageData *)&image;
 
 	char *src = source_image->getImageData();
 
-	for(int j = 0; j < iH; j++)
-		for(int i = 0; i < iW; i++) {
+	for(int j = 0; (j < iH) && ((j + (y - iH)) < myHeight); j++)
+		for(int i = 0; (i < iW) && ((i + x) < myWidth); i++) {
 			c_src = src + i / 4 + iW * j / 4;
 			s_src = (i & 3) << 1;
 
