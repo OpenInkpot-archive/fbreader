@@ -17,6 +17,9 @@
  * 02110-1301, USA.
  */
 
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include <ZLFile.h>
 #include <ZLDir.h>
 #include <ZLInputStream.h>
@@ -34,11 +37,23 @@ const std::string XMLConfig::UNKNOWN_CATEGORY = ".unknown.";
 static const std::string CHANGES_FILE = "config.changes";
 
 std::string XMLConfig::configDirName() const {
-#ifdef XMLCONFIGHOMEDIR
+/*#ifdef XMLCONFIGHOMEDIR
 	const std::string home = XMLCONFIGHOMEDIR;
 #else
 	const std::string home = "~";
 #endif
+*/
+	int c = -1, nc = -1;
+	std::string home;
+
+	c = access("/mnt/.FBReader", F_OK);
+	nc = access("/home/.FBReader/nocard", F_OK);
+
+	if((c != -1) && (nc == -1))
+		home = "/mnt";
+	else
+		home = "/home";
+
 	return home + ZLibrary::FileNameDelimiter + "." + ZLibrary::ApplicationName();
 }
 
