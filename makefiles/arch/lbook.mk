@@ -6,9 +6,12 @@ endif
 IMAGEDIR = $(INSTALLDIR)/share/pixmaps
 APPIMAGEDIR = $(INSTALLDIR)/share/pixmaps/%APPLICATION_NAME%
 
-CC = arm-linux-gnueabi-gcc
-AR = arm-linux-gnueabi-ar rsu
-LD = arm-linux-gnueabi-g++
+#CC = arm-linux-gnueabi-gcc
+#AR = arm-linux-gnueabi-ar rsu
+#LD = arm-linux-gnueabi-g++
+
+override AR += rsu
+override LD = arm-linux-gnueabi-g++
 
 CFLAGS = -pipe -fno-exceptions -Wall -Wno-ctor-dtor-privacy -W -DLIBICONV_PLUG -DARM -DXMLCONFIGHOMEDIR=\"/home\"
 LDFLAGS =
