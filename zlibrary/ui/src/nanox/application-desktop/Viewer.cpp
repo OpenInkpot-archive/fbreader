@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Alexander Egorov <lunohod@gmx.de>
+ * Copyright (C) 2008 Alexander Kerner <lunohod@gmx.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,8 @@ bool toc_jump;
 
 enum state_t {
 	ST_NORMAL = 0,
-	ST_LINK_NAV = 1
+	ST_LINK_NAV = 1,
+	ST_CLOCK = 2
 };
 
 state_t cur_state;
@@ -79,6 +80,8 @@ extern ZLApplication *mainApplication;
 
 unsigned char *buf;
 
+char *fileName_InitDoc;
+
 static CallbackFunction * v3_cb = NULL;
 
 int InitDoc(char *fileName)
@@ -99,6 +102,9 @@ int InitDoc(char *fileName)
 		}
     }
 #endif
+
+	fileName_InitDoc = fileName;
+
     char *file;
 
 	if(strstr(fileName, ".pdb.fb2")) {         
@@ -551,10 +557,125 @@ void   vFreeDir(){
 #endif
 }
 
+int hour, min, pos;
+
+void drawClock(bool init = false)
+{
+	shared_ptr<ZLPaintContext> pc = mainApplication->context();
+
+	ZLColor c;
+	c.Red = 0;
+	c.Green = 0;
+	c.Blue = 0;
+	pc->setFillColor(c);
+	pc->fillRectangle(235, 350, 368, 463);
+	c.Red = 0xff;
+	c.Green = 0xff;
+	c.Blue = 0xff;
+	pc->setFillColor(c);
+	pc->fillRectangle(238, 353, 365, 460);
+
+	pc->setFont("Arial", 14, false, false);
+	char *clock = v3_cb->GetString("VIEWER_CLOCK");
+	if(clock != NULL)
+		pc->drawString(245, 385, clock, strlen(clock));
+	else
+		pc->drawString(245, 385, "Clock", 5);
+	pc->drawLine(238, 395, 368, 395);
+	pc->drawLine(238, 396, 368, 396);
+
+	char t[10];
+	sprintf(t, "%02u:%02u", hour, min);
+
+	int x = 245;
+	int y = 445;
+
+	for(int i = 0; i < 5; i++) {
+		bool bold;
+		if(pos == i)
+			bold = true;
+		else
+			bold = false;
+		pc->setFont("Arial", 20, bold, false);
+		pc->drawString(x, y, t + i, 1);
+		x += pc->stringWidth(t + i, 1);
+	}
+
+	v3_cb->BeginDialog();
+	if(!init) {
+		v3_cb->BlitBitmap(238, 353, 130, 110, 238, 353, 600, 800, buf);
+		v3_cb->PartialPrint();
+	}
+	v3_cb->EndDialog();
+}
+
+int setClock(int keyId)
+{
+	if(keyId == NULL) {
+		drawClock(true);
+		return 3;
+	}
+
+	int key;
+
+	switch(keyId) {
+		case KEY_OK:
+			//set_clock
+			struct timeval t;
+			t.tv_sec = hour * 3600 + min * 60;
+			settimeofday(&t, NULL);
+		case KEY_CANCEL:
+			cur_state = ST_NORMAL;
+			mainApplication->refreshWindow();
+			return 1;
+			break;
+		case KEY_0: key = 0; break;
+		case KEY_1: key = 1; break;
+		case KEY_2: key = 2; break;
+		case KEY_3: key = 3; break;
+		case KEY_4: key = 4; break;
+		case KEY_5: key = 5; break;
+		case KEY_6: key = 6; break;
+		case KEY_7: key = 7; break;
+		case KEY_8: key = 8; break;
+		case KEY_9: key = 9; break;
+		default: return 2;
+	}
+
+	if((pos == 0) && (key < 3)) {
+		hour = hour % 10 + key * 10;
+		if(hour > 24)
+			hour = 24;
+		pos++;
+		drawClock();
+	} else if((pos == 1)  && ((hour < 20) || (key <= 4))) {
+		hour = (hour / 10) * 10 + key;
+		pos += 2;
+		drawClock();
+	} else if((pos == 3) && (key < 6)) {
+		min = min % 10 + key * 10;
+		if(min > 59)
+			min = 59;
+		pos++;
+		drawClock();
+	} else if(pos == 4) {
+		min = (min / 10) * 10 + key;
+		pos = 0;
+		drawClock();
+	}
+
+	return 2;
+}
+
+
 int OnKeyPressed(int keyId, int state)
 {
+	if(cur_state == ST_CLOCK) {
+		return setClock(keyId);
+	}
 
-	if(cur_state == ST_LINK_NAV) {		
+
+	if(cur_state == ST_LINK_NAV) {
 		switch ( keyId ) {
 			case KEY_OK: {
 				xxx_link cur_link = xxx_page_links.at(cur_link_idx);
@@ -839,3 +960,72 @@ void invert(int x, int y, int w, int h)
 			buf[i+j*150] = ~buf[i+j*150];
 }
 
+
+#define MENU_SETTINGS 1000
+#define MENU_CLOCK 1001
+#define MENU_DEL_AND_QUIT 1010
+#define MENU_TRASH_AND_QUIT 1011
+
+/**
+* Call this function on final (non submenu) menu item selection.
+*
+* actionId - id of menu action. Set of standard actions should be defined in SDK header file. 
+*            Some range should be reserved for plugin items.
+*            E.g. 1..999 for standard, Viewer-defined actions
+*                 1000-1999 reserved for plugins
+*
+* If return value is 1, this means that action has been processed in plugin and viewer should flush the screen.
+* If return value is 2, this means that action has been processed in plugin and no more processing is required.
+* If return value is 0, or no such function defined in plugin, default processing should be done by Viewer.
+*/
+int OnMenuAction( int actionId )
+{
+    switch ( actionId ) {
+		case MENU_SETTINGS:
+			return 2;
+			break;
+
+		case MENU_TRASH_AND_QUIT:
+			// TODO ask user
+			unlink(fileName_InitDoc);
+			exit(0);
+			break;
+
+		case MENU_DEL_AND_QUIT:
+			// TODO ask user
+			//unlink(fileName_InitDoc);
+			exit(0);
+			break;
+
+		case MENU_CLOCK:
+			hour = 0;
+			min = 0;
+			pos = 0;
+			cur_state = ST_CLOCK;
+			setClock(NULL);
+			return 1;
+			break;
+	}
+
+    return 0;
+}
+
+
+static viewer_menu_item_t custom_menu_items[] =
+{
+//    {MENU_SETTINGS, "VIEWER_MENU_SETTINGS", NULL},
+    {MENU_CLOCK, "VIEWER_MENU_CLOCK", NULL},
+//    {MENU_DEL_AND_QUIT, "VIEWER_MENU_DEL_AND_QUIT", NULL},
+//    {MENU_TRASH_AND_QUIT, "VIEWER_MENU_TRASH_AND_QUIT", NULL},
+	{ 0, NULL, NULL }
+};
+
+/**
+* Returns custom menu items array, NULL to use standard menu items only.
+*/
+const viewer_menu_item_t * GetCustomViewerMenu()
+{
+    return custom_menu_items;
+}
+
+//const char * GetAboutInfoText()
