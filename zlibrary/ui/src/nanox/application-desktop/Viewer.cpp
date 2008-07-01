@@ -22,6 +22,12 @@
 #include "../../../../../fbreader/src/fbreader/FBReader.h"
 #include "../../../../../fbreader/src/fbreader/BookTextView.h"
 #include "../../../../../fbreader/src/fbreader/FBReaderActions.h"
+#include "../../../../../fbreader/src/description/BookDescriptionUtil.h"
+#include "../view/ZLNXPaintContext.h"
+#include "../../../../../fbreader/src/formats/FormatPlugin.h"
+#include "../../../../../fbreader/src/bookmodel/BookModel.h"
+#include <ZLFile.h>
+#include <ZLLanguageList.h>
 
 #include <unistd.h>
 #include <stdio.h>
@@ -54,7 +60,14 @@ bool toc_jump;
 enum state_t {
 	ST_NORMAL = 0,
 	ST_LINK_NAV = 1,
-	ST_CLOCK = 2
+	ST_CLOCK = 2,
+	ST_FONT_SEL = 3,
+	ST_FONT_SIZE = 4,
+	ST_INTERLINE = 5,
+	ST_MENU_ENC = 6,
+	ST_ENC = 7,
+	ST_LANG = 8,
+	ST_MENU_FONT = 9
 };
 
 state_t cur_state;
@@ -73,6 +86,8 @@ void updateCoord(int &x, int &y, int &w, int&h);
 void invert(int x, int y, int h, int w);
 
 int cur_link_idx;
+
+std::vector<std::string> encodings;
 
 #define ALLOW_RUN_EXE 1
 
@@ -667,11 +682,886 @@ int setClock(int keyId)
 	return 2;
 }
 
+std::vector<std::string> ffamilies;
+int fontsel_pg;
+int enc_pg;
+int lang_pg;
+
+void drawMenuFont(bool init = false);
+void drawFontSel(bool init = false)
+{
+	int x0 = 100 , y0 = 175, x1 = 500, y1 = 625;
+
+
+	shared_ptr<ZLPaintContext> pc = mainApplication->context();
+	if(init) {
+		fontsel_pg = 0;
+	}
+
+	ZLColor c;
+	c.Red = 0;
+	c.Green = 0;
+	c.Blue = 0;
+	pc->setFillColor(c);
+	pc->fillRectangle(x0, y0, x1 + 3, y1 + 3);
+	c.Red = 0xff;
+	c.Green = 0xff;
+	c.Blue = 0xff;
+	pc->setFillColor(c);
+	pc->fillRectangle(x0 + 2, y0 + 3, x1, y1);
+
+	pc->setFont("Arial", 14, false, false);
+	char *bf = v3_cb->GetString("VIEWER_FONT");
+	if(bf != NULL)
+		pc->drawString(x0 + 5, y0 + 35, bf, strlen(bf));
+	else
+		pc->drawString(x0 + 5, y0 + 35, "Base font family", 16);
+	pc->drawLine(x0, y0 + 45, x1, y0 + 45);
+	pc->drawLine(x0, y0 + 46, x1, y0 + 46);
+
+	char l[100];
+	int i = 0;
+	while((i < 8) && ((fontsel_pg * 8) + i) < ffamilies.size()) {
+		int idx = fontsel_pg * 8 + i;
+		sprintf(l, "%d. %s", i + 1, ffamilies.at(idx).c_str());
+		pc->setFont(ffamilies.at(idx).c_str(), 14, false, false);
+		pc->drawString(x0 + 10, y0 + 90 + 40 * i, l, strlen(l));
+		i++;
+	}
+
+	pc->drawLine(x0, y1 - 45, x1, y1 - 45);
+	pc->drawLine(x0, y1 - 46, x1, y1 - 46);
+
+	int pgs = ffamilies.size() / 8; 
+	if((ffamilies.size() % 8) > 0)
+		pgs++;
+	sprintf(l, "%d / %d", fontsel_pg + 1, pgs);
+	pc->setFont("Arial", 14, false, false);
+	pc->drawString(x0 + 5, y1 - 10, l, strlen(l));
+
+	pc->drawLine(x0 + 95, y1 - 45, x0 + 95, y1);
+	pc->drawLine(x0 + 96, y1 - 45, x0 + 96, y1);
+	ZLStringOption &option = ZLTextStyleCollection::instance().baseStyle().FontFamilyOption;
+	sprintf(l, "%s", option.value().c_str());
+	pc->drawString(x0 + 106, y1 - 10, l, strlen(l));
+
+	v3_cb->BeginDialog();
+	if(!init) {
+		v3_cb->BlitBitmap(x0, y0, x1 - x0, y1 - y0, x0, y0, 600, 800, buf);
+		v3_cb->PartialPrint();
+	}
+	v3_cb->EndDialog();
+}
+
+int setFont(int keyId)
+{
+	if(keyId == NULL) {
+		drawFontSel();		
+		return 2;
+	}
+
+	int key;
+
+	switch(keyId) {
+		case KEY_OK:
+		case KEY_CANCEL:
+			cur_state = ST_MENU_FONT;
+			mainApplication->refreshWindow();
+			drawMenuFont();
+			return 2;
+			break;
+		case KEY_DOWN:
+		case KEY_0: key = 0; break;
+		case KEY_1: key = 1; break;
+		case KEY_2: key = 2; break;
+		case KEY_3: key = 3; break;
+		case KEY_4: key = 4; break;
+		case KEY_5: key = 5; break;
+		case KEY_6: key = 6; break;
+		case KEY_7: key = 7; break;
+		case KEY_8: key = 8; break;
+		case KEY_UP:
+		case KEY_9: key = 9; break;
+		default: return 2;
+	}
+
+	if(key == 0) {
+		int pgs = ffamilies.size() / 8; 
+		if((ffamilies.size() % 8) > 0)
+			pgs++;
+		if(fontsel_pg < (pgs - 1)) {
+			fontsel_pg++;
+			drawFontSel();
+		}
+	} else if(key == 9) {
+		if(fontsel_pg > 0) {
+			fontsel_pg--;
+			drawFontSel();
+		}
+	} else {
+		int idx = key - 1 + fontsel_pg * 8;
+		if(idx < ffamilies.size()) {
+			// set font
+			ZLStringOption &option = ZLTextStyleCollection::instance().baseStyle().FontFamilyOption;
+			option.setValue(ffamilies.at(idx));
+			((FBReader *)mainApplication)->clearTextCaches();
+			cur_state = ST_MENU_FONT;
+			mainApplication->refreshWindow();
+			drawMenuFont();
+			return 1;
+		}
+	}
+
+	return 2;
+}
+
+void drawFontSize(bool init = false)
+{
+	int x0 = 100 , y0 = 175, x1 = 500, y1 = 625;
+
+	shared_ptr<ZLPaintContext> pc = mainApplication->context();
+
+	ZLColor c;
+	c.Red = 0;
+	c.Green = 0;
+	c.Blue = 0;
+	pc->setFillColor(c);
+	pc->fillRectangle(x0, y0, x1 + 3, y1 + 3);
+	c.Red = 0xff;
+	c.Green = 0xff;
+	c.Blue = 0xff;
+	pc->setFillColor(c);
+	pc->fillRectangle(x0 + 2, y0 + 3, x1, y1);
+
+	pc->setFont("Arial", 14, false, false);
+	char *bf = v3_cb->GetString("VIEWER_FONT_SIZE");
+	if(bf != NULL)
+		pc->drawString(x0 + 5, y0 + 35, bf, strlen(bf));
+	else
+		pc->drawString(x0 + 5, y0 + 35, "Base font size", 14);
+	pc->drawLine(x0, y0 + 45, x1, y0 + 45);
+	pc->drawLine(x0, y0 + 46, x1, y0 + 46);
+
+	char l[100];
+	int i = 0;
+	while(i < 8) {
+		int idx = fontsel_pg * 8 + i;
+		sprintf(l, "%d. %d pt", i + 1, 2 * i + 6);
+		pc->drawString(x0 + 10, y0 + 90 + 40 * i, l, strlen(l));
+		i++;
+	}
+
+	pc->drawLine(x0, y1 - 45, x1, y1 - 45);
+	pc->drawLine(x0, y1 - 46, x1, y1 - 46);
+
+	sprintf(l, "%d / %d", 1, 1);
+	pc->setFont("Arial", 14, false, false);
+	pc->drawString(x0 + 5, y1 - 10, l, strlen(l));
+
+	pc->drawLine(x0 + 95, y1 - 45, x0 + 95, y1);
+	pc->drawLine(x0 + 96, y1 - 45, x0 + 96, y1);
+	ZLIntegerRangeOption &option = ZLTextStyleCollection::instance().baseStyle().FontSizeOption;
+	sprintf(l, "%d pt", option.value());
+	pc->drawString(x0 + 106, y1 - 10, l, strlen(l));
+
+	v3_cb->BeginDialog();
+	if(!init) {
+		v3_cb->BlitBitmap(x0, y0, x1 - x0, y1 - y0, x0, y0, 600, 800, buf);
+		v3_cb->PartialPrint();
+	}
+	v3_cb->EndDialog();
+}
+
+int setFontSize(int keyId)
+{
+	if(keyId == NULL) {
+		drawFontSize();
+		return 2;
+	}
+
+	int key;
+
+	switch(keyId) {
+		case KEY_OK:
+		case KEY_CANCEL:
+			cur_state = ST_MENU_FONT;
+			mainApplication->refreshWindow();
+			drawMenuFont();
+			return 2;
+			break;
+//		case KEY_0: key = 0; break;
+		case KEY_1: key = 1; break;
+		case KEY_2: key = 2; break;
+		case KEY_3: key = 3; break;
+		case KEY_4: key = 4; break;
+		case KEY_5: key = 5; break;
+		case KEY_6: key = 6; break;
+		case KEY_7: key = 7; break;
+		case KEY_8: key = 8; break;
+//		case KEY_9: key = 9; break;
+		default: return 2;
+	}
+
+	int size = 2 * key + 4;
+	// set size 
+	ZLIntegerRangeOption &option = ZLTextStyleCollection::instance().baseStyle().FontSizeOption;
+	option.setValue(size);
+	((FBReader *)mainApplication)->clearTextCaches();
+	cur_state = ST_MENU_FONT;
+	mainApplication->refreshWindow();
+	drawMenuFont();
+	return 1;
+}
+
+void drawInterLine(bool init = false)
+{
+	int x0 = 100 , y0 = 175, x1 = 500, y1 = 625;
+
+	shared_ptr<ZLPaintContext> pc = mainApplication->context();
+
+	ZLColor c;
+	c.Red = 0;
+	c.Green = 0;
+	c.Blue = 0;
+	pc->setFillColor(c);
+	pc->fillRectangle(x0, y0, x1 + 3, y1 + 3);
+	c.Red = 0xff;
+	c.Green = 0xff;
+	c.Blue = 0xff;
+	pc->setFillColor(c);
+	pc->fillRectangle(x0 + 2, y0 + 3, x1, y1);
+
+	pc->setFont("Arial", 14, false, false);
+	char *bf = v3_cb->GetString("VIEWER_INTERLINE");
+	if(bf != NULL)
+		pc->drawString(x0 + 5, y0 + 35, bf, strlen(bf));
+	else
+		pc->drawString(x0 + 5, y0 + 35, "Interline space", 15);
+	pc->drawLine(x0, y0 + 45, x1, y0 + 45);
+	pc->drawLine(x0, y0 + 46, x1, y0 + 46);
+
+	char l[100];
+	int i = 0;
+	while(i < 8) {
+		int idx = fontsel_pg * 8 + i;
+		sprintf(l, "%d. %d %%", i + 1, 10 * i + 80);
+		pc->drawString(x0 + 10, y0 + 90 + 40 * i, l, strlen(l));
+		i++;
+	}
+
+	pc->drawLine(x0, y1 - 45, x1, y1 - 45);
+	pc->drawLine(x0, y1 - 46, x1, y1 - 46);
+
+	sprintf(l, "%d / %d", 1, 1);
+	pc->setFont("Arial", 14, false, false);
+	pc->drawString(x0 + 5, y1 - 10, l, strlen(l));
+
+	pc->drawLine(x0 + 95, y1 - 45, x0 + 95, y1);
+	pc->drawLine(x0 + 96, y1 - 45, x0 + 96, y1);
+	ZLIntegerOption &option = ZLTextStyleCollection::instance().baseStyle().LineSpacePercentOption;
+	sprintf(l, "%d %%", option.value());
+	pc->drawString(x0 + 106, y1 - 10, l, strlen(l));
+
+	v3_cb->BeginDialog();
+	if(!init) {
+		v3_cb->BlitBitmap(x0, y0, x1 - x0, y1 - y0, x0, y0, 600, 800, buf);
+		v3_cb->PartialPrint();
+	}
+	v3_cb->EndDialog();
+}
+
+int setInterLine(int keyId)
+{
+	if(keyId == NULL) {
+		drawInterLine();
+		return 2;
+	}
+
+	int key;
+
+	switch(keyId) {
+		case KEY_OK:
+		case KEY_CANCEL:
+			mainApplication->refreshWindow();
+			cur_state = ST_MENU_FONT;
+			drawMenuFont();
+			return 2;
+			break;
+//		case KEY_0: key = 0; break;
+		case KEY_1: key = 1; break;
+		case KEY_2: key = 2; break;
+		case KEY_3: key = 3; break;
+		case KEY_4: key = 4; break;
+		case KEY_5: key = 5; break;
+		case KEY_6: key = 6; break;
+		case KEY_7: key = 7; break;
+		case KEY_8: key = 8; break;
+//		case KEY_9: key = 9; break;
+		default: return 2;
+	}
+
+	int val = 10 * key + 70;
+	// set size 
+	ZLIntegerOption &option = ZLTextStyleCollection::instance().baseStyle().LineSpacePercentOption;
+	option.setValue(val);
+	((FBReader *)mainApplication)->clearTextCaches();
+	cur_state = ST_MENU_FONT;
+	mainApplication->refreshWindow();
+	drawMenuFont();
+	return 1;
+}
+
+BookInfo *myBookInfo;
+void drawMenuEnc(bool init = false)
+{
+	int x0 = 100 , y0 = 175, x1 = 500, y1 = 625;
+
+	shared_ptr<ZLPaintContext> pc = mainApplication->context();
+
+	ZLColor c;
+	c.Red = 0;
+	c.Green = 0;
+	c.Blue = 0;
+	pc->setFillColor(c);
+	pc->fillRectangle(x0, y0, x1 + 3, y1 + 3);
+	c.Red = 0xff;
+	c.Green = 0xff;
+	c.Blue = 0xff;
+	pc->setFillColor(c);
+	pc->fillRectangle(x0 + 2, y0 + 3, x1, y1);
+
+	if(myBookInfo == NULL)
+		myBookInfo = new BookInfo(fileName_InitDoc);
+
+	pc->setFont("Arial", 12, false, false);
+	char *bf = v3_cb->GetString("VIEWER_MENU_ENC");
+	if(bf != NULL)
+		pc->drawString(x0 + 5, y0 + 35, bf, strlen(bf));
+	else
+		pc->drawString(x0 + 5, y0 + 35, "Encoding", 8);
+	pc->drawLine(x0, y0 + 45, x1, y0 + 45);
+	pc->drawLine(x0, y0 + 46, x1, y0 + 46);
+
+	char l[100];
+	int i = 0;
+
+	char *lang = v3_cb->GetString("VIEWER_LANG");
+	if(lang != NULL)
+		sprintf(l, "%d. %s : %s", i + 1, lang, ZLLanguageList::languageName(myBookInfo->LanguageOption.value()).c_str());
+	else
+		sprintf(l, "%d. %s : %s", i + 1, "Language", ZLLanguageList::languageName(myBookInfo->LanguageOption.value()).c_str());
+	pc->drawString(x0 + 10, y0 + 90 + 40 * i, l, strlen(l));
+	i++;
+
+	char *enc = v3_cb->GetString("VIEWER_ENC");
+	if(enc != NULL)
+		sprintf(l, "%d. %s: %s", i + 1, enc, myBookInfo->EncodingOption.value().c_str());
+	else
+		sprintf(l, "%d. %s: %s", i + 1, "Encoding", myBookInfo->EncodingOption.value().c_str());
+	pc->drawString(x0 + 10, y0 + 90 + 40 * i, l, strlen(l));
+	i++;
+
+	pc->drawLine(x0, y1 - 45, x1, y1 - 45);
+	pc->drawLine(x0, y1 - 46, x1, y1 - 46);
+
+	sprintf(l, "%d / %d", 1, 1);
+	pc->setFont("Arial", 14, false, false);
+	pc->drawString(x0 + 5, y1 - 10, l, strlen(l));
+
+	pc->drawLine(x0 + 95, y1 - 45, x0 + 95, y1);
+	pc->drawLine(x0 + 96, y1 - 45, x0 + 96, y1);
+
+	v3_cb->BeginDialog();
+	if(!init) {
+		v3_cb->BlitBitmap(x0, y0, x1 - x0, y1 - y0, x0, y0, 600, 800, buf);
+		v3_cb->PartialPrint();
+	}
+	v3_cb->EndDialog();
+}
+
+int setEnc(int keyId);
+int setLang(int keyId);
+
+int menuEnc(int keyId)
+{
+	if(keyId == NULL) {
+		drawMenuEnc(true);
+		return 3;
+	}
+
+	int key;
+
+	switch(keyId) {
+		case KEY_OK:
+		case KEY_CANCEL:
+			cur_state = ST_NORMAL;
+			mainApplication->refreshWindow();
+			return 1;
+			break;
+//		case KEY_0: key = 0; break;
+		case KEY_1: key = 1; 
+					cur_state = ST_LANG;
+					setLang(NULL);
+					return 2;
+					break;
+		case KEY_2: key = 2; 
+					cur_state = ST_ENC;
+					setEnc(NULL);
+					return 2;
+					break;
+/*		case KEY_3: key = 3; break;
+		case KEY_4: key = 4; break;
+		case KEY_5: key = 5; break;
+		case KEY_6: key = 6; break;
+		case KEY_7: key = 7; break;
+		case KEY_8: key = 8; break;
+//		case KEY_9: key = 9; break;
+*/		
+		default: return 2;
+	}
+	return 2;
+}
+
+void drawEnc(bool init = false)
+{
+	int x0 = 100 , y0 = 175, x1 = 500, y1 = 625;
+
+	shared_ptr<ZLPaintContext> pc = mainApplication->context();
+
+	if(init) {
+		enc_pg = 0;
+		encodings.clear();
+		encodings.push_back("auto");
+		encodings.push_back("UTF-8");
+		encodings.push_back("KOI8-R");
+		encodings.push_back("KOI8-U");
+		encodings.push_back("windows-1251");
+		encodings.push_back("windows-1252");
+		encodings.push_back("ISO-8859-1");
+		encodings.push_back("US-ASCII");
+	}
+
+
+	ZLColor c;
+	c.Red = 0;
+	c.Green = 0;
+	c.Blue = 0;
+	pc->setFillColor(c);
+	pc->fillRectangle(x0, y0, x1 + 3, y1 + 3);
+	c.Red = 0xff;
+	c.Green = 0xff;
+	c.Blue = 0xff;
+	pc->setFillColor(c);
+	pc->fillRectangle(x0 + 2, y0 + 3, x1, y1);
+
+	pc->setFont("Arial", 12, false, false);
+	char *bf = v3_cb->GetString("VIEWER_ENC");
+	if(bf != NULL)
+		pc->drawString(x0 + 5, y0 + 35, bf, strlen(bf));
+	else
+		pc->drawString(x0 + 5, y0 + 35, "Encoding", 8);
+	pc->drawLine(x0, y0 + 45, x1, y0 + 45);
+	pc->drawLine(x0, y0 + 46, x1, y0 + 46);
+
+	char l[100];
+	int i = 0;
+	while((i < 8) && ((enc_pg * 8) + i) < encodings.size()) {
+		int idx = enc_pg * 8 + i;
+		sprintf(l, "%d. %s", i + 1, encodings.at(idx).c_str());
+		pc->drawString(x0 + 10, y0 + 90 + 40 * i, l, strlen(l));
+		i++;
+	}
+
+	pc->drawLine(x0, y1 - 45, x1, y1 - 45);
+	pc->drawLine(x0, y1 - 46, x1, y1 - 46);
+
+	int pgs = encodings.size() / 8; 
+	if((encodings.size() % 8) > 0)
+		pgs++;
+	sprintf(l, "%d / %d", enc_pg + 1, pgs);
+	pc->setFont("Arial", 14, false, false);
+	pc->drawString(x0 + 5, y1 - 10, l, strlen(l));
+
+	pc->drawLine(x0 + 95, y1 - 45, x0 + 95, y1);
+	pc->drawLine(x0 + 96, y1 - 45, x0 + 96, y1);
+
+	sprintf(l, "%s", myBookInfo->EncodingOption.value().c_str());
+	pc->drawString(x0 + 106, y1 - 10, l, strlen(l));
+
+	v3_cb->BeginDialog();
+//	if(!init) {
+	v3_cb->BlitBitmap(x0, y0, x1 - x0, y1 - y0, x0, y0, 600, 800, buf);
+	v3_cb->PartialPrint();
+//	}
+	v3_cb->EndDialog();
+}
+
+int setEnc(int keyId)
+{
+	if(keyId == NULL) {
+		drawEnc(true);
+		return 2;
+	}
+
+	int key;
+
+	switch(keyId) {
+		case KEY_OK:
+		case KEY_CANCEL:
+			mainApplication->refreshWindow();
+			cur_state = ST_MENU_ENC;
+			drawMenuEnc();
+			return 2;
+			break;
+		case KEY_DOWN:
+		case KEY_0: key = 0; break;
+		case KEY_1: key = 1; break;
+		case KEY_2: key = 2; break;
+		case KEY_3: key = 3; break;
+		case KEY_4: key = 4; break;
+		case KEY_5: key = 5; break;
+		case KEY_6: key = 6; break;
+		case KEY_7: key = 7; break;
+		case KEY_8: key = 8; break;
+		case KEY_UP:
+		case KEY_9: key = 9; break;
+		default: return 2;
+	}
+	if(key == 0) {
+		int pgs = encodings.size() / 8; 
+		if((encodings.size() % 8) > 0)
+			pgs++;
+		if(enc_pg < (pgs - 1)) {
+			enc_pg++;
+			drawEnc();
+		}
+	} else if(key == 9) {
+		if(enc_pg > 0) {
+			enc_pg--;
+			drawEnc();
+		}
+	} else {
+		int idx = key - 1 + enc_pg * 8;
+		if(idx < encodings.size()) {
+			ZLFile file(fileName_InitDoc);
+			BookDescriptionPtr description = new BookDescription(fileName_InitDoc);
+			description->myEncoding = encodings.at(idx);
+			BookDescriptionUtil::saveInfo(file);
+			
+			//WritableBookDescription((BookDescriptionPtr&)description).encoding() = encodings.at(idx);
+
+			// set encoding
+			myBookInfo->EncodingOption.setValue(encodings.at(idx));
+
+			//((FBReader *)mainApplication)->openFile(fileName_InitDoc);
+			FBReader *fbr = (FBReader*)mainApplication;
+			fbr->openFile(fbr->myModel->fileName());
+
+			fbr->clearTextCaches();
+			mainApplication->refreshWindow();
+			cur_state = ST_MENU_ENC;
+			drawMenuEnc();
+			return 1;
+		}
+	}
+
+	return 2;
+}
+
+std::vector<std::string> languages;
+void drawLang(bool init = false)
+{
+	int x0 = 100 , y0 = 175, x1 = 500, y1 = 625;
+
+	shared_ptr<ZLPaintContext> pc = mainApplication->context();
+
+	if(init) {
+		lang_pg = 0;
+
+		const std::vector<std::string> &l = ZLLanguageList::languageCodes();
+		languages.empty();
+		languages.resize(l.size());
+		copy(l.begin(), l.end(), languages.begin());
+		languages.erase(find(languages.begin(), languages.end(), "ru"));
+		languages.insert(languages.begin(), std::string("ru"));
+	}
+
+
+	ZLColor c;
+	c.Red = 0;
+	c.Green = 0;
+	c.Blue = 0;
+	pc->setFillColor(c);
+	pc->fillRectangle(x0, y0, x1 + 3, y1 + 3);
+	c.Red = 0xff;
+	c.Green = 0xff;
+	c.Blue = 0xff;
+	pc->setFillColor(c);
+	pc->fillRectangle(x0 + 2, y0 + 3, x1, y1);
+
+	pc->setFont("Arial", 12, false, false);
+	char *bf = v3_cb->GetString("VIEWER_LANG");
+	if(bf != NULL)
+		pc->drawString(x0 + 5, y0 + 35, bf, strlen(bf));
+	else
+		pc->drawString(x0 + 5, y0 + 35, "Language", 8);
+	pc->drawLine(x0, y0 + 45, x1, y0 + 45);
+	pc->drawLine(x0, y0 + 46, x1, y0 + 46);
+
+	char l[100];
+	int i = 0;
+	while((i < 8) && ((lang_pg * 8) + i) < languages.size()) {
+		int idx = lang_pg * 8 + i;
+		sprintf(l, "%d. %s", i + 1, ZLLanguageList::languageName(languages.at(idx)).c_str());
+		pc->drawString(x0 + 10, y0 + 90 + 40 * i, l, strlen(l));
+		i++;
+	}
+
+	pc->drawLine(x0, y1 - 45, x1, y1 - 45);
+	pc->drawLine(x0, y1 - 46, x1, y1 - 46);
+
+	int pgs = languages.size() / 8; 
+	if((languages.size() % 8) > 0)
+		pgs++;
+	sprintf(l, "%d / %d", lang_pg + 1, pgs);
+	pc->setFont("Arial", 14, false, false);
+	pc->drawString(x0 + 5, y1 - 10, l, strlen(l));
+
+	pc->drawLine(x0 + 95, y1 - 45, x0 + 95, y1);
+	pc->drawLine(x0 + 96, y1 - 45, x0 + 96, y1);
+
+	sprintf(l, "%s", ZLLanguageList::languageName(myBookInfo->LanguageOption.value()).c_str());
+	pc->drawString(x0 + 106, y1 - 10, l, strlen(l));
+
+	v3_cb->BeginDialog();
+//	if(!init) {
+	v3_cb->BlitBitmap(x0, y0, x1 - x0, y1 - y0, x0, y0, 600, 800, buf);
+	v3_cb->PartialPrint();
+//	}
+	v3_cb->EndDialog();
+}
+
+int setLang(int keyId)
+{
+	if(keyId == NULL) {
+		drawLang(true);
+		return 2;
+	}
+
+	int key;
+
+	switch(keyId) {
+		case KEY_OK:
+		case KEY_CANCEL:
+			mainApplication->refreshWindow();
+			cur_state = ST_MENU_ENC;
+			drawMenuEnc();
+			return 2;
+			break;
+		case KEY_DOWN:
+		case KEY_0: key = 0; break;
+		case KEY_1: key = 1; break;
+		case KEY_2: key = 2; break;
+		case KEY_3: key = 3; break;
+		case KEY_4: key = 4; break;
+		case KEY_5: key = 5; break;
+		case KEY_6: key = 6; break;
+		case KEY_7: key = 7; break;
+		case KEY_8: key = 8; break;
+		case KEY_UP:
+		case KEY_9: key = 9; break;
+		default: return 2;
+	}
+	if(key == 0) {
+		int pgs = languages.size() / 8; 
+		if((languages.size() % 8) > 0)
+			pgs++;
+		if(lang_pg < (pgs - 1)) {
+			lang_pg++;
+			drawLang();
+		}
+	} else if(key == 9) {
+		if(lang_pg > 0) {
+			lang_pg--;
+			drawLang();
+		}
+	} else {
+		int idx = key - 1 + lang_pg * 8;
+		if(idx < languages.size()) {
+			FBReader *fbr = (FBReader*)mainApplication;
+
+			BookDescriptionPtr description = new BookDescription(fbr->myModel->fileName());
+			description->myLanguage = languages.at(idx);
+			BookDescriptionUtil::saveInfo(ZLFile(fbr->myModel->fileName()));
+			
+			// set encoding
+			myBookInfo->LanguageOption.setValue(languages.at(idx));
+
+			fbr->openFile(fbr->myModel->fileName());
+
+			fbr->clearTextCaches();
+			mainApplication->refreshWindow();
+			cur_state = ST_MENU_ENC;
+			drawMenuEnc();
+			return 1;
+		}
+	}
+
+	return 2;
+}
+
+void drawMenuFont(bool init)
+{
+	int x0 = 100 , y0 = 175, x1 = 500, y1 = 625;
+
+	shared_ptr<ZLPaintContext> pc = mainApplication->context();
+
+	ZLColor c;
+	c.Red = 0;
+	c.Green = 0;
+	c.Blue = 0;
+	pc->setFillColor(c);
+	pc->fillRectangle(x0, y0, x1 + 3, y1 + 3);
+	c.Red = 0xff;
+	c.Green = 0xff;
+	c.Blue = 0xff;
+	pc->setFillColor(c);
+	pc->fillRectangle(x0 + 2, y0 + 3, x1, y1);
+
+	if(myBookInfo == NULL)
+		myBookInfo = new BookInfo(fileName_InitDoc);
+
+	pc->setFont("Arial", 12, false, false);
+	char *bf = v3_cb->GetString("VIEWER_MENU_FONT");
+	if(bf != NULL)
+		pc->drawString(x0 + 5, y0 + 35, bf, strlen(bf));
+	else
+		pc->drawString(x0 + 5, y0 + 35, "ûÒÉÆÔ", 8);
+	pc->drawLine(x0, y0 + 45, x1, y0 + 45);
+	pc->drawLine(x0, y0 + 46, x1, y0 + 46);
+
+	char l[100];
+	int i = 0;
+
+	char *x = v3_cb->GetString("VIEWER_FONT");
+	if(x != NULL)
+		sprintf(l, "%d. %s", i + 1, x);//, ZLTextStyleCollection::instance().baseStyle().FontFamilyOption.value().c_str());
+	else
+		sprintf(l, "%d. %s", i + 1, "Base font family");//, ZLTextStyleCollection::instance().baseStyle().FontFamilyOption.value().c_str());
+	pc->drawString(x0 + 10, y0 + 90 + 40 * i, l, strlen(l));
+	i++;
+
+	x = NULL;
+	x = v3_cb->GetString("VIEWER_FONT_SIZE");
+	if(x != NULL)
+		sprintf(l, "%d. %s", i + 1, x); //, ZLTextStyleCollection::instance().baseStyle().FontSizeOption.value());
+	else
+		sprintf(l, "%d. %s", i + 1, "Font Size"); //, ZLTextStyleCollection::instance().baseStyle().FontSizeOption.value());
+	pc->drawString(x0 + 10, y0 + 90 + 40 * i, l, strlen(l));
+	i++;
+
+	x = NULL;
+	x = v3_cb->GetString("VIEWER_INTERLINE");
+	if(x != NULL)
+		sprintf(l, "%d. %s", i + 1, x);//, ZLTextStyleCollection::instance().baseStyle().LineSpacePercentOption.value());
+	else
+		sprintf(l, "%d. %s", i + 1, "Interline space");//, ZLTextStyleCollection::instance().baseStyle().LineSpacePercentOption.value());
+
+	pc->drawString(x0 + 10, y0 + 90 + 40 * i, l, strlen(l));
+	i++;
+
+	pc->drawLine(x0, y1 - 45, x1, y1 - 45);
+	pc->drawLine(x0, y1 - 46, x1, y1 - 46);
+
+	sprintf(l, "%d / %d", 1, 1);
+	pc->setFont("Arial", 14, false, false);
+	pc->drawString(x0 + 5, y1 - 10, l, strlen(l));
+
+	pc->drawLine(x0 + 95, y1 - 45, x0 + 95, y1);
+	pc->drawLine(x0 + 96, y1 - 45, x0 + 96, y1);
+
+	v3_cb->BeginDialog();
+	if(!init) {
+		v3_cb->BlitBitmap(x0, y0, x1 - x0, y1 - y0, x0, y0, 600, 800, buf);
+		v3_cb->PartialPrint();
+	}
+	v3_cb->EndDialog();
+}
+int menuFont(int keyId)
+{
+	if(keyId == NULL) {
+		drawMenuFont(true);
+		return 3;
+	}
+
+	int key;
+
+	switch(keyId) {
+		case KEY_OK:
+		case KEY_CANCEL:
+			cur_state = ST_NORMAL;
+			mainApplication->refreshWindow();
+			return 1;
+			break;
+//		case KEY_0: key = 0; break;
+		case KEY_1: key = 1; 
+					cur_state = ST_FONT_SEL;
+					setFont(NULL);
+					return 2;
+					break;
+		case KEY_2: key = 2; 
+					cur_state = ST_FONT_SIZE;
+					setFontSize(NULL);
+					return 2;
+					break;
+		case KEY_3: key = 3; 
+					cur_state = ST_INTERLINE;
+					setInterLine(NULL);
+					return 2;
+					break;
+		case KEY_4: key = 4; break;
+		case KEY_5: key = 5; break;
+		case KEY_6: key = 6; break;
+		case KEY_7: key = 7; break;
+		case KEY_8: key = 8; break;
+//		case KEY_9: key = 9; break;
+		default: return 2;
+	}
+	return 2;
+}
 
 int OnKeyPressed(int keyId, int state)
 {
 	if(cur_state == ST_CLOCK) {
 		return setClock(keyId);
+	}
+	
+	if(cur_state == ST_MENU_FONT)
+		return menuFont(keyId);
+
+
+	if(cur_state == ST_FONT_SEL) {
+		return setFont(keyId);
+	}
+
+	if(cur_state == ST_FONT_SIZE) {
+		return setFontSize(keyId);
+	}
+
+	if(cur_state == ST_INTERLINE) {
+		return setInterLine(keyId);
+	}
+
+	if(cur_state == ST_MENU_ENC) {
+		return menuEnc(keyId);
+	}
+
+	if(cur_state == ST_ENC) {
+		return setEnc(keyId);
+	}
+
+	if(cur_state == ST_LANG) {
+		return setLang(keyId);
 	}
 
 
@@ -962,7 +1852,9 @@ void invert(int x, int y, int w, int h)
 
 
 #define MENU_SETTINGS 1000
-#define MENU_CLOCK 1001
+#define MENU_FONT 1001
+#define MENU_ENC 1002
+#define MENU_CLOCK 1003
 #define MENU_DEL_AND_QUIT 1010
 #define MENU_TRASH_AND_QUIT 1011
 
@@ -1005,6 +1897,37 @@ int OnMenuAction( int actionId )
 			setClock(NULL);
 			return 1;
 			break;
+
+		case MENU_FONT:
+			cur_state = ST_MENU_FONT;
+			menuFont(NULL);
+			return 1;
+			break;
+
+/*		case MENU_FONT:
+			cur_state = ST_FONT_SEL;
+			setFont(NULL);
+			return 1;
+			break;
+
+		case MENU_FONT_SIZE:
+			cur_state = ST_FONT_SIZE;
+			setFontSize(NULL);
+			return 1;
+			break;
+
+		case MENU_INTERLINE:
+			cur_state = ST_INTERLINE;
+			setInterLine(NULL);
+			return 1;
+			break;
+*/			
+
+		case MENU_ENC:
+			cur_state = ST_MENU_ENC;
+			menuEnc(NULL);
+			return 1;
+			break;
 	}
 
     return 0;
@@ -1014,7 +1937,12 @@ int OnMenuAction( int actionId )
 static viewer_menu_item_t custom_menu_items[] =
 {
 //    {MENU_SETTINGS, "VIEWER_MENU_SETTINGS", NULL},
+	{MENU_FONT, "VIEWER_MENU_FONT", NULL},
+	{MENU_ENC, "VIEWER_MENU_ENC", NULL},
     {MENU_CLOCK, "VIEWER_MENU_CLOCK", NULL},
+//	{MENU_FONT_SIZE, "VIEWER_FONT_SIZE", NULL},
+//	{MENU_INTERLINE, "VIEWER_INTERLINE", NULL},
+	
 //    {MENU_DEL_AND_QUIT, "VIEWER_MENU_DEL_AND_QUIT", NULL},
 //    {MENU_TRASH_AND_QUIT, "VIEWER_MENU_TRASH_AND_QUIT", NULL},
 	{ 0, NULL, NULL }

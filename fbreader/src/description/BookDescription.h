@@ -61,7 +61,8 @@ public:
 private:
 	static std::map<std::string,BookDescriptionPtr> ourDescriptions;
 
-private:
+//private:
+public:
 	BookDescription(const std::string &fileName);
 
 public:
@@ -73,7 +74,8 @@ public:
 	const std::string &language() const;
 	const std::string &encoding() const;
 
-private:
+//private:
+public:
 	AuthorPtr myAuthor;
 	std::string myTitle;
 	std::string mySequenceName;

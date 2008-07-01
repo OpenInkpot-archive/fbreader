@@ -38,6 +38,7 @@ struct xxx_link {
 	bool next;
 };
 extern std::vector<xxx_link> xxx_page_links;
+extern std::vector<std::string> ffamilies;
 extern char *buf;
 #define ROUND_26_6_TO_INT(valuetoround) (((valuetoround) + 63) >> 6)
 
@@ -150,6 +151,13 @@ void ZLNXPaintContext::cacheFonts() const {
 					Font *fc = &(fontCache[lFace->family_name])[bi_hash];
 
 					if(fc->fileName.length() == 0) {
+						if((bi_hash == 0)
+								&& strcmp(lFace->family_name, "Symbol")
+								&& strcmp(lFace->family_name, "Wingdings")
+								&& strcmp(lFace->family_name, "Wingdings 2")
+								&& strcmp(lFace->family_name, "Wingdings 3")
+								&& strcmp(lFace->family_name, "Webdings"))
+							ffamilies.push_back(lFace->family_name);
 						fc->familyName = lFace->family_name;
 						fc->fileName = fFullName;
 						fc->index = i;

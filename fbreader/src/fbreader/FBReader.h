@@ -101,6 +101,7 @@ private:
 
 	bool closeView();
 	std::string helpFileName(const std::string &language) const;
+public:
 	void openFile(const std::string &fileName);
 
 public:
@@ -138,8 +139,10 @@ private:
 
 	ZLTime myLastScrollingTime;
 
+public:
 	BookModel *myModel;
 
+private:
 	ZLKeyBindings myBindings0;
 	ZLKeyBindings myBindings90;
 	ZLKeyBindings myBindings180;
