@@ -78,7 +78,7 @@ void ZLNXLibraryImplementation::run(ZLApplication *application) {
 	bool end = false;
 	xcb_generic_event_t  *e;
 	while (!end) {
-		e = xcb_poll_for_event(connection);
+		e = xcb_wait_for_event(connection);
 		if (e) {
 			switch (e->response_type & ~0x80) {
 				case XCB_KEY_RELEASE: 

@@ -1,3 +1,9 @@
+fbreader (0.8.15-1.oi2) stable; urgency=low
+
+  * fixed 100% cpu usage
+
+ -- Alexander Kerner <lunohod@gmx.de>  Fri, 04 Jul 2008 20:15:19 +0000
+
 fbreader (0.8.15-1.oi1) stable; urgency=low
 
   * slind packaging
