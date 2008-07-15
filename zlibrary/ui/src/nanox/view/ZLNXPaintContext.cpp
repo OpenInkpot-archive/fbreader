@@ -196,6 +196,10 @@ void ZLNXPaintContext::cacheFonts() const {
 
 		closedir(dir_p);
 	}
+	if(fontCache.empty()) {
+		printf("no fonts found\n");
+		exit(-1);
+	}
 }
 
 const std::string ZLNXPaintContext::realFontFamilyName(std::string &fontFamily) const {
@@ -216,11 +220,14 @@ void ZLNXPaintContext::setFont(const std::string &family, int size, bool bold, b
 	int bi_hash = (bold?2:0) + (italic?1:0);
 	std::map<std::string, std::map<int, Font> >::iterator it = fontCache.find(family);
 	if(it == fontCache.end()) {
-		std::string defFont("Arial");
-		it = fontCache.find(defFont);
+//		std::string defFont("Arial");
+//		it = fontCache.find(defFont);
+		it = fontCache.begin();
 	}
 
 	Font *fc = &((it->second)[bi_hash]);
+	for(int i = 0; (i < 4) && (fc == NULL); i++)
+		fc = &((it->second)[i]);
 
 	/*
 	   cout << "	hash: " << bi_hash << endl;
@@ -352,7 +359,7 @@ int ZLNXPaintContext::stringWidth(const char *str, int len) const {
 		if(charWidthCache->find(codepoint) != charWidthCache->end()) {
 			w += (*charWidthCache)[codepoint] + kerning;
 		} else {
-			if(!FT_Load_Glyph(*face, glyph_idx,  FT_LOAD_DEFAULT)) {
+			if(!FT_Load_Glyph(*face, glyph_idx,  FT_LOAD_RENDER | FT_LOAD_DEFAULT)) { //FT_LOAD_DEFAULT)) {
 				ch_w = ROUND_26_6_TO_INT((*face)->glyph->advance.x); // or face->glyph->metrics->horiAdvance >> 6
 				w += ch_w + kerning;
 				charWidthCache->insert(std::make_pair(codepoint, ch_w));
@@ -482,7 +489,7 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 		if(glyphCache->find(codepoint) != glyphCache->end()) { 
 			pglyph = &(*glyphCache)[codepoint];
 		} else {
-			if(FT_Load_Glyph(*face, glyph_idx,  FT_LOAD_RENDER |  FT_LOAD_TARGET_NORMAL)){
+			if(FT_Load_Glyph(*face, glyph_idx,  FT_LOAD_RENDER |  FT_LOAD_DEFAULT)){
 				continue;
 			}	
 
