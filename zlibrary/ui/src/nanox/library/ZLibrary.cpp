@@ -39,6 +39,14 @@ ZLApplication *mainApplication;
 
 extern xcb_connection_t *connection;
 
+
+bool idle;
+void suspendTimer(int signo, siginfo_t* evp, void* ucontext)
+{
+	if(idle)
+		system("echo mem > /sys/power/state");
+}
+
 class ZLNXLibraryImplementation : public ZLibraryImplementation {
 	private:
 		void init(int &argc, char **&argv);
@@ -74,11 +82,43 @@ void ZLNXLibraryImplementation::run(ZLApplication *application) {
 
 	application->initWindow();
 
+	
+	struct sigaction sigv;
+	struct sigevent sigx;
+	struct itimerspec val;
+	timer_t t_id;
+
+	sigemptyset(&sigv.sa_mask);
+	sigv.sa_flags = SA_SIGINFO;
+	sigv.sa_sigaction = suspendTimer;
+
+	if(sigaction(SIGUSR1, &sigv, 0) == -1) {
+		perror("sigaction");
+		return;
+	}
+
+	sigx.sigev_notify = SIGEV_SIGNAL;
+	sigx.sigev_signo = SIGUSR1;
+	sigx.sigev_value.sival_ptr = (void *)NULL;
+
+	if(timer_create(CLOCK_REALTIME, &sigx, &t_id) == -1) {
+		perror("timer_create");
+		return;
+	}
+
+	val.it_value.tv_sec = 60;
+	val.it_value.tv_nsec = 0;
+	val.it_interval.tv_sec = 0;
+	val.it_interval.tv_nsec = 0;
+
 //key press events
 	bool end = false;
 	xcb_generic_event_t  *e;
 	while (!end) {
+		idle = true;
+		timer_settime(t_id, 0, &val, 0);
 		e = xcb_wait_for_event(connection);
+		idle = false;
 		if (e) {
 			switch (e->response_type & ~0x80) {
 				case XCB_KEY_RELEASE: 
@@ -113,5 +153,6 @@ void ZLNXLibraryImplementation::run(ZLApplication *application) {
 		}
 	}
 
+	timer_delete(t_id);
 	delete application;
 }
