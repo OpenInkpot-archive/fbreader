@@ -87,6 +87,9 @@ public:
 		ZLTextView &myTextView;
 		const ZLTextPositionIndicatorInfo &myInfo;
 		int myExtraWidth;
+
+	private:
+		FILE *f_cf, *f_cn;
 	};
 
 	friend class ZLTextView::PositionIndicator;

@@ -72,9 +72,15 @@ ZLTextPositionIndicatorInfo::~ZLTextPositionIndicatorInfo() {
 }
 
 ZLTextView::PositionIndicator::PositionIndicator(ZLTextView &textView, const ZLTextPositionIndicatorInfo &info) : myTextView(textView), myInfo(info), myExtraWidth(0) {
+	f_cn = fopen("/sys/class/power_supply/lbookv3_battery/charge_now", "r");
+	f_cf = fopen("/sys/class/power_supply/lbookv3_battery/charge_full_design", "r");
 }
 
 ZLTextView::PositionIndicator::~PositionIndicator() {
+	if(f_cn != NULL)
+		fclose(f_cn);
+	if(f_cf != NULL)
+		fclose(f_cf);
 }
 
 const ZLTextView &ZLTextView::PositionIndicator::textView() const {
@@ -155,6 +161,25 @@ std::string ZLTextView::PositionIndicator::textPositionString() const {
 	//ZLStringUtil::appendNumber(buffer, 1 + sizeOfTextBeforeCursor() / 2048);
 	buffer += '/';
 	ZLStringUtil::appendNumber(buffer, 1 + sizeOfTextBeforeParagraph(endTextIndex()) / 2048);
+
+	char b[10];
+	int charge;
+	int x;
+	if((f_cn != NULL) && (f_cf != NULL)) {
+		rewind(f_cn);
+		rewind(f_cf);
+		fgets(b, 10, f_cn);
+		charge = atoi(b);
+		fgets(b, 10, f_cf);
+		x = atoi(b);
+		if(x > 0)
+			charge = charge * 100 / atoi(b);
+	} else
+		charge = 0;
+
+	sprintf(b, " <%d\%>", charge);
+
+	buffer = buffer + std::string(b);
 
 	return buffer;
 
