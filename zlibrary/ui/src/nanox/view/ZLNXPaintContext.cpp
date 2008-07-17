@@ -66,6 +66,8 @@ ZLNXPaintContext::ZLNXPaintContext() {
 
 	error = FT_Init_FreeType( &library );
 
+	fPath.push_back("/usr/share/fonts/truetype/liberation/");
+	fPath.push_back("/usr/share/fonts/truetype/");
 	fPath.push_back("/usr/share/fonts/ttf/");
 //	fPath.push_back("/usr/share/fonts/ttf/ms/");
 	/*	fPath.push_back("/mnt/fbreader/fonts/");
