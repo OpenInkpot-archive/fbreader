@@ -78,6 +78,9 @@ ZLPaintContext *ZLNXLibraryImplementation::createContext() {
 
 void ZLNXLibraryImplementation::run(ZLApplication *application) {
 	//printf("ZLNXLibraryImplementation::rrun\n");
+	
+	system("echo 1 > /sys/class/graphics/fb0/manual_refresh");
+
 	ZLDialogManager::instance().createApplicationWindow(application);
 
 	application->initWindow();
@@ -155,4 +158,6 @@ void ZLNXLibraryImplementation::run(ZLApplication *application) {
 
 	timer_delete(t_id);
 	delete application;
+
+	system("echo 0 > /sys/class/graphics/fb0/manual_refresh");
 }
