@@ -72,15 +72,9 @@ ZLTextPositionIndicatorInfo::~ZLTextPositionIndicatorInfo() {
 }
 
 ZLTextView::PositionIndicator::PositionIndicator(ZLTextView &textView, const ZLTextPositionIndicatorInfo &info) : myTextView(textView), myInfo(info), myExtraWidth(0) {
-	f_cn = fopen("/sys/class/power_supply/lbookv3_battery/charge_now", "r");
-	f_cf = fopen("/sys/class/power_supply/lbookv3_battery/charge_full_design", "r");
 }
 
 ZLTextView::PositionIndicator::~PositionIndicator() {
-	if(f_cn != NULL)
-		fclose(f_cn);
-	if(f_cf != NULL)
-		fclose(f_cf);
 }
 
 const ZLTextView &ZLTextView::PositionIndicator::textView() const {
@@ -165,9 +159,12 @@ std::string ZLTextView::PositionIndicator::textPositionString() const {
 	char b[10];
 	int charge;
 	int x;
+	FILE *f_cf, *f_cn;
+
+	f_cn = fopen("/sys/class/power_supply/lbookv3_battery/charge_now", "r");
+	f_cf = fopen("/sys/class/power_supply/lbookv3_battery/charge_full_design", "r");
+
 	if((f_cn != NULL) && (f_cf != NULL)) {
-		rewind(f_cn);
-		rewind(f_cf);
 		fgets(b, 10, f_cn);
 		charge = atoi(b);
 		fgets(b, 10, f_cf);
@@ -176,6 +173,11 @@ std::string ZLTextView::PositionIndicator::textPositionString() const {
 			charge = charge * 100 / atoi(b);
 	} else
 		charge = 0;
+
+	if(f_cn != NULL)
+		fclose(f_cn);
+	if(f_cf != NULL)
+		fclose(f_cf);
 
 	sprintf(b, " <%d\%>", charge);
 
