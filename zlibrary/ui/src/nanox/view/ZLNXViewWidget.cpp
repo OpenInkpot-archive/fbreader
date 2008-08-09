@@ -20,17 +20,53 @@
 #include "ZLNXViewWidget.h"
 #include "ZLNXPaintContext.h"
 
+#include <ewl/Ewl.h>
+#include <Evas.h>
+
+#include "../../../../../fbreader/src/fbreader/FBReaderActions.h"
+
+static void
+cb_window_destroy(Ewl_Widget *w, void *ev, void *data)
+{
+	    ewl_main_quit();
+}
+
+static void
+cb_window_close(Ewl_Widget *w, void *ev, void *data)
+{
+	    ewl_widget_destroy(w);
+}
+
+static void
+cb_key_down(Ewl_Widget *w, void *ev, void *data)
+{
+    Ewl_Event_Key_Down *e;
+	Evas_Object *img;
+	Ewl_Embed *emb;
+	Evas_Coord img_w, img_h;
+	int *_data;
+	int i;
 
 
-#define XCB_ALL_PLANES ~0
+    e = (Ewl_Event_Key_Down*)ev;
+	ZLApplication *application = (ZLApplication*)data;
 
-xcb_connection_t *connection;
-xcb_window_t window;
-xcb_screen_t *screen;
-xcb_drawable_t rect;
-xcb_shm_segment_info_t shminfo;
-xcb_image_t *im;
-unsigned int *pal;
+    if(!strcmp(e->base.keyname, "q")
+            || !strcmp(e->base.keyname, "Escape")) {
+        Ewl_Widget *win;
+
+		application->doAction(ActionCode::CANCEL);
+        win = ewl_widget_name_find("main_win");
+        ewl_widget_destroy(win);
+    } else if(!strcmp(e->base.keyname, "0")) {
+		application->doAction(ActionCode::LARGE_SCROLL_FORWARD);
+
+    } else if(!strcmp(e->base.keyname, "9")) {
+		application->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
+	}
+}
+
+
 
 void ZLNXViewWidget::updateCoordinates(int &x, int &y) {
 	switch (rotation()) {
@@ -66,141 +102,31 @@ int ZLNXViewWidget::height() const {
 }
 
 ZLNXViewWidget::ZLNXViewWidget(ZLApplication *application, Angle initialAngle) : ZLViewWidget(initialAngle) {
+	Ewl_Widget *win, *o;
+
 	myApplication = application;
 
-	xcb_screen_iterator_t screen_iter;
-	const xcb_setup_t    *setup;
-	xcb_generic_event_t  *e;
-	xcb_generic_error_t  *error;
-	xcb_void_cookie_t     cookie_window;
-	xcb_void_cookie_t     cookie_map;
-	uint32_t              mask;
-	uint32_t              values[2];
-	int                   screen_number;
-	uint8_t               is_hand = 0;
-	xcb_rectangle_t     rect_coord = { 0, 0, 600, 800};
+    win = ewl_window_new();
+    ewl_window_title_set(EWL_WINDOW(win), "FBReader");
+    ewl_window_class_set(EWL_WINDOW(win), "fbreader");
+    ewl_window_name_set(EWL_WINDOW(win), "fbreader");
+    ewl_object_fill_policy_set(EWL_OBJECT(win), EWL_FLAG_FILL_ALL);
+    ewl_object_size_request(EWL_OBJECT(win), 600, 800);
+    ewl_callback_append(win, EWL_CALLBACK_DELETE_WINDOW, cb_window_close, application);
+    ewl_callback_append(win, EWL_CALLBACK_KEY_DOWN, cb_key_down, application);
+    ewl_callback_append(win, EWL_CALLBACK_DESTROY, cb_window_destroy, application);
+    ewl_widget_name_set(win, "main_win");
+    ewl_widget_show(win);
 
-	/* getting the connection */
-	connection = xcb_connect (NULL, &screen_number);
-	if (xcb_connection_has_error(connection)) {
-		fprintf (stderr, "ERROR: can't connect to an X server\n");
-		exit(-1);
-	}
-
-	/* getting the current screen */
-/*	setup = xcb_get_setup (connection);
-
-	screen = NULL;
-	screen_iter = xcb_setup_roots_iterator (setup);
-	for (; screen_iter.rem != 0; --screen_number, xcb_screen_next (&screen_iter))
-		if (screen_number == 0)
-		{
-			screen = screen_iter.data;
-			break;
-		}
-	if (!screen) {
-		fprintf (stderr, "ERROR: can't get the current screen\n");
-		xcb_disconnect(connection);
-		exit(-1);
-	}
-*/
-	screen = xcb_aux_get_screen (connection, screen_number);
-
-	gc = xcb_generate_id (connection);
-	mask = XCB_GC_FOREGROUND | XCB_GC_GRAPHICS_EXPOSURES;
-	values[0] = screen->black_pixel;
-	values[1] = 0; /* no graphics exposures */
-	xcb_create_gc (connection, gc, screen->root, mask, values);
-
-	bgcolor = xcb_generate_id (connection);
-	mask = XCB_GC_FOREGROUND | XCB_GC_GRAPHICS_EXPOSURES;
-	values[0] = screen->white_pixel;
-	values[1] = 0; /* no graphics exposures */
-	xcb_create_gc (connection, bgcolor, screen->root, mask, values);
-
-	/* creating the window */
-	window = xcb_generate_id(connection);
-	mask = XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK;
-	values[0] = screen->white_pixel;
-	values[1] =
-		XCB_EVENT_MASK_KEY_RELEASE |
-		XCB_EVENT_MASK_BUTTON_PRESS |
-		XCB_EVENT_MASK_EXPOSURE |
-		XCB_EVENT_MASK_POINTER_MOTION;
-
-	uint8_t depth = xcb_aux_get_depth (connection, screen);
-	xcb_create_window(connection,
-			depth,
-			window, screen->root,
-			0, 0, 600, 800,
-			0, XCB_WINDOW_CLASS_INPUT_OUTPUT,
-			screen->root_visual,
-			mask, values);
-
-	rect = xcb_generate_id (connection);
-	xcb_create_pixmap (connection, depth,
-			rect, window,
-			600, 800);
-
-
-	xcb_map_window(connection, window);
-	//	printf("depth: %d\n", screen->root_depth);
-
-	xcb_colormap_t    colormap;
-	colormap = screen->default_colormap;
-
-	xcb_alloc_color_reply_t *rep;
-	rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, 0, 0, 0), NULL);
-	pal_[0] = rep->pixel;
-	free(rep);
-	rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, 0x55<<8, 0x55<<8, 0x55<<8), NULL);
-	pal_[1] = rep->pixel;
-	free(rep);
-	rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, 0xaa<<8, 0xaa<<8, 0xaa<<8), NULL);
-	pal_[2] = rep->pixel;
-	free(rep);
-
-	pal = pal_;
-
-
-	xcb_shm_query_version_reply_t *rep_shm;
-
-	rep_shm = xcb_shm_query_version_reply (connection,
-			xcb_shm_query_version (connection),
-			NULL);
-	if(rep_shm) {
-		//uint8_t format; 
-		xcb_image_format_t format;              
-		int shmctl_status;
-
-		if (rep_shm->shared_pixmaps &&
-				(rep_shm->major_version > 1 || rep_shm->minor_version > 0))
-			format = (xcb_image_format_t)rep_shm->pixmap_format;
-		else
-			format = (xcb_image_format_t)0;
-
-		im = xcb_image_create_native (connection, 600, 800,
-				format, depth, NULL, ~0, NULL);
-		assert(im);
-
-		shminfo.shmid = shmget (IPC_PRIVATE,
-				im->stride*im->height,
-				IPC_CREAT | 0777);
-		assert(shminfo.shmid != -1);
-		shminfo.shmaddr = (uint8_t*)shmat (shminfo.shmid, 0, 0);
-		assert(shminfo.shmaddr);
-		im->data = shminfo.shmaddr;
-
-		shminfo.shmseg = xcb_generate_id (connection);			
-		xcb_shm_attach (connection, shminfo.shmseg,
-				shminfo.shmid, 0);
-		shmctl_status = shmctl(shminfo.shmid, IPC_RMID, 0);
-		assert(shmctl_status != -1);
-		free (rep_shm);
-	}
-
-
-	xcb_flush(connection);
+    o = ewl_image_new();
+	EWL_IMAGE(o)->image = NULL;
+    ewl_object_fill_policy_set(EWL_OBJECT(o), EWL_FLAG_FILL_FILL);
+    ewl_container_child_append(EWL_CONTAINER(win), o);
+//    ewl_callback_append(o, EWL_CALLBACK_REVEAL, cb_image_reveal, NULL);
+    ewl_object_position_request(EWL_OBJECT(o), CURRENT_X(win), CURRENT_Y(win));
+    ewl_object_size_request(EWL_OBJECT(o), CURRENT_W(win), CURRENT_H(win));
+    ewl_widget_name_set(o, "image");
+    ewl_widget_show(o);
 }
 
 ZLNXViewWidget::~ZLNXViewWidget() {
@@ -217,40 +143,31 @@ void ZLNXViewWidget::doPaint()
 {
 	ZLNXPaintContext &pContext = (ZLNXPaintContext&)view()->context();
 
+	Ewl_Widget *win, *o;
+	Evas_Object *img;
+	Ewl_Embed *emb;
+	Evas_Coord img_w, img_h;
+	int *data;
 	int i;
-	i = xcb_image_shm_get (connection, window,
-			im, shminfo,
-			0, 0,
-			XCB_ALL_PLANES);
-	assert(i);
-	pContext.image = im;
+
+
+
+	win = ewl_widget_name_find("main_win");
+	o = ewl_widget_name_find("image");
+
+	img = (Evas_Object*)EWL_IMAGE(o)->image;
+	if(!img)
+		return;
+	evas_object_image_size_set(img, CURRENT_W(win), CURRENT_H(win));
+	evas_object_image_size_get(img, &img_w, &img_h);
+	data = (int*)evas_object_image_data_get(img, 1);
+	if(!data)
+		return;
+
+	pContext.image = data;
 
 	view()->paint();
 
-	/*
-	   for(int j = 50; j < 60; j++)
-	   for(int i = 0; i < 100; i++)
-	   xcb_image_put_pixel (pContext.image,
-	   i, j,
-	   pal[0]);
-
-	   for(int j = 65; j < 75; j++)
-	   for(int i = 0; i < 100; i++)
-	   xcb_image_put_pixel (pContext.image,
-	   i, j,
-	   pal[1]);
-
-	   for(int j = 80; j < 90; j++)
-	   for(int i = 0; i < 100; i++)
-	   xcb_image_put_pixel (pContext.image,
-	   i, j,
-	   pal[2]);
-
-*/
-
-	xcb_image_shm_put (connection, window, gc,
-			pContext.image, shminfo,
-			0, 0, 0, 0, 600, 800, 0);
-
-	xcb_flush(connection);
+	evas_object_image_data_set(img, data);
+	evas_object_image_data_update_add(img, 0, 0, img_w, img_h);
 }

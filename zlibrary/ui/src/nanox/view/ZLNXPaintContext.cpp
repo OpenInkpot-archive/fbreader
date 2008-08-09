@@ -32,11 +32,6 @@
 
 using namespace std;
 
-extern xcb_connection_t     *connection;
-extern xcb_window_t          window;
-extern xcb_screen_t         *screen;
-extern unsigned int *pal;
-
 struct xxx_link {
 	int x1, y1, x2, y2;
 	std::string id;
@@ -48,7 +43,6 @@ extern std::vector<xxx_link> xxx_page_links;
 ZLNXPaintContext::ZLNXPaintContext() {
 
 	image = NULL;
-	myPixmap = 0;
 
 	myWidth = 600;
 	myHeight = 800;
@@ -108,8 +102,6 @@ ZLNXPaintContext::~ZLNXPaintContext() {
 
 	if(library)
 		FT_Done_FreeType(library);
-
-	xcb_free_pixmap(connection, myPixmap);
 }
 
 
@@ -275,8 +267,8 @@ void ZLNXPaintContext::setColor(ZLColor color, LineStyle style) {
 
 void ZLNXPaintContext::setFillColor(ZLColor color, FillStyle style) {
 	//printf("setFillColor\n");
-	fColor = (0.299 * color.Red + 0.587 * color.Green + 0.114 * color.Blue ) / 64;
-	fColor = pal[fColor & 3];
+//	fColor = (0.299 * color.Red + 0.587 * color.Green + 0.114 * color.Blue ) / 64;
+//	fColor = pal[fColor & 3];
 }
 
 int ZLNXPaintContext::stringWidth(const char *str, int len) const {
@@ -548,12 +540,13 @@ void ZLNXPaintContext::drawImage(int x, int y, const ZLImageData &image) {
 			if(val == 0xc0)
 				continue;
 
-			if(val == 0x00)
+/*			if(val == 0x00)
 				xcb_image_put_pixel (this->image, i+x, j + (y - iH), pal[0]);
 			else if(val == 0x40)
 				xcb_image_put_pixel (this->image, i+x, j + (y - iH), pal[1]);
 			else
 				xcb_image_put_pixel (this->image, i+x, j + (y - iH), pal[2]);
+*/				
 		}
 }
 
@@ -568,7 +561,7 @@ void ZLNXPaintContext::drawLine(int x0, int y0, int x1, int y1, bool fill) {
 	int k, s;
 	int p;
 	bool done = false;
-
+/*
 	if(x1 != x0) {
 		k = (y1 - y0) / (x1 - x0);
 		j = y0;
@@ -612,6 +605,7 @@ void ZLNXPaintContext::drawLine(int x0, int y0, int x1, int y1, bool fill) {
 
 		} while(!done);
 	}
+*/
 }
 
 void ZLNXPaintContext::fillRectangle(int x0, int y0, int x1, int y1) {
@@ -635,7 +629,7 @@ void ZLNXPaintContext::drawFilledCircle(int x, int y, int r) {
 }
 
 void ZLNXPaintContext::clear(ZLColor color) {
-	memset(image->data, 0xff, image->width * image->height * image->bpp / 8);
+	memset(image, 0xff, myWidth * myHeight * sizeof(int));
 
 	xxx_page_links.clear();
 }
@@ -665,7 +659,11 @@ void ZLNXPaintContext::drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y)
 
 			val = bitmap->buffer[q * bitmap->width + p];
 
-			if(val < 64)
+			val = ~val;
+
+			image[i + (j * myWidth)] = (255 << 24) | (val << 16) | (val << 8) | val;
+
+/*			if(val < 64)
 				continue;
 
 			if(val >= 192)
@@ -674,6 +672,8 @@ void ZLNXPaintContext::drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y)
 				xcb_image_put_pixel (image, i, j, pal[1]);
 			else
 				xcb_image_put_pixel (image, i, j, pal[2]);
+*/		
 		}
+		
 	}
 }

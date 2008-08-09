@@ -20,6 +20,8 @@
 #include <ZLApplication.h>
 #include <ZLibrary.h>
 
+#include <ewl/Ewl.h>
+
 #include "../../../../core/src/unix/library/ZLibraryImplementation.h"
 
 #include "../../unix/message/ZLUnixMessage.h"
@@ -36,8 +38,6 @@
 
 class ZLApplication;
 ZLApplication *mainApplication;
-
-extern xcb_connection_t *connection;
 
 
 bool idle;
@@ -61,6 +61,11 @@ void initLibrary() {
 
 void ZLNXLibraryImplementation::init(int &argc, char **&argv) {
 	//printf("init\n");
+	if(!ewl_init(&argc, argv)) {
+		fprintf(stderr, "Unable to init EWL.\n");
+		exit(-1);
+	}
+
 	ZLibrary::parseArguments(argc, argv);
 
 	XMLConfigManager::createInstance();
@@ -115,48 +120,14 @@ void ZLNXLibraryImplementation::run(ZLApplication *application) {
 	val.it_interval.tv_nsec = 0;
 
 //key press events
-	bool end = false;
-	xcb_generic_event_t  *e;
-	while (!end) {
-		idle = true;
-		timer_settime(t_id, 0, &val, 0);
-		e = xcb_wait_for_event(connection);
-		idle = false;
-		if (e) {
-			switch (e->response_type & ~0x80) {
-				case XCB_KEY_RELEASE: 
-					{
-						xcb_key_release_event_t *ev;
+//	bool end = false;
+//		idle = true;
+//		timer_settime(t_id, 0, &val, 0);
+//		e = xcb_wait_for_event(connection);
+//		idle = false;
+	ewl_main();
 
-						ev = (xcb_key_release_event_t *)e;
-
-						//printf("ev->detail: %d\n", ev->detail);
-						switch (ev->detail) {
-							/* ESC */
-							case 9:
-								application->doAction(ActionCode::CANCEL);
-								end = true;
-								break;
-
-							case 19:
-							case 90:
-							case 111:
-								application->doAction(ActionCode::LARGE_SCROLL_FORWARD);
-								break;
-
-							case 18:
-							case 81:
-							case 116:
-								application->doAction(ActionCode::LARGE_SCROLL_BACKWARD);
-								break;
-						}
-					}
-			}
-			free (e);
-		}
-	}
-
-	timer_delete(t_id);
+//	timer_delete(t_id);
 	delete application;
 
 	system("echo 0 > /sys/class/graphics/fb0/manual_refresh");

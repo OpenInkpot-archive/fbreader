@@ -32,13 +32,6 @@
 #include FT_GLYPH_H
 #include FT_BITMAP_H
 
-#include <xcb/xcb.h>
-#define class class_
-#include <xcb/xcb_aux.h>
-#undef class
-#include <xcb/xcb_image.h>
-
-
 
 class ZLNXPaintContext : public ZLPaintContext {
 
@@ -49,9 +42,7 @@ public:
 	int width() const;
 	int height() const;
 
-	xcb_pixmap_t *pixmap() { return &myPixmap; }
-
-	xcb_image_t     *image;
+	int *image;
 
 	void clear(ZLColor color);
 
@@ -77,13 +68,6 @@ public:
 	void drawFilledCircle(int x, int y, int r);
 
 private:
-	xcb_pixmap_t myPixmap;
-	xcb_gcontext_t       gc_w;
-	xcb_gcontext_t       gc_b;
-	xcb_gcontext_t       gc_b1;
-	xcb_gcontext_t       gc_b2;
-
-
 	int myWidth, myHeight;
 
 	class Font {
