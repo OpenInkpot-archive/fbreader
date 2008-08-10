@@ -150,17 +150,19 @@ void ZLNXViewWidget::doPaint()
 	int *data;
 	int i;
 
-
-
 	win = ewl_widget_name_find("main_win");
 	o = ewl_widget_name_find("image");
 
 	img = (Evas_Object*)EWL_IMAGE(o)->image;
 	if(!img)
 		return;
+
 	evas_object_image_size_set(img, CURRENT_W(win), CURRENT_H(win));
 	evas_object_image_size_get(img, &img_w, &img_h);
-	data = (int*)evas_object_image_data_get(img, 1);
+
+	printf("WxH: %dx%d\n", img_w, img_h);
+	
+	data = (int*)evas_object_image_data_get(img, 1);		
 	if(!data)
 		return;
 
@@ -168,6 +170,7 @@ void ZLNXViewWidget::doPaint()
 
 	view()->paint();
 
-	evas_object_image_data_set(img, data);
+	//evas_object_image_data_set(img, data);
 	evas_object_image_data_update_add(img, 0, 0, img_w, img_h);
+	//ewl_widget_configure(o);
 }
