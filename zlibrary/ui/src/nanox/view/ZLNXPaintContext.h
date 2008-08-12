@@ -27,11 +27,9 @@
 #include <vector>
 #include <map>
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-#include FT_GLYPH_H
-#include FT_BITMAP_H
-
+#undef PANGO_DISABLE_DEPRECATED
+#include <pango/pango.h>
+#include <pango/pangoft2.h>
 
 class ZLNXPaintContext : public ZLPaintContext {
 
@@ -47,7 +45,6 @@ public:
 	void clear(ZLColor color);
 
 	void fillFamiliesList(std::vector<std::string> &families) const;
-	void cacheFonts() const;
 	const std::string realFontFamilyName(std::string &fontFamily) const;
 
 	void setFont(const std::string &family, int size, bool bold, bool italic);
@@ -70,50 +67,12 @@ public:
 private:
 	int myWidth, myHeight;
 
-	class Font {
-		public:
-			Font() : 
-				familyName(""),
-				fileName(""),
-				index(0),
-				myFace(NULL),
-				isBold(false),
-				isItalic(false) {}
+	PangoContext *myContext;
 
-			~Font() { if(myFace) FT_Done_Face(myFace); }
-	
-			std::string familyName;
-			std::string fileName;
-			int index;
+	PangoFontDescription *myFontDescription;
 
-			FT_Face myFace;
-			bool isBold;
-			bool isItalic;
-
-			std::map<int, std::map<unsigned long, int> > charWidthCacheAll;
-			std::map<int, std::map<unsigned long, FT_BitmapGlyph> > glyphCacheAll;
-			
-			std::map<int, std::map<FT_UInt, std::map<FT_UInt, int> > > kerningCacheAll;
-			std::map<int, std::map<unsigned long, FT_UInt> > glyphIdxCacheAll;
-	};
-	
-
-	mutable std::vector<std::string> fPath;
-	mutable std::map<std::string, std::map<int, Font> > fontCache;
-	mutable std::map<unsigned long, int> *charWidthCache;
-	mutable std::map<unsigned long, FT_BitmapGlyph> *glyphCache;
-
-	mutable std::map<FT_UInt, std::map<FT_UInt, int> > *kerningCache;
-	mutable std::map<unsigned long, FT_UInt> *glyphIdxCache;
-
-	FT_Face	*face;
-	std::string fCurFamily;
-	int fCurSize;
-	bool fCurItalic;
-	bool fCurBold;
-	int fColor;
-
-	FT_Library library;
+	mutable PangoAnalysis myAnalysis;
+	PangoGlyphString *myString;
 
 	std::vector<std::string> myFontFamilies;
 
@@ -121,8 +80,16 @@ private:
 	mutable int mySpaceWidth;
 	int myDescent;
 
+	ZLColor fColor;
 
-	void drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y);
+	//FT_Bitmap *ft2bmp;
+	FT_Bitmap *createFTBitmap(int width, int height);
+	void freeFTBitmap(FT_Bitmap *bitmap);
+	void modifyFTBitmap(FT_Bitmap *bitmap, int width, int height);
+	void setFTBitmap(FT_Bitmap *bitmap, int width, int height);
+	void clearFTBitmap(FT_Bitmap *bitmap);
+
+	//void drawGlyph( FT_Bitmap*  bitmap, FT_Int x, FT_Int y);
 };
 
 #endif /* __ZLNXPAINTCONTEXT_H__ */

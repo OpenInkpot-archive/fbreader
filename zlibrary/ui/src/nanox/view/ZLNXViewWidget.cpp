@@ -38,6 +38,13 @@ cb_window_close(Ewl_Widget *w, void *ev, void *data)
 }
 
 static void
+cb_image_reveal(Ewl_Widget *w, void *ev, void *data)
+{
+	ZLNXViewWidget *vw = (ZLNXViewWidget*)data;
+	vw->doPaint();
+}
+
+static void
 cb_key_down(Ewl_Widget *w, void *ev, void *data)
 {
     Ewl_Event_Key_Down *e;
@@ -122,7 +129,7 @@ ZLNXViewWidget::ZLNXViewWidget(ZLApplication *application, Angle initialAngle) :
 	EWL_IMAGE(o)->image = NULL;
     ewl_object_fill_policy_set(EWL_OBJECT(o), EWL_FLAG_FILL_FILL);
     ewl_container_child_append(EWL_CONTAINER(win), o);
-//    ewl_callback_append(o, EWL_CALLBACK_REVEAL, cb_image_reveal, NULL);
+    ewl_callback_append(o, EWL_CALLBACK_REVEAL, cb_image_reveal, this);
     ewl_object_position_request(EWL_OBJECT(o), CURRENT_X(win), CURRENT_Y(win));
     ewl_object_size_request(EWL_OBJECT(o), CURRENT_W(win), CURRENT_H(win));
     ewl_widget_name_set(o, "image");

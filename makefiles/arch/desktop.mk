@@ -36,8 +36,8 @@ ifeq "$(UI_TYPE)" "gtk"
 endif
 
 ifeq "$(UI_TYPE)" "nanox"
-  UILIBS = -ljpeg -lpng -lrt -lfreetype -lxcb -lxcb-image -lxcb-aux `PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/ pkg-config --cflags --libs ewl` `PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/ pkg-config --cflags --libs evas`
-  NXINCLUDE = `pkg-config --cflags 'freetype2'` `PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/ pkg-config --cflags --libs ewl` `PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/ pkg-config --cflags --libs evas`
+  UILIBS = -ljpeg -lpng -lrt -lxcb -lxcb-image -lxcb-aux `PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/ pkg-config --libs evas ewl pango pangoft2`
+  NXINCLUDE = `PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/ pkg-config --cflags evas ewl pango pangoft2`
   ZLSHARED = no
 endif
 
