@@ -17,7 +17,7 @@ CFLAGS = -pipe -fno-exceptions -Wall -Wno-ctor-dtor-privacy -W -DLIBICONV_PLUG -
 LDFLAGS =
 
 ifeq "$(UI_TYPE)" "nanox"
-  UILIBS = -lrt -lpthread -ljpeg -lpng -lxcb -lxcb-image `arm-linux-gnueabi-pkg-config --libs evas ewl pango pangoft2'
+  UILIBS = -lrt -lpthread -ljpeg -lpng -lxcb -lxcb-image `arm-linux-gnueabi-pkg-config --libs evas ewl pango pangoft2`
   NXINCLUDE = `arm-linux-gnueabi-pkg-config --cflags evas ewl pango pangoft2`
   EXTERNALINCLUDE =
   ZLSHARED = no

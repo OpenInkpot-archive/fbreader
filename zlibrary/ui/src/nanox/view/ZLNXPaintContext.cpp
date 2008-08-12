@@ -251,14 +251,21 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 
 	unsigned char val;
 	unsigned char *p_ft = (unsigned char *)ft2bmp->buffer;;
-	for(int i = ft2bmp->rows - 1; i >= 0; i--) {
-		for (int k = 0; k < ft2bmp->width; k++) {
+	for(int i = ft2bmp->rows - 1; 
+			(i >= 0) && ((y-i) >= 0) && ((y-i) < myHeight); 
+			i--) {
+		for (int k = 0; 
+				(k < ft2bmp->width) && ((x+k) >= 0) && ((x+k) < myWidth);
+				k++) {
+//			image[x+k + (y-i) * myWidth] = 0xffaaaaaa;
+//			continue;
+
 			int level;
 			if (p_ft[k]==0) {
 				continue;
 			}
 			//val = 255 - p_ft[k];
-			val = ~p_ft[k];
+			val = ~p_ft[k];		
 			image[x+k + (y-i) * myWidth] = (255 << 24) | (val << 16) | (val << 8) | val;		
 		}
 		p_ft += ft2bmp->pitch;
