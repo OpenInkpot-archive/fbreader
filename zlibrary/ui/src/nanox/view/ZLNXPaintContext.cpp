@@ -266,6 +266,8 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 			}
 			//val = 255 - p_ft[k];
 			val = ~p_ft[k];		
+			val = val % 64;
+			val *= 0x55;
 			image[x+k + (y-i) * myWidth] = (255 << 24) | (val << 16) | (val << 8) | val;		
 		}
 		p_ft += ft2bmp->pitch;
