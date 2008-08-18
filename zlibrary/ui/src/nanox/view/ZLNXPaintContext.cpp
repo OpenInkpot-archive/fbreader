@@ -199,7 +199,7 @@ int ZLNXPaintContext::stringWidth(const char *str, int len) const {
 	pango_shape(str, len, &myAnalysis, myString);
 	PangoRectangle logicalRectangle;
 	pango_glyph_string_extents(myString, myAnalysis.font, 0, &logicalRectangle);
-	cout << "stringWidth: " << (logicalRectangle.width + PANGO_SCALE / 2) / PANGO_SCALE << endl;
+//	cout << "stringWidth: " << (logicalRectangle.width + PANGO_SCALE / 2) / PANGO_SCALE << endl;
 	return (logicalRectangle.width + PANGO_SCALE / 2) / PANGO_SCALE;
 }
 
@@ -251,25 +251,26 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 
 	unsigned char val;
 	unsigned char *p_ft = (unsigned char *)ft2bmp->buffer;;
-	for(int i = ft2bmp->rows - 1; 
-			(i >= 0) && ((y-i) >= 0) && ((y-i) < myHeight); 
-			i--) {
-		for (int k = 0; 
-				(k < ft2bmp->width) && ((x+k) >= 0) && ((x+k) < myWidth);
-				k++) {
-//			image[x+k + (y-i) * myWidth] = 0xffaaaaaa;
-//			continue;
+	for(int i = 0; i < ft2bmp->rows - 1; i++) {
+//	for(int i = ft2bmp->rows - 1; i >= 0; i--) {
+//		if(!( ((y-i) >= 0) && ((y-i) < myHeight)))
+			for (int k = 0; 
+					k < ft2bmp->width;
+//					(k < ft2bmp->width) && ((x+k) >= 0) && ((x+k) < myWidth);
+					k++) {
+				//			image[x+k + (y-i) * myWidth] = 0xffaaaaaa;
+				//			continue;
 
-			int level;
-			if (p_ft[k]==0) {
-				continue;
+				int level;
+				if (p_ft[k]==0) {
+					continue;
+				}
+				//val = 255 - p_ft[k];
+				val = ~p_ft[k];		
+				val = val % 64;
+				val *= 0x55;
+				image[x+k + (y+i) * myWidth] = (255 << 24) | (val << 16) | (val << 8) | val;		
 			}
-			//val = 255 - p_ft[k];
-			val = ~p_ft[k];		
-			val = val % 64;
-			val *= 0x55;
-			image[x+k + (y-i) * myWidth] = (255 << 24) | (val << 16) | (val << 8) | val;		
-		}
 		p_ft += ft2bmp->pitch;
 	}
 	freeFTBitmap(ft2bmp);
