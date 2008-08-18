@@ -123,6 +123,7 @@ ZLNXViewWidget::ZLNXViewWidget(ZLApplication *application, Angle initialAngle) :
     ewl_callback_append(win, EWL_CALLBACK_KEY_DOWN, cb_key_down, application);
     ewl_callback_append(win, EWL_CALLBACK_DESTROY, cb_window_destroy, application);
     ewl_widget_name_set(win, "main_win");
+	ewl_theme_data_str_set(EWL_WIDGET(win), "/window/group", "ewl/blank");
     ewl_widget_show(win);
 
     o = ewl_image_new();
