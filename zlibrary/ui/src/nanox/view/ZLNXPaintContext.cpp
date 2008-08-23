@@ -62,6 +62,8 @@ ZLNXPaintContext::ZLNXPaintContext() {
 
 	myContext = 0;
 
+	ft2bmp = NULL;
+
 	myFontDescription = 0;
 	myAnalysis.lang_engine = 0;
 	myAnalysis.level = 0;
@@ -99,6 +101,9 @@ ZLNXPaintContext::~ZLNXPaintContext() {
 	if (myContext != 0) {
 		g_object_unref(myContext);
 	}
+
+	if(ft2bmp)
+		clearFTBitmap(ft2bmp);
 }
 
 
@@ -236,38 +241,58 @@ void ZLNXPaintContext::drawString(int x, int y, const char *str, int len) {
 	pango_shape(str, len, &myAnalysis, myString);
 
 	PangoRectangle logicalRectangle;
-	pango_glyph_string_extents(myString, myAnalysis.font, 0, &logicalRectangle);
+	PangoRectangle inkR;
+	pango_glyph_string_extents(myString, myAnalysis.font, &inkR, &logicalRectangle);
 
-/*	cout << "metrics:" <<
-	(logicalRectangle.width + PANGO_SCALE / 2) / PANGO_SCALE << "x" <<
-	(logicalRectangle.height + PANGO_SCALE / 2) / PANGO_SCALE << endl;
-*/	
+	int width;
 
-	FT_Bitmap *ft2bmp = createFTBitmap(
-	(logicalRectangle.width + PANGO_SCALE / 2) / PANGO_SCALE,
-	(logicalRectangle.height + PANGO_SCALE / 2) / PANGO_SCALE);
 
-	pango_ft2_render(ft2bmp, myAnalysis.font, myString, 0, ft2bmp->rows - myDescent);
+	if(PANGO_RBEARING(inkR) > PANGO_RBEARING(logicalRectangle))
+		width = PANGO_RBEARING(inkR);
+	else {
+		width = PANGO_LBEARING(inkR);
+		if(width < 0)
+			width = - width + logicalRectangle.width;
+		else
+			width = logicalRectangle.width;
+	}
+
+	if(!ft2bmp)
+		ft2bmp = createFTBitmap(
+				(width + PANGO_SCALE / 2) / PANGO_SCALE,
+				(logicalRectangle.height + PANGO_SCALE / 2) / PANGO_SCALE);
+	else
+		modifyFTBitmap(
+				ft2bmp,
+				(width + PANGO_SCALE / 2) / PANGO_SCALE,
+				(logicalRectangle.height + PANGO_SCALE / 2) / PANGO_SCALE);
+
+	int lb;
+	lb = (PANGO_LBEARING(inkR) + PANGO_SCALE / 2) / PANGO_SCALE;
+	if(lb > 0)
+		lb = 0;
+
+	pango_ft2_render(ft2bmp, myAnalysis.font, myString, -lb , ft2bmp->rows - myDescent);
 
 	unsigned char val;
-	unsigned char *p_ft = (unsigned char *)ft2bmp->buffer;;
+	unsigned char *p_ft = (unsigned char *)ft2bmp->buffer;
 	for(int i = ft2bmp->rows - 1; i >= 0; i--) {
 			for (int k = 0; 
 					k < ft2bmp->width;
 					k++) {
+
+				if((x + k) < 0)
+					continue;
 
 				int level;
 				if (p_ft[k]==0) {
 					continue;
 				}
 				val = 0x55 * ((unsigned char)~p_ft[k] / 64);
-				image[x+k + (y-i) * myWidth] = (255 << 24) | (val << 16) | (val << 8) | val;		
+				image[x + k + (y-i) * myWidth] = (255 << 24) | (val << 16) | (val << 8) | val;
 			}
 		p_ft += ft2bmp->pitch;
 	}
-	freeFTBitmap(ft2bmp);
-//	clearFTBitmap(ft2bmp);
-//TODO
 }
 
 void ZLNXPaintContext::clearFTBitmap(FT_Bitmap *bitmap)

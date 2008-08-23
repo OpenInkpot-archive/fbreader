@@ -79,6 +79,7 @@ private:
 	mutable int myStringHeight;
 	mutable int mySpaceWidth;
 	int myDescent;
+	FT_Bitmap *ft2bmp;
 
 	ZLColor fColor;
 
