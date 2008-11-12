@@ -37,6 +37,11 @@
 #include "../optionsDialog/OptionsDialog.h"
 #include "../../../zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.h"
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+
 FBAction::FBAction(FBReader &fbreader) : myFBReader(fbreader) {
 }
 
@@ -185,6 +190,13 @@ bool ScrollingAction::useKeyDelay() const {
 	return false;
 }
 
+#ifndef FBIO_WAITFORVSYNC
+#define FBIO_WAITFORVSYNC       _IOW('F', 0x20, uint32_t)
+#endif
+#define EINK_APOLLOFB_IOCTL_SET_AUTOREDRAW _IOW('F', 0x21, unsigned int)
+#define EINK_APOLLOFB_IOCTL_FORCE_REDRAW _IO('F', 0x22)
+#define EINK_APOLLOFB_IOCTL_SHOW_PREVIOUS _IO('F', 0x23)
+
 void ScrollingAction::run() {
 	if(fbreader().getMode() == FBReader::HYPERLINK_NAV_MODE) {
 		if(myForward)
@@ -197,6 +209,19 @@ void ScrollingAction::run() {
 	int delay = fbreader().myLastScrollingTime.millisecondsTo(ZLTime());
 	shared_ptr<ZLView> view = fbreader().currentView();
 	if (!view.isNull() && ((delay < 0) || (delay >= myOptions.DelayOption.value()))) {
+		if(myForward) {
+/*			FILE *x = fopen("/sys/class/graphics/fb0/disable_auto_redraw", "w");
+			fwrite("0", 1, 1, x);
+			rewind(x);
+			fwrite("1", 1, 1, x);
+			fclose(x);
+*/
+			int x;
+			x = open("/dev/fb0", O_NONBLOCK);
+			ioctl(x, EINK_APOLLOFB_IOCTL_FORCE_REDRAW);
+			ioctl(x, EINK_APOLLOFB_IOCTL_SET_AUTOREDRAW, 0);
+			close(x);
+		}
 
 		if(fbreader().getMode() == FBReader::BOOK_TEXT_MODE) {
 			// jump to next section
@@ -243,9 +268,22 @@ void ScrollingAction::run() {
 			default:
 				break;
 		}
+		if(!myForward)
+			((ZLTextView&)*view).scrollPage(myForward, oType, oValue);
 		((ZLTextView&)*view).scrollPage(myForward, oType, oValue);
 		fbreader().refreshWindow();
 		fbreader().myLastScrollingTime = ZLTime();
+
+		if(myForward) {
+			int x;
+			x = open("/dev/fb0", O_NONBLOCK);
+			ioctl(x, FBIO_WAITFORVSYNC);
+			ioctl(x, EINK_APOLLOFB_IOCTL_SET_AUTOREDRAW, 1);
+			close(x);
+		}
+
+		if(!myForward)
+			fbreader().doAction(ActionCode::LARGE_SCROLL_FORWARD);
 	}
 }
 
@@ -285,6 +323,10 @@ void CancelAction::run() {
 //	} else if (fbreader().isFullscreen()) {
 //		fbreader().setFullscreen(false);
 	} else if (fbreader().QuitOnCancelOption.value()) {
+/*		FILE *x = fopen("/sys/class/graphics/fb0/disable_auto_redraw", "w");
+		fwrite("0", 1, 1, x);
+		fclose(x);
+*/		
 		fbreader().quit();
 	}
 }
