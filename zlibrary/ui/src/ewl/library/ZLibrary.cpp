@@ -150,6 +150,7 @@ void ZLEwlLibraryImplementation::run(ZLApplication *application) {
 		usec_diff = 1000000 + usec_diff;
 	}
 
+	printf("%d %d, %d %d\n", t1.tv_sec, t1.tv_usec, t2.tv_sec, t2.tv_usec);
 	printf("100 pages: %d.%06d\n", sec_diff, usec_diff);
 	exit(0);
 
