@@ -6,11 +6,11 @@ endif
 IMAGEDIR = $(INSTALLDIR)/share/pixmaps
 APPIMAGEDIR = $(INSTALLDIR)/share/pixmaps/%APPLICATION_NAME%
 
-override AR += rsu
+#override AR += rsu
 
-#CC = gcc
-#AR = ar rsu
-#LD = g++
+CC = gcc
+AR = ar rsu
+LD = g++
 
 CFLAGS = -pipe -fno-exceptions -Wall -Wno-ctor-dtor-privacy -W -DLIBICONV_PLUG
 LDFLAGS =

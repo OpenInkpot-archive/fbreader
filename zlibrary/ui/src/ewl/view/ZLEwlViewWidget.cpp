@@ -196,10 +196,11 @@ void ZLEwlViewWidget::doPaint()	{
 
 	view()->paint();
 
-	xcb_image_shm_put (connection, window, gc,
+/*	xcb_image_shm_put (connection, window, gc,
 			pContext.image, shminfo,
 			0, 0, 0, 0, 600, 800, 0);
 	xcb_flush(connection);
+*/	
 }
 
 void ZLEwlViewWidget::trackStylus(bool track) {

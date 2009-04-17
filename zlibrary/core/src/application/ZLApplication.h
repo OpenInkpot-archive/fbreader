@@ -123,14 +123,15 @@ protected:
 	void addAction(const std::string &actionId, shared_ptr<Action> action);
 	void registerPopupData(const std::string &actionId, shared_ptr<ZLPopupData> popupData);
 
-	void setView(shared_ptr<ZLView> view);
-	shared_ptr<ZLView> currentView() const;
 	ZLView::Angle rotation() const;
 
 	void setFullscreen(bool fullscreen);
 	bool isFullscreen() const;
 	void quit();
 
+public:	
+void setView(shared_ptr<ZLView> view);
+	shared_ptr<ZLView> currentView() const;
 public:
 	virtual ~ZLApplication();
 	virtual void initWindow();

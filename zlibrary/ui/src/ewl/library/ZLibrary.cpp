@@ -17,6 +17,8 @@
  * 02110-1301, USA.
  */
 
+#include <sys/time.h>
+
 #include <ewl/Ewl.h>
 
 #include <ZLApplication.h>
@@ -34,6 +36,8 @@
 #include "../../../../core/src/util/ZLKeyUtil.h"
 #include "../../../../core/src/unix/xmlconfig/XMLConfig.h"
 #include "../../../../core/src/unix/iconv/IConvEncodingConverter.h"
+#include "../../../../../fbreader/src/fbreader/FBReader.h"
+#include "../../../../../fbreader/src/fbreader/BookTextView.h"
 
 extern xcb_connection_t *connection;
 
@@ -125,6 +129,30 @@ void main_loop(ZLApplication *application)
 void ZLEwlLibraryImplementation::run(ZLApplication *application) {
 	ZLDialogManager::instance().createApplicationWindow(application);
 	application->initWindow();
+
+	FBReader *f = (FBReader*)application;
+	f->bookTextView().gotoPage(1);
+	f->refreshWindow();
+	shared_ptr<ZLView> view = f->currentView();
+
+
+	struct timeval t1, t2;
+
+	gettimeofday(&t1, NULL);
+	for(int i = 0; i < 100; i++)
+		((FBView&)*view).scrollAndUpdatePage(true, ZLTextView::NO_OVERLAPPING, 0);
+	gettimeofday(&t2, NULL);
+
+	int usec_diff = t2.tv_usec - t1.tv_usec;
+	int sec_diff = t2.tv_sec - t1.tv_sec;
+	if(usec_diff < 0) {
+		sec_diff--;
+		usec_diff = 1000000 + usec_diff;
+	}
+
+	printf("100 pages: %d.%06d\n", sec_diff, usec_diff);
+	exit(0);
+
 	ewl_main();
 //	main_loop(application);
 	delete application;
