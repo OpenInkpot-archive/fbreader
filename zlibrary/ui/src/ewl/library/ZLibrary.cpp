@@ -136,7 +136,7 @@ void ZLEwlLibraryImplementation::run(ZLApplication *application) {
 	shared_ptr<ZLView> view = f->currentView();
 
 
-	struct timeval t1, t2;
+/*	struct timeval t1, t2;
 
 	gettimeofday(&t1, NULL);
 	for(int i = 0; i < 100; i++)
@@ -153,6 +153,7 @@ void ZLEwlLibraryImplementation::run(ZLApplication *application) {
 	printf("%d %d, %d %d\n", t1.tv_sec, t1.tv_usec, t2.tv_sec, t2.tv_usec);
 	printf("100 pages: %d.%06d\n", sec_diff, usec_diff);
 	exit(0);
+*/	
 
 	ewl_main();
 //	main_loop(application);
