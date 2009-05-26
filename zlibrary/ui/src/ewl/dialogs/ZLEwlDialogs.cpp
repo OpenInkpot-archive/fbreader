@@ -56,6 +56,16 @@
 
 #define _(__str__) gettext((__str__))
 
+class GettextInitializer {
+	public:
+		GettextInitializer() {
+			setlocale(LC_ALL, "");
+			textdomain("fbreader");
+		}
+};
+
+GettextInitializer locale_init_hack;
+
 static struct _action {
 	char *actionId;
 	char *actionName;
