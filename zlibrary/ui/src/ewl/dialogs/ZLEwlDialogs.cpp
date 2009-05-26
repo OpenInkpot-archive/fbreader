@@ -1268,7 +1268,9 @@ void ZLEwlBookInfo(FBReader &f)
 
 	if(!myBookInfo->SeriesNameOption.value().empty()) {
 		list_add_tv(_("Series: "), myBookInfo->SeriesNameOption.value());
-		list_add_tv(_("Book number: "), myBookInfo->NumberInSeriesOption.value());
+		stringstream s;
+		s << myBookInfo->NumberInSeriesOption.value();
+		list_add_tv(_("Book number: "), s.str());
 	}
 
 	cb_fcb_new(list);
