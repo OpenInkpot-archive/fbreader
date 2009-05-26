@@ -14,7 +14,7 @@ Package: fbreader
 Priority: optional
 Architecture: any
 Replaces: 
-Depends: ${shlibs:Depends}, fbreader-settings
+Depends: ${shlibs:Depends}, fbreader-settings, echoicebox-data
 Description: e-book reader
  FBReader is an e-book reader.
  .
