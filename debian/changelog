@@ -1,3 +1,10 @@
+fbreader (0.10.7-1.oi4) asimov; urgency=low
+
+  * localization
+  * xcb connection error handling
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 26 May 2009 17:12:46 +0200
+
 fbreader (0.10.7-1.oi3) asimov; urgency=low
 
   * test build - new gui
