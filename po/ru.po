@@ -100,7 +100,7 @@ msgstr "Уменьшить размер шрифта"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
 msgid "Toggle Position Indicator"
-msgstr "Переключить индикатор положения"
+msgstr "Вкл./Выкл. индикатор положения"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
 msgid "Arabic"
