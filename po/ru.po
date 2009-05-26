@@ -1,18 +1,19 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# FBReader translation file.
+#
+# Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
+# This file is distributed under the same license as the FBReader package.
+# Alexander Kerner <lunohod@openinkpot.org>, 2009.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: FBreader\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-25 14:51+0200\n"
-"PO-Revision-Date: 2009-05-26 12:47+0200\n"
+"PO-Revision-Date: 2009-05-26 11:17+0200\n"
 "Last-Translator: Vladimir <v@v>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: Russian <openinkpot-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:63
@@ -47,23 +48,23 @@ msgstr "Показать оглавление"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:70
 msgid "Go to Home"
-msgstr "Перейти в начало книги"
+msgstr "В начало книги"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:71
 msgid "Go to Start of Section"
-msgstr "Перейти в начало раздела"
+msgstr "В начало раздела"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:72
 msgid "Go to End of Section"
-msgstr "Перейти в конец раздела"
+msgstr "В конец раздела"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:73
 msgid "Go to Next TOC Section"
-msgstr "Перейти к следующей главе"
+msgstr "К следующему разделу"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:74
 msgid "Go to Previous TOC Section"
-msgstr "Перейти к предыдущей главе"
+msgstr "К предыдущему разделу"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
 msgid "Large Scroll Forward"
@@ -237,7 +238,7 @@ msgstr "Страница "
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:294
 msgid "Bookmark added"
-msgstr "Добавить закладку"
+msgstr "Закладка добавлена"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:323
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:349
@@ -398,15 +399,15 @@ msgstr "Показывать метки глав"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1052
 msgid "Show Position"
-msgstr "Показывать позицию"
+msgstr "Показать позицию"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1053
 msgid "Show Time"
-msgstr "Показывать время"
+msgstr "Показать время"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1054
 msgid "Show Battery"
-msgstr "Показывать батарею"
+msgstr "Показать батарею"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1064
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1126
