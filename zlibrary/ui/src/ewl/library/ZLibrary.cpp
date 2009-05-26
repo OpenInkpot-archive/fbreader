@@ -130,6 +130,10 @@ void main_loop(ZLApplication *application)
 	while (!_fbreader_closed) {
 //		set_timer();
 		e = xcb_wait_for_event(connection);
+		if(xcb_connection_has_error(connection)) {
+			fprintf(stderr, "Connection to server closed\n");
+			break;
+		}
 //		busy();
 		if (e) {
 			switch (e->response_type & ~0x80) {	

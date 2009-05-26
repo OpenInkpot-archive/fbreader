@@ -25,6 +25,10 @@
 #include <string.h>
 #include "Ewl.h"
 #include "virtk.h"
+#include <Ecore_X.h>
+
+extern bool emergency_exit;
+extern void exit_all(void* param);
 
 typedef struct _layout {
 	int x;
@@ -459,5 +463,6 @@ Ewl_Widget *init_virtk(Ewl_Widget *parent, char *ltext, virtk_handler handler)
 	}
 	set_layout(0);
 
+	ecore_x_io_error_handler_set(exit_all, NULL);
 	return win;
 }

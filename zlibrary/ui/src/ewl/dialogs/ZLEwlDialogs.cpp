@@ -50,6 +50,8 @@
 #include "../../../../../fbreader/src/formats/txt/TxtPlugin.h"
 #include "../../../../../fbreader/src/formats/txt/PlainTextFormat.h"
 
+extern bool emergency_exit;
+
 #define FONT_SIZE_MIN	6
 #define FONT_SIZE_MAX	24 - FONT_SIZE_MIN
 #define FONT_SIZE(i) ((i)+FONT_SIZE_MIN)
@@ -387,6 +389,9 @@ void ZLEwlSearchDialog(FBReader &f)
 
 	ewl_widget_show(w = init_virtk(NULL, _("Search"), search_input_handler));
 	ecore_main_loop_begin();
+	if(emergency_exit)
+		return;
+
 	if(w) {
 		ewl_widget_hide(w);
 		ewl_widget_destroy(w);

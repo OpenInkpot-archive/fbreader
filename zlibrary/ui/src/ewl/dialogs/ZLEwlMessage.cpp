@@ -33,6 +33,7 @@ extern "C" {
 using namespace std;
 
 extern void ee_init();
+extern bool emergency_exit;
 
 static void die(const char* fmt, ...)
 {
@@ -132,6 +133,8 @@ void show_message(char *text, void *handler)
 	ecore_main_loop_iterate();
 
 	ecore_main_loop_begin();
+	if(emergency_exit)
+		return;
 
 	ecore_evas_hide(main_win);
 	ecore_evas_free(main_win);
@@ -256,6 +259,8 @@ long read_number(char *text)
 	ecore_main_loop_iterate();
 
 	ecore_main_loop_begin();
+	if(emergency_exit)
+		return -1;
 
 	ecore_evas_hide(main_win);
 	ecore_evas_free(main_win);

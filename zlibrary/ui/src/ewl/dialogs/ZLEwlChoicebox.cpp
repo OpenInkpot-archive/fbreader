@@ -27,6 +27,7 @@
 #include <cstring>
 
 #include <Ecore.h>
+#include <Ecore_X.h>
 #include <Ecore_Evas.h>
 #include <Edje.h>
 
@@ -44,6 +45,7 @@ extern "C" {
 const int header_h = 49;
 const int footer_h = 49;
 
+bool emergency_exit = false;
 
 static Ecore_Evas *lcb_win, *fcb_win;
 
@@ -51,9 +53,13 @@ static void cb_rcb_destroy();
 
 static bool alt_modifier = false;
 
+void exit_all(void* param) {
+	emergency_exit = true;
+	ecore_main_loop_quit();
+}
+
 static int exit_handler(void* param, int ev_type, void* event)
 {
-//	fprintf(stderr, "exit_handler\n");
 	ecore_main_loop_quit();
 
 	return 1;
@@ -315,6 +321,7 @@ void ee_init()
 			return;
 
 		ecore_event_handler_add(ECORE_EVENT_SIGNAL_EXIT, exit_handler, NULL);
+		ecore_x_io_error_handler_set(exit_all, NULL);
 
 		_init = 1;
 	}
@@ -380,6 +387,8 @@ void cb_lcb_new()
 	ecore_evas_show(lcb_win);
 
 	ecore_main_loop_begin();
+	if(emergency_exit)
+		return;
 
 	if(lcb_win) {
 		ecore_evas_hide(lcb_win);
@@ -773,6 +782,8 @@ void cb_fcb_new(cb_list *list)
 	ecore_evas_show(fcb_win);
 
 	ecore_main_loop_begin();
+	if(emergency_exit)
+		return;
 
 	if(fcb_win) {
 		ecore_evas_hide(fcb_win);
