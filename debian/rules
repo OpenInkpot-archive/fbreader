@@ -19,14 +19,11 @@ clean:
 build: build-stamp
 build-stamp:
 		dh_testdir
-		pwd
-		echo $(CURDIR)
-		cd $(CURDIR)
-		pwd
 		$(MAKE) -C zlibrary/core TARGET_ARCH=desktop UI_TYPE=ewl
 		$(MAKE) -C zlibrary/text TARGET_ARCH=desktop UI_TYPE=ewl
 		$(MAKE) -C zlibrary/ui TARGET_ARCH=desktop UI_TYPE=ewl
 		$(MAKE) -C fbreader TARGET_ARCH=desktop UI_TYPE=ewl
+		$(MAKE) -C po TARGET_ARCH=desktop UI_TYPE=ewl
 		touch build-stamp 
 
 install: install-stamp
@@ -40,6 +37,7 @@ install-stamp: build
 		$(MAKE) -C zlibrary/text TARGET_ARCH=desktop UI_TYPE=ewl DESTDIR=$(DEB_DIR)/fbreader do_install
 		$(MAKE) -C zlibrary/ui TARGET_ARCH=desktop UI_TYPE=ewl DESTDIR=$(DEB_DIR)/fbreader do_install
 		$(MAKE) -C fbreader TARGET_ARCH=desktop UI_TYPE=ewl DESTDIR=$(DEB_DIR)/fbreader do_install
+		$(MAKE) -C po TARGET_ARCH=desktop UI_TYPE=ewl DEST_DIR=$(DEB_DIR)/fbreader do_install
 		mkdir $(DEB_DIR)/fbreader/usr/share/FBReader/themes
 		install -m 644 themes/oitheme.edj $(DEB_DIR)/fbreader/usr/share/FBReader/themes
 		install -m 644 themes/cb_header_footer.edj $(DEB_DIR)/fbreader/usr/share/FBReader/themes
