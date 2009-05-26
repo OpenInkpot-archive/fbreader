@@ -332,6 +332,7 @@ msgstr ""
 msgid "Indicator Height"
 msgstr ""
 
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1056
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:682
 msgid "Offset From Text"
 msgstr ""
@@ -406,10 +407,6 @@ msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1054
 msgid "Show Battery"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1056
-msgid "Offset from Text"
 msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1064

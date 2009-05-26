@@ -1053,7 +1053,7 @@ void options_dialog_handler(int idx, bool is_alt)
 		ADD_OPTION_BOOL_H(	_("Show Time"), indicatorInfo.ShowTimeOption.value(), ZLBooleanOption_handler, &indicatorInfo.ShowTimeOption);
 		ADD_OPTION_BOOL_H(	_("Show Battery"), indicatorInfo.ShowBatteryOption.value(), ZLBooleanOption_handler, &indicatorInfo.ShowBatteryOption);
 		ADD_OPTION_INT(		_("Indicator Height"), indicatorInfo.HeightOption.value());
-		ADD_OPTION_INT(		_("Offset from Text"), indicatorInfo.OffsetOption.value());
+		ADD_OPTION_INT(		_("Offset From Text"), indicatorInfo.OffsetOption.value());
 		ADD_OPTION_INT_F(	_("Font Size"), indicatorInfo.FontSizeOption.value(), _("%dpt"));
 
 		cb_lcb_redraw();
