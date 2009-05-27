@@ -410,7 +410,6 @@ Ewl_Widget *init_virtk(Ewl_Widget *parent, char *ltext, virtk_handler handler)
 	ewl_widget_show(ebox);
 
 	entry = ewl_entry_new();
-	ewl_entry_editable_set(EWL_ENTRY(entry), 1);
 	ewl_callback_del(EWL_WIDGET(entry), EWL_CALLBACK_KEY_DOWN, ewl_entry_cb_key_down);
 	ewl_container_child_append(EWL_CONTAINER(ebox), entry);
 	ewl_theme_data_str_set(EWL_WIDGET(entry), "/entry/file", vk_theme);
@@ -418,6 +417,8 @@ Ewl_Widget *init_virtk(Ewl_Widget *parent, char *ltext, virtk_handler handler)
 	ewl_theme_data_str_set(EWL_WIDGET(entry), "/entry/cursor/file", vk_theme);
 	ewl_theme_data_str_set(EWL_WIDGET(entry), "/entry/cursor/group", "ewl/dlg_entry/cursor");
 	ewl_widget_name_set(entry, "virtk_entry");
+	ewl_text_font_size_set(EWL_TEXT(entry), 30);
+	ewl_entry_editable_set(EWL_ENTRY(entry), 1);
 	ewl_widget_show(entry);
 
 
