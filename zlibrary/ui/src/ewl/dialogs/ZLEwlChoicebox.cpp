@@ -51,6 +51,8 @@ static Ecore_Evas *lcb_win, *fcb_win;
 
 static void cb_rcb_destroy();
 
+static bool reuse_fcb_win = false;
+
 static bool alt_modifier = false;
 
 void exit_all(void* param) {
@@ -587,9 +589,12 @@ static void fcb_draw_handler(Evas_Object* choicebox,
 		return;
 
 	cb_list_item *i = &l->items.at(item_num);
-	if(!i->text.empty())
+	if(!i->text.empty()) {
 		edje_object_part_text_set(item, "text", i->text.c_str());
-	else {
+		edje_object_part_text_set(item, "title", "");
+		edje_object_part_text_set(item, "value", "");
+	} else {
+		edje_object_part_text_set(item, "text", "");
 		edje_object_part_text_set(item, "title", i->title.c_str());
 		edje_object_part_text_set(item, "value", i->value.c_str());
 	}
@@ -607,8 +612,18 @@ static void fcb_handler(Evas_Object* choicebox,
 //			choicebox, item_num, is_alt, param);
 
 	cb_list *l = (cb_list *)param;
-	if(l->item_handler(item_num, is_alt) != 0)
-		ecore_main_loop_quit();
+	switch(l->item_handler(item_num, is_alt)) {
+		case 1:
+			reuse_fcb_win = false;
+			ecore_main_loop_quit();
+			break;
+		case 2:
+			reuse_fcb_win = true;
+			ecore_main_loop_quit();
+		case 0:
+		default:
+			break;
+	}
 }
 
 
@@ -723,71 +738,97 @@ void cb_fcb_redraw(int newsize)
 
 void cb_fcb_new(cb_list *list)
 {
-	ee_init();
+	Evas_Object *bg;
 
-	fcb_win = ecore_evas_software_x11_new(0, 0, 0, 0, 600, 800);
+	if(reuse_fcb_win && fcb_win) {
 
-	ecore_evas_title_set(fcb_win, "FCB");
-	ecore_evas_name_class_set(fcb_win, "FCB", "FCB");
+		Evas* main_canvas = ecore_evas_get(fcb_win);
+		Evas_Object *choicebox = evas_object_name_find(main_canvas, "cb_full");
 
-	Evas* main_canvas = ecore_evas_get(fcb_win);
+		edje_object_part_text_set(evas_object_name_find(main_canvas, "header"),
+				"text", list->name.c_str());
+		edje_object_part_text_set(evas_object_name_find(main_canvas, "footer"),
+				"alt", list->alt_text.c_str());
+		choicebox_set_size(choicebox, list->items.size());
 
-	ecore_evas_callback_delete_request_set(fcb_win, fcb_win_close_handler);
+		choicebox_invalidate_interval(choicebox, 0, list->items.size());
+		if(list->items.size() > 0)
+			choicebox_set_selection(choicebox, 0);
 
-	Evas_Object* bg = evas_object_rectangle_add(main_canvas);
-	evas_object_name_set(bg, "bg");
-	evas_object_color_set(bg, 255, 255, 255, 255);
-	evas_object_move(bg, 0, 0);
-	evas_object_resize(bg, 600, 800);
-	evas_object_show(bg);
+		evas_object_show(evas_object_name_find(main_canvas, "bg"));
+	} else {
 
-	Evas_Object* header = edje_object_add(main_canvas);
-	evas_object_name_set(header, "header");
-	edje_object_file_set(header, "/usr/share/FBReader/themes/cb_header_footer.edj",
-			"header");
-	edje_object_part_text_set(header, "text", list->name.c_str());
-	evas_object_move(header, 0, 0);
-	evas_object_resize(header, 600, header_h);
-	evas_object_show(header);
+		ee_init();
 
-	Evas_Object* footer = edje_object_add(main_canvas);
-	evas_object_name_set(footer, "footer");
-	edje_object_file_set(footer, "/usr/share/FBReader/themes/cb_header_footer.edj",
-			"footer");
-	edje_object_part_text_set(footer, "alt", list->alt_text.c_str());
-	evas_object_move(footer, 0, 800 - footer_h);
-	evas_object_resize(footer, 600, footer_h);
-	evas_object_show(footer);
+		fcb_win = ecore_evas_software_x11_new(0, 0, 0, 0, 600, 800);
 
-	Evas_Object* choicebox = choicebox_new(main_canvas, "/usr/share/echoicebox/echoicebox.edj", "full",
-			fcb_handler, fcb_draw_handler, fcb_page_updated_handler, list);
-	choicebox_set_size(choicebox, list->items.size());
-	evas_object_name_set(choicebox, "cb_full");
-	evas_object_resize(choicebox, 600, 800 - header_h - footer_h);
-	evas_object_move(choicebox, 0, header_h);
-	evas_object_show(choicebox);
+		ecore_evas_title_set(fcb_win, "FCB");
+		ecore_evas_name_class_set(fcb_win, "FCB", "FCB");
 
-	evas_object_focus_set(choicebox, true);
-	evas_object_event_callback_add(choicebox,
-			EVAS_CALLBACK_KEY_DOWN,
-			&fcb_win_key_down_handler,
-			NULL);
-	evas_object_event_callback_add(choicebox,
-			EVAS_CALLBACK_KEY_UP,
-			&fcb_win_key_up_handler,
-			NULL);
+		Evas* main_canvas = ecore_evas_get(fcb_win);
 
-	ecore_evas_callback_resize_set(fcb_win, fcb_win_resize_handler);
+		ecore_evas_callback_delete_request_set(fcb_win, fcb_win_close_handler);
+
+		bg = evas_object_rectangle_add(main_canvas);
+		evas_object_name_set(bg, "bg");
+		evas_object_color_set(bg, 255, 255, 255, 255);
+		evas_object_move(bg, 0, 0);
+		evas_object_resize(bg, 600, 800);
+		evas_object_show(bg);
+
+		Evas_Object* header = edje_object_add(main_canvas);
+		evas_object_name_set(header, "header");
+		edje_object_file_set(header, "/usr/share/FBReader/themes/cb_header_footer.edj",
+				"header");
+		edje_object_part_text_set(header, "text", list->name.c_str());
+		evas_object_move(header, 0, 0);
+		evas_object_resize(header, 600, header_h);
+		evas_object_show(header);
+
+		Evas_Object* footer = edje_object_add(main_canvas);
+		evas_object_name_set(footer, "footer");
+		edje_object_file_set(footer, "/usr/share/FBReader/themes/cb_header_footer.edj",
+				"footer");
+		edje_object_part_text_set(footer, "alt", list->alt_text.c_str());
+		evas_object_move(footer, 0, 800 - footer_h);
+		evas_object_resize(footer, 600, footer_h);
+		evas_object_show(footer);
+
+		Evas_Object* choicebox = choicebox_new(main_canvas, "/usr/share/echoicebox/echoicebox.edj", "full",
+				fcb_handler, fcb_draw_handler, fcb_page_updated_handler, list);
+		choicebox_set_size(choicebox, list->items.size());
+		evas_object_name_set(choicebox, "cb_full");
+		evas_object_resize(choicebox, 600, 800 - header_h - footer_h);
+		evas_object_move(choicebox, 0, header_h);
+		evas_object_show(choicebox);
+
+		evas_object_focus_set(choicebox, true);
+		evas_object_event_callback_add(choicebox,
+				EVAS_CALLBACK_KEY_DOWN,
+				&fcb_win_key_down_handler,
+				NULL);
+		evas_object_event_callback_add(choicebox,
+				EVAS_CALLBACK_KEY_UP,
+				&fcb_win_key_up_handler,
+				NULL);
+
+		ecore_evas_callback_resize_set(fcb_win, fcb_win_resize_handler);
+	}
 
 	ecore_evas_show(fcb_win);
+
+	reuse_fcb_win = false;
 
 	ecore_main_loop_begin();
 	if(emergency_exit)
 		return;
 
 	if(fcb_win) {
-		ecore_evas_hide(fcb_win);
-		ecore_evas_free(fcb_win);
-		fcb_win = NULL;
+		evas_object_hide(bg);
+		if(!reuse_fcb_win) {
+			ecore_evas_hide(fcb_win);
+			ecore_evas_free(fcb_win);
+			fcb_win = NULL;
+		}
 	}
 }

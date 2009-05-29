@@ -21,7 +21,6 @@
 
 #include "ZLEwlDialogs.h"
 #include "ZLEwlChoicebox.h"
-#include "ZLEwlEntry.h"
 #include "ZLEwlMessage.h"
 #include "virtk.h"
 
@@ -220,10 +219,10 @@ void ZLEwlTOCDialog(FBReader &f)
 {
 	myFbreader = &f;
 
-	if(list)
-		delete list;
-
-	list = new cb_list;
+	if(!list)
+		list = new cb_list;
+	else
+		list->items.clear();
 
 	list->name = _("Table Of Contents");
 	list->alt_text = "";
@@ -257,6 +256,11 @@ void ZLEwlTOCDialog(FBReader &f)
 	curTOCParent = cm.myRoot;
 
 	cb_fcb_new(list);
+
+	if(list) {
+		delete list;
+		list = NULL;
+	}
 }
 
 int bookmarks_handler(int idx, bool is_alt)
@@ -280,9 +284,10 @@ void ZLEwlBMKDialog(FBReader &f)
 {
 	myFbreader = &f;
 
-	if(list)
-		delete list;
-	list = new cb_list;
+	if(!list)
+		list = new cb_list;
+	else
+		list->items.clear();
 
 	list->name = _("Bookmarks");
 	list->alt_text = _("Delete");
@@ -300,6 +305,10 @@ void ZLEwlBMKDialog(FBReader &f)
 	}
 
 	cb_fcb_new(list);
+	if(list) {
+		delete list;
+		list = NULL;
+	}
 }
 
 void ZLEwlBMKAddedMsg(FBReader &f) {
@@ -1247,9 +1256,10 @@ void ZLEwlBookInfo(FBReader &f)
 {
 	myFbreader = &f;
 
-	if(list)
-		delete list;
-	list = new cb_list;
+	if(!list)
+		list = new cb_list;
+	else
+		list->items.clear();
 
 	list->name = _("Book Info");
 	list->alt_text = "";
@@ -1279,6 +1289,10 @@ void ZLEwlBookInfo(FBReader &f)
 	}
 
 	cb_fcb_new(list);
+	if(list) {
+		delete list;
+		list = NULL;
+	}
 }
 
 int mmenu_handler(int idx, bool is_alt)
@@ -1286,7 +1300,7 @@ int mmenu_handler(int idx, bool is_alt)
 	switch(idx) {
 		case 0:
 			next_gui = ZLEwlBookInfo;
-			return 1;
+			return 2;
 			break;
 		case 1:
 			next_gui = ZLEwlGotoPageDialog;
@@ -1294,7 +1308,7 @@ int mmenu_handler(int idx, bool is_alt)
 			break;
 		case 2:
 			next_gui = ZLEwlTOCDialog;
-			return 1;
+			return 2;
 			break;
 		case 3:
 			next_gui = ZLEwlSearchDialog;
@@ -1302,7 +1316,7 @@ int mmenu_handler(int idx, bool is_alt)
 			break;
 		case 4:
 			next_gui = ZLEwlBMKDialog;
-			return 1;
+			return 2;
 			break;
 /*		case 5:
 			next_gui = ZLEwlOptionsDialog;
@@ -1351,5 +1365,10 @@ void ZLEwlMainMenu(FBReader &f)
 	if(next_gui) {
 		myFbreader->refreshWindow();
 		next_gui(f);
+	}
+
+	if(list) {
+		delete list;
+		list = NULL;
 	}
 }
