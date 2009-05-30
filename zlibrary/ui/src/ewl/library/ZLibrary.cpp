@@ -52,6 +52,7 @@
 extern xcb_connection_t *connection;
 extern xcb_window_t window;
 ZLApplication *myapplication;
+static bool in_main_loop;
 
 class ZLEwlLibraryImplementation : public ZLibraryImplementation {
 
@@ -183,6 +184,7 @@ void main_loop(ZLApplication *application)
 	_fbreader_closed = false;
 	while (!_fbreader_closed) {
 //		set_timer();
+		in_main_loop = true;
 		e = xcb_wait_for_event(connection);
 		if(xcb_connection_has_error(connection)) {
 			fprintf(stderr, "Connection to server closed\n");
@@ -211,10 +213,12 @@ void main_loop(ZLApplication *application)
 
 						//printf("ev->detail: %d %s\n", ev->detail, kmap[ev->detail].c_str());
 
+						in_main_loop = false;
 						if(alt_pressed)
 							application->doActionByKey(std::string("Alt+") + kmap[ev->detail]);
 						else
 							application->doActionByKey(kmap[ev->detail]);
+						in_main_loop = true;
 
 						break;
 					}
@@ -256,7 +260,8 @@ void sigusr1_handler(int)
 	if(!(window && connection))
 		return;
 
-	ecore_main_loop_quit();
+	if(!in_main_loop)
+		ecore_main_loop_quit();
 
 	// raise window
 	uint32_t value_list = XCB_STACK_MODE_ABOVE;
