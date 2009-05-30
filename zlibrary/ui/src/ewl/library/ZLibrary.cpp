@@ -19,6 +19,11 @@
 
 #include <ewl/Ewl.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <signal.h>
+#include <errno.h>
+
 #include <ZLApplication.h>
 #include <ZLibrary.h>
 
@@ -35,8 +40,18 @@
 #include "../../../../core/src/util/ZLKeyUtil.h"
 #include "../../../../core/src/unix/xmlconfig/XMLConfig.h"
 #include "../../../../core/src/unix/iconv/IConvEncodingConverter.h"
+#include "../../../../../fbreader/src/fbreader/FBReader.h"
+#include "../../../../../fbreader/src/bookmodel/BookModel.h"
+
+#define FBR_FIFO "/tmp/.FBReader-fifo"
+
+#ifndef NAME_MAX
+#define NAME_MAX 4096
+#endif
 
 extern xcb_connection_t *connection;
+extern xcb_window_t window;
+ZLApplication *myapplication;
 
 class ZLEwlLibraryImplementation : public ZLibraryImplementation {
 
@@ -51,6 +66,45 @@ void initLibrary() {
 }
 
 void ZLEwlLibraryImplementation::init(int &argc, char **&argv) {
+	int pid;
+	FILE *pidof = popen("pidof FBReader", "r");
+	if(pidof) {
+		while(fscanf(pidof, "%d", &pid) != EOF && pid == getpid());
+		pclose(pidof);
+
+		do {
+			if(pid <= 0 || pid == getpid())
+				break;
+
+			if(mkfifo(FBR_FIFO, 0666) && errno != EEXIST)
+				break;
+
+			kill(pid, SIGUSR1);
+
+			int fifo = open(FBR_FIFO, O_WRONLY);
+			if(!fifo) {
+				unlink(FBR_FIFO);
+				break;
+			}
+
+			char *p = argv[1];
+			int ret;
+			int len = strlen(p);
+			while(len) {
+				ret = write(fifo, p, len);
+				if(ret == -1 && errno == EINTR)
+					break;
+
+				len -= ret;
+				p += ret;
+			}
+
+			close(fifo);
+			unlink(FBR_FIFO);
+			exit(0);
+		} while(0);
+	}
+
 	if(!ewl_init(&argc, argv)) {
 		fprintf(stderr, "Unable to init EWL.\n");
 	}		
@@ -192,20 +246,71 @@ void main_loop(ZLApplication *application)
 	//delete_timer();
 }
 
-void signal_handler(int )
+void sigint_handler(int)
 {
 	exit(1);
 }
 
+void sigusr1_handler(int)
+{
+	if(!(window && connection))
+		return;
+
+	ecore_main_loop_quit();
+
+	// raise window
+	uint32_t value_list = XCB_STACK_MODE_ABOVE;
+	xcb_configure_window(connection, window, XCB_CONFIG_WINDOW_STACK_MODE, &value_list);
+	xcb_flush(connection);
+
+	int fifo = open(FBR_FIFO, O_RDONLY);
+	if(!fifo)
+		return;
+
+	char buf[NAME_MAX];
+	char *p = buf;
+	int ret;
+	int len = NAME_MAX - 1;
+	while((ret = read(fifo, p, len)) > 0) {
+		len -= ret;
+		p += ret;
+	}
+	*p = '\0';
+	close(fifo);
+
+	std::string filename(buf);
+	if(filename.empty())
+		return;
+
+	FBReader *f = (FBReader*)myapplication;
+	if(!f->myModel->fileName().compare(filename))
+		return;
+
+	BookDescriptionPtr description;
+	f->createDescription(filename, description);
+	if (!description.isNull()) {
+		f->openBook(description);
+		f->refreshWindow();
+	}
+}
+
 void ZLEwlLibraryImplementation::run(ZLApplication *application) {
 	struct sigaction act;
-	act.sa_handler = signal_handler;
+
+	ZLDialogManager::instance().createApplicationWindow(application);
+	application->initWindow();
+
+	myapplication = application;
+
+	act.sa_handler = sigint_handler;
 	sigemptyset(&act.sa_mask);
 	act.sa_flags = 0;
 	sigaction(SIGINT, &act, NULL);
 
-	ZLDialogManager::instance().createApplicationWindow(application);
-	application->initWindow();
+	act.sa_handler = sigusr1_handler;
+	sigemptyset(&act.sa_mask);
+	act.sa_flags = 0;
+	sigaction(SIGUSR1, &act, NULL);
 
 	main_loop(application);
 	delete application;
