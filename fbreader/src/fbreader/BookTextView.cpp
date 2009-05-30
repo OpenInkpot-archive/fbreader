@@ -57,7 +57,6 @@ BookTextView::BookTextView(FBReader &reader, shared_ptr<ZLPaintContext> context)
 
 BookTextView::~BookTextView() {
 	saveState();
-	saveBookmarks();
 }
 
 void BookTextView::setModel(shared_ptr<ZLTextModel> model, const std::string &language, const std::string &fileName) {
@@ -121,6 +120,8 @@ void BookTextView::setContentsModel(shared_ptr<ZLTextModel> contentsModel) {
 }
 
 void BookTextView::saveState() {
+	saveBookmarks();
+
 	const ZLTextWordCursor &cursor = startCursor();
 
 	if (!cursor.isNull()) {
