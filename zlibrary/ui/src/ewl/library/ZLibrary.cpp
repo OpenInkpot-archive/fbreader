@@ -96,9 +96,13 @@ void ZLEwlLibraryImplementation::init(int &argc, char **&argv) {
 				break;
 			}
 
-			char *p = argv[1];
-			int ret;
+			char *p;
+			if(argc > 1)
+				p = argv[1];
+			else
+				p = "";
 			int len = strlen(p);
+			int ret;
 			while(len) {
 				ret = write(fifo, p, len);
 				if(ret == -1 && errno == EINTR)
@@ -284,7 +288,7 @@ void sigusr1_handler(int)
 	char *p = buf;
 	int ret;
 	int len = NAME_MAX - 1;
-	while((ret = read(fifo, p, len)) > 0) {
+	while(len > 0 && (ret = read(fifo, p, len)) > 0) {
 		len -= ret;
 		p += ret;
 	}
