@@ -42,6 +42,11 @@
 #include "../../../../core/src/unix/iconv/IConvEncodingConverter.h"
 #include "../../../../../fbreader/src/fbreader/FBReader.h"
 #include "../../../../../fbreader/src/bookmodel/BookModel.h"
+#include "../../../../../fbreader/src/fbreader/BookTextView.h"
+
+extern "C" {
+#include <xcb/xcb_atom.h>
+}
 
 #define FBR_FIFO "/tmp/.FBReader-fifo"
 
@@ -53,6 +58,9 @@ extern xcb_connection_t *connection;
 extern xcb_window_t window;
 ZLApplication *myapplication;
 static bool in_main_loop;
+
+static void init_properties();
+static void set_properties();
 
 class ZLEwlLibraryImplementation : public ZLibraryImplementation {
 
@@ -296,16 +304,116 @@ void sigusr1_handler(int)
 	if (!description.isNull()) {
 		f->openBook(description);
 		f->refreshWindow();
+		set_properties();
 	}
+}
+
+static struct atom {
+	char *name;
+	xcb_atom_t atom;
+} atoms[] = {
+	"UTF8_STRING", 0,
+	"FBR_AUTHOR", 0,
+	"FBR_TITLE", 0,
+	"FRB_FILENAME", 0,
+	"FRB_FILEPATH", 0,
+	"FBR_SERIES", 0,
+	"FBR_SERIES_NUMBER", 0,
+	"FBR_TYPE", 0,
+	"FBR_SIZE", 0,
+	"FBR_CURRENT_POSITION", 0,
+	"FBR_PAGES_COUNT", 0,
+	"FBR_WINDOW_ID", 0,
+};
+
+static void init_properties()
+{
+	if(!connection)
+		return;
+
+	xcb_intern_atom_cookie_t cookie;
+	xcb_intern_atom_reply_t *reply = NULL;
+
+	int atoms_cnt = sizeof(atoms) / sizeof(struct atom);
+	for(int i = 0; i < atoms_cnt; i++) {
+		cookie = xcb_intern_atom_unchecked(connection, 0, strlen(atoms[i].name), atoms[i].name);
+		reply = xcb_intern_atom_reply(connection, cookie, NULL);
+		atoms[i].atom = reply->atom;
+		free(reply);
+	}
+}
+
+void set_properties()
+{
+	if(!(window && connection))
+		return;
+
+	FBReader *f = (FBReader*)myapplication;
+	std::string fileName = f->myModel->fileName();
+	BookInfo *myBookInfo = new BookInfo(fileName);
+
+#define set_prop_str(__i__, __prop__) \
+	xcb_change_property(connection, \
+			XCB_PROP_MODE_REPLACE, \
+			window, \
+			atoms[(__i__)].atom, \
+			atoms[0].atom, \
+			8, \
+			strlen((__prop__)), \
+			(__prop__));
+
+#define set_prop_int(__i__, __prop__) \
+	{ \
+	int i = (__prop__); \
+	xcb_change_property(connection, \
+			XCB_PROP_MODE_REPLACE, \
+			window, \
+			atoms[(__i__)].atom, \
+			INTEGER, \
+			32, \
+			1, \
+			(unsigned char*)&i); \
+	}
+
+	set_prop_str(1, myBookInfo->AuthorDisplayNameOption.value().c_str());
+	set_prop_str(2, myBookInfo->TitleOption.value().c_str());
+	set_prop_str(3, ZLFile::fileNameToUtf8(ZLFile(fileName).name(false)).c_str());
+	set_prop_str(4, ZLFile::fileNameToUtf8(ZLFile(fileName).path()).c_str());
+	set_prop_str(5, myBookInfo->SeriesNameOption.value().c_str());
+	set_prop_int(6, myBookInfo->NumberInSeriesOption.value());
+	set_prop_int(8, 43690);
+	set_prop_int(9, f->bookTextView().positionIndicator()->textPosition());
+
+	xcb_change_property(connection,
+			XCB_PROP_MODE_REPLACE,
+			window,
+			atoms[11].atom,
+			WINDOW,
+			sizeof(xcb_window_t) * 8,
+			1,
+			(unsigned char*)&window);
+
+	xcb_flush(connection);
+
+	free(myBookInfo);
+}
+
+void update_position_property()
+{
+	if(!atoms[9].atom)
+		return;
+
+	FBReader *f = (FBReader*)myapplication;
+	set_prop_int(9, f->bookTextView().positionIndicator()->textPosition());
 }
 
 void ZLEwlLibraryImplementation::run(ZLApplication *application) {
 	struct sigaction act;
 
 	ZLDialogManager::instance().createApplicationWindow(application);
-	application->initWindow();
 
 	myapplication = application;
+	application->initWindow();
 
 	act.sa_handler = sigint_handler;
 	sigemptyset(&act.sa_mask);
@@ -317,6 +425,8 @@ void ZLEwlLibraryImplementation::run(ZLApplication *application) {
 	act.sa_flags = 0;
 	sigaction(SIGUSR1, &act, NULL);
 
+	init_properties();
+	set_properties();
 	main_loop(application);
 	delete application;
 }

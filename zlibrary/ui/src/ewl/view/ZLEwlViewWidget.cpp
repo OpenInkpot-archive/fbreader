@@ -203,6 +203,9 @@ void ZLEwlViewWidget::doPaint()	{
 
 	view()->paint();
 
+	void update_position_property();
+	update_position_property();
+
 	xcb_image_shm_put (connection, window, gc,
 			pContext.image, shminfo,
 			0, 0, 0, 0, w, h, 0);

@@ -186,6 +186,9 @@ public:
 
 	ZLTextElementMap myTextElementMap;
 
+public:
+	shared_ptr<ZLTextView::PositionIndicator> positionIndicator();
+
 protected:
 	bool onStylusPress(int x, int y);
 	bool onStylusMove(int x, int y);
@@ -210,7 +213,6 @@ protected:
 	bool empty() const;
 
 	virtual shared_ptr<PositionIndicator> createPositionIndicator(const ZLTextPositionIndicatorInfo&);
-	shared_ptr<ZLTextView::PositionIndicator> positionIndicator();
 
 	virtual int leftMargin() const = 0;
 	virtual int rightMargin() const = 0;
