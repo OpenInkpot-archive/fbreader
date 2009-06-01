@@ -20,6 +20,8 @@
 #ifndef VIRTK_H
 #define VIRTK_H
 
+#include <Ewl.h>
+
 typedef void (*virtk_handler)(char *text);
 Ewl_Widget *init_virtk(Ewl_Widget *parent, char *ltext, virtk_handler handler);
 
