@@ -130,6 +130,7 @@ static char *alignments[] = { _("undefined"), _("left"), _("right"), _("center")
 static char *para_break_type[] = { _("New Line"), _("Empty Line"), _("Line With Indent") };
 static int curBreakType = 0;
 static bool reopen_file = false;
+static int do_refresh = -1;
 
 vector<cb_olist *> olists;
 cb_vlist *vlist;
@@ -413,6 +414,28 @@ void ZLEwlSearchDialog(FBReader &f)
 	}
 }
 
+void set_refresh_flag()
+{
+	do_refresh = 2;
+}
+
+void refresh_view()
+{
+fprintf(stderr, "refresh_view %d\n", do_refresh);
+	if(do_refresh < 0 || do_refresh-- != 1)
+		return;
+
+	fprintf(stderr, "refresh\n");
+
+	if(reopen_file)
+		myFbreader->openFile(myFbreader->myModel->fileName());
+
+	reopen_file = false;
+
+	myFbreader->clearTextCaches();
+    myFbreader->refreshWindow();
+}
+
 void settings_close_handler()
 {
 	if(reopen_file)
@@ -433,6 +456,7 @@ void ZLBooleanOption_handler(int idx, bool is_alt)
 	o->setValue(i->values.at(i->curval_idx).ibool);
 
 	cb_lcb_invalidate(idx);
+	do_refresh = 2;
 }
 
 void font_family_handler(int idx, bool is_alt)
@@ -444,6 +468,7 @@ void font_family_handler(int idx, bool is_alt)
 	iv.text = iv.sval = option.value();
 
 	cb_lcb_invalidate(vlist->parent_item_idx);
+	do_refresh = 2;
 }
 
 void line_spacing_handler(int idx, bool is_alt)
@@ -459,6 +484,7 @@ void line_spacing_handler(int idx, bool is_alt)
 	free(t);
 
 	cb_lcb_invalidate(vlist->parent_item_idx);
+	do_refresh = 2;
 }
 
 void font_size_handler(int idx, bool is_alt)
@@ -475,6 +501,7 @@ void font_size_handler(int idx, bool is_alt)
 	free(t);
 
 	cb_lcb_invalidate(vlist->parent_item_idx);
+	do_refresh = 2;
 }
 
 void indicator_offset_handler(int idx, bool is_alt)
@@ -492,6 +519,7 @@ void indicator_offset_handler(int idx, bool is_alt)
 	free(t);
 
 	cb_lcb_invalidate(vlist->parent_item_idx);
+	do_refresh = 2;
 }
 
 void indicator_height_handler(int idx, bool is_alt)
@@ -512,6 +540,7 @@ void indicator_height_handler(int idx, bool is_alt)
 	free(t);
 
 	cb_lcb_invalidate(vlist->parent_item_idx);
+	do_refresh = 2;
 }
 
 void indicator_font_size_handler(int idx, bool is_alt)
@@ -528,6 +557,7 @@ void indicator_font_size_handler(int idx, bool is_alt)
 	free(t);
 
 	cb_lcb_invalidate(vlist->parent_item_idx);
+	do_refresh = 2;
 }
 
 void alignment_handler(int idx, bool is_alt)
@@ -540,6 +570,7 @@ void alignment_handler(int idx, bool is_alt)
 	iv.text = alignments[iv.ival];
 
 	cb_lcb_invalidate(vlist->parent_item_idx);
+	do_refresh = 2;
 }
 
 void margins_val_handler(int idx, bool is_alt)
@@ -573,6 +604,7 @@ void margins_val_handler(int idx, bool is_alt)
 	free(t);
 
 	cb_lcb_invalidate(vlist->parent_item_idx);
+	do_refresh = 2;
 }
 
 void margins_handler(int idx, bool is_alt)
@@ -616,7 +648,7 @@ void first_line_indent_handler(int idx, bool is_alt)
 	free(t);
 
 	cb_lcb_invalidate(vlist->parent_item_idx);
-
+	do_refresh = 2;
 }
 
 void format_style_handler(int idx, bool is_alt)
@@ -695,6 +727,7 @@ void indicator_handler(int idx, bool is_alt)
 		++i->curval_idx %= i->values.size();
 
 		cb_lcb_invalidate(idx);
+		do_refresh = 2;
 	} else if(5 == idx) {
 		INIT_VLIST(_("Indicator Height"), indicator_height_handler);
 
@@ -731,6 +764,7 @@ void default_language_handler(int idx, bool is_alt)
 		iv.text = iv.sval = languages[idx].langName;
 
 		cb_lcb_invalidate(vlist->parent_item_idx);
+		do_refresh = 2;
 	}
 }
 
@@ -749,6 +783,8 @@ void default_encoding_set_handler(int idx, bool is_alt)
 	cb_item_value &iv2 = olists.back()->items.at(vlist->parent_item_idx + 1).current_value;
 	iv2.text = iv2.sval = sets.at(idx)->infos().at(0)->name();
 	cb_lcb_invalidate(vlist->parent_item_idx + 1);
+
+	do_refresh = 2;
 }
 
 void default_encoding_handler(int idx, bool is_alt)
@@ -775,6 +811,7 @@ void default_encoding_handler(int idx, bool is_alt)
 	iv.text = iv.sval = newenc;
 
 	cb_lcb_invalidate(vlist->parent_item_idx);
+	do_refresh = 2;
 }
 
 void language_handler(int idx, bool is_alt)
@@ -841,6 +878,7 @@ void book_encoding_set_handler(int idx, bool is_alt)
 	cb_lcb_invalidate(vlist->parent_item_idx + 1);
 
 	reopen_file = true;
+	do_refresh = 2;
 }
 
 void book_encoding_handler(int idx, bool is_alt)
@@ -873,6 +911,7 @@ void book_encoding_handler(int idx, bool is_alt)
 	cb_lcb_invalidate(vlist->parent_item_idx);
 
 	reopen_file = true;
+	do_refresh = 2;
 }
 
 void book_language_handler(int idx, bool is_alt)
@@ -892,6 +931,7 @@ void book_language_handler(int idx, bool is_alt)
 	cb_lcb_invalidate(vlist->parent_item_idx);
 
 	reopen_file = true;
+	do_refresh = 2;
 }
 
 void book_para_break_handler(int idx, bool is_alt)
@@ -933,6 +973,7 @@ void book_para_break_handler(int idx, bool is_alt)
 
 			cb_lcb_invalidate(vlist->parent_item_idx);
 			reopen_file = true;
+			do_refresh = 2;
 		}
 	}
 }
@@ -1007,6 +1048,7 @@ void single_key_handler(int idx, bool is_alt)
 	iv.text = iv.sval = actions[idx].actionName;
 
 	cb_lcb_invalidate(vlist->parent_item_idx);
+	do_refresh = 2;
 }
 
 void keys_handler(int idx, bool is_alt)

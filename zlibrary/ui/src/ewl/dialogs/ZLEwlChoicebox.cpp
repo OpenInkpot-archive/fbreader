@@ -32,6 +32,7 @@
 #include <Edje.h>
 
 extern "C" {
+#include <xcb/xcb.h>
 #include <echoicebox.h>
 }
 
@@ -162,16 +163,19 @@ static void lcb_win_resize_handler(Ecore_Evas* main_win)
 	Evas_Object* main_canvas_edje = evas_object_name_find(canvas, "main_canvas_edje");
 	evas_object_resize(main_canvas_edje, w, h);
 
+	Evas_Object *l_choicebox = evas_object_name_find(canvas, SETTINGS_LEFT_NAME);
+	Evas_Object *r_choicebox = evas_object_name_find(canvas, SETTINGS_RIGHT_NAME);
+
 	Evas_Object *bg = evas_object_name_find(canvas, "bg");
 	evas_object_resize(bg, w, h);
 
 	Evas_Object* header = evas_object_name_find(canvas, "lcb_header");
 	evas_object_move(header, 0, 0);
-	evas_object_resize(header, w/2, header_h);
+	evas_object_resize(header, r_choicebox ? w/2 : w, header_h);
 
 	Evas_Object* footer = evas_object_name_find(canvas, "lcb_footer");
 	evas_object_move(footer, 0, h - footer_h);
-	evas_object_resize(footer, w/2, footer_h);
+	evas_object_resize(footer, r_choicebox ? w/2 : w, footer_h);
 
 	header = evas_object_name_find(canvas, "rcb_header");
 	if(header) {
@@ -185,16 +189,14 @@ static void lcb_win_resize_handler(Ecore_Evas* main_win)
 		evas_object_resize(footer, w/2, footer_h);
 	}
 
-	Evas_Object* choicebox = evas_object_name_find(canvas, SETTINGS_LEFT_NAME);
-	if(choicebox) {
-		evas_object_resize(choicebox, w/2, h - header_h - footer_h);
-		evas_object_move(choicebox, 0, header_h);
+	if(l_choicebox) {
+		evas_object_resize(l_choicebox, r_choicebox ? w/2 : w, h - header_h - footer_h);
+		evas_object_move(l_choicebox, 0, header_h);
 	}
 
-	choicebox = evas_object_name_find(canvas, SETTINGS_RIGHT_NAME);
-	if(choicebox) {
-		evas_object_resize(choicebox, w/2, h - header_h - footer_h);
-		evas_object_move(choicebox, w/2, header_h);
+	if(r_choicebox) {
+		evas_object_resize(r_choicebox, w/2, h - header_h - footer_h);
+		evas_object_move(r_choicebox, w/2, header_h);
 	}
 }
 
@@ -309,6 +311,15 @@ void cb_lcb_redraw()
 		choicebox_set_selection(choicebox, 0);
 }
 
+static Ecore_Idle_Enterer *idle_enterer = NULL;
+
+static int
+idle_render(void *data)
+{
+	void refresh_view();
+	refresh_view();
+}
+
 void ee_init()
 {
 	static int _init = 0;
@@ -324,6 +335,7 @@ void ee_init()
 
 		ecore_event_handler_add(ECORE_EVENT_SIGNAL_EXIT, exit_handler, NULL);
 		ecore_x_io_error_handler_set(exit_all, NULL);
+		idle_enterer = ecore_idle_enterer_add(idle_render, NULL);
 
 		_init = 1;
 	}
@@ -337,6 +349,14 @@ void cb_lcb_new()
 
 	ecore_evas_title_set(lcb_win, "LCB");
 	ecore_evas_name_class_set(lcb_win, "LCB", "LCB");
+
+	extern xcb_window_t window;
+	ecore_x_icccm_transient_for_set(
+			ecore_evas_software_x11_window_get(lcb_win),
+			window);
+
+	ecore_evas_resize(lcb_win, 300, 800);
+	ecore_evas_move(lcb_win, 0, 0);
 
 	Evas* main_canvas = ecore_evas_get(lcb_win);
 
@@ -471,11 +491,23 @@ static void cb_rcb_destroy()
 	evas_object_hide(o);
 	evas_object_del(o);
 
+	int w, h;
+	evas_output_size_get(ecore_evas_get(lcb_win), &w, &h);
+	ecore_evas_resize(lcb_win, w / 2, h);
+
 	evas_object_focus_set(evas_object_name_find(e, SETTINGS_LEFT_NAME), true);
+
 	if(vlist) {
+		if(vlist->destroy_handler) {
+			vlist->destroy_handler();
+		}
+
 		delete vlist;
 		vlist = NULL;
 	}
+
+	void set_refresh_flag();
+	set_refresh_flag();
 }
 
 static void rcb_win_key_up_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
@@ -521,7 +553,7 @@ void cb_rcb_new()
 	Evas* main_canvas = ecore_evas_get(lcb_win);
 	int w, h;
 	evas_output_size_get(main_canvas, &w, &h);
-	w /= 2;
+	ecore_evas_resize(lcb_win, w * 2, h);
 
 	Evas_Object* header = edje_object_add(main_canvas);
 	evas_object_name_set(header, "rcb_header");

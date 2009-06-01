@@ -95,6 +95,7 @@ struct _cb_vlist {
 	cb_olist *parent;
 	int parent_item_idx;
 	void(*item_handler)(int, bool);
+	void(*destroy_handler)();
 };
 
 void cb_fcb_new(cb_list *list);
@@ -271,6 +272,7 @@ extern cb_vlist *vlist;
 		vlist = new cb_vlist;	\
 		vlist->name = (__name);	\
 		vlist->item_handler = (__handler);	\
+		vlist->destroy_handler = refresh_view; \
 		vlist->parent = olists.back();	\
 		vlist->parent_item_idx = idx;
 
