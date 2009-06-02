@@ -1,3 +1,11 @@
+fbreader (0.10.7-1.oi6) asimov; urgency=low
+
+  * new translations
+  * added "transparency" to the settings dialog
+  * various fixes
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 02 Jun 2009 14:42:04 +0200
+
 fbreader (0.10.7-1.oi5) asimov; urgency=low
 
   * fixed ukranian translation file
