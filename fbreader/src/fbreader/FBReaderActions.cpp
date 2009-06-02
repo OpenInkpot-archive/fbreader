@@ -262,6 +262,8 @@ void ScrollingAction::run() {
 		if(fbreader().mode() == FBReader::BOOK_TEXT_MODE) {
 			// jump to next section
 			ZLTextWordCursor endC = fbreader().bookTextView().endCursor();
+			if(endC.isNull())
+				return;
 			if(myForward
 					&& endC.paragraphCursor().isLast()
 					&& endC.isEndOfParagraph()) {
