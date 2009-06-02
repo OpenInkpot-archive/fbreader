@@ -235,14 +235,20 @@ std::string ZLTextView::PositionIndicator::timeString() const {
 
 	ZLTime time;
 	const short hours = time.hours();
-	ZLStringUtil::appendNumber(buffer, hours / 10);
-	ZLStringUtil::appendNumber(buffer, hours % 10);
+	if(hours >= 0) {
+		ZLStringUtil::appendNumber(buffer, hours / 10);
+		ZLStringUtil::appendNumber(buffer, hours % 10);
+	} else
+		buffer += "--";
 
 	buffer += ':';
 
 	const short minutes = time.minutes();
-	ZLStringUtil::appendNumber(buffer, minutes / 10);
-	ZLStringUtil::appendNumber(buffer, minutes % 10);
+	if(minutes >= 0) {
+		ZLStringUtil::appendNumber(buffer, minutes / 10);
+		ZLStringUtil::appendNumber(buffer, minutes % 10);
+	} else
+		buffer += "--";
 
 	return buffer;
 }

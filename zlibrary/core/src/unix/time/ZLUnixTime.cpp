@@ -17,6 +17,7 @@
  * 02110-1301, USA.
  */
 
+#include <stdio.h>
 #include <sys/timeb.h>
 #include <time.h>
 
@@ -29,9 +30,15 @@ ZLTime ZLUnixTimeManager::currentTime() const {
 }
 
 short ZLUnixTimeManager::hoursBySeconds(long seconds) const {
-	return localtime(&seconds)->tm_hour;
+	if(localtime(&seconds)->tm_year < 109)
+		return -1;
+	else
+		return localtime(&seconds)->tm_hour;
 }
 
 short ZLUnixTimeManager::minutesBySeconds(long seconds) const {
-	return localtime(&seconds)->tm_min;
+	if(localtime(&seconds)->tm_year < 109)
+		return -1;
+	else
+		return localtime(&seconds)->tm_min;
 }
