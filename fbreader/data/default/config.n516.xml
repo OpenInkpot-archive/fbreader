@@ -15,6 +15,7 @@
     <option name="Battery" value="false"/>
     <option name="Type" value="1"/>
     <option name="Offset" value="5"/>
+	<option name="Color" value="11184810"/>
   </group>
   <group name="Options">
     <option name="LeftMargin" value="15"/>
