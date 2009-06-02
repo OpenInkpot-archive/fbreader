@@ -421,11 +421,11 @@ void set_refresh_flag()
 
 void refresh_view()
 {
-fprintf(stderr, "refresh_view %d\n", do_refresh);
+	//fprintf(stderr, "refresh_view %d\n", do_refresh);
 	if(do_refresh < 0 || do_refresh-- != 1)
 		return;
 
-	fprintf(stderr, "refresh\n");
+	//fprintf(stderr, "refresh\n");
 
 	if(reopen_file)
 		myFbreader->openFile(myFbreader->myModel->fileName());
