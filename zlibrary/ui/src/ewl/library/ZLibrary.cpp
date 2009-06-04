@@ -47,6 +47,9 @@
 extern "C" {
 #include <xcb/xcb_atom.h>
 }
+#include <xcb/xcb_atom.h>
+
+extern const xcb_atom_t INTEGER;
 
 #define FBR_FIFO "/tmp/.FBReader-fifo"
 
@@ -56,11 +59,13 @@ extern "C" {
 
 extern xcb_connection_t *connection;
 extern xcb_window_t window;
+extern xcb_screen_t *screen;
 ZLApplication *myapplication;
 static bool in_main_loop;
 
 static void init_properties();
 static void set_properties();
+static void delete_properties();
 
 class ZLEwlLibraryImplementation : public ZLibraryImplementation {
 
@@ -317,17 +322,17 @@ static struct atom {
 	xcb_atom_t atom;
 } atoms[] = {
 	"UTF8_STRING", 0,
-	"FBR_AUTHOR", 0,
-	"FBR_TITLE", 0,
-	"FRB_FILENAME", 0,
-	"FRB_FILEPATH", 0,
-	"FBR_SERIES", 0,
-	"FBR_SERIES_NUMBER", 0,
-	"FBR_TYPE", 0,
-	"FBR_SIZE", 0,
-	"FBR_CURRENT_POSITION", 0,
-	"FBR_PAGES_COUNT", 0,
-	"FBR_WINDOW_ID", 0,
+	"ACTIVE_DOC_AUTHOR", 0,
+	"ACTIVE_DOC_TITLE", 0,
+	"ACTIVE_DOC_FILENAME", 0,
+	"ACTIVE_DOC_FILEPATH", 0,
+	"ACTIVE_DOC_SERIES", 0,
+	"ACTIVE_DOC_SERIES_NUMBER", 0,
+	"ACTIVE_DOC_TYPE", 0,
+	"ACTIVE_DOC_SIZE", 0,
+	"ACTIVE_DOC_CURRENT_POSITION", 0,
+	"ACTIVE_DOC_PAGES_COUNT", 0,
+	"ACTIVE_DOC_WINDOW_ID", 0,
 };
 
 static void init_properties()
@@ -385,21 +390,47 @@ void set_properties()
 	set_prop_str(4, ZLFile::fileNameToUtf8(ZLFile(fileName).path()).c_str());
 	set_prop_str(5, myBookInfo->SeriesNameOption.value().c_str());
 	set_prop_int(6, myBookInfo->NumberInSeriesOption.value());
-	set_prop_int(8, 43690);
 	set_prop_int(9, f->bookTextView().positionIndicator()->textPosition());
 
 	xcb_change_property(connection,
 			XCB_PROP_MODE_REPLACE,
-			window,
+			screen->root,
 			atoms[11].atom,
 			WINDOW,
 			sizeof(xcb_window_t) * 8,
 			1,
 			(unsigned char*)&window);
 
+	xcb_change_property(connection,
+			XCB_PROP_MODE_REPLACE,
+			window,
+			WM_NAME,
+			atoms[0].atom,
+			8,
+			strlen("FBReader"),
+			"FBReader");
+
+	xcb_change_property(connection,
+			XCB_PROP_MODE_REPLACE,
+			window,
+			WM_CLASS,
+			STRING,
+			8,
+			strlen("FBReader") * 2 + 2,
+			"FBReader\0FBReader");
+
 	xcb_flush(connection);
 
 	free(myBookInfo);
+}
+
+void delete_properties()
+{
+	xcb_delete_property(connection,
+			screen->root,
+			atoms[11].atom);
+
+	xcb_flush(connection);
 }
 
 void update_position_property()
@@ -432,5 +463,6 @@ void ZLEwlLibraryImplementation::run(ZLApplication *application) {
 	init_properties();
 	set_properties();
 	main_loop(application);
+	delete_properties();
 	delete application;
 }
