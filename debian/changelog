@@ -1,3 +1,9 @@
+fbreader (0.10.7-1.oi7) asimov; urgency=low
+
+  * test build
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sun, 07 Jun 2009 22:15:12 +0200
+
 fbreader (0.10.7-1.oi6) asimov; urgency=low
 
   * new translations
