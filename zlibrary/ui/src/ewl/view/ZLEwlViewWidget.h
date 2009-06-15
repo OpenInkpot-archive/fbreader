@@ -26,6 +26,7 @@
 extern "C" {
 #include <xcb/xcb.h>
 #include <xcb/shm.h>
+#include <xcb/randr.h>
 }
 
 class ZLEwlViewWidget : public ZLViewWidget {

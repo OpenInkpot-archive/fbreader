@@ -94,6 +94,9 @@ ZLEwlViewWidget::ZLEwlViewWidget(ZLApplication *application, ZLView::Angle initi
 
 	screen = xcb_aux_get_screen (connection, screen_number);
 
+	xcb_randr_query_version_reply_t *rr_version;
+	rr_version = xcb_randr_query_version_reply(connection, xcb_randr_query_version(connection, 1, 1), 0);
+
 	gc = xcb_generate_id (connection);
 	mask = XCB_GC_FOREGROUND | XCB_GC_GRAPHICS_EXPOSURES;
 	values[0] = screen->black_pixel;

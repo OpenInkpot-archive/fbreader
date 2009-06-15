@@ -46,8 +46,8 @@
 
 extern "C" {
 #include <xcb/xcb_atom.h>
+#include <xcb/randr.h>
 }
-#include <xcb/xcb_atom.h>
 
 extern const xcb_atom_t INTEGER;
 
@@ -66,6 +66,32 @@ static bool in_main_loop;
 static void init_properties();
 static void set_properties();
 static void delete_properties();
+
+char *get_rotated_key(char **keys)
+{
+	xcb_randr_get_screen_info_cookie_t cookie;
+	xcb_randr_get_screen_info_reply_t *reply;
+	xcb_randr_rotation_t rotation;
+
+	cookie = xcb_randr_get_screen_info(connection, screen->root);
+	reply = xcb_randr_get_screen_info_reply(connection, cookie, NULL);
+
+	rotation = (xcb_randr_rotation_t)reply->rotation;
+	free(reply);
+
+	switch(rotation) {
+		case XCB_RANDR_ROTATION_ROTATE_0:
+			return keys[0];
+		case XCB_RANDR_ROTATION_ROTATE_90:
+			return keys[1];
+		case XCB_RANDR_ROTATION_ROTATE_180:
+			return keys[2];
+		case XCB_RANDR_ROTATION_ROTATE_270:
+			return keys[3];
+		default:
+			return keys[0];
+	}
+}
 
 class ZLEwlLibraryImplementation : public ZLibraryImplementation {
 
@@ -145,39 +171,45 @@ ZLPaintContext *ZLEwlLibraryImplementation::createContext() {
 	return (ZLPaintContext *)pc;
 }
 
-static struct {
+static char *cursor_keys[] = { "Up", "Right", "Down", "Left", "Up", "Right", "Down", "Left" };
+static char *jog_keys[] = { "Prior", "Next", "Next", "Prior", "Next", "Prior", "Prior", "Next" };
+
+struct _key {
 	int keynum;
 	char *keyname;
-} _keys[] = {
-	9, "Escape",
-	10, "1",
-	11, "2",
-	12, "3",
-	13, "4",
-	14, "5",
-	15, "6",
-	16, "7",
-	17, "8",
-	18, "9",
-	19, "0",
-	36, "Return",
-	64, "Alt_L",
-	65, " ",
-	82, "-",
-	86, "+",
-	119, "Delete",
-	111, "Up",
-	112, "Prior",
-	113, "Left",
-	114, "Right",
-	116, "Down",
-	117, "Next",
-	124, "XF86PowerOff",
-	147, "Menu",
-//	161, "XF86RotateWindows",
-	172, "XF86AudioPlay",
-	225, "XF86Search",
-	0, NULL
+	char **rotkeys;
+};
+
+static struct _key _keys[] = {
+	9, "Escape", NULL,
+	10, "1", NULL,
+	11, "2", NULL,
+	12, "3", NULL,
+	13, "4", NULL,
+	14, "5", NULL,
+	15, "6", NULL,
+	16, "7", NULL,
+	17, "8", NULL,
+	18, "9", NULL,
+	19, "0", NULL,
+	36, "Return", NULL,
+	64, "Alt_L", NULL,
+	65, " ", NULL,
+	82, "-", NULL,
+	86, "+", NULL,
+	119, "Delete", NULL,
+	111, "Up", &cursor_keys[0],
+	112, "Prior", &jog_keys[0],
+	113, "Left", &cursor_keys[3],
+	114, "Right", &cursor_keys[1],
+	116, "Down", &cursor_keys[2],
+	117, "Next", &jog_keys[4],
+	124, "XF86PowerOff", NULL,
+	147, "Menu", NULL,
+//	161, "XF86RotateWindows", NULL,
+	172, "XF86AudioPlay", NULL,
+	225, "XF86Search", NULL,
+	0, NULL, NULL,
 };
 
 bool _fbreader_closed;
@@ -188,14 +220,13 @@ void main_loop(ZLApplication *application)
 	xcb_visibility_t visibility;
 	static bool alt_pressed = false;
 
-	std::map<int, std::string> kmap;
+	std::map<int, struct _key *> kmap;
 	int i = 0;
 
 	while(_keys[i].keynum) {
-		kmap.insert(std::make_pair(_keys[i].keynum, _keys[i].keyname));
+		kmap.insert(std::make_pair(_keys[i].keynum, &_keys[i]));
 		i++;
 	}
-
 
 //	init_timer();
 
@@ -215,7 +246,7 @@ void main_loop(ZLApplication *application)
 					{
 						xcb_key_press_event_t *ev = (xcb_key_press_event_t *)e;
 
-						if(!alt_pressed && kmap[ev->detail] == "ALT_L")
+						if(!alt_pressed && kmap[ev->detail]->keyname == "ALT_L")
 							alt_pressed = true;
 
 						break;
@@ -224,18 +255,25 @@ void main_loop(ZLApplication *application)
 					{
 						xcb_key_release_event_t *ev = (xcb_key_release_event_t *)e;
 
-						if(alt_pressed && kmap[ev->detail] == "ALT_L") {
+						if(alt_pressed && kmap[ev->detail]->keyname == "ALT_L") {
 							alt_pressed = false;
 							continue;
 						}
 
 						//printf("ev->detail: %d %s\n", ev->detail, kmap[ev->detail].c_str());
+						std::string pressed_key;
+
+						struct _key *s_key = kmap[ev->detail];
+						if(s_key->rotkeys != NULL)
+							pressed_key = get_rotated_key(s_key->rotkeys);
+						else
+							pressed_key = s_key->keyname;
 
 						in_main_loop = false;
 						if(alt_pressed)
-							application->doActionByKey(std::string("Alt+") + kmap[ev->detail]);
+							application->doActionByKey(std::string("Alt+") + pressed_key);
 						else
-							application->doActionByKey(kmap[ev->detail]);
+							application->doActionByKey(pressed_key);
 						in_main_loop = true;
 
 						break;
