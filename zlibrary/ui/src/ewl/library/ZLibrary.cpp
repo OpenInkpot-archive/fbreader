@@ -174,7 +174,7 @@ static struct {
 	117, "Next",
 	124, "XF86PowerOff",
 	147, "Menu",
-	161, "XF86RotateWindows",
+//	161, "XF86RotateWindows",
 	172, "XF86AudioPlay",
 	225, "XF86Search",
 	0, NULL
@@ -185,6 +185,7 @@ bool _fbreader_closed;
 void main_loop(ZLApplication *application)
 {
 	xcb_generic_event_t  *e;
+	xcb_visibility_t visibility;
 	static bool alt_pressed = false;
 
 	std::map<int, std::string> kmap;
@@ -239,23 +240,35 @@ void main_loop(ZLApplication *application)
 
 						break;
 					}
+				case XCB_VISIBILITY_NOTIFY:
+					{
+						xcb_visibility_notify_event_t *v = (xcb_visibility_notify_event_t *)e;
+						visibility = (xcb_visibility_t)v->state;
+
+						break;
+					}
 				case XCB_EXPOSE:
 					{
 						xcb_expose_event_t *expose = (xcb_expose_event_t *)e;
 
-						application->refreshWindow();
+						if(visibility != XCB_VISIBILITY_FULLY_OBSCURED) {
+							application->refreshWindow();
+						}
 						
 						break;
 					}
 				case XCB_CONFIGURE_NOTIFY:
 					{
 						xcb_configure_notify_event_t *conf = (xcb_configure_notify_event_t *)e;
-
-						//printf("resize: %d %d\n", conf->width, conf->height);	
 						ZLEwlViewWidget *view = (ZLEwlViewWidget*)application->myViewWidget;
 						if(view->width() != conf->width || view->height() != conf->height) {
 							view->resize(conf->width, conf->height);
-							application->refreshWindow();
+
+					/*		if(visibility == XCB_VISIBILITY_UNOBSCURED) {
+								printf("configure visible -> redraw\n");
+								application->refreshWindow();
+							}
+					*/
 						}
 						
 						break;
