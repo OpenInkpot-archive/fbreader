@@ -66,6 +66,7 @@ public:
 		bool onStylusPress(int x, int y);
 		int textPosition() const;
 		int currentPage() const;
+		int pagesCount() const;
 
 	protected:
 		const ZLTextView &textView() const;

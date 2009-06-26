@@ -382,6 +382,7 @@ static struct atom {
 	"ACTIVE_DOC_TYPE", 0,
 	"ACTIVE_DOC_SIZE", 0,
 	"ACTIVE_DOC_CURRENT_POSITION", 0,
+	"ACTIVE_DOC_CURRENT_PAGE", 0,
 	"ACTIVE_DOC_PAGES_COUNT", 0,
 	"ACTIVE_DOC_WINDOW_ID", 0,
 };
@@ -442,11 +443,13 @@ void set_properties()
 	set_prop_str(5, myBookInfo->SeriesNameOption.value().c_str());
 	set_prop_int(6, myBookInfo->NumberInSeriesOption.value());
 	set_prop_int(9, f->bookTextView().positionIndicator()->textPosition());
+	set_prop_int(10, f->bookTextView().positionIndicator()->currentPage());
+	set_prop_int(11, f->bookTextView().positionIndicator()->pagesCount());
 
 	xcb_change_property(connection,
 			XCB_PROP_MODE_REPLACE,
 			screen->root,
-			atoms[11].atom,
+			atoms[12].atom,
 			WINDOW,
 			sizeof(xcb_window_t) * 8,
 			1,
@@ -479,7 +482,7 @@ void delete_properties()
 {
 	xcb_delete_property(connection,
 			screen->root,
-			atoms[11].atom);
+			atoms[12].atom);
 
 	xcb_flush(connection);
 }
@@ -491,6 +494,8 @@ void update_position_property()
 
 	FBReader *f = (FBReader*)myapplication;
 	set_prop_int(9, f->bookTextView().positionIndicator()->textPosition());
+	set_prop_int(10, f->bookTextView().positionIndicator()->currentPage());
+	set_prop_int(11, f->bookTextView().positionIndicator()->pagesCount());
 }
 
 void ZLEwlLibraryImplementation::run(ZLApplication *application) {
