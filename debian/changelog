@@ -1,3 +1,10 @@
+fbreader (0.10.7-1.oi9) asimov; urgency=low
+
+  * save current page and total page count in window properties
+  * new translations
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Fri, 26 Jun 2009 16:17:13 +0200
+
 fbreader (0.10.7-1.oi8) asimov; urgency=low
 
   * different keys behaviour when screen is rotated
