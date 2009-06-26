@@ -1,0 +1,494 @@
+# translation of messages_fr.po to French
+# FBReader translation file.
+#
+# Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
+# This file is distributed under the same license as the FBReader package.
+#
+# Alexander Kerner <lunohod@openinkpot.org>, 2009.
+# Louvre <diogenedebian@gmail.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: messages_fr\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-05-25 14:51+0200\n"
+"PO-Revision-Date: 2009-06-26 14:22+0200\n"
+"Last-Translator: Louvre <diogenedebian@gmail.com>\n"
+"Language-Team: French <openinkpot-l10n@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:63
+msgid "None"
+msgstr "Aucun"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:64
+msgid "Add Bookmark"
+msgstr "Ajouter un marque-page"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:65
+msgid "Show Bookmarks"
+msgstr "Afficher les marque-pages"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:66
+msgid "Hyperlinks mode"
+msgstr "Mode Liens hypertexte"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:67
+msgid "Show Footnotes"
+msgstr "Afficher les notes de bas de page"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:68
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:137
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1321
+msgid "Go To Page"
+msgstr "Aller à la page"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:69
+msgid "Show Table of Contents"
+msgstr "Afficher la table des matières"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:70
+msgid "Go to Home"
+msgstr "Aller au répertoire Home"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:71
+msgid "Go to Start of Section"
+msgstr "Aller au début de la section"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:72
+msgid "Go to End of Section"
+msgstr "Aller à la fin de la section"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:73
+msgid "Go to Next TOC Section"
+msgstr "Aller à la section suivante de la table des matières"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:74
+msgid "Go to Previous TOC Section"
+msgstr "Aller à la section précédente de la table des matières"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
+msgid "Large Scroll Forward"
+msgstr "Grand bond en avant"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:76
+msgid "Large Scroll Backward"
+msgstr "Grand bond en arrière"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:77
+msgid "Undo"
+msgstr "Annuler"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:78
+msgid "Redo"
+msgstr "Rétablir"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:79
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:329
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:355
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:378
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1325
+msgid "Search"
+msgstr "Chercher"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:80
+msgid "Increase Font Size"
+msgstr "Augmenter la taille de la police"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:81
+msgid "Decrease Font Size"
+msgstr "Diminuer la taille de la police"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
+msgid "Toggle Position Indicator"
+msgstr "Activer/Désactiver l'indicateur de position"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+msgid "Arabic"
+msgstr "Arabe"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
+msgid "Czech"
+msgstr "Tchèque"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
+msgid "German"
+msgstr "Allemand"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
+msgid "German (traditional orthography)"
+msgstr "Allemand (orthographe traditionnelle)"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:98
+msgid "Greek"
+msgstr "Grec"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:99
+msgid "English"
+msgstr "Anglais"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:100
+msgid "Esperanto"
+msgstr "Espéranto"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
+msgid "Spanish"
+msgstr "Espagnol"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:102
+msgid "Finnish"
+msgstr "Finnois"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
+msgid "French"
+msgstr "Français"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
+msgid "Hebrew"
+msgstr "Hébreu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:105
+msgid "Indonesian"
+msgstr "Indonésien"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
+msgid "Italian"
+msgstr "Italien"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
+msgid "Norwegian"
+msgstr "Norvégien"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
+msgid "Portuguese"
+msgstr "Portugais"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
+msgid "Russian"
+msgstr "Russe"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
+msgid "Swedish"
+msgstr "Suédois"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:111
+msgid "Turkish"
+msgstr "Turc"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:112
+msgid "Ukrainian"
+msgstr "Ukrainien"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:113
+msgid "Chinese"
+msgstr "Chinois"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:114
+msgid "Other"
+msgstr "Autre"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
+msgid "undefined"
+msgstr "Non défini"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
+msgid "left"
+msgstr "gauche"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
+msgid "right"
+msgstr "droit"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
+msgid "center"
+msgstr "centre"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
+msgid "justify"
+msgstr "justifier"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
+msgid "New Line"
+msgstr "Nouvelle Ligne"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
+msgid "Empty Line"
+msgstr "Ligne vide"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
+msgid "Line With Indent"
+msgstr "Ligne avec Indentation"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:216
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1323
+msgid "Table Of Contents"
+msgstr "Table Des Matières"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:275
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1327
+msgid "Bookmarks"
+msgstr "Marque-pages"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:276
+msgid "Delete"
+msgstr "Effacer"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:284
+msgid "Page "
+msgstr "Page"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:294
+msgid "Bookmark added"
+msgstr "Marque-page ajouté"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:323
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:349
+msgid "<- Search ->"
+msgstr "<- Chercher ->"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:325
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:351
+msgid "Search ->"
+msgstr "Chercher ->"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:327
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:353
+msgid "<- Search"
+msgstr "<- Chercher"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:336
+msgid "Text not found"
+msgstr "Texte non trouvé"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:433
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:619
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1029
+#, c-format
+msgid "%d%%"
+msgstr "%d%%"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:449
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:502
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:612
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:692
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1027
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1057
+#, c-format
+msgid "%dpt"
+msgstr "%dpt"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:560
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:643
+msgid "Left Margin"
+msgstr "Marge gauche"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:563
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:644
+msgid "Right Margin"
+msgstr "Marge droite"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:566
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:645
+msgid "Top Margin"
+msgstr "Marge du haut"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:569
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:646
+msgid "Bottom Margin"
+msgstr "Marge du bas"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:602
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1026
+msgid "Font Family"
+msgstr "Famille de police"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:609
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1027
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1057
+msgid "Font Size"
+msgstr "Taille de la police"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:616
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1029
+msgid "Line Spacing"
+msgstr "Espacement des lignes"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:623
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1030
+msgid "Alignment"
+msgstr "Alignement"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:633
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1031
+msgid "Margins"
+msgstr "Marges"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:650
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1032
+msgid "First Line Indent"
+msgstr "Indentation de première ligne"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:675
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1055
+msgid "Indicator Height"
+msgstr "Hauteur de l'indicateur"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:682
+msgid "Offset From Text"
+msgstr "Éloignement par rapport au texte"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:689
+msgid "Indicator Font Size"
+msgstr "Indicateur Taille de la Police"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:759
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1084
+msgid "Default Language"
+msgstr "Langue par défaut"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:767
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:930
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1093
+msgid "Default Encoding Set"
+msgstr "Type d'encodage par défaut"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:774
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:937
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1094
+msgid "Default Encoding"
+msgstr "Encodage par défaut"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:919
+msgid "Book Language"
+msgstr "Langue du livre"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:963
+msgid "Break Paragraph At"
+msgstr "Couper le paragraphe à"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:991
+#, c-format
+msgid "Key %d"
+msgstr "Touche %d"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1018
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1222
+msgid "Format & Style"
+msgstr "Formatage & Style"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1028
+msgid "Bold"
+msgstr "Gras"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1033
+msgid "Auto Hyphenations"
+msgstr "Césures automatiques"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1042
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1223
+msgid "Indicator"
+msgstr "Indicateur"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1050
+msgid "Show Indicator"
+msgstr "Afficher l'indicateur"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1051
+msgid "Show TOC Marks"
+msgstr "Afficher les marque-pages de la Table des Matières"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1052
+msgid "Show Position"
+msgstr "Afficher la position"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1053
+msgid "Show Time"
+msgstr "Afficher l'heure"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1054
+msgid "Show Battery"
+msgstr "Afficher la batterie"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1056
+msgid "Offset from Text"
+msgstr "Éloignement par rapport au texte"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1064
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1126
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1224
+msgid "Language"
+msgstr "Langue"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1075
+msgid "Detect Language and Encoding"
+msgstr "Détecter la langue et l'encodage"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1101
+msgid "iso-8859-1 -> win-1251"
+msgstr "iso-8859-1 -> win-1251"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1111
+msgid "Book Settings"
+msgstr "Réglages du livre"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1129
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1139
+msgid "Encoding"
+msgstr "Encodage"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1138
+msgid "Encoding Set"
+msgstr "Type d'encodage"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1174
+msgid "Break Paragraph at"
+msgstr "Couper le paragraphe à"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1182
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1226
+msgid "Keys"
+msgstr "Touches"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1214
+msgid "Settings"
+msgstr "Réglages"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1225
+msgid "Book settings"
+msgstr "Réglages du livre"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1239
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1319
+msgid "Book Info"
+msgstr "Informations du livre"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1254
+msgid "File: "
+msgstr "Fichier: "
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1255
+msgid "Full path: "
+msgstr "Chemin complet: "
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1256
+msgid "Title: "
+msgstr "Titre: "
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1257
+msgid "Author: "
+msgstr "Auteur: "
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1260
+msgid "Series: "
+msgstr "Série: "
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1261
+msgid "Book number: "
+msgstr "Numéro du livre: "
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1314
+msgid "Book Menu"
+msgstr "Menu du livre"
+
