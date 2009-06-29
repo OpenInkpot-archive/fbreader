@@ -1,3 +1,9 @@
+fbreader (0.10.7-1.oi10) asimov; urgency=low
+
+  * added .desktop file
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Mon, 29 Jun 2009 15:23:39 +0200
+
 fbreader (0.10.7-1.oi9) asimov; urgency=low
 
   * save current page and total page count in window properties
