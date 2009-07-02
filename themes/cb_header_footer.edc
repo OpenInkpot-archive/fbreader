@@ -23,8 +23,8 @@ collections {
                     text {
                         align, 0.0 0.5;
                         text, "omg, somebody forgot to set the text!!!!11oneone";
-                        font, "serif";
-                        size, 30;
+                        font, "sans-serif";
+                        size, 28;
                         text_class, "chrome";
                     }
                     rel1 { relative, 0.0 0.0; offset, 17 0; }
@@ -60,7 +60,7 @@ collections {
                     color, 255 255 255 255;
                     text {
                         text, "omg, somebody forgot to set the text!!!!11oneone";
-                        font, "serif";
+                        font, "sans-serif";
                         size, 28;
                         text_class, "chrome";
                     }
@@ -77,8 +77,8 @@ collections {
                     rel2 { relative, 1.0 1.0; offset, -17 -1; }
                     text {
 						align, 0.0 0.5;
-                        font, "serif";
-                        size, 30;
+                        font, "sans-serif";
+                        size, 28;
                         text_class, "chrome";
                     }
                 }
