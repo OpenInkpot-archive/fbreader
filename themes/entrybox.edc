@@ -25,9 +25,9 @@ collections {
 					rel1 { relative, 0.0 0.0; offset, 0 0; }
 					rel2 { relative, 1.0 1.0; offset, 0 0; }
 					text {
-						font, "serif";
+						font, "sans-serif";
 						text, "";
-						size, 30;
+						size, 28;
 						min, 1 1;
 						align, 0.1 0.5;
 					}
@@ -46,8 +46,8 @@ collections {
 					rel1 { relative, 0.0 0.0; offset, 20 0; }
 					rel2 { relative, 1.0 1.0; offset, 0 0; }
 					text {
-						font, "serif";
-						size, 30;
+						font, "sans-serif";
+						size, 28;
 						align, 0.0 0.5;
 					}
 				}

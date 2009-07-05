@@ -24,8 +24,8 @@ collections {
 					rel2 { relative, 1.0 1.0; offset, -1 -1; }
 					text {
 						text, "";
-						font, "serif";
-						size, 30;
+						font, "sans-serif";
+						size, 28;
 						text_class, "chrome";
 					}
 				}
