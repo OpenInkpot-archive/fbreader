@@ -153,7 +153,6 @@ static void lcb_handler(Evas_Object* choicebox,
 		l->item_handler(item_num, is_alt);
 }
 
-
 static void lcb_win_resize_handler(Ecore_Evas* main_win)
 {
 	Evas* canvas = ecore_evas_get(main_win);
@@ -341,11 +340,57 @@ void ee_init()
 	}
 }
 
+int screen_change_handler(void *data, int type, void *event)
+{
+	if(type != ECORE_X_EVENT_SCREEN_CHANGE)
+		return 0;
+
+	Ecore_Evas *win = (Ecore_Evas*)data;
+	Ecore_X_Event_Screen_Change *e = (Ecore_X_Event_Screen_Change*)event;
+
+	int w, h;
+
+	if(e->rotation == ECORE_X_RANDR_ROT_90 || e->rotation == ECORE_X_RANDR_ROT_270) {
+		h = e->width;
+		w = e->height;
+	} else {
+		w = e->width;
+		h = e->height;
+	}
+
+	if(evas_object_name_find(ecore_evas_get(win), SETTINGS_RIGHT_NAME))
+		ecore_evas_resize(win, w, h);
+	else
+		ecore_evas_resize(win, w/2, h);
+
+	return 0;
+}
+
 void cb_lcb_new()
 {
 	ee_init();
 
-	lcb_win = ecore_evas_software_x11_new(0, 0, 0, 0, 600, 800);
+	Ecore_X_Randr_Rotation r;
+	Ecore_X_Screen_Size s;
+	Ecore_X_Window root;
+
+	root = ecore_x_window_root_first_get();
+
+	ecore_x_randr_get_screen_info_prefetch(root);
+	ecore_x_randr_get_screen_info_fetch();
+	r = ecore_x_randr_screen_rotation_get(root);
+	s = ecore_x_randr_current_screen_size_get(root);
+
+	int w, h;
+	if(r == ECORE_X_RANDR_ROT_90 || r == ECORE_X_RANDR_ROT_270) {
+		w = s.width;
+		h = s.height;
+	} else {
+		h = s.width;
+		w = s.height;
+	}
+
+	lcb_win = ecore_evas_software_x11_new(0, 0, 0, 0, w, h);
 
 	ecore_evas_title_set(lcb_win, "LCB");
 	ecore_evas_name_class_set(lcb_win, "LCB", "LCB");
@@ -355,7 +400,10 @@ void cb_lcb_new()
 			ecore_evas_software_x11_window_get(lcb_win),
 			window);
 
-	ecore_evas_resize(lcb_win, 300, 800);
+	ecore_x_randr_events_select(ecore_evas_software_x11_window_get(lcb_win), 1);
+	Ecore_Event_Handler *sc_handler = ecore_event_handler_add(ECORE_X_EVENT_SCREEN_CHANGE, screen_change_handler, lcb_win);
+
+	ecore_evas_resize(lcb_win, w/2, h);
 	ecore_evas_move(lcb_win, 0, 0);
 
 	Evas* main_canvas = ecore_evas_get(lcb_win);
@@ -366,7 +414,7 @@ void cb_lcb_new()
 	evas_object_name_set(bg, "bg");
 	evas_object_color_set(bg, 255, 255, 255, 255);
 	evas_object_move(bg, 0, 0);
-	evas_object_resize(bg, 600, 800);
+	evas_object_resize(bg, w, h);
 	evas_object_show(bg);
 
 	Evas_Object* header = edje_object_add(main_canvas);
@@ -375,22 +423,22 @@ void cb_lcb_new()
 			"header");
 	edje_object_part_text_set(header, "text", olists.empty() ? "" : olists.back()->name.c_str());
 	evas_object_move(header, 0, 0);
-	evas_object_resize(header, 300, header_h);
+	evas_object_resize(header, w/2, header_h);
 	evas_object_show(header);
 
 	Evas_Object* footer = edje_object_add(main_canvas);
 	evas_object_name_set(footer, "lcb_footer");
 	edje_object_file_set(footer, "/usr/share/FBReader/themes/cb_header_footer.edj",
 			"footer");
-	evas_object_move(footer, 0, 800 - footer_h);
-	evas_object_resize(footer, 300, footer_h);
+	evas_object_move(footer, 0, h - footer_h);
+	evas_object_resize(footer, w/2, footer_h);
 	evas_object_show(footer);
 
 	Evas_Object* choicebox = choicebox_new(main_canvas, "/usr/share/echoicebox/echoicebox.edj", "settings-left",
 			lcb_handler, lcb_draw_handler, lcb_page_updated_handler, (void*)NULL);
 	choicebox_set_size(choicebox, olists.empty() ? 0 : olists.back()->items.size());
 	evas_object_name_set(choicebox, SETTINGS_LEFT_NAME);
-	evas_object_resize(choicebox, 300, 800 - header_h - footer_h);
+	evas_object_resize(choicebox, w/2, h - header_h - footer_h);
 	evas_object_move(choicebox, 0, header_h);
 	evas_object_show(choicebox);
 
@@ -413,6 +461,8 @@ void cb_lcb_new()
 		return;
 
 	if(lcb_win) {
+		ecore_event_handler_del(sc_handler);
+		ecore_x_randr_events_select(ecore_evas_software_x11_window_get(lcb_win), 0);
 		ecore_evas_hide(lcb_win);
 		ecore_evas_free(lcb_win);
 		lcb_win = NULL;
