@@ -18,8 +18,8 @@
 	<binding key="0" action="largeScrollForward"/>
 	<binding key="Return" action="preferences"/> 
 	<binding key="Escape" action="cancel"/>
-	<binding key="Up" action="largeScrollForward"/>
-	<binding key="Down" action="largeScrollBackward"/>
+	<binding key="Right" action="largeScrollForward"/>
+	<binding key="Left" action="largeScrollBackward"/>
 	<binding key="+" action="increaseFont"/>
 	<binding key="-" action="decreaseFont"/>
 </keymap>
