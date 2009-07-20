@@ -1,3 +1,10 @@
+fbreader (0.10.7-1.oi15) asimov; urgency=low
+
+  * added mime types for gzip, bzip2 and tar archives
+  * remapped Left/Right buttons on V3
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Mon, 20 Jul 2009 17:36:10 +0200
+
 fbreader (0.10.7-1.oi14) asimov; urgency=low
 
   * fix echoicebox rotation
