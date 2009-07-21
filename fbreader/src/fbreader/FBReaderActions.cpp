@@ -384,15 +384,18 @@ CancelAction::CancelAction(FBReader &fbreader) : FBAction(fbreader) {
 }
 
 void CancelAction::run() {
-	if (fbreader().QuitOnCancelOption.value()) {
-		int x;
-		x = open("/dev/fb0", O_NONBLOCK);
-		ioctl(x, FBIO_WAITFORVSYNC);
-		ioctl(x, EINK_APOLLOFB_IOCTL_SET_AUTOREDRAW, 1);
-		close(x);
-		fbreader().quit();
-	}
-	switch (fbreader().myActionOnCancel) {
+	if(fbreader().mode() != FBReader::BOOK_TEXT_MODE)
+		fbreader().restorePreviousMode();
+	else
+		if (fbreader().QuitOnCancelOption.value()) {
+			int x;
+			x = open("/dev/fb0", O_NONBLOCK);
+			ioctl(x, FBIO_WAITFORVSYNC);
+			ioctl(x, EINK_APOLLOFB_IOCTL_SET_AUTOREDRAW, 1);
+			close(x);
+			fbreader().quit();
+		}
+/*	switch (fbreader().myActionOnCancel) {
 		case FBReader::UNFULLSCREEN:
 			if (fbreader().isFullscreen()) {
 				fbreader().setFullscreen(false);
@@ -412,6 +415,7 @@ void CancelAction::run() {
 			}
 			break;
 	}
+*/	
 }
 
 ToggleIndicatorAction::ToggleIndicatorAction(FBReader &fbreader) : FBAction(fbreader) {
