@@ -214,6 +214,14 @@ static struct _key _keys[] = {
 
 bool _fbreader_closed;
 
+bool isConfigure(xcb_generic_event_t *e) {
+	return (e->response_type & ~0x80) == XCB_CONFIGURE_NOTIFY;
+}
+
+bool isExpose(xcb_generic_event_t *e) {
+	return (e->response_type & ~0x80) == XCB_EXPOSE;
+}
+
 void main_loop(ZLApplication *application)
 {
 	xcb_generic_event_t  *e;
@@ -229,17 +237,36 @@ void main_loop(ZLApplication *application)
 	}
 
 //	init_timer();
+	
+	std::vector<xcb_generic_event_t *> efifo;
 
 	_fbreader_closed = false;
 	while (!_fbreader_closed) {
 //		set_timer();
 		in_main_loop = true;
-		e = xcb_wait_for_event(connection);
+
+		if(efifo.empty()) {
+			e = xcb_wait_for_event(connection);
+			efifo.push_back(e);
+		}
+
+		while(e = xcb_poll_for_event(connection))
+			efifo.push_back(e);
+
 		if(xcb_connection_has_error(connection)) {
 			fprintf(stderr, "Connection to server closed\n");
 			break;
 		}
+
 //		busy();
+
+		if(efifo.empty())
+			continue;
+		else {
+			e = efifo.front();
+			efifo.erase(efifo.begin());
+		}
+
 		if (e) {
 			switch (e->response_type & ~0x80) {	
 				case XCB_KEY_PRESS:
@@ -287,6 +314,9 @@ void main_loop(ZLApplication *application)
 					}
 				case XCB_EXPOSE:
 					{
+						if(count_if(efifo.begin(), efifo.end(), isExpose) > 0)
+							break;
+
 						xcb_expose_event_t *expose = (xcb_expose_event_t *)e;
 
 						if(visibility != XCB_VISIBILITY_FULLY_OBSCURED) {
@@ -297,6 +327,9 @@ void main_loop(ZLApplication *application)
 					}
 				case XCB_CONFIGURE_NOTIFY:
 					{
+						if(count_if(efifo.begin(), efifo.end(), isConfigure) > 0)
+							break;
+
 						xcb_configure_notify_event_t *conf = (xcb_configure_notify_event_t *)e;
 						ZLEwlViewWidget *view = (ZLEwlViewWidget*)application->myViewWidget;
 						if(view->width() != conf->width || view->height() != conf->height) {
