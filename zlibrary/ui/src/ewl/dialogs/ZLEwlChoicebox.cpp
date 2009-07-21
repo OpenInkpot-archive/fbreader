@@ -370,6 +370,7 @@ void cb_lcb_new()
 {
 	ee_init();
 
+	/*
 	Ecore_X_Randr_Rotation r;
 	Ecore_X_Screen_Size s;
 	Ecore_X_Window root;
@@ -381,7 +382,6 @@ void cb_lcb_new()
 	r = ecore_x_randr_screen_rotation_get(root);
 	s = ecore_x_randr_current_screen_size_get(root);
 
-	int w, h;
 	if(r == ECORE_X_RANDR_ROT_90 || r == ECORE_X_RANDR_ROT_270) {
 		w = s.width;
 		h = s.height;
@@ -389,6 +389,13 @@ void cb_lcb_new()
 		h = s.width;
 		w = s.height;
 	}
+	*/
+
+	int w, h;
+	extern xcb_window_t window;
+	ecore_x_drawable_geometry_get_prefetch(window);
+	ecore_x_drawable_geometry_get_fetch();
+	ecore_x_window_size_get(window, &w, &h);
 
 	lcb_win = ecore_evas_software_x11_new(0, 0, 0, 0, w, h);
 
