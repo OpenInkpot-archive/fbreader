@@ -1,3 +1,9 @@
+fbreader (0.10.7-1.oi18) asimov; urgency=low
+
+  * fix CancelAction
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 21 Jul 2009 18:51:25 +0200
+
 fbreader (0.10.7-1.oi17) asimov; urgency=low
 
   * use full 8bit grayscale palette
