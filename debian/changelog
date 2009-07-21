@@ -1,3 +1,10 @@
+fbreader (0.10.7-1.oi17) asimov; urgency=low
+
+  * use full 8bit grayscale palette
+  * purge pattern dithering
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 21 Jul 2009 16:31:59 +0200
+
 fbreader (0.10.7-1.oi16) asimov; urgency=low
 
   * avoid excessive screen updates after screen rotation
