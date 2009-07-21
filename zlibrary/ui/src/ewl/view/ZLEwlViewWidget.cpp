@@ -156,6 +156,12 @@ ZLEwlViewWidget::ZLEwlViewWidget(ZLApplication *application, ZLView::Angle initi
 */
 
 	for(int i = 0; i < 256; i++) {
+		// FIXME: workaround for broken palitre on n516
+		if(i < 8) {
+			pal_[i] = 0;
+			continue;
+		}
+
 		rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, i<<8, i<<8, i<<8), NULL);
 		pal_[i] = rep->pixel;
 		free(rep);
@@ -216,9 +222,13 @@ void ZLEwlViewWidget::doPaint()	{
 	void update_position_property();
 	update_position_property();
 
-	for(int i = 0; i < 256; i++) 
-		for(int j = 0; j < 600; j++)
+	/*for(int i = 0; i < 256; i++)  {
+		fprintf(stderr, "%d: %x\n", i, pal[i]);
+		for(int j = 0; j < 600; j++) {
 			xcb_image_put_pixel(im, j, i, pal[i]);
+		}
+	}
+	*/
 
 	xcb_image_shm_put (connection, window, gc,
 			pContext.image, shminfo,
@@ -292,7 +302,7 @@ void ZLEwlViewWidget::invertRegion(int x0, int y0, int x1, int y1, bool flush)
 			pixel = 0xffffff & xcb_image_get_pixel(im, i, j);
 			for(int idx = 0; idx < 256; idx++) {
 				if(pixel == (0xffffff & pal[idx])) {
-					xcb_image_put_pixel(im, i, j, pal[~idx]);
+					xcb_image_put_pixel(im, i, j, pal[~idx & 0xff]);
 					break;
 				}
 			}

@@ -749,6 +749,7 @@ void ZLEwlPaintContext::drawGlyph(FT_Bitmap* bitmap, FT_Int x, FT_Int y)
 	FT_Int  x_max = x + bitmap->width;
 	FT_Int  y_max = y + bitmap->rows;
 	unsigned char val;
+	unsigned char white = pal[255];
 	int s;
 
 	for ( i = x, p = 0; i < x_max; i++, p++ ) {
@@ -763,9 +764,15 @@ void ZLEwlPaintContext::drawGlyph(FT_Bitmap* bitmap, FT_Int x, FT_Int y)
 			else if(bitmap->pixel_mode == ft_pixel_mode_mono)
 				val = (bitmap->buffer[q * bitmap->pitch + p / 8] & (1 << (7 - (p % 8)))) ? 255 : 0;
 			else
-				val = 0;
+				//val = 0;
+				continue;
 
-			xcb_image_put_pixel (image, i, j, pal[255 - val]);
+			val = ~val;
+
+			if(pal[val] == white)
+				continue;
+
+			xcb_image_put_pixel (image, i, j, pal[val]);
 		}
 	}
 }
@@ -778,7 +785,7 @@ void ZLEwlPaintContext::invertRegion(int x0, int y0, int x1, int y1)
 			pixel = 0xffffff & xcb_image_get_pixel(im, i, j);
 			for(int idx = 0; idx < 256; idx++) {
 				if(pixel == (0xffffff & pal[idx])) {
-					xcb_image_put_pixel(im, i, j, pal[~idx]);
+					xcb_image_put_pixel(im, i, j, pal[~idx & 0xff]);
 					break;
 				}
 			}
