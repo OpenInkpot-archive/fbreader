@@ -19,6 +19,7 @@
  */
 
 #include <algorithm>
+#include <stdint.h>
 
 #include <ZLDialogManager.h>
 #include <ZLDialog.h>
