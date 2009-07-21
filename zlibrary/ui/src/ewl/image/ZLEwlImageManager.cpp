@@ -70,35 +70,6 @@ extern "C" {
 #include <gif_lib.h>
 
 
-static const short dither_2bpp_8x8[] = {
-	0, 32, 12, 44, 2, 34, 14, 46, 
-	48, 16, 60, 28, 50, 18, 62, 30, 
-	8, 40, 4, 36, 10, 42, 6, 38, 
-	56, 24, 52, 20, 58, 26, 54, 22, 
-	3, 35, 15, 47, 1, 33, 13, 45, 
-	51, 19, 63, 31, 49, 17, 61, 29, 
-	11, 43, 7, 39, 9, 41, 5, 37, 
-	59, 27, 55, 23, 57, 25, 53, 21, 
-};
-
-
-int Dither2BitColor( int color, int x, int y )
-{
-	int cl = ((((color>>16) & 255) + ((color>>8) & 255) + ((color) & 255)) * (256/3)) >> 8;
-	if (cl<5)
-		return 0;
-	else if (cl>=250)
-		return 3<<6;
-	int d = dither_2bpp_8x8[(x&7) | ( (y&7) << 3 )] - 1;
-
-	cl = ( cl + d - 32 );
-	if (cl<5)
-		return 0;
-	else if (cl>=250)
-		return 3<<6;
-	return cl & 0xc0;
-}
-
 typedef struct {
 	struct jpeg_source_mgr pub;   /* public fields */
 	int len;
@@ -235,8 +206,7 @@ void ZLEwlImageData::setPosition(unsigned int x, unsigned int y) {
 	myX = x;
 	myY = y;
 
-	myPosition = myImageData + x / 4 + myWidth * y / 4;
-	myShift = (x & 3) << 1;
+	myPosition = myImageData + x + myWidth * y;
 }
 
 void ZLEwlImageData::moveX(int delta) {
@@ -248,11 +218,7 @@ void ZLEwlImageData::moveY(int delta) {
 }
 
 void ZLEwlImageData::setPixel(unsigned char r, unsigned char g, unsigned char b) {
-	int pixel = (0.299 * r + 0.587 * g + 0.114 * b ) / 64;
-	pixel = (~pixel & 3) << 6;
-
-	*myPosition &= ~(0xc0 >> myShift);
-	*myPosition |= (pixel >> myShift);
+	*myPosition = 0.299 * r + 0.587 * g + 0.114 * b;
 }
 
 void ZLEwlImageData::copyFrom(const ZLImageData &source, unsigned int targetX, unsigned int targetY) {
@@ -266,18 +232,7 @@ void ZLEwlImageData::copyFrom(const ZLImageData &source, unsigned int targetX, u
 
 	char *src = source_image->getImageData();
 
-	for(int j = 0; j < sH; j++)
-		for(int i = 0; i < sW; i++) {
-			c_src = src + i / 4 + sW * j / 4;
-			s_src = (i & 3) << 1;
-
-
-			c = myImageData + (i + targetX) / 4 + myWidth * (j + (targetY - sH)) / 4;
-			s = ((i + targetX) & 3) << 1;
-
-			*c &= ~(0xc0 >> s);
-			*c |= (((*c_src << s_src) & 0xc0) >> s);
-		}
+	memcpy(myImageData, source_image->getImageData(), sW * sH);
 }
 
 shared_ptr<ZLImageData> ZLEwlImageManager::createData() const {
@@ -366,9 +321,7 @@ void ZLEwlImageManager::convertImageDirectJpeg(const std::string &stringData, ZL
 
 	data.init(cinfo.image_width, cinfo.image_height);
 
-
-	cinfo.out_color_space = JCS_RGB;
-	//    cinfo.out_color_space = JCS_GRAYSCALE;
+	cinfo.out_color_space = JCS_GRAYSCALE;
 
 	(void) jpeg_start_decompress(&cinfo);
 
@@ -376,27 +329,13 @@ void ZLEwlImageManager::convertImageDirectJpeg(const std::string &stringData, ZL
 	buffer = (*cinfo.mem->alloc_sarray)
 		((j_common_ptr) &cinfo, JPOOL_IMAGE, row_stride, 1);
 
-	char *p, *c;	
-	int pixel, s, j;
+	char *c;	
 	while (cinfo.output_scanline < cinfo.output_height) {
 		(void) jpeg_read_scanlines(&cinfo, buffer, 1);
 
-		p = (char*)buffer[0];
-		j = cinfo.output_scanline;
+		c = ((ZLEwlImageData&)data).getImageData() + cinfo.output_width * (cinfo.output_scanline - 1);
 
-		for(int i = 0; i < cinfo.output_width; i++) {			
-			pixel = Dither2BitColor( 
-					p[0] << 16 | p[1] << 8 | p[2] << 0,
-					i, j);
-
-			c = ((ZLEwlImageData&)data).getImageData() + i / 4 + cinfo.output_width * j / 4;
-			s = (i & 3) << 1;
-
-			*c &= ~(0xc0 >> s);
-			*c |= (pixel >> s);
-
-			p += 3;
-		}
+		memcpy(c, (char*)buffer[0], cinfo.output_width);
 	}
 
 	(void) jpeg_finish_decompress(&cinfo);
@@ -456,8 +395,7 @@ void ZLEwlImageManager::convertImageDirectPng(const std::string &stringData, ZLI
 	if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
 		png_set_tRNS_to_alpha(png_ptr);
 
-	if (bit_depth == 16)
-		png_set_strip_16(png_ptr);
+	if (bit_depth == 16) png_set_strip_16(png_ptr);
 
 	png_set_invert_alpha(png_ptr);
 
@@ -465,14 +403,14 @@ void ZLEwlImageManager::convertImageDirectPng(const std::string &stringData, ZLI
 		png_set_packing(png_ptr);
 
 	//if (color_type == PNG_COLOR_TYPE_RGB)
-	png_set_filler(png_ptr, 0, PNG_FILLER_AFTER);
+	//png_set_filler(png_ptr, 0, PNG_FILLER_AFTER);
 
 	//if (color_type == PNG_COLOR_TYPE_RGB_ALPHA)
 	//    png_set_swap_alpha(png_ptr);
 
-	if (color_type == PNG_COLOR_TYPE_GRAY ||
-			color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
-		png_set_gray_to_rgb(png_ptr);
+	if (! (color_type == PNG_COLOR_TYPE_GRAY ||
+			color_type == PNG_COLOR_TYPE_GRAY_ALPHA))
+		png_set_rgb_to_gray(png_ptr, 1, -1, -1);
 
 	int number_passes = png_set_interlace_handling(png_ptr);
 	//if (color_type == PNG_COLOR_TYPE_RGB_ALPHA ||
@@ -484,26 +422,14 @@ void ZLEwlImageManager::convertImageDirectPng(const std::string &stringData, ZLI
 
 
 	char *c;	
-	unsigned int *p;
-	int pixel, s;
 	for(int pass = 0; pass < number_passes; pass++) {
 		for(int y = 0; y < height; y++) {
 
 			png_read_rows(png_ptr, (unsigned char **)&row, png_bytepp_NULL, 1);
 
-			p = row;
+			c = ((ZLEwlImageData&)data).getImageData() + width * y;
 
-			for(int i = 0; i < width; i++) {			
-				pixel = Dither2BitColor(*p, i, y);
-
-				c = ((ZLEwlImageData&)data).getImageData() + i / 4 + width * y / 4;
-				s = (i & 3) << 1;
-
-				*c &= ~(0xc0 >> s);
-				*c |= (pixel >> s);
-
-				p++;
-			}
+			memcpy(c, (char*)row, width);
 		}
 	}
 
@@ -679,33 +605,18 @@ void ZLEwlImageManager::convertImageDirectGif(const std::string &stringData, ZLI
 	Height = GifFile->SHeight;
 
 	for (j = 0; j < Height; j++) {
+		c = ((ZLEwlImageData&)data).getImageData() + Width * j;
 		for (i = 0; i < Width; i++) {
 			p = ScreenBuffer[j][i];
 			//			p = ColorMapEntry[p].Red * 30 +
 			//				ColorMapEntry[p].Green * 59 +
 			//				ColorMapEntry[p].Blue * 11 > AvgIntensity;			
 
-			//			pixel = Dither2BitColor((ColorMapEntry[p].Red << 16 | ColorMapEntry[p].Green << 8 | ColorMapEntry[p].Blue << 0), i, j);
-
-
 			unsigned char x = ColorMapEntry[p].Red * 0.299 +
 				ColorMapEntry[p].Green * 0.587 +
 				ColorMapEntry[p].Blue * 0.114;			
-			if(x < 64)
-				pixel = 0x00;
-			else if(x <= 128)
-				pixel = 0x40;
-			else if(x <= 192)
-				pixel = 0x80;
-			else
-				pixel = 0xc0;
 
-
-			c = ((ZLEwlImageData&)data).getImageData() + i / 4 + Width * j / 4;
-			s = (i & 3) << 1;
-
-			*c &= ~(0xc0 >> s);
-			*c |= (pixel >> s);
+			*c++ = x;
 		}
 	}
 
@@ -756,55 +667,26 @@ rearrangePixels(unsigned char* buf, uint32 width, uint32 bit_count, int row, ZLI
 			break;
 
 		case 24:
+			c = ((ZLEwlImageData&)data).getImageData() + width * row;
 			for (i = 0; i < width; i++, buf += 3) {
 				unsigned char x = buf[2] * 0.299 +
 					buf[1] * 0.587 +
 					buf[0] * 0.114;
 
-
-				if(x < 64)
-					pixel = 0x00;
-				else if(x <= 128)
-					pixel = 0x40;
-				else if(x <= 192)
-					pixel = 0x80;
-				else
-					pixel = 0xc0;
-
-
-				c = ((ZLEwlImageData&)data).getImageData() + i / 4 + width * row / 4;
-				s = (i & 3) << 1;
-
-				*c &= ~(0xc0 >> s);
-				*c |= (pixel >> s);
-
+				*c++ = x;
 			}
 			break;
 
 		case 32:
 			{
+				c = ((ZLEwlImageData&)data).getImageData() + width * row;
 				unsigned char* buf1 = buf;
 				for (i = 0; i < width; i++, buf += 4) {
 					unsigned char x = buf[2] * 0.299 +
 						buf[1] * 0.587 +
 						buf[0] * 0.114;
 
-
-					if(x < 64)
-						pixel = 0x00;
-					else if(x <= 128)
-						pixel = 0x40;
-					else if(x <= 192)
-						pixel = 0x80;
-					else
-						pixel = 0xc0;
-
-
-					c = ((ZLEwlImageData&)data).getImageData() + i / 4 + width * row / 4;
-					s = (i & 3) << 1;
-
-					*c &= ~(0xc0 >> s);
-					*c |= (pixel >> s);
+					*c++ = x;
 				}
 			}
 			break;
@@ -1054,6 +936,8 @@ void ZLEwlImageManager::convertImageDirectBmp(const std::string &stringData, ZLI
 						int g_shift = last_bit_set (info_hdr.iGreenMask) - 7;
 						int b_shift = last_bit_set (info_hdr.iBlueMask) - 7;
 
+
+						char *c = ((ZLEwlImageData&)data).getImageData() + w * row;
 						for (int i=0 ; rgb_ptr >= row_ptr; r16_ptr -= 2, rgb_ptr -= 3, i++)
 						{
 							int val = (r16_ptr[0] << 0) + (r16_ptr[1] << 8);
@@ -1071,56 +955,24 @@ void ZLEwlImageManager::convertImageDirectBmp(const std::string &stringData, ZLI
 								rgb_ptr[2] = (val & info_hdr.iBlueMask) << -b_shift;
 
 
-							char *c;	
-							int pixel, s;
 							unsigned char x = rgb_ptr[0] * 0.299 +
 								rgb_ptr[1] * 0.587 +
 								rgb_ptr[2] * 0.114;
 
 
-							if(x < 64)
-								pixel = 0x00;
-							else if(x <= 128)
-								pixel = 0x40;
-							else if(x <= 192)
-								pixel = 0x80;
-							else
-								pixel = 0xc0;
-
-
-							c = ((ZLEwlImageData&)data).getImageData() + i / 4 + w * row / 4;
-							s = (i & 3) << 1;
-
-							*c &= ~(0xc0 >> s);
-							*c |= (pixel >> s);
+							*c++ = x;
 						}
 					}
 					else if(info_hdr.iBitCount == 8) {
+						char *c = ((ZLEwlImageData&)data).getImageData() + w * row;
 						unsigned char *b = xdata + stride * row;
 						for (int i = 0; i < w; i++, b++) {
-							char *c;	
-							int pixel, s;
 							unsigned char x = 
 								clr_tbl[*b*n_clr_elems+2] * 0.299 +
 								clr_tbl[*b*n_clr_elems+1] * 0.587 +
 								clr_tbl[*b*n_clr_elems] * 0.114;
 
-
-							if(x < 64)
-								pixel = 0x00;
-							else if(x <= 128)
-								pixel = 0x40;
-							else if(x <= 192)
-								pixel = 0x80;
-							else
-								pixel = 0xc0;
-
-
-							c = ((ZLEwlImageData&)data).getImageData() + i / 4 + w * row / 4;
-							s = (i & 3) << 1;
-
-							*c &= ~(0xc0 >> s);
-							*c |= (pixel >> s);
+							*c++ = x;
 						}
 					}
 					else
@@ -1249,4 +1101,3 @@ bad1:
 bad:
 	return;
 }
-
