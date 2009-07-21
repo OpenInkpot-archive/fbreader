@@ -91,7 +91,7 @@ private:
 	mutable int mySpaceWidth;
 	int myDescent;
 
-	int fColor;
+	unsigned char fColor;
 
 	FT_Bitmap *ft2bmp;
 	FT_Bitmap *createFTBitmap(int width, int height);

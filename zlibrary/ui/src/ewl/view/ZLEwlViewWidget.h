@@ -53,7 +53,7 @@ private:
 
 private:
 	xcb_gcontext_t		bgcolor;
-	unsigned int pal_[4];
+	unsigned int pal_[256];
 
 	ZLApplication *myApplication;
 	bool myRepaintBlocked;

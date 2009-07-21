@@ -194,13 +194,12 @@ void ZLEwlPaintContext::setFont(const std::string &family, int size, bool bold, 
 }
 
 void ZLEwlPaintContext::setColor(ZLColor color, LineStyle style) {
-	fColor = (0.299 * color.Red + 0.587 * color.Green + 0.114 * color.Blue ) / 64;
+	fColor = 0.299 * color.Red + 0.587 * color.Green + 0.114 * color.Blue; 
 }
 
 void ZLEwlPaintContext::setFillColor(ZLColor color, FillStyle style) {
 	//fColor = color;
-	fColor = (0.299 * color.Red + 0.587 * color.Green + 0.114 * color.Blue ) / 64;
-	fColor = pal[fColor & 3];
+    fColor = 0.299 * color.Red + 0.587 * color.Green + 0.114 * color.Blue;
 }
 
 /*int ZLEwlPaintContext::stringWidth(const char *str, int len) const {
@@ -534,13 +533,14 @@ void ZLEwlPaintContext::drawString(int x, int y, const char *str, int len, bool 
 		previous = glyph_idx;
 	}
 
-	if(fColor >= 2)
+	if(fColor >= 128)
 		invertRegion(x, y - stringHeight() + stringHeight() / 4, pen.x, y + stringHeight() / 5);
 
 //	pango_fc_font_unlock_face((PangoFcFont*)myAnalysis.font);
 }
 
 void ZLEwlPaintContext::drawImage(int x, int y, const ZLImageData &image) {
+	//FIXME
 	char *c;
 	char *c_src;
 	int s, s_src;
@@ -634,7 +634,7 @@ void ZLEwlPaintContext::drawLine(int x0, int y0, int x1, int y1, bool fill) {
 				done = true;
 
 			if(fill)
-				xcb_image_put_pixel (image, i, j, fColor);
+				xcb_image_put_pixel (image, i, j, pal[fColor]);
 			else
 				xcb_image_put_pixel (image, i, j, pal[0]);
 
@@ -656,7 +656,7 @@ void ZLEwlPaintContext::drawLine(int x0, int y0, int x1, int y1, bool fill) {
 				done = true;
 
 			if(fill)
-				xcb_image_put_pixel (image, i, j, fColor);
+				xcb_image_put_pixel (image, i, j, pal[fColor]);
 			else
 				xcb_image_put_pixel (image, i, j, pal[0]);
 
@@ -689,7 +689,7 @@ void ZLEwlPaintContext::drawFilledCircle(int x, int y, int r) {
 }
 
 void ZLEwlPaintContext::clear(ZLColor color) {
-	memset(image->data, pal[3], image->width * image->height * image->bpp / 8);
+	memset(image->data, pal[255], image->width * image->height * image->bpp / 8);
 }
 
 int ZLEwlPaintContext::width() const {
@@ -765,11 +765,7 @@ void ZLEwlPaintContext::drawGlyph(FT_Bitmap* bitmap, FT_Int x, FT_Int y)
 			else
 				val = 0;
 
-			if(val < 64)
-				continue;
-
-			val = 3 - val / 64;
-			xcb_image_put_pixel (image, i, j, pal[val]);
+			xcb_image_put_pixel (image, i, j, pal[255 - val]);
 		}
 	}
 }
@@ -780,9 +776,9 @@ void ZLEwlPaintContext::invertRegion(int x0, int y0, int x1, int y1)
 	for(int i = x0; i <= x1; i++) {
 		for(int j = y0; j <= y1; j++) {
 			pixel = 0xffffff & xcb_image_get_pixel(im, i, j);
-			for(int idx = 0; idx < 4; idx++) {
+			for(int idx = 0; idx < 256; idx++) {
 				if(pixel == (0xffffff & pal[idx])) {
-					xcb_image_put_pixel(im, i, j, pal[3 - idx]);
+					xcb_image_put_pixel(im, i, j, pal[~idx]);
 					break;
 				}
 			}

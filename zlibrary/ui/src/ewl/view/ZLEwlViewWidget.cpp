@@ -141,7 +141,7 @@ ZLEwlViewWidget::ZLEwlViewWidget(ZLApplication *application, ZLView::Angle initi
 	colormap = screen->default_colormap;
 
 	xcb_alloc_color_reply_t *rep;
-	rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, 0, 0, 0), NULL);
+/*	rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, 0, 0, 0), NULL);
 	pal_[0] = rep->pixel;
 	free(rep);
 	rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, 0x55<<8, 0x55<<8, 0x55<<8), NULL);
@@ -153,6 +153,13 @@ ZLEwlViewWidget::ZLEwlViewWidget(ZLApplication *application, ZLView::Angle initi
 	rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, 0xff<<8, 0xff<<8, 0xff<<8), NULL);
 	pal_[3] = rep->pixel;
 	free(rep);
+*/
+
+	for(int i = 0; i < 256; i++) {
+		rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, i<<8, i<<8, i<<8), NULL);
+		pal_[i] = rep->pixel;
+		free(rep);
+	}
 
 	pal = pal_;
 
@@ -209,10 +216,16 @@ void ZLEwlViewWidget::doPaint()	{
 	void update_position_property();
 	update_position_property();
 
+	for(int i = 0; i < 256; i++) 
+		for(int j = 0; j < 600; j++)
+			xcb_image_put_pixel(im, j, i, pal[i]);
+
 	xcb_image_shm_put (connection, window, gc,
 			pContext.image, shminfo,
 			0, 0, 0, 0, w, h, 0);
 	xcb_flush(connection);
+
+	//sleep(10);
 }
 
 void ZLEwlViewWidget::trackStylus(bool track) {
@@ -277,9 +290,9 @@ void ZLEwlViewWidget::invertRegion(int x0, int y0, int x1, int y1, bool flush)
 	for(int i = x0; i <= x1; i++) {
 		for(int j = y0; j <= y1; j++) {
 			pixel = 0xffffff & xcb_image_get_pixel(im, i, j);
-			for(int idx = 0; idx < 4; idx++) {
+			for(int idx = 0; idx < 256; idx++) {
 				if(pixel == (0xffffff & pal[idx])) {
-					xcb_image_put_pixel(im, i, j, pal[3 - idx]);
+					xcb_image_put_pixel(im, i, j, pal[~idx]);
 					break;
 				}
 			}
