@@ -144,6 +144,11 @@ public:
 	void highlightPrevLink();
 	void openHyperlink();
 
+	void highlightCurrentLine();
+	void highlightNextLine();
+	void highlightPrevLine();
+	void bookmarkLine();
+
 	RecentBooks &recentBooks();
 	const RecentBooks &recentBooks() const;
 

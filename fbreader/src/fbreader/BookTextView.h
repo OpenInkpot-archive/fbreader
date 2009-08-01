@@ -96,9 +96,9 @@ private:
 
 	typedef std::vector<std::pair<Position, int> > BookmarkVector;
 	typedef std::vector<std::pair<Position, std::pair<int, std::string> > > BookmarkTextVector;
+public:
 	BookmarkVector myBookmarks;
 	unsigned int myCurrentBookmarkSize;
-public:
 	unsigned int getBookmarksSize();
 	std::vector<std::pair<std::pair<int, int>, std::pair<int, std::string> > > getBookmarks();
 	void addBookmark();

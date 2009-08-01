@@ -240,10 +240,15 @@ void ScrollingAction::run() {
 			buffer = 0;
 		}
 
-		if(myForward)
+/*xxx		if(myForward)
 			fbreader().highlightNextLink();
 		else
 			fbreader().highlightPrevLink();
+			*/
+		if(myForward)
+			fbreader().highlightNextLine();
+		else
+			fbreader().highlightPrevLine();
 		return;
 	}
 
@@ -684,7 +689,8 @@ HyperlinkNavStart::HyperlinkNavStart(FBReader &fbreader) : FBAction(fbreader) {
 
 void HyperlinkNavStart::run() {
 	if(fbreader().mode() == FBReader::HYPERLINK_NAV_MODE)
-		fbreader().openHyperlink();
+		//xxfbreader().openHyperlink();
+		fbreader().bookmarkLine();
 	else
 		fbreader().startNavigationMode();
 }

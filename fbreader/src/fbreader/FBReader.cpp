@@ -357,6 +357,99 @@ void FBReader::invertRegion(HyperlinkCoord link, bool flush)
 	((ZLApplication*)this)->invertRegion(link.x0, link.y0, link.x1, link.y1, flush);
 }
 
+static ZLTextElementMap::const_iterator line_it;
+
+void FBReader::highlightCurrentLine()
+{
+	line_it = ((ZLTextView&)*myBookTextView).myTextElementMap.begin();
+	for (;line_it != ((ZLTextView&)*myBookTextView).myTextElementMap.end(); ++line_it)
+		if (line_it->Kind == ZLTextElement::WORD_ELEMENT)
+			break;
+
+	((ZLApplication*)this)->invertRegion(
+			line_it->XStart,
+			line_it->YStart, 
+			line_it->XEnd, 
+			line_it->YEnd,
+			true);
+}
+
+void FBReader::highlightNextLine()
+{
+	int cur_y = line_it->YStart;
+	((ZLApplication*)this)->invertRegion(
+			line_it->XStart,
+			line_it->YStart, 
+			line_it->XEnd, 
+			line_it->YEnd,
+			true);
+
+	for (;line_it != ((ZLTextView&)*myBookTextView).myTextElementMap.end(); ++line_it)
+		if (line_it->Kind == ZLTextElement::WORD_ELEMENT && line_it->YStart > cur_y)
+			break;
+
+
+	if(line_it == ((ZLTextView&)*myBookTextView).myTextElementMap.end()) {
+		line_it = ((ZLTextView&)*myBookTextView).myTextElementMap.begin();
+		for (;line_it != ((ZLTextView&)*myBookTextView).myTextElementMap.end(); ++line_it)
+			if (line_it->Kind == ZLTextElement::WORD_ELEMENT)
+				break;
+	}
+
+
+	((ZLApplication*)this)->invertRegion(
+			line_it->XStart,
+			line_it->YStart, 
+			line_it->XEnd, 
+			line_it->YEnd,
+			true);
+}
+
+void FBReader::highlightPrevLine()
+{
+	int cur_y = line_it->YStart;
+	((ZLApplication*)this)->invertRegion(
+			line_it->XStart,
+			line_it->YStart, 
+			line_it->XEnd, 
+			line_it->YEnd,
+			true);
+
+	for (;line_it != ((ZLTextView&)*myBookTextView).myTextElementMap.begin(); --line_it)
+		if (line_it->Kind == ZLTextElement::WORD_ELEMENT && line_it->YStart < cur_y)
+			break;
+
+
+	if(line_it == ((ZLTextView&)*myBookTextView).myTextElementMap.begin()) {
+		line_it = ((ZLTextView&)*myBookTextView).myTextElementMap.end();
+		for (;line_it != ((ZLTextView&)*myBookTextView).myTextElementMap.begin(); --line_it)
+			if (line_it->Kind == ZLTextElement::WORD_ELEMENT)
+				break;
+	}
+
+
+	((ZLApplication*)this)->invertRegion(
+			line_it->XStart,
+			line_it->YStart, 
+			line_it->XEnd, 
+			line_it->YEnd,
+			true);
+}
+
+void FBReader::bookmarkLine()
+{
+	typedef std::pair<int,int> Position;
+	bookTextView().myBookmarks.push_back(make_pair(Position(line_it->ParagraphIndex, line_it->ElementIndex), 666));
+	//highlightCurrentLine();
+	((ZLApplication*)this)->invertRegion(
+			line_it->XStart,
+			line_it->YStart, 
+			line_it->XEnd, 
+			line_it->YEnd,
+			true);
+	restorePreviousMode();
+}
+
 void FBReader::highlightCurrentLink()
 {
 	for(int i = currentLinkIdx; (i >= 0) && (i < pageLinks.size()); i++) {
@@ -371,10 +464,12 @@ void FBReader::highlightCurrentLink()
 
 void FBReader::startNavigationMode()
 {
-	if(!pageLinks.empty() && ((myMode == BOOK_TEXT_MODE) || (myMode == FOOTNOTE_MODE))) {
+	if(//xxx!pageLinks.empty() && 
+			((myMode == BOOK_TEXT_MODE) || (myMode == FOOTNOTE_MODE))) {
 		setMode(HYPERLINK_NAV_MODE);
 		currentLinkIdx = 0;
-		highlightCurrentLink();
+		//xxx highlightCurrentLink();
+		highlightCurrentLine();
 	}
 }
 
@@ -507,7 +602,7 @@ void FBReader::showBookTextView() {
 
 void FBReader::restorePreviousMode() {
 	if(myMode == HYPERLINK_NAV_MODE) {
-		invertRegion(pageLinks.at(currentLinkIdx), true);
+//xxx		invertRegion(pageLinks.at(currentLinkIdx), true);
 	}
 
 	setMode(myPreviousMode);
