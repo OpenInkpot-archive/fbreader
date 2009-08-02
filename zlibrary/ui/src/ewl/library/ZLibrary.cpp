@@ -273,7 +273,7 @@ void main_loop(ZLApplication *application)
 					{
 						xcb_key_press_event_t *ev = (xcb_key_press_event_t *)e;
 
-						if(!alt_pressed && kmap[ev->detail]->keyname == "ALT_L")
+						if(!alt_pressed && kmap[ev->detail]->keyname == "Alt_L")
 							alt_pressed = true;
 
 						break;
@@ -282,7 +282,7 @@ void main_loop(ZLApplication *application)
 					{
 						xcb_key_release_event_t *ev = (xcb_key_release_event_t *)e;
 
-						if(alt_pressed && kmap[ev->detail]->keyname == "ALT_L") {
+						if(alt_pressed && kmap[ev->detail]->keyname == "Alt_L") {
 							alt_pressed = false;
 							continue;
 						}
