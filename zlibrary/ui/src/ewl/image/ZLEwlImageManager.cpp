@@ -57,6 +57,7 @@
 
 
 #include <ZLImage.h>
+#include <ZLOptions.h>
 
 #include "ZLEwlImageManager.h"
 
@@ -69,6 +70,35 @@ extern "C" {
 #include <png.h>
 #include <gif_lib.h>
 
+static const short dither_2bpp_8x8[] = {
+	0, 32, 12, 44, 2, 34, 14, 46, 
+	48, 16, 60, 28, 50, 18, 62, 30, 
+	8, 40, 4, 36, 10, 42, 6, 38, 
+	56, 24, 52, 20, 58, 26, 54, 22, 
+	3, 35, 15, 47, 1, 33, 13, 45, 
+	51, 19, 63, 31, 49, 17, 61, 29, 
+	11, 43, 7, 39, 9, 41, 5, 37, 
+	59, 27, 55, 23, 57, 25, 53, 21, 
+};
+
+int Dither2BitColor( int color, int x, int y )
+{
+	int cl = color & 0xff;
+	if (cl<5)
+		return 0;
+	else if (cl>=250)
+		return 0xff;
+
+	int d = dither_2bpp_8x8[(x&7) | ( (y&7) << 3 )] - 1;
+
+	cl = ( cl + d - 32 );
+	if (cl<5)
+		return 0;
+	else if (cl>=250)
+		return 0xff;
+
+	return ((cl & 0xc0)>>6) * 0x55;
+}
 
 typedef struct {
 	struct jpeg_source_mgr pub;   /* public fields */
@@ -328,14 +358,21 @@ void ZLEwlImageManager::convertImageDirectJpeg(const std::string &stringData, ZL
 	row_stride = cinfo.output_width * cinfo.output_components;
 	buffer = (*cinfo.mem->alloc_sarray)
 		((j_common_ptr) &cinfo, JPOOL_IMAGE, row_stride, 1);
-
-	char *c;	
+ 
+	ZLIntegerOption myDitherAlgo(ZLCategoryKey::LOOK_AND_FEEL, "Options", "DitherAlgo", 0);
+	register int dalgo = myDitherAlgo.value();
+	char *c;
 	while (cinfo.output_scanline < cinfo.output_height) {
 		(void) jpeg_read_scanlines(&cinfo, buffer, 1);
 
 		c = ((ZLEwlImageData&)data).getImageData() + cinfo.output_width * (cinfo.output_scanline - 1);
 
-		memcpy(c, (char*)buffer[0], cinfo.output_width);
+		if(dalgo == 1) {
+			unsigned char *s = (unsigned char*)buffer[0];
+			for(int i = 0; i < cinfo.output_width; i++)
+				*c++ = Dither2BitColor(*s++, i, cinfo.output_scanline - 1);
+		} else
+			memcpy(c, (char*)buffer[0], cinfo.output_width);
 	}
 
 	(void) jpeg_finish_decompress(&cinfo);
@@ -421,6 +458,8 @@ void ZLEwlImageManager::convertImageDirectPng(const std::string &stringData, ZLI
 	png_set_bgr(png_ptr);
 
 
+	ZLIntegerOption myDitherAlgo(ZLCategoryKey::LOOK_AND_FEEL, "Options", "DitherAlgo", 0);
+	register int dalgo = myDitherAlgo.value();
 	char *c;	
 	for(int pass = 0; pass < number_passes; pass++) {
 		for(int y = 0; y < height; y++) {
@@ -429,7 +468,12 @@ void ZLEwlImageManager::convertImageDirectPng(const std::string &stringData, ZLI
 
 			c = ((ZLEwlImageData&)data).getImageData() + width * y;
 
-			memcpy(c, (char*)row, width);
+			if(dalgo == 1) {
+				unsigned char *s = (unsigned char*)row;
+				for(int i = 0; i < width; i++)
+					*c++ = Dither2BitColor(*s++, i, y);
+			} else 
+				memcpy(c, (char*)row, width);
 		}
 	}
 
@@ -604,6 +648,8 @@ void ZLEwlImageManager::convertImageDirectGif(const std::string &stringData, ZLI
 	Width = GifFile->SWidth;
 	Height = GifFile->SHeight;
 
+	ZLIntegerOption myDitherAlgo(ZLCategoryKey::LOOK_AND_FEEL, "Options", "DitherAlgo", 0);
+	register int dalgo = myDitherAlgo.value();
 	for (j = 0; j < Height; j++) {
 		c = ((ZLEwlImageData&)data).getImageData() + Width * j;
 		for (i = 0; i < Width; i++) {
@@ -616,7 +662,10 @@ void ZLEwlImageManager::convertImageDirectGif(const std::string &stringData, ZLI
 				ColorMapEntry[p].Green * 0.587 +
 				ColorMapEntry[p].Blue * 0.114;			
 
-			*c++ = x;
+			if(dalgo == 1)
+				*c++ = Dither2BitColor(x, i, j);
+			else
+				*c++ = x;
 		}
 	}
 
@@ -660,6 +709,9 @@ rearrangePixels(unsigned char* buf, uint32 width, uint32 bit_count, int row, ZLI
 	char *c;	
 	int pixel, s;
 
+	ZLIntegerOption myDitherAlgo(ZLCategoryKey::LOOK_AND_FEEL, "Options", "DitherAlgo", 0);
+	register int dalgo = myDitherAlgo.value();
+
 	printf("bit_count: %d\n", bit_count);
 	switch(bit_count) {
 
@@ -673,7 +725,10 @@ rearrangePixels(unsigned char* buf, uint32 width, uint32 bit_count, int row, ZLI
 					buf[1] * 0.587 +
 					buf[0] * 0.114;
 
-				*c++ = x;
+				if(dalgo == 1)
+					*c++ = Dither2BitColor(x, i, row);
+				else
+					*c++ = x;
 			}
 			break;
 
@@ -686,7 +741,10 @@ rearrangePixels(unsigned char* buf, uint32 width, uint32 bit_count, int row, ZLI
 						buf[1] * 0.587 +
 						buf[0] * 0.114;
 
-					*c++ = x;
+					if(dalgo == 1)
+						*c++ = Dither2BitColor(x, i, row);
+					else
+						*c++ = x;
 				}
 			}
 			break;
@@ -712,6 +770,9 @@ void ZLEwlImageManager::convertImageDirectBmp(const std::string &stringData, ZLI
 	uint32	row, stride;
 
 	unsigned char* xdata = 0;
+
+	ZLIntegerOption myDitherAlgo(ZLCategoryKey::LOOK_AND_FEEL, "Options", "DitherAlgo", 0);
+	register int dalgo = myDitherAlgo.value();
 
 	memcpy(file_hdr.bType, p, 2);
 
@@ -959,8 +1020,10 @@ void ZLEwlImageManager::convertImageDirectBmp(const std::string &stringData, ZLI
 								rgb_ptr[1] * 0.587 +
 								rgb_ptr[2] * 0.114;
 
-
-							*c++ = x;
+							if(dalgo == 1)
+								*c++ = Dither2BitColor(x, i, row);
+							else
+								*c++ = x;
 						}
 					}
 					else if(info_hdr.iBitCount == 8) {
@@ -972,7 +1035,10 @@ void ZLEwlImageManager::convertImageDirectBmp(const std::string &stringData, ZLI
 								clr_tbl[*b*n_clr_elems+1] * 0.587 +
 								clr_tbl[*b*n_clr_elems] * 0.114;
 
-							*c++ = x;
+							if(dalgo == 1)
+								*c++ = Dither2BitColor(x, i, row);
+							else
+								*c++ = x;
 						}
 					}
 					else
