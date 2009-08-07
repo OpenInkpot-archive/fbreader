@@ -308,6 +308,8 @@ void cb_lcb_redraw()
 	choicebox_invalidate_interval(choicebox, 0, l->items.size());
 	if(l->items.size() > 0)
 		choicebox_set_selection(choicebox, 0);
+
+	alt_modifier = false;
 }
 
 static Ecore_Idle_Enterer *idle_enterer = NULL;
@@ -462,6 +464,8 @@ void cb_lcb_new()
 	ecore_evas_callback_resize_set(lcb_win, lcb_win_resize_handler);
 
 	ecore_evas_show(lcb_win);
+
+	alt_modifier = false;
 
 	ecore_main_loop_begin();
 	if(emergency_exit)
@@ -646,6 +650,8 @@ void cb_rcb_new()
 			EVAS_CALLBACK_KEY_UP,
 			&rcb_win_key_up_handler,
 			NULL);
+
+	alt_modifier = false;
 }
 
 // fcb
@@ -823,6 +829,8 @@ void cb_fcb_redraw(int newsize)
 	}
 	if(newsize > 0)
 		choicebox_set_selection(choicebox, 0);
+
+	alt_modifier = false;
 }
 
 void cb_fcb_new(cb_list *list)
@@ -907,6 +915,8 @@ void cb_fcb_new(cb_list *list)
 	ecore_evas_show(fcb_win);
 
 	reuse_fcb_win = false;
+
+	alt_modifier = false;
 
 	ecore_main_loop_begin();
 	if(emergency_exit)
