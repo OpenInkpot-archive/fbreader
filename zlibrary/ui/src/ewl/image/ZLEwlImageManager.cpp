@@ -100,6 +100,93 @@ int Dither2BitColor( int color, int x, int y )
 	return ((cl & 0xc0)>>6) * 0x55;
 }
 
+void floyd_steinberg_dither(ZLImageData &data)
+{
+	ZLEwlImageData &i = (ZLEwlImageData&)data;
+	int w = data.width();
+	int h = data.height();
+
+	unsigned char *c = (unsigned char*)i.getImageData();
+	int xi;
+	unsigned char *x;
+
+	int oldpixel, newpixel;
+	int quant_error;
+
+	extern int xcb_pal_colours;
+	int factor = 255 / (xcb_pal_colours - 1);
+	int factor_half = factor>>1;
+
+	for(int j = 0; j < h; j++)
+		for(int i = 0; i < w; i++) {
+			x = c + j * w + i;
+
+			oldpixel = *x;
+
+			newpixel = (oldpixel + factor_half) / factor;
+			newpixel *= factor;
+			if(newpixel > 255)
+				newpixel = 255;
+			if(newpixel < 0)
+				newpixel = 0;
+			*x = newpixel;
+
+			quant_error = oldpixel - newpixel;
+
+			if(i < w - 1) {
+				x++;
+
+				xi = *x;
+				xi = xi + 7 * quant_error / 16;
+				if(xi <= 0)
+					*x = 0;
+				else if (xi >= 255)
+					*x = 255;
+				else
+					*x = xi;
+			}
+
+			x = c + (j+1) * w + i - 1;
+
+			if(j < h - 1) {
+				if(i > 0) {
+					xi = *x;
+					xi = xi + 3 * quant_error / 16;
+					if(xi <= 0)
+						*x = 0;
+					else if (xi >= 255)
+						*x = 255;
+					else
+						*x = xi;
+				}
+
+				x++;
+
+				xi = *x;
+				xi = xi + 5 * quant_error / 16;
+				if(xi <= 0)
+					*x = 0;
+				else if (xi >= 255)
+					*x = 255;
+				else
+					*x = xi;
+
+				if(i < w - 1) {
+					x++;
+
+					xi = *x;
+					xi = xi + quant_error / 16;
+					if(xi <= 0)
+						*x = 0;
+					else if (xi >= 255)
+						*x = 255;
+					else
+						*x = xi;
+				}
+			}
+		}
+}
+
 typedef struct {
 	struct jpeg_source_mgr pub;   /* public fields */
 	int len;
@@ -301,6 +388,10 @@ void ZLEwlImageManager::convertImageDirect(const std::string &stringData, ZLImag
 
 		return;
 	}
+
+	ZLIntegerOption myDitherAlgo(ZLCategoryKey::LOOK_AND_FEEL, "Options", "DitherAlgo", 0);
+	if(myDitherAlgo.value() == 2)
+		floyd_steinberg_dither(data);
 }
 
 void ZLEwlImageManager::convertImageDirectJpeg(const std::string &stringData, ZLImageData &data) const {

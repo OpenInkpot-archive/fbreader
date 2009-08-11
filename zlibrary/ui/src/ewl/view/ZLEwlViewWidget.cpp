@@ -34,6 +34,7 @@ xcb_shm_segment_info_t shminfo;
 xcb_image_t *im;
 xcb_gcontext_t		gc;
 unsigned int *pal;
+int xcb_pal_colours;
 
 static void updatePoint(ZLEwlViewWidget *viewWidget, int &x, int &y) {
 	switch (viewWidget->rotation()) {
@@ -155,6 +156,7 @@ ZLEwlViewWidget::ZLEwlViewWidget(ZLApplication *application, ZLView::Angle initi
 	free(rep);
 */
 
+	xcb_pal_colours = 1;
 	for(int i = 0; i < 256; i++) {
 		// FIXME: workaround for broken palitre on n516
 		if(i < 8) {
@@ -164,8 +166,14 @@ ZLEwlViewWidget::ZLEwlViewWidget(ZLApplication *application, ZLView::Angle initi
 
 		rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, i<<8, i<<8, i<<8), NULL);
 		pal_[i] = rep->pixel;
+
+		if(pal_[i] != pal_[i - 1])
+			xcb_pal_colours++;
+
 		free(rep);
 	}
+
+	fprintf(stderr, "xcb_pal_colours %d\n", xcb_pal_colours);
 
 	pal = pal_;
 
