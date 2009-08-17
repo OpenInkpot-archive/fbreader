@@ -1,3 +1,11 @@
+fbreader (0.10.7-1.oi19) asimov; urgency=low
+
+  * implemented Floyd-Steinberg dithering algorithm
+  * ukranian translation updated
+  * fixed long press issue
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 18 Aug 2009 01:15:07 +0200
+
 fbreader (0.10.7-1.oi18) asimov; urgency=low
 
   * fix CancelAction
