@@ -1,9 +1,9 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
@@ -133,10 +133,6 @@ msgstr "世界语"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
 msgid "Spanish"
 msgstr "西班牙语"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:102
-msgid "芬兰语"
-msgstr "Finnish"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
 msgid "French"
@@ -332,6 +328,7 @@ msgstr "首行缩进"
 msgid "Indicator Height"
 msgstr "状态条高度"
 
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1056
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:682
 msgid "Offset From Text"
 msgstr "Offset From Text"
@@ -407,10 +404,6 @@ msgstr "显示时间"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1054
 msgid "Show Battery"
 msgstr "显示电池"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1056
-msgid "Offset from Text"
-msgstr "Offset from Text"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1064
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1126
@@ -488,3 +481,13 @@ msgstr "书号："
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1314
 msgid "Book Menu"
 msgstr "书籍菜单"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:102
+msgid "Finnish"
+msgstr "芬兰语"
+
+#~ msgid "芬兰语"
+#~ msgstr "Finnish"
+
+#~ msgid "Offset from Text"
+#~ msgstr "Offset from Text"
