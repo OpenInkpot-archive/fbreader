@@ -1,9 +1,9 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
@@ -13,13 +13,9 @@ msgstr ""
 "Last-Translator: Anrdás Csehi <acsehi@gmail.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:63
-msgid "None"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:64
 msgid "Add Bookmark"
@@ -47,10 +43,6 @@ msgstr "Lapra ugrás"
 msgid "Show Table of Contents"
 msgstr "Tartalomjegyzék megjelenítése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:70
-msgid "Go to Home"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:71
 msgid "Go to Start of Section"
 msgstr "Fejezet elejére ugrás"
@@ -66,14 +58,6 @@ msgstr "Következő Tartalomjegyzék címre ugrás"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:74
 msgid "Go to Previous TOC Section"
 msgstr "Előző Tartalomjegyzék címre ugrás"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
-msgid "Large Scroll Forward"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:76
-msgid "Large Scroll Backward"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:77
 msgid "Undo"
@@ -420,10 +404,6 @@ msgstr "Nyelv"
 msgid "Detect Language and Encoding"
 msgstr "Nyelv és kódolás felismerése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1101
-msgid "iso-8859-1 -> win-1251"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1111
 msgid "Book Settings"
 msgstr "Könyv beállításai"
@@ -487,3 +467,25 @@ msgstr "Könyv száma: "
 msgid "Book Menu"
 msgstr "Könyv menü"
 
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1101
+msgid "iso-8859-1 -> win-1251"
+msgstr "iso-8859-1 -> win-1251"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:63
+#, fuzzy
+msgid "None"
+msgstr "Nincs"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:70
+msgid "Go to Home"
+msgstr "Elejére ugrás"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
+#, fuzzy
+msgid "Large Scroll Forward"
+msgstr "Ugrás előre (nagyobb)"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:76
+#, fuzzy
+msgid "Large Scroll Backward"
+msgstr "Ugrás vissza (nagyobb)"
