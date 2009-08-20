@@ -244,13 +244,6 @@ msgstr "<- Keresés"
 msgid "Text not found"
 msgstr "Szöveg nem található"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:433
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:619
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1029
-#, c-format
-msgid "%d%%"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:449
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:502
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:612
@@ -489,3 +482,10 @@ msgstr "Ugrás előre (nagyobb)"
 #, fuzzy
 msgid "Large Scroll Backward"
 msgstr "Ugrás vissza (nagyobb)"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:433
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:619
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1029
+#, c-format
+msgid "%d%%"
+msgstr "%d%%"
