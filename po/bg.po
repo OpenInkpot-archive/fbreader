@@ -1,9 +1,9 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
@@ -259,23 +259,6 @@ msgstr "<- Търсене"
 msgid "Text not found"
 msgstr "Текстът не е намерен"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:433
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:619
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1029
-#, c-format
-msgid "%d%%"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:449
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:502
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:612
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:692
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1027
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1057
-#, c-format
-msgid "%dpt"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:560
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:643
 msgid "Left Margin"
@@ -419,10 +402,6 @@ msgstr "Език"
 msgid "Detect Language and Encoding"
 msgstr "Откриване на език и кодировка"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1101
-msgid "iso-8859-1 -> win-1251"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1111
 msgid "Book Settings"
 msgstr "Настройки на книгата"
@@ -485,3 +464,24 @@ msgstr "Номер на книга: "
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1314
 msgid "Book Menu"
 msgstr "Книги"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:449
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:502
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:612
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:692
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1027
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1057
+#, c-format
+msgid "%dpt"
+msgstr "%dpt"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1101
+msgid "iso-8859-1 -> win-1251"
+msgstr "iso-8859-1 -> win-1251"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:433
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:619
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1029
+#, c-format
+msgid "%d%%"
+msgstr "%d%%"
