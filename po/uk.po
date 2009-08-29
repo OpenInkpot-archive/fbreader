@@ -1,9 +1,9 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBReader\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Last-Translator: Artem Naluzhnyy <tut@nhamon.com.ua>\n"
 "Language-Team: Ukranian <openinkpot-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:63
@@ -114,10 +114,6 @@ msgstr "чеська"
 msgid "German"
 msgstr "німецька"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
-msgid "German (traditional orthography)"
-msgstr "Німецька (традиційна)"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:98
 msgid "Greek"
 msgstr "грецька"
@@ -137,10 +133,6 @@ msgstr "іспанська"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:102
 msgid "Finnish"
 msgstr "фінська"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
-msgid "French"
-msgstr "французька"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
 msgid "Hebrew"
@@ -332,6 +324,7 @@ msgstr "Відступ першого рядка абзацу"
 msgid "Indicator Height"
 msgstr "Товщина рядка статусу"
 
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1056
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:682
 msgid "Offset From Text"
 msgstr "Відстань до тексту"
@@ -407,10 +400,6 @@ msgstr "Поточний час"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1054
 msgid "Show Battery"
 msgstr "Заряд батареї"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1056
-msgid "Offset from Text"
-msgstr "Відстань до тексту"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1064
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1126
@@ -489,3 +478,13 @@ msgstr "Номер книжки в циклі:"
 msgid "Book Menu"
 msgstr "Меню книжки"
 
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
+msgid "German (traditional orthography)"
+msgstr "німецька (традиційна орф.)"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
+msgid "French"
+msgstr "французька"
+
+#~ msgid "Offset from Text"
+#~ msgstr "Відстань до тексту"
