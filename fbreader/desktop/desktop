@@ -1,9 +1,12 @@
 [Desktop Entry]
 Name=FBReader
+Name[pl]=FBReader
 Name[ru]=FBReader
 GenericName=E-book reader
+GenericName[pl]=Czytnik e-booków
 GenericName[ru]=Чтение электронных книг
 Comment=E-book reader
+Comment[pl]=Czytnik e-booków
 Comment[ru]=Чтение электронных книг
 TryExec=FBReader
 Exec=FBReader %F
