@@ -381,10 +381,6 @@ msgstr "Автоматичний перенос слів"
 msgid "Indicator"
 msgstr "Рядок статусу"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1050
-msgid "Show Indicator"
-msgstr "Відображати рядок статусу"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1051
 msgid "Show TOC Marks"
 msgstr "Позначки розділів"
@@ -424,10 +420,6 @@ msgstr "Параметри книжки"
 msgid "Encoding"
 msgstr "Кодування символів"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1138
-msgid "Encoding Set"
-msgstr "Набір кодуівань"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1174
 msgid "Break Paragraph at"
 msgstr "Завершення параграфу"
@@ -449,10 +441,6 @@ msgstr "Налаштування книжки"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1319
 msgid "Book Info"
 msgstr "Інформація про книжку"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1254
-msgid "File: "
-msgstr "Ім’я файлу книжки:"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1255
 msgid "Full path: "
@@ -485,6 +473,18 @@ msgstr "німецька (традиційна орф.)"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
 msgid "French"
 msgstr "французька"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1050
+msgid "Show Indicator"
+msgstr "Відображати рядок статусу"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1138
+msgid "Encoding Set"
+msgstr "Набір кодувань"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1254
+msgid "File: "
+msgstr "Ім’я файлу книжки:"
 
 #~ msgid "Offset from Text"
 #~ msgstr "Відстань до тексту"
