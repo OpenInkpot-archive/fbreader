@@ -1,4 +1,4 @@
-fbreader (0.10.7-1.oi21) UNRELEASED; urgency=low
+fbreader (0.10.7-1.oi21) asimov; urgency=low
 
   [ Mikhail Gusarov ]
   * Adapt EFL frontend to libchoicebox1
@@ -7,7 +7,7 @@ fbreader (0.10.7-1.oi21) UNRELEASED; urgency=low
   [ Tomasz Długosz ]
   * Polish .desktop translation
 
- -- Mikhail Gusarov <dottedmag@dottedmag.net>  Mon, 31 Aug 2009 05:07:07 +0700
+ -- Alexander Kerner <lunohod@openinkpot.org>  Mon, 31 Aug 2009 00:10:13 +0200
 
 fbreader (0.10.7-1.oi20) asimov; urgency=low
 
