@@ -33,7 +33,7 @@
 
 extern "C" {
 #include <xcb/xcb.h>
-#include <echoicebox.h>
+#include <libchoicebox.h>
 }
 
 #define SETTINGS_LEFT_NAME "settings_left"
@@ -54,7 +54,7 @@ static void cb_rcb_destroy();
 
 static bool reuse_fcb_win = false;
 
-static bool alt_modifier = false;
+static bool bookmark_delete_mode = false;
 
 void exit_all(void* param) {
 	emergency_exit = true;
@@ -235,60 +235,39 @@ static void cb_lcb_destroy()
 static void lcb_win_key_up_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
 {
 	int i;
-	Evas_Event_Key_Down* ev = (Evas_Event_Key_Down*)event_info;
-//	fprintf(stderr, "kn: %s, k: %s, s: %s, c: %s\n", ev->keyname, ev->key, ev->string, ev->compose);
-
-	const char *k = ev->key;
+	Evas_Event_Key_Up* ev = (Evas_Event_Key_Up*)event_info;
+    bool is_alt = evas_key_modifier_is_set(ev->modifiers, "Alt");
 
 	Evas_Object* r = evas_object_name_find(e, SETTINGS_LEFT_NAME);
 
-    if(!strcmp(ev->keyname, "Up") || !strcmp(ev->keyname, "Prior"))
-		choicebox_prev(r);
-    if(!strcmp(ev->keyname, "Down") || !strcmp(ev->keyname, "Next"))
-		choicebox_next(r);
-	if(!strcmp(k, "Left")) {
+    /* FIXME: this might become configurable in future */
+	if(!strcmp(ev->keyname, "Left")) {
 		cb_olist_item *item;
 		if((i = choicebox_get_selection(r)) != -1 &&
 				(item = &olists.back()->items.at(i)) &&
 				(item->values.size() == 3 || item->values.size() == 2)) {
 			if(item->values.size() == 3)
-				choicebox_activate_current(r, alt_modifier);
-			choicebox_activate_current(r, alt_modifier);
-		} else
-			choicebox_prevpage(r);
+				choicebox_activate_current(r, is_alt);
+			choicebox_activate_current(r, is_alt);
+            return;
+		}
 	}
-	if(!strcmp(k, "Right")) {
+	if(!strcmp(ev->keyname, "Right")) {
 		cb_olist_item *item;
 		if((i = choicebox_get_selection(r)) != -1 &&
 				(item = &olists.back()->items.at(i)) &&
 				(item->values.size() == 3 || item->values.size() == 2)) {
-			choicebox_activate_current(r, alt_modifier);
-		} else
-			choicebox_nextpage(r);
+			choicebox_activate_current(r, is_alt);
+            return;
+		}
 	}
-	if(!strncmp("KP_", k, 3) && isdigit(k[3]) && k[3] != '0' && !k[4])
-		choicebox_activate_nth_visible(r, k[3]-'1', alt_modifier);
-	if(!strcmp(k, "Return"))
-		choicebox_activate_current(r, alt_modifier);
-	if(!strcmp(k, "Escape"))
-		cb_lcb_destroy();
-	if(!strcmp(k, "Alt_L")) {
-		alt_modifier = false;
-		edje_object_signal_emit(evas_object_name_find(e, "lcb_footer"), alt_modifier ? "alt_on" : "alt_off", "");
-	}
-	if(!strcmp(k, "space")) {
-		alt_modifier = !alt_modifier;
-		edje_object_signal_emit(evas_object_name_find(e, "lcb_footer"), alt_modifier ? "alt_on" : "alt_off", "");
-	}
+
+    choicebox_aux_key_up_handler(o, ev);
 }
 
-static void lcb_win_key_down_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
+static void lcb_close_handler(Evas_Object* choicebox, void* param)
 {
-	Evas_Event_Key_Up* ev = (Evas_Event_Key_Up*)event_info;
-	if(!strcmp(ev->keyname, "Alt_L")) {
-		alt_modifier = true;
-		edje_object_signal_emit(evas_object_name_find(e, "lcb_footer"), alt_modifier ? "alt_on" : "alt_off", "");
-	}
+    cb_lcb_destroy();
 }
 
 void cb_lcb_redraw()
@@ -309,7 +288,7 @@ void cb_lcb_redraw()
 	if(l->items.size() > 0)
 		choicebox_set_selection(choicebox, 0);
 
-	alt_modifier = false;
+	bookmark_delete_mode = false;
 }
 
 static Ecore_Idle_Enterer *idle_enterer = NULL;
@@ -443,8 +422,18 @@ void cb_lcb_new()
 	evas_object_resize(footer, w/2, footer_h);
 	evas_object_show(footer);
 
-	Evas_Object* choicebox = choicebox_new(main_canvas, "/usr/share/echoicebox/echoicebox.edj", "settings-left",
-			lcb_handler, lcb_draw_handler, lcb_page_updated_handler, (void*)NULL);
+    choicebox_info_t info = {
+        NULL,
+        "/usr/share/choicebox/choicebox.edj",
+        "settings-left",
+        "/usr/share/FBReader/themes/cb_header_footer.edj",
+        "item",
+        lcb_handler,
+        lcb_draw_handler,
+        lcb_page_updated_handler,
+        lcb_close_handler,
+    };
+	Evas_Object* choicebox = choicebox_new(main_canvas, &info, NULL);
 	choicebox_set_size(choicebox, olists.empty() ? 0 : olists.back()->items.size());
 	evas_object_name_set(choicebox, SETTINGS_LEFT_NAME);
 	evas_object_resize(choicebox, w/2, h - header_h - footer_h);
@@ -452,10 +441,6 @@ void cb_lcb_new()
 	evas_object_show(choicebox);
 
 	evas_object_focus_set(choicebox, true);
-	evas_object_event_callback_add(choicebox,
-			EVAS_CALLBACK_KEY_DOWN,
-			&lcb_win_key_down_handler,
-			NULL);
 	evas_object_event_callback_add(choicebox,
 			EVAS_CALLBACK_KEY_UP,
 			&lcb_win_key_up_handler,
@@ -465,7 +450,7 @@ void cb_lcb_new()
 
 	ecore_evas_show(lcb_win);
 
-	alt_modifier = false;
+	bookmark_delete_mode = false;
 
 	ecore_main_loop_begin();
 	if(emergency_exit)
@@ -571,42 +556,9 @@ static void cb_rcb_destroy()
 	set_refresh_flag();
 }
 
-static void rcb_win_key_up_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
+static void rcb_close_handler(Evas_Object* choicebox, void* param)
 {
-	Evas_Event_Key_Down* ev = (Evas_Event_Key_Down*)event_info;
-//	fprintf(stderr, "kn: %s, k: %s, s: %s, c: %s\n", ev->keyname, ev->key, ev->string, ev->compose);
-
-	const char *k = ev->key;
-
-	Evas_Object* r = evas_object_name_find(e, SETTINGS_RIGHT_NAME);
-
-
-    if(!strcmp(ev->keyname, "Up") || !strcmp(ev->keyname, "Prior"))
-		choicebox_prev(r);
-    if(!strcmp(ev->keyname, "Down") || !strcmp(ev->keyname, "Next"))
-		choicebox_next(r);
-	if(!strcmp(k, "Left"))
-		choicebox_prevpage(r);
-	if(!strcmp(k, "Right"))
-		choicebox_nextpage(r);
-	if(!strncmp("KP_", k, 3) && isdigit(k[3]) && k[3] != '0' && !k[4])
-		choicebox_activate_nth_visible(r, k[3]-'1', alt_modifier);
-	if(!strcmp(k, "Return"))
-		choicebox_activate_current(r, alt_modifier);
-	if(!strcmp(k, "Escape"))
-		cb_rcb_destroy();
-	if(!strcmp(k, "Alt_L"))
-		alt_modifier = false;
-	if(!strcmp(k, "space")) {
-		alt_modifier = !alt_modifier;
-	}
-}
-
-static void rcb_win_key_down_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
-{
-	Evas_Event_Key_Up* ev = (Evas_Event_Key_Up*)event_info;
-	if(!strcmp(ev->key, "Alt_L"))
-		alt_modifier = true;
+    cb_rcb_destroy();
 }
 
 void cb_rcb_new()
@@ -633,25 +585,29 @@ void cb_rcb_new()
 	evas_object_resize(footer, w, footer_h);
 	evas_object_show(footer);
 
-	Evas_Object* choicebox = choicebox_new(main_canvas, "/usr/share/echoicebox/echoicebox.edj", "settings-right",
-			rcb_handler, rcb_draw_handler, rcb_page_updated_handler, (void*)NULL);
+    choicebox_info_t info = {
+        NULL,
+        "/usr/share/choicebox/choicebox.edj",
+        "settings-right",
+        "/usr/share/FBReader/themes/cb_header_footer.edj",
+        "item",
+        rcb_handler,
+        rcb_draw_handler,
+        rcb_page_updated_handler,
+        rcb_close_handler,
+    };
+	Evas_Object* choicebox = choicebox_new(main_canvas, &info, NULL);
+
 	choicebox_set_size(choicebox, vlist->values.size());
 	evas_object_name_set(choicebox, SETTINGS_RIGHT_NAME);
 	evas_object_resize(choicebox, w, h - header_h - footer_h);
 	evas_object_move(choicebox, w, header_h);
 	evas_object_show(choicebox);
 
+    choicebox_aux_subscribe_key_up(choicebox);
 	evas_object_focus_set(choicebox, true);
-	evas_object_event_callback_add(choicebox,
-			EVAS_CALLBACK_KEY_DOWN,
-			&rcb_win_key_down_handler,
-			NULL);
-	evas_object_event_callback_add(choicebox,
-			EVAS_CALLBACK_KEY_UP,
-			&rcb_win_key_up_handler,
-			NULL);
 
-	alt_modifier = false;
+	bookmark_delete_mode = false;
 }
 
 // fcb
@@ -707,7 +663,7 @@ static void fcb_handler(Evas_Object* choicebox,
 //			choicebox, item_num, is_alt, param);
 
 	cb_list *l = (cb_list *)param;
-	switch(l->item_handler(item_num, is_alt)) {
+	switch(l->item_handler(item_num, is_alt || bookmark_delete_mode)) {
 		case 1:
 			reuse_fcb_win = false;
 			ecore_main_loop_quit();
@@ -764,45 +720,26 @@ static void cb_fcb_destroy()
 
 static void fcb_win_key_up_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
 {
-	Evas_Event_Key_Down* ev = (Evas_Event_Key_Down*)event_info;
+	Evas_Event_Key_Up* ev = (Evas_Event_Key_Up*)event_info;
 //	fprintf(stderr, "kn: %s, k: %s, s: %s, c: %s\n", ev->keyname, ev->key, ev->string, ev->compose);
 
 	const char *k = ev->key;
 
 	Evas_Object* r = evas_object_name_find(e, "cb_full");
 
-    if(!strcmp(ev->keyname, "Up") || !strcmp(ev->keyname, "Prior"))
-		choicebox_prev(r);
-    if(!strcmp(ev->keyname, "Down") || !strcmp(ev->keyname, "Next"))
-		choicebox_next(r);
-	if(!strcmp(k, "Left"))
-		choicebox_prevpage(r);
-	if(!strcmp(k, "Right"))
-		choicebox_nextpage(r);
-	if(!strncmp("KP_", k, 3) && isdigit(k[3]) && k[3] != '0' && !k[4])
-		choicebox_activate_nth_visible(r, k[3]-'1', alt_modifier);
-	if(!strcmp(k, "Return"))
-		choicebox_activate_current(r, alt_modifier);
-	if(!strcmp(k, "Escape"))
-		cb_fcb_destroy();
-	if(!strcmp(k, "Alt_L")) {
-		alt_modifier = false;
-		edje_object_signal_emit(evas_object_name_find(e, "footer"), alt_modifier ? "alt_on" : "alt_off", "");
-	}
+    /* FIXME: in far future this should be made configurable */
 	if(!strcmp(k, "space")) {
-		alt_modifier = !alt_modifier;
-
-		edje_object_signal_emit(evas_object_name_find(e, "footer"), alt_modifier ? "alt_on" : "alt_off", "");
+		bookmark_delete_mode = !bookmark_delete_mode;
+		edje_object_signal_emit(evas_object_name_find(e, "footer"), bookmark_delete_mode ? "alt_on" : "alt_off", "");
+        return;
 	}
+
+    choicebox_aux_key_up_handler(o, ev);
 }
 
-static void fcb_win_key_down_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
+static void fcb_close_handler(Evas_Object* choicebox, void* param)
 {
-	Evas_Event_Key_Up* ev = (Evas_Event_Key_Up*)event_info;
-	if(!strcmp(ev->key, "Alt_L")) {
-		alt_modifier = true;
-		edje_object_signal_emit(evas_object_name_find(e, "footer"), alt_modifier ? "alt_on" : "alt_off", "");
-	}
+    cb_fcb_destroy();
 }
 
 void cb_fcb_invalidate(int idx)
@@ -830,7 +767,7 @@ void cb_fcb_redraw(int newsize)
 	if(newsize > 0)
 		choicebox_set_selection(choicebox, 0);
 
-	alt_modifier = false;
+	bookmark_delete_mode = false;
 }
 
 void cb_fcb_new(cb_list *list)
@@ -891,8 +828,19 @@ void cb_fcb_new(cb_list *list)
 		evas_object_resize(footer, 600, footer_h);
 		evas_object_show(footer);
 
-		Evas_Object* choicebox = choicebox_new(main_canvas, "/usr/share/echoicebox/echoicebox.edj", "full",
-				fcb_handler, fcb_draw_handler, fcb_page_updated_handler, list);
+        choicebox_info_t info = {
+            NULL,
+            "/usr/share/choicebox/choicebox.edj",
+            "full",
+            "/usr/share/FBReader/themes/cb_header_footer.edj",
+            "item",
+            fcb_handler,
+            fcb_draw_handler,
+            fcb_page_updated_handler,
+            fcb_close_handler,
+        };
+
+		Evas_Object* choicebox = choicebox_new(main_canvas, &info, list);
 		choicebox_set_size(choicebox, list->items.size());
 		evas_object_name_set(choicebox, "cb_full");
 		evas_object_resize(choicebox, 600, 800 - header_h - footer_h);
@@ -900,10 +848,6 @@ void cb_fcb_new(cb_list *list)
 		evas_object_show(choicebox);
 
 		evas_object_focus_set(choicebox, true);
-		evas_object_event_callback_add(choicebox,
-				EVAS_CALLBACK_KEY_DOWN,
-				&fcb_win_key_down_handler,
-				NULL);
 		evas_object_event_callback_add(choicebox,
 				EVAS_CALLBACK_KEY_UP,
 				&fcb_win_key_up_handler,
@@ -916,7 +860,7 @@ void cb_fcb_new(cb_list *list)
 
 	reuse_fcb_win = false;
 
-	alt_modifier = false;
+	bookmark_delete_mode = false;
 
 	ecore_main_loop_begin();
 	if(emergency_exit)

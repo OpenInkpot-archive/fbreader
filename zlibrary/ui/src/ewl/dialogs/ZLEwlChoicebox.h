@@ -98,6 +98,7 @@ struct _cb_vlist {
 	void(*destroy_handler)();
 };
 
+
 void cb_fcb_new(cb_list *list);
 void cb_fcb_redraw(int newsize = -1);
 void cb_fcb_invalidate(int idx);

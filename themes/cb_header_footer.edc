@@ -1,4 +1,77 @@
+styles {
+    style {
+        name, "titles";
+        base, "font=sans-serif font_size=24 color=#000 align=left valign=top wrap=word";
+        tag, "inactive" "+color=#888";
+        tag, "/inactive" "-";
+    };
+    style {
+        name, "values";
+        base, "font=sans-serif font_size=20 color=#000 align=right valign=bottom";
+        tag, "inactive" "+color=#888";
+        tag, "/inactive" "-";
+    }
+
+    style {
+        name, "item-texts";
+        base, "font=sans-serif font_size=28 color=#000 align=left valign=middle";
+        tag, "inactive" "+color=#888";
+        tag, "/inactive" "-";
+    }
+}
+
 collections {
+   group {
+      name, "item";
+      parts {
+         part {
+            name, "text";
+            type, TEXTBLOCK;
+            description {
+               state, "default" 0.0;
+               color, 0 0 0 255;
+               text {
+                  style, "item-texts";
+                  max, 0 1;
+               }
+               align, 0 0.5;
+               rel1 { relative, 0.0 0.0; offset, 3 0; }
+               rel2 { relative, 1.0 1.0; offset, -4 -1; }
+            }
+         }
+         part {
+            name, "title";
+            type, TEXTBLOCK;
+            multiline, 1;
+            description {
+               state, "default" 0.0;
+               text {
+                  style, "titles";
+                  min, 0 1;
+               }
+               align, 0.0 0.0;
+               rel1 { relative, 0.0 0.0; offset, 3 0; }
+               rel2 { relative, 1.0 0.0; offset, -4 0; }
+            }
+         }
+         part {
+            name, "value";
+            type, TEXTBLOCK;
+            multiline, 1;
+            description {
+               state, "default" 0.0;
+               text {
+                  style, "values";
+                  min, 0 1;
+               }
+               align, 1.0 1.0;
+               rel1 { relative, 0.0 1.0; offset, 3 -1; }
+               rel2 { relative, 1.0 1.0; offset, -4 -1; }
+            }
+         }
+      }
+   }
+
     group {
         name, "header";
         parts {
