@@ -1,3 +1,14 @@
+fbreader (0.10.7-1.oi21) UNRELEASED; urgency=low
+
+  [ Mikhail Gusarov ]
+  * Adapt EFL frontend to libchoicebox1
+  * Translations updated: Bulgarian, Ukrainian
+
+  [ Tomasz Długosz ]
+  * Polish .desktop translation
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Mon, 31 Aug 2009 05:07:07 +0700
+
 fbreader (0.10.7-1.oi20) asimov; urgency=low
 
   * translations updated
