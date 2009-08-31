@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: FBreader\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-25 14:51+0200\n"
-"PO-Revision-Date: 2009-08-31 07:04+0530\n"
+"PO-Revision-Date: 2009-08-31 14:36+0530\n"
 "Last-Translator: sankarshan mukhopadhyay <sankarshan@fedoraproject.org>\n"
 "Language-Team: anubad@lists.ankur.org.in\n"
 "Language: en\n"
@@ -66,7 +66,7 @@ msgstr "পরের TOC সেকশন-এ যাওয়া হবে"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:74
 msgid "Go to Previous TOC Section"
-msgstr ""
+msgstr "আগের TOC সেকশন-এ যাওয়া হবে"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
 msgid "Large Scroll Forward"
@@ -107,14 +107,16 @@ msgstr ""
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
 msgid "Arabic"
 msgstr ""
+"আরবি\n"
+"আরবি"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
 msgid "Czech"
-msgstr ""
+msgstr "চেক"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
 msgid "German"
-msgstr ""
+msgstr "জার্মান"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
 msgid "German (traditional orthography)"
@@ -122,19 +124,19 @@ msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:98
 msgid "Greek"
-msgstr ""
+msgstr "গ্রীক"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:99
 msgid "English"
-msgstr ""
+msgstr "ইংরাজী"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:100
 msgid "Esperanto"
-msgstr ""
+msgstr "এস্পেরান্তো"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
 msgid "Spanish"
-msgstr ""
+msgstr "স্প্যানিশ"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:102
 msgid "Finnish"
@@ -186,11 +188,11 @@ msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:114
 msgid "Other"
-msgstr ""
+msgstr "অন্যান্য"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "undefined"
-msgstr ""
+msgstr "অজানা"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "left"
