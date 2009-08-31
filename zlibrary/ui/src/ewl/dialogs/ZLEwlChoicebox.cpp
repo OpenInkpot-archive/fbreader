@@ -105,11 +105,9 @@ static void lcb_draw_handler(Evas_Object* choicebox,
 
 	cb_olist_item *i = &l->items.at(item_num);
 	if(i->type == ITEM_SUBMENU || i->type == ITEM_TEXT) {
-		edje_object_part_text_set(item, "text", i->name.c_str());
-		edje_object_part_text_set(item, "title", "");
+		edje_object_part_text_set(item, "title", i->name.c_str());
 		edje_object_part_text_set(item, "value", "");
 	} else if(i->type == ITEM_OPTION) {
-		edje_object_part_text_set(item, "text", "");
 		edje_object_part_text_set(item, "title", i->name.c_str());
 
 		if(i->values.empty())
@@ -426,8 +424,8 @@ void cb_lcb_new()
         NULL,
         "/usr/share/choicebox/choicebox.edj",
         "settings-left",
-        "/usr/share/FBReader/themes/cb_header_footer.edj",
-        "item",
+        "/usr/share/choicebox/choicebox.edj",
+        "item-settings",
         lcb_handler,
         lcb_draw_handler,
         lcb_page_updated_handler,
@@ -492,8 +490,7 @@ static void rcb_draw_handler(Evas_Object* choicebox,
 		return;
 
 	cb_item_value *iv = &vlist->values.at(item_num);
-	edje_object_part_text_set(item, "text", iv->text.c_str());
-	edje_object_part_text_set(item, "title", "");
+	edje_object_part_text_set(item, "title", iv->text.c_str());
 	edje_object_part_text_set(item, "value", "");
 
 //	fprintf(stderr, "rcd_draw_handle: choicebox: %p, item: %p, item_num: %d, page_position: %d, param: %p\n",
@@ -589,8 +586,8 @@ void cb_rcb_new()
         NULL,
         "/usr/share/choicebox/choicebox.edj",
         "settings-right",
-        "/usr/share/FBReader/themes/cb_header_footer.edj",
-        "item",
+        "/usr/share/choicebox/choicebox.edj",
+        "item-settings",
         rcb_handler,
         rcb_draw_handler,
         rcb_page_updated_handler,
