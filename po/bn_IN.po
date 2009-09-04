@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: FBreader\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-25 14:51+0200\n"
-"PO-Revision-Date: 2009-08-31 14:36+0530\n"
+"PO-Revision-Date: 2009-09-04 12:56+0530\n"
 "Last-Translator: sankarshan mukhopadhyay <sankarshan@fedoraproject.org>\n"
 "Language-Team: anubad@lists.ankur.org.in\n"
 "Language: en\n"
@@ -140,23 +140,23 @@ msgstr "স্প্যানিশ"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:102
 msgid "Finnish"
-msgstr ""
+msgstr "ফিনিশ"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
 msgid "French"
-msgstr ""
+msgstr "ফরাসী"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
 msgid "Hebrew"
-msgstr ""
+msgstr "হিব্রু"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:105
 msgid "Indonesian"
-msgstr ""
+msgstr "ইন্দোনেশীয়"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
 msgid "Italian"
-msgstr ""
+msgstr "ইতালিয়ান"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
 msgid "Norwegian"
@@ -196,15 +196,15 @@ msgstr "অজানা"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "left"
-msgstr ""
+msgstr "বাঁদিক"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "right"
-msgstr ""
+msgstr "ডানদিক"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "center"
-msgstr ""
+msgstr "মাঝখানে"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "justify"
@@ -212,11 +212,11 @@ msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
 msgid "New Line"
-msgstr ""
+msgstr "নতুন লাইন"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
 msgid "Empty Line"
-msgstr ""
+msgstr "শূন্য লাইন"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
 msgid "Line With Indent"
@@ -225,50 +225,50 @@ msgstr ""
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:216
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1323
 msgid "Table Of Contents"
-msgstr ""
+msgstr "সূচীপত্র"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:275
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1327
 msgid "Bookmarks"
-msgstr ""
+msgstr "বুকমার্ক"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:276
 msgid "Delete"
-msgstr ""
+msgstr "মুছে ফেলুন"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:284
 msgid "Page "
-msgstr ""
+msgstr "পৃষ্ঠা"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:294
 msgid "Bookmark added"
-msgstr ""
+msgstr "বুকমার্ক যোগ করা হয়েছে"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:323
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:349
 msgid "<- Search ->"
-msgstr ""
+msgstr "<- Search ->"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:325
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:351
 msgid "Search ->"
-msgstr ""
+msgstr "Search ->"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:327
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:353
 msgid "<- Search"
-msgstr ""
+msgstr "<- Search"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:336
 msgid "Text not found"
-msgstr ""
+msgstr "টেক্সট খুঁজে পাওয়া যায়নি"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:433
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:619
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1029
 #, c-format
 msgid "%d%%"
-msgstr ""
+msgstr "%d%%"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:449
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:502
@@ -283,33 +283,33 @@ msgstr ""
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:560
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:643
 msgid "Left Margin"
-msgstr ""
+msgstr "বাঁদিকের মার্জিন"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:563
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:644
 msgid "Right Margin"
-msgstr ""
+msgstr "ডানদিকের মার্জিন"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:566
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:645
 msgid "Top Margin"
-msgstr ""
+msgstr "উপরের মার্জিন"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:569
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:646
 msgid "Bottom Margin"
-msgstr ""
+msgstr "নীচের মার্জিন"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:602
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1026
 msgid "Font Family"
-msgstr ""
+msgstr "ফন্টের ছাঁদ"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:609
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1027
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1057
 msgid "Font Size"
-msgstr ""
+msgstr "ফন্টের আকার"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:616
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1029
