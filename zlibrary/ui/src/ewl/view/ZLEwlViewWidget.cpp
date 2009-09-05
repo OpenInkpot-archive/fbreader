@@ -24,6 +24,10 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 
+extern "C" {
+#include <libeoi.h>
+}
+
 #define XCB_ALL_PLANES ~0
 
 xcb_connection_t *connection;
