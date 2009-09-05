@@ -1,3 +1,11 @@
+fbreader (0.10.7-1.oi22) asimov; urgency=low
+
+  [ Mikhail Gusarov ]
+  * Add support for numbers 'hints' for lists (OI#323).
+  * Translations updated: Bengali.
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Sun, 06 Sep 2009 06:43:01 +0700
+
 fbreader (0.10.7-1.oi21) asimov; urgency=low
 
   [ Mikhail Gusarov ]
