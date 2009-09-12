@@ -1,3 +1,9 @@
+fbreader (0.10.7-1.oi23) asimov; urgency=low
+
+  * enlarge cover page in fb2
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sun, 13 Sep 2009 01:04:29 +0200
+
 fbreader (0.10.7-1.oi22) asimov; urgency=low
 
   [ Mikhail Gusarov ]
