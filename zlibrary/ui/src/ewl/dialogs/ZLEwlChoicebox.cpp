@@ -31,9 +31,11 @@
 #include <Ecore_Evas.h>
 #include <Edje.h>
 
+
 extern "C" {
 #include <xcb/xcb.h>
 #include <libchoicebox.h>
+#include <libeoi.h>
 }
 
 #define SETTINGS_LEFT_NAME "settings_left"
@@ -342,6 +344,8 @@ int screen_change_handler(void *data, int type, void *event)
 	else
 		ecore_evas_resize(win, w/2, h);
 
+    eoi_process_resize(NULL);
+
 	return 0;
 }
 
@@ -437,6 +441,8 @@ void cb_lcb_new()
 	evas_object_resize(choicebox, w/2, h - header_h - footer_h);
 	evas_object_move(choicebox, 0, header_h);
 	evas_object_show(choicebox);
+
+    eoi_register_fullscreen_choicebox(choicebox);
 
 	evas_object_focus_set(choicebox, true);
 	evas_object_event_callback_add(choicebox,
@@ -595,11 +601,14 @@ void cb_rcb_new()
     };
 	Evas_Object* choicebox = choicebox_new(main_canvas, &info, NULL);
 
+
 	choicebox_set_size(choicebox, vlist->values.size());
 	evas_object_name_set(choicebox, SETTINGS_RIGHT_NAME);
 	evas_object_resize(choicebox, w, h - header_h - footer_h);
 	evas_object_move(choicebox, w, header_h);
 	evas_object_show(choicebox);
+
+    eoi_register_fullscreen_choicebox(choicebox);
 
     choicebox_aux_subscribe_key_up(choicebox);
 	evas_object_focus_set(choicebox, true);
@@ -843,6 +852,8 @@ void cb_fcb_new(cb_list *list)
 		evas_object_resize(choicebox, 600, 800 - header_h - footer_h);
 		evas_object_move(choicebox, 0, header_h);
 		evas_object_show(choicebox);
+
+        eoi_register_fullscreen_choicebox(choicebox);
 
 		evas_object_focus_set(choicebox, true);
 		evas_object_event_callback_add(choicebox,

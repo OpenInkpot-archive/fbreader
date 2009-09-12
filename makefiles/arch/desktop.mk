@@ -38,8 +38,8 @@ ifeq "$(UI_TYPE)" "gtk"
 endif
 
 ifeq "$(UI_TYPE)" "ewl"
-  UILIBS = $(shell pkg-config --libs xcb xcb-image xcb-atom xcb-randr evas ewl pango pangoft2 glib-2.0 libpng freetype2 ecore ecore-evas libchoicebox) -ljpeg -lungif -lrt
-  EWLINCLUDE = $(shell pkg-config --cflags xcb xcb-image xcb-randr xcb-atom evas ewl pango pangoft2 glib-2.0 libpng freetype2 ecore ecore-evas libchoicebox)
+  UILIBS = $(shell pkg-config --libs xcb xcb-image xcb-atom xcb-randr evas ewl pango pangoft2 glib-2.0 libpng freetype2 ecore ecore-evas libchoicebox libeoi) -ljpeg -lungif -lrt
+  EWLINCLUDE = $(shell pkg-config --cflags xcb xcb-image xcb-randr xcb-atom evas ewl pango pangoft2 glib-2.0 libpng freetype2 ecore ecore-evas libchoicebox libeoi)
   ZLSHARED = no
 endif
 
