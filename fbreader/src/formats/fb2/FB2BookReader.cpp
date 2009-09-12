@@ -190,6 +190,8 @@ void FB2BookReader::startElementHandler(int tag, const char **xmlattributes) {
 				}
 				if (myInsideCoverpage) {
 					myCoverImageReference = ref;
+					extern std::string cover_image_id;
+					cover_image_id = ref; 
 				}
 			}
 			break;

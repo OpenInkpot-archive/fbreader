@@ -90,6 +90,12 @@ void ZLTextParagraphBuilder::fill() {
 				if (!image.isNull()) {
 					shared_ptr<ZLImageData> data = ZLImageManager::instance().imageData(*image);
 					if (!data.isNull()) {
+
+						extern std::string cover_image_id;
+						extern ZLImageData *cover_image;
+						if(imageEntry.id() == cover_image_id)
+							cover_image = &(*data);
+
 						myElements.push_back(new ZLTextImageElement(imageEntry.id(), data));
 					}
 				}

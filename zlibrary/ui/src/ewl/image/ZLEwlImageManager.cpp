@@ -61,6 +61,7 @@
 
 #include "ZLEwlImageManager.h"
 
+
 extern "C" {
 #include <stdio.h>
 #include <jpeglib.h>
@@ -69,6 +70,8 @@ extern "C" {
 
 #include <png.h>
 #include <gif_lib.h>
+
+std::string cover_image_id;
 
 static const short dither_2bpp_8x8[] = {
 	0, 32, 12, 44, 2, 34, 14, 46, 

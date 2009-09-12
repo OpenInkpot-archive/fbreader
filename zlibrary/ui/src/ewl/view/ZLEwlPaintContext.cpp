@@ -539,13 +539,17 @@ void ZLEwlPaintContext::drawString(int x, int y, const char *str, int len, bool 
 //	pango_fc_font_unlock_face((PangoFcFont*)myAnalysis.font);
 }
 
+ZLImageData *cover_image = NULL;
+
 void ZLEwlPaintContext::drawImage(int x, int y, const ZLImageData &image) {
 	char *c;
 	char *c_src;
 	int s, s_src;
 	int iW = image.width();
 	int iH = image.height();
+	float fscal;
 	int scal = 1;
+	bool do_scal = false;
 	unsigned char val;
 	unsigned char white = pal[255];
 
@@ -573,10 +577,29 @@ void ZLEwlPaintContext::drawImage(int x, int y, const ZLImageData &image) {
 		if (x < 0)
 			x = (myWidth - sW) / 2;
 
+	} else if(cover_image == source_image) {
+
+		if(myWidth > iW)
+			fscal = 0.8 * myWidth / iW;
+
+		if((iH * fscal) > myHeight)
+			fscal = 0.85 * myHeight / iH;
+
+		sW = iW * fscal;
+		sH = iH * fscal;
+
+		x = (myWidth - iW * fscal) / 2;
+		y = iH * fscal + 20;
+
+		scal = SCALMUL / fscal;
+		
 	} else {
 		sW = iW;
 		sH = iH;
 	}
+
+	if(scal > SCALMUL || cover_image == source_image)
+		do_scal = true;
 
 	int si, sj;
 	for(int j = 0; j < sH; j++)
@@ -587,7 +610,7 @@ void ZLEwlPaintContext::drawImage(int x, int y, const ZLImageData &image) {
 			if(i+x >= myWidth || i+x < 0)
 				continue;
 
-			if(scal > SCALMUL) {
+			if(do_scal) {
 				si = i * scal / SCALMUL;
 				sj = j * scal / SCALMUL;
 			} else {
