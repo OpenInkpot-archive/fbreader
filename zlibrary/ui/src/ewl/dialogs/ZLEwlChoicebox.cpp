@@ -511,7 +511,7 @@ static void rcb_handler(Evas_Object* choicebox,
 //	printf("rcb_handle: choicebox: %p, item_num: %d, is_alt: %d, param: %p\n",
 //			choicebox, item_num, is_alt, param);
 
-	if(!vlist)
+	if(!vlist || !vlist->item_handler)
 		return;
 
 	vlist->item_handler(item_num, is_alt);
@@ -669,6 +669,10 @@ static void fcb_handler(Evas_Object* choicebox,
 //			choicebox, item_num, is_alt, param);
 
 	cb_list *l = (cb_list *)param;
+
+	if(!l || !l->item_handler)
+		return;
+
 	switch(l->item_handler(item_num, is_alt || bookmark_delete_mode)) {
 		case 1:
 			reuse_fcb_win = false;
