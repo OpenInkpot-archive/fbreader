@@ -1319,7 +1319,7 @@ void ZLEwlBookInfo(FBReader &f)
 	}
 
 	list_add_tv(_("File: "), ZLFile::fileNameToUtf8(ZLFile(fileName).name(false)));
-	list_add_tv(_("Full path: "), ZLFile::fileNameToUtf8(ZLFile(fileName).path()));
+	//list_add_tv(_("Full path: "), ZLFile::fileNameToUtf8(ZLFile(fileName).path()));
 	list_add_tv(_("Title: "), myBookInfo->TitleOption.value());
 	list_add_tv(_("Author: "), myBookInfo->AuthorDisplayNameOption.value());
 
