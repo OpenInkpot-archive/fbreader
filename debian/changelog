@@ -1,3 +1,16 @@
+fbreader (0.10.7-2) asimov; urgency=low
+
+  [ Tomasz Długosz ]
+  * name of po file with Greek translation fixed
+  [ Alexander Kerner ]
+  * fix changing virtual keyboard layoyt. #464
+  * fix cover image upscaling
+  * don't show 'full path' in book info dialog
+  * fixed crash in 'book info'. #458
+  * change default indicator settings
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Wed, 16 Sep 2009 00:01:28 +0200
+
 fbreader (0.10.7-1.oi23) asimov; urgency=low
 
   * enlarge cover page in fb2
