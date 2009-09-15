@@ -547,7 +547,7 @@ void ZLEwlPaintContext::drawImage(int x, int y, const ZLImageData &image) {
 	int s, s_src;
 	int iW = image.width();
 	int iH = image.height();
-	float fscal;
+	float fscal = 1.0;
 	int scal = 1;
 	bool do_scal = false;
 	unsigned char val;
@@ -580,16 +580,16 @@ void ZLEwlPaintContext::drawImage(int x, int y, const ZLImageData &image) {
 	} else if(cover_image == source_image) {
 
 		if(myWidth > iW)
-			fscal = 0.8 * myWidth / iW;
+			fscal = .85 * myWidth / iW;
 
-		if((iH * fscal) > myHeight)
-			fscal = 0.85 * myHeight / iH;
+		if((iH * fscal) > (.85 * myHeight))
+			fscal = .85 * myHeight / iH;
 
 		sW = iW * fscal;
 		sH = iH * fscal;
 
 		x = (myWidth - iW * fscal) / 2;
-		y = iH * fscal + 20;
+		y = iH * fscal + .05 * myHeight;
 
 		scal = SCALMUL / fscal;
 		
