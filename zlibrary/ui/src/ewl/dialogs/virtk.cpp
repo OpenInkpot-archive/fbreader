@@ -243,8 +243,8 @@ void keypress_cb(Ewl_Widget *w, void *event, void *data)
 		first_k = 0;
 
 		ewl_entry_delete_left(EWL_ENTRY(entry));
-	} else if(!strcmp(k, "Up") || !strcmp(k, "Down")) {
-		if(!strcmp(k, "Up"))
+	} else if(!strcmp(k, "Up") || !strcmp(k, "Down") || !strcmp(k, "Right") || !strcmp(k, "Left")) {
+		if(!strcmp(k, "Up") || !strcmp(k, "Right"))
 			i++;
 		else
 			i--;
