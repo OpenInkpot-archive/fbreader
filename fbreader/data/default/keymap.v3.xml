@@ -16,7 +16,8 @@
 	<binding key="Alt+8" action="search"/>
 	<binding key="9" action="largeScrollBackward"/>
 	<binding key="0" action="largeScrollForward"/>
-	<binding key="Return" action="preferences"/> 
+	<binding key="Return" action="menu"/> 
+	<binding key="Alt+Return" action="preferences"/> 
 	<binding key="Escape" action="cancel"/>
 	<binding key="Right" action="largeScrollForward"/>
 	<binding key="Left" action="largeScrollBackward"/>
