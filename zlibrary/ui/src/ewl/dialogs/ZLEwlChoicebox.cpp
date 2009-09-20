@@ -285,8 +285,10 @@ void cb_lcb_redraw()
 	edje_object_part_text_set(header, "text", olists.empty() ? "" : olists.back()->name.c_str());
 	choicebox_set_size(choicebox, l->items.size());
 	choicebox_invalidate_interval(choicebox, 0, l->items.size());
-	if(l->items.size() > 0)
-		choicebox_set_selection(choicebox, 0);
+	if(l->items.size() > 0) {
+		choicebox_scroll_to(choicebox, 0);
+		choicebox_set_selection(choicebox, -1);
+	}
 
 	bookmark_delete_mode = false;
 }
@@ -774,8 +776,10 @@ void cb_fcb_redraw(int newsize)
 		choicebox_set_size(choicebox, newsize);
 		choicebox_invalidate_interval(choicebox, 0, newsize);
 	}
-	if(newsize > 0)
-		choicebox_set_selection(choicebox, 0);
+	if(newsize > 0) {
+		choicebox_scroll_to(choicebox, 0);
+		choicebox_set_selection(choicebox, -1);
+	}
 
 	bookmark_delete_mode = false;
 }
@@ -796,8 +800,10 @@ void cb_fcb_new(cb_list *list)
 		choicebox_set_size(choicebox, list->items.size());
 
 		choicebox_invalidate_interval(choicebox, 0, list->items.size());
-		if(list->items.size() > 0)
-			choicebox_set_selection(choicebox, 0);
+		if(list->items.size() > 0) {
+			choicebox_scroll_to(choicebox, 0);
+			choicebox_set_selection(choicebox, -1);
+		}
 
 		evas_object_show(evas_object_name_find(main_canvas, "bg"));
 	} else {
