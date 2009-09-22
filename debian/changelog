@@ -1,3 +1,12 @@
+fbreader (0.10.7-3) asimov; urgency=low
+
+  * change keybindings for V3
+  * fix for #481
+  * add help
+  * fix full screen choicebox
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 22 Sep 2009 21:58:45 +0200
+
 fbreader (0.10.7-2) asimov; urgency=low
 
   [ Tomasz Długosz ]
