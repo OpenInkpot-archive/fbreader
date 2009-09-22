@@ -323,7 +323,7 @@ void ee_init()
 	}
 }
 
-int screen_change_handler(void *data, int type, void *event)
+static int screen_change_handler(void *data, int type, void *event)
 {
 	if(type != ECORE_X_EVENT_SCREEN_CHANGE)
 		return 0;

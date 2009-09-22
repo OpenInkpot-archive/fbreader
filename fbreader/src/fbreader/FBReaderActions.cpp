@@ -705,3 +705,11 @@ void BookmarksShow::run() {
 	FBReader &f = fbreader();
 	ZLEwlBMKDialog(f);
 }
+
+Help::Help(FBReader &fbreader) : FBAction(fbreader) {
+}
+
+void Help::run() {
+	FBReader &f = fbreader();
+	ZLEwlHelpDialog(f);
+}

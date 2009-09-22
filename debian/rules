@@ -46,6 +46,9 @@ install-stamp: build
 		install -m 644 themes/entrybox.edj $(DEB_DIR)/fbreader/usr/share/FBReader/themes
 		install -m 644 themes/virtktheme.edj $(DEB_DIR)/fbreader/usr/share/FBReader/themes
 		install -m 644 themes/virtk_layout $(DEB_DIR)/fbreader/usr/share/FBReader/themes
+		mkdir -p $(DEB_DIR)/fbreader/usr/share/keys/help
+		install -m 644 fbreader_help.ini $(DEB_DIR)/fbreader/usr/share/keys/help/fbreader.ini
+		cp -a help $(DEB_DIR)/fbreader/usr/share
 		for FLAVOUR in $(flavours); do \
 			DEFAULT_DIR=$(DEB_DIR)/fbreader-settings-$$FLAVOUR/usr/share/FBReader/default; \
 			mkdir -p $$DEFAULT_DIR; \

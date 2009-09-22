@@ -80,6 +80,7 @@ public:
 	static const std::string HYPERLINK_NAV_START;
 	static const std::string BMK_ADD;
 	static const std::string BMK_SHOW;
+	static const std::string HELP;
 
 private:
 	ActionCode();
@@ -431,6 +432,13 @@ class BookmarksShow : public FBAction {
 
 public:
 	BookmarksShow(FBReader &fbreader);
+	void run();
+};
+
+class Help : public FBAction {
+
+public:
+	Help(FBReader &fbreader);
 	void run();
 };
 

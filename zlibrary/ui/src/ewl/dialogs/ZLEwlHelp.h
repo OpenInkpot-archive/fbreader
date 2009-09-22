@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Alexander Kerner <lunohod@openinkpot.org>
+ * Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,20 +17,9 @@
  * 02110-1301, USA.
  */
 
-#ifndef _ZLEWLDIALOGS_H_
-#define _ZLEWLDIALOGS_H_
+#ifndef ZLEWLHELP_H
+#define ZLEWLHELP_H
 
-#include "../../../../../fbreader/src/fbreader/FBReaderActions.h"
-
-void ZLEwlGotoPageDialog(FBReader &f);
-void ZLEwlOptionsDialog(FBReader &f);
-void ZLEwlTOCDialog(FBReader &f);
-void ZLEwlBMKDialog(FBReader &f);
-void ZLEwlBMKAddedMsg(FBReader &f);
-void ZLEwlSearchDialog(FBReader &f);
-void ZLEwlBookInfo(FBReader &f);
-//void redraw_text();
-void ZLEwlMainMenu(FBReader &f);
-void ZLEwlHelpDialog(FBReader &f);
+void show_help();
 
 #endif

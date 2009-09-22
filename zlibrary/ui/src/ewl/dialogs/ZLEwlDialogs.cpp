@@ -22,6 +22,7 @@
 #include "ZLEwlDialogs.h"
 #include "ZLEwlChoicebox.h"
 #include "ZLEwlMessage.h"
+#include "ZLEwlHelp.h"
 #include "virtk.h"
 
 #include <ewl/Ewl.h>
@@ -1413,4 +1414,9 @@ void ZLEwlMainMenu(FBReader &f)
 		delete list;
 		list = NULL;
 	}
+}
+
+void ZLEwlHelpDialog(FBReader &f)
+{
+    show_help();
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <keymap>
-	<binding key="0" action="undo"/>
+	<binding key="0" action="help"/>
 	<binding key="1" action="redo"/>
 	<binding key="2" action="gotoPageNumber"/>
 	<binding key="3" action="addBookmark"/>
