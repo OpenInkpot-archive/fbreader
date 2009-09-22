@@ -323,7 +323,7 @@ void ee_init()
 	}
 }
 
-static int screen_change_handler(void *data, int type, void *event)
+static int lcb_screen_change_handler(void *data, int type, void *event)
 {
 	if(type != ECORE_X_EVENT_SCREEN_CHANGE)
 		return 0;
@@ -393,7 +393,7 @@ void cb_lcb_new()
 			window);
 
 	ecore_x_randr_events_select(ecore_evas_software_x11_window_get(lcb_win), 1);
-	Ecore_Event_Handler *sc_handler = ecore_event_handler_add(ECORE_X_EVENT_SCREEN_CHANGE, screen_change_handler, lcb_win);
+	Ecore_Event_Handler *sc_handler = ecore_event_handler_add(ECORE_X_EVENT_SCREEN_CHANGE, lcb_screen_change_handler, lcb_win);
 
 	ecore_evas_resize(lcb_win, w/2, h);
 	ecore_evas_move(lcb_win, 0, 0);
@@ -689,6 +689,30 @@ static void fcb_handler(Evas_Object* choicebox,
 	}
 }
 
+static int fcb_screen_change_handler(void *data, int type, void *event)
+{
+	if(type != ECORE_X_EVENT_SCREEN_CHANGE)
+		return 0;
+
+	Ecore_Evas *win = (Ecore_Evas*)data;
+	Ecore_X_Event_Screen_Change *e = (Ecore_X_Event_Screen_Change*)event;
+
+	int w, h;
+
+	if(e->rotation == ECORE_X_RANDR_ROT_90 || e->rotation == ECORE_X_RANDR_ROT_270) {
+		h = e->width;
+		w = e->height;
+	} else {
+		w = e->width;
+		h = e->height;
+	}
+
+    ecore_evas_resize(win, w, h);
+
+    eoi_process_resize(NULL);
+
+	return 0;
+}
 
 static void fcb_win_resize_handler(Ecore_Evas* main_win)
 {
@@ -818,6 +842,14 @@ void cb_fcb_new(cb_list *list)
 		Evas* main_canvas = ecore_evas_get(fcb_win);
 
 		ecore_evas_callback_delete_request_set(fcb_win, fcb_win_close_handler);
+
+        extern xcb_window_t window;
+        ecore_x_icccm_transient_for_set(
+                ecore_evas_software_x11_window_get(fcb_win),
+                window);
+
+        ecore_x_randr_events_select(ecore_evas_software_x11_window_get(fcb_win), 1);
+        Ecore_Event_Handler *sc_handler = ecore_event_handler_add(ECORE_X_EVENT_SCREEN_CHANGE, fcb_screen_change_handler, fcb_win);
 
 		bg = evas_object_rectangle_add(main_canvas);
 		evas_object_name_set(bg, "bg");
