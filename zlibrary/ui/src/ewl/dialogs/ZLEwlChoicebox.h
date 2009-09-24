@@ -178,10 +178,10 @@ extern cb_vlist *vlist;
 			i.values.clear();	\
 			cb_item_value iv;	\
 			iv.type = VAL_BOOL;	\
-			iv.text = "On";	\
+			iv.text = gettext("On");	\
 			iv.ibool = true;	\
 			i.values.push_back(iv);	\
-			iv.text = "Off";	\
+			iv.text = gettext("Off");	\
 			iv.ibool = false;	\
 			i.values.push_back(iv);	\
 			if((__value))	\
@@ -200,10 +200,10 @@ extern cb_vlist *vlist;
 			i.values.clear();	\
 			cb_item_value iv;	\
 			iv.type = VAL_BOOL;	\
-			iv.text = "On";	\
+			iv.text = gettext("On");	\
 			iv.ibool = true;	\
 			i.values.push_back(iv);	\
-			iv.text = "Off";	\
+			iv.text = gettext("Off");	\
 			iv.ibool = false;	\
 			i.values.push_back(iv);	\
 			if((__value))	\
