@@ -33,16 +33,6 @@ msgstr "Hiperlink mód"
 msgid "Show Footnotes"
 msgstr "Lábjegyzetek megjelenítése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:68
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:137
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1321
-msgid "Go To Page"
-msgstr "Lapra ugrás"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:69
-msgid "Show Table of Contents"
-msgstr "Tartalomjegyzék megjelenítése"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:71
 msgid "Go to Start of Section"
 msgstr "Fejezet elejére ugrás"
@@ -489,3 +479,13 @@ msgstr "Ugrás vissza (nagyobb)"
 #, c-format
 msgid "%d%%"
 msgstr "%d%%"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:68
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:137
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1321
+msgid "Go To Page"
+msgstr "Adott lapra ugrás"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:69
+msgid "Show Table of Contents"
+msgstr "Tartalomjegyzékre ugrás"
