@@ -1,13 +1,13 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBReader\n"
-"Report-Msgid-Bugs-To: @PACKAGE_BUGREPORT@\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-24 15:50+0200\n"
 "PO-Revision-Date: 2009-08-09 01:03+0200\n"
 "Last-Translator: Artem Naluzhnyy <tut@nhamon.com.ua>\n"
@@ -15,11 +15,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:144
-msgid "FBReader: Help"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
 msgid "None"
@@ -487,15 +482,20 @@ msgstr "Номер книжки в циклі:"
 msgid "Book Menu"
 msgstr "Меню книжки"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
-msgid "On"
-msgstr ""
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:144
+msgid "FBReader: Help"
+msgstr "FBReader: Довідка"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:184
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
 msgid "Off"
-msgstr ""
+msgstr "ні"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
+msgid "On"
+msgstr "так"
 
 #~ msgid "Full path: "
 #~ msgstr "Шлях до файлу:"
