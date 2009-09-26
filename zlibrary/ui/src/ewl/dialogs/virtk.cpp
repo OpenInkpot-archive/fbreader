@@ -201,8 +201,8 @@ void keypress_cb(Ewl_Widget *w, void *event, void *data)
 
 	const char *k = e->base.keyname;
 
-	if(isdigit(k[0]) && !k[1]) {
-		pressed_k = k[0] - '0';
+	if(!strncmp(k, "KP_", 3) && isdigit(k[3]) && !k[4]) {
+		pressed_k = k[3] - '0';
 		if(pressed_k == 0)
 			pressed_k = 10;
 
