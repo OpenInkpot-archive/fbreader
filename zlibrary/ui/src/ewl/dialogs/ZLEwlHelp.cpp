@@ -42,8 +42,6 @@ using namespace std;
 extern void ee_init();
 extern bool emergency_exit;
 
-static Ecore_Evas *mw;
-
 static void die(const char* fmt, ...)
 {
     va_list ap;
@@ -76,9 +74,11 @@ static void main_win_resize_handler(Ecore_Evas* main_win)
     evas_object_show(rr);
 }
 
-static void help_closed()
+static void help_closed(Evas_Object* help)
 {
-    ecore_evas_hide(mw);
+    Evas* evas = evas_object_evas_get(help);
+    Ecore_Evas* ee = ecore_evas_ecore_evas_get(evas);
+    ecore_evas_hide(ee);
     ecore_main_loop_quit();
 }
 
@@ -124,8 +124,6 @@ void show_help()
     ecore_evas_borderless_set(main_win, 0);
     ecore_evas_title_set(main_win, gettext("FBReader: Help"));
     ecore_evas_name_class_set(main_win, "fbreader_help", "fbreader_help");
-
-    mw = main_win;
 
     extern xcb_window_t window;
     ecore_x_icccm_transient_for_set(

@@ -1,13 +1,3 @@
-fbreader (0.10.7-4) asimov; urgency=low
-
-  * Make On/Off translatable
-  * update translations
-  * add ukranian help translation
-  * fix broken virtual keyboard
-  * use new Help api
-
- -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 26 Sep 2009 21:47:34 +0200
-
 fbreader (0.10.7-3) asimov; urgency=low
 
   * change keybindings for V3
