@@ -14,7 +14,7 @@ styles {
 
     style {
         name, "item-texts";
-        base, "font=sans-serif font_size=28 color=#000 align=left valign=middle";
+        base, "font=sans-serif font_size=28 color=#000 align=left valign=middle wrap=word";
         tag, "inactive" "+color=#888";
         tag, "/inactive" "-";
     }
@@ -27,6 +27,7 @@ collections {
          part {
             name, "text";
             type, TEXTBLOCK;
+            multiline, 1;
             description {
                state, "default" 0.0;
                color, 0 0 0 255;
