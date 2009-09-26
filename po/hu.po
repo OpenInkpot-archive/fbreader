@@ -1,13 +1,13 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
-"Report-Msgid-Bugs-To: @PACKAGE_BUGREPORT@\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-24 15:50+0200\n"
 "PO-Revision-Date: 2009-06-26 10:44+0200\n"
 "Last-Translator: Anrdás Csehi <acsehi@gmail.com>\n"
@@ -16,16 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:144
-msgid "FBReader: Help"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
-#, fuzzy
-msgid "None"
-msgstr "Nincs"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:76
 msgid "Add Bookmark"
@@ -42,46 +32,6 @@ msgstr "Hiperlink mód"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:79
 msgid "Show Footnotes"
 msgstr "Lábjegyzetek megjelenítése"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:80
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:150
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1395
-msgid "Go To Page"
-msgstr "Adott lapra ugrás"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:81
-msgid "Show Table of Contents"
-msgstr "Tartalomjegyzékre ugrás"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
-msgid "Go to Home"
-msgstr "Elejére ugrás"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
-msgid "Go to Start of Section"
-msgstr "Fejezet elejére ugrás"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
-msgid "Go to End of Section"
-msgstr "Fejezet végére ugrás"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
-msgid "Go to Next TOC Section"
-msgstr "Következő Tartalomjegyzék címre ugrás"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
-msgid "Go to Previous TOC Section"
-msgstr "Előző Tartalomjegyzék címre ugrás"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
-#, fuzzy
-msgid "Large Scroll Forward"
-msgstr "Ugrás előre (nagyobb)"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
-#, fuzzy
-msgid "Large Scroll Backward"
-msgstr "Ugrás vissza (nagyobb)"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
 msgid "Undo"
@@ -385,14 +335,6 @@ msgstr "Billentyű %d"
 msgid "Format & Style"
 msgstr "Formátum és stílus"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1095
-msgid "Bold"
-msgstr "Félkövér"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1100
-msgid "Auto Hyphenations"
-msgstr "Automata elválasztás"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1109
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1290
 msgid "Indicator"
@@ -402,10 +344,6 @@ msgstr "Státuszsor"
 msgid "Show Indicator"
 msgstr "Státuszsor megjelenítése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1118
-msgid "Show TOC Marks"
-msgstr "Tartalomjegyzék jelzések megjelenítése"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1119
 msgid "Show Position"
 msgstr "Pozíció megjelenítése"
@@ -413,10 +351,6 @@ msgstr "Pozíció megjelenítése"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1120
 msgid "Show Time"
 msgstr "Idő megjelenítése"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1121
-msgid "Show Battery"
-msgstr "Akku töltés megjelenítése"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1131
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1193
@@ -448,11 +382,6 @@ msgstr "Kódolási család"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1241
 msgid "Break Paragraph at"
 msgstr "Új bekezdés kezdete"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1249
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1293
-msgid "Keys"
-msgstr "Billentyűk"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1281
 msgid "Settings"
@@ -491,15 +420,83 @@ msgstr "Könyv száma: "
 msgid "Book Menu"
 msgstr "Könyv menü"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
-msgid "On"
-msgstr ""
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:144
+msgid "FBReader: Help"
+msgstr "FBReader: Segítség"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
+msgid "None"
+msgstr "Nincs"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:184
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
 msgid "Off"
-msgstr ""
+msgstr "Ki"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
+msgid "On"
+msgstr "Be"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1095
+msgid "Bold"
+msgstr "Félkövér"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1100
+msgid "Auto Hyphenations"
+msgstr "Automatikus elválasztás"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1121
+msgid "Show Battery"
+msgstr "Akku töltöttség megjelenítése"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1118
+msgid "Show TOC Marks"
+msgstr "Tartalomjegyzék pontok megjelenítése"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1249
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1293
+msgid "Keys"
+msgstr "Billentyűkiosztás"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:80
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:150
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1395
+msgid "Go To Page"
+msgstr "Adott lapra lapozás"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
+msgid "Go to Home"
+msgstr "Elejére lapozás"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:81
+msgid "Show Table of Contents"
+msgstr "Tartalomjegyzékre lapozás"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
+msgid "Go to End of Section"
+msgstr "Fejezet végére lapozás"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
+msgid "Go to Start of Section"
+msgstr "Fejezet elejére lapozás"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
+msgid "Go to Previous TOC Section"
+msgstr "Előző TJ címre lapozás"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
+msgid "Go to Next TOC Section"
+msgstr "Következő TJ címre lapozás"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
+msgid "Large Scroll Backward"
+msgstr "Lapozás vissza (nagyobb)"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
+msgid "Large Scroll Forward"
+msgstr "Lapozás előre (nagyobb)"
 
 #~ msgid "Full path: "
 #~ msgstr "Teljes elérési út: "
