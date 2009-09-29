@@ -451,10 +451,6 @@ msgstr "Automatikus elválasztás"
 msgid "Show Battery"
 msgstr "Akku töltöttség megjelenítése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1118
-msgid "Show TOC Marks"
-msgstr "Tartalomjegyzék pontok megjelenítése"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1249
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1293
 msgid "Keys"
@@ -497,6 +493,10 @@ msgstr "Lapozás vissza (nagyobb)"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
 msgid "Large Scroll Forward"
 msgstr "Lapozás előre (nagyobb)"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1118
+msgid "Show TOC Marks"
+msgstr "Tartalomjegyzék jelek megjelenítése"
 
 #~ msgid "Full path: "
 #~ msgstr "Teljes elérési út: "
