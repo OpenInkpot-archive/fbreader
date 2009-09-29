@@ -1,9 +1,8 @@
-<p> FIXME: en </p>
-<h2>Установки:</h2>
+<h2>Settings:</h2>
 
-<p>В настройках параметров программы доступны такие категории:</p>
-<p>Формат и стиль – настройки параметров отображения текста электронной книги;</p>
-<p>Индикатор – настройки параметров отображения индикатора;</p>
-<p>Язык – настройки языка и кодировки текста электронной книги;</p>
-<p>Параметры книги – настройки языка и кодировки текста электронной книги;</p>
-<p>Кнопки – назначение действий программируемых кнопок «1-9».</p>
+<p>In this menu you can view and change:</p>
+<p>Format – settings of the style of the text of ebook;</p>
+<p>Indicator – settings of the indicator;</p>
+<p>Language – settings of the language and encoding of the text as defaults;</p>
+<p>Book settings – settings of the language and encoding of the text of the current ebook;</p>
+<p>Keys – settings of the functions of “1-9” programmable keys.</p>

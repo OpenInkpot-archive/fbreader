@@ -1,10 +1,9 @@
-<p> FIXME: en </p>
-<h2>Процесс чтения:</h2>
+<h2>Reading ebooks:</h2>
 
-<p>Переход между страницами текста осуществляется с помощью кнопок джойстика «влево/вправо», а также с помощью цифровых кнопок «5» и «6» соответственно. Назначение цифровых кнопок можно изменить в настройках «Кнопки» в меню «Установки».</p> 
-<p>Для изменения ориентации страницы (портретная/ландшафтная) нажмите кнопку «Поворот страницы». При изменении ориентации страницы назначение кнопок джойстика соответственно изменяется.</p> 
-<p>Для поиска по тексту нажмите кнопку «Поиск/Масштабирование». На экране отобразится виртуальная клавиатура. Последовательным нажатием соответствующих строке и столбцу символу цифровых клавиш введите необходимые символы. Для осуществления поиска заданного слова нажмите кнопку «ОК». Чтобы найти это слово далее или ранее нажмите кнопки джойстика «вправо/влево». Для выхода из режима поиска нажмите кнопку «ОК».</p>
-<p>Чтобы просмотреть и изменить настройки программы для чтения FBReader нажмите кнопку «ОК» для перехода в меню «Установки».</p>
-<p>Для просмотра и изменения настроек текстового файла перейдите в «Меню книги», нажав кнопку «М». </p>
-<p>Для вызова справки нажмите кнопку «0».</p> 
-<p>Для управления проигрыванием аудио файла во время чтения электронной книги используйте кнопку «Воспроизвести/Остановить», расположенную в нижней части устройства.</p>
+<p>To navigate between pages of the text use joystick buttons left/right, as well as “5”/”6” number buttons. Functions of the programmable buttons can be changed by selecting “Keys” in “ Settings” menu.</p> 
+<p>To change orientation of the page (portrait/landscape), press “Rotate” button. Functions of joystick buttons changes to fit the new orientation. </p> 
+<p>To search in the text, press “Search/Zoom” button. Virtual keyboard appears. Press programmable button according to the number of the row and then according to the number of the column to enter the phrase to search. To search next or previous press joystick buttons right/left. To exit from the search mode, press “OK” button.</p>
+<p>To view and change settings of the FBReader, press “ОК” to proceed to the “Settings” menu.</p>
+<p>To view and change settings of the text file, press “M” button to proceed to the “Book menu”.</p>
+<p>The Help can be opened by pressing “0” button.</p> 
+<p>To control playing of the audio file while you are reading ebooks, use “Play/Stop” button, located in lower right side of the device.</p>
