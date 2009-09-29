@@ -1,3 +1,11 @@
+fbreader (0.10.7-5) asimov; urgency=low
+
+  * enable multiline text in fullscreen choicebox 
+  * update translations
+  * add english help translation
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 29 Sep 2009 22:00:31 +0200
+
 fbreader (0.10.7-4) asimov; urgency=low
 
   * Make On/Off translatable
