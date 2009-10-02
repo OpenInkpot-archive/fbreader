@@ -34,6 +34,8 @@
 
 #include "../network/NetworkLink.h"
 
+#include "../database/booksdb/BooksDBUtil.h"
+
 const std::string NetLibraryView::SEARCH_PARAMETER_ID = "networkSearchPattern";
 
 const std::string NetLibraryView::DownloadMobi = "downloadMobi";
@@ -278,18 +280,18 @@ bool NetLibraryView::_onStylusPress(int x, int y) {
 		if (downloader.hasErrors()) {
 			downloader.showErrorMessage();
 		} else {
-			BookDescriptionPtr description = BookDescription::getDescription(downloader.fileName());
-			WritableBookDescription wDescription(*description);
-			wDescription.clearAuthor();
-			wDescription.addAuthor(book->Author.DisplayName, book->Author.SortKey);
-			wDescription.title() = book->Title;
-			wDescription.language() = book->Language;
+			shared_ptr<DBBook> downloaderBook = BooksDBUtil::getBook(downloader.fileName());
+			downloaderBook->authors().clear();
+			shared_ptr<DBAuthor> downloaderAuthors = DBAuthor::create(book->Author.DisplayName, book->Author.SortKey);
+			downloaderBook->authors().push_back( (downloaderAuthors.isNull()) ? (new DBAuthor()) : downloaderAuthors );
+			downloaderBook->setTitle(book->Title);
+			downloaderBook->setLanguage(book->Language);
 			for (std::vector<std::string>::const_iterator it = book->Tags.begin(); it != book->Tags.end(); ++it) {
-				wDescription.addTag(*it);
+				downloaderBook->addTag( DBTag::getSubTag(*it) );
 			}
-			wDescription.saveInfo();
+			BooksDB::instance().saveBook(downloaderBook);
 
-			fbreader().openBook(description);
+			fbreader().openBook(downloaderBook);
 			fbreader().setMode(FBReader::BOOK_TEXT_MODE);
 			rebuildModel();
 		}

@@ -113,6 +113,8 @@ void ZLTextStyleReader::startElementHandler(const char *tag, const char **attrib
 						alignment = ALIGN_CENTER;
 					} else if (strcmp(alignmentString, "justify") == 0) {
 						alignment = ALIGN_JUSTIFY;
+					} else if (strcmp(alignmentString, "linestart") == 0) {
+						alignment = ALIGN_LINESTART;
 					}
 				}
 				const int lineSpacingPercent = intValue(attributes, "lineSpacingPercent", -1);

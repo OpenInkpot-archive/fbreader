@@ -25,20 +25,20 @@
 #include "FB2DescriptionReader.h"
 #include "FB2TagManager.h"
 
-FB2DescriptionReader::FB2DescriptionReader(BookDescription &description) : myDescription(description) {
-	myDescription.clearAuthor();
-	myDescription.title().erase();
-	myDescription.language().erase();
-	myDescription.removeAllTags();
+FB2DescriptionReader::FB2DescriptionReader(DBBook &book) : myBook(book) {
+	myBook.authors().clear();
+	myBook.setTitle("");
+	myBook.setLanguage("");
+	myBook.tags().clear();
 }
 
 void FB2DescriptionReader::characterDataHandler(const char *text, size_t len) {
 	switch (myReadState) {
 		case READ_TITLE:
-			myDescription.title().append(text, len);
+			myBook.appendTitle(std::string(text, len));
 			break;
 		case READ_LANGUAGE:
-			myDescription.language().append(text, len);
+			myBook.appendLanguage(std::string(text, len));
 			break;
 		case READ_AUTHOR_NAME_0:
 			myAuthorNames[0].append(text, len);
@@ -107,9 +107,9 @@ void FB2DescriptionReader::startElementHandler(int tag, const char **attributes)
 				if (name != 0) {
 					std::string seriesName = name;
 					ZLStringUtil::stripWhiteSpaces(seriesName);
-					myDescription.seriesName() = seriesName;
+					myBook.setSeriesName(seriesName);
 					const char *number = attributeValue(attributes, "number");
-					myDescription.numberInSeries() = (number != 0) ? atoi(number) : 0;
+					myBook.setNumberInSeries( (number != 0) ? atoi(number) : 0 );
 				}
 			}
 			break;
@@ -136,10 +136,12 @@ void FB2DescriptionReader::endElementHandler(int tag) {
 						FB2TagManager::instance().humanReadableTags(myGenreBuffer);
 					if (!tags.empty()) {
 						for (std::vector<std::string>::const_iterator it = tags.begin(); it != tags.end(); ++it) {
-							myDescription.addTag(*it, false);
+							//myBook.addTag(*it, false);
+							myBook.addTag(  DBTag::getSubTag(*it)  );
 						}
 					} else {
-						myDescription.addTag(myGenreBuffer);
+						//myBook.addTag(myGenreBuffer);
+						myBook.addTag(  DBTag::getSubTag(myGenreBuffer)  );
 					}
 					myGenreBuffer.erase();
 				}
@@ -160,7 +162,10 @@ void FB2DescriptionReader::endElementHandler(int tag) {
 					fullName += ' ';
 				}
 				fullName += myAuthorNames[2];
-				myDescription.addAuthor(fullName, myAuthorNames[2]);
+				shared_ptr<DBAuthor> author = DBAuthor::create(fullName, myAuthorNames[2]);
+				if (!author.isNull()) {
+					myBook.authors().push_back( author );
+				}
 				myAuthorNames[0].erase();
 				myAuthorNames[1].erase();
 				myAuthorNames[2].erase();
@@ -198,5 +203,9 @@ bool FB2DescriptionReader::readDescription(const std::string &fileName) {
 		myAuthorNames[i].erase();
 	}
 	myGenreBuffer.erase();
-	return readDocument(fileName);
+	bool code = readDocument(fileName);
+	if (myBook.authors().empty()) {
+		myBook.authors().push_back( new DBAuthor() );
+	}
+	return code;
 }

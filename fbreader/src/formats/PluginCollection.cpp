@@ -46,6 +46,7 @@ PluginCollection &PluginCollection::instance() {
 		ourInstance->myPlugins.push_back(new PluckerPlugin());
 		ourInstance->myPlugins.push_back(new PalmDocPlugin());
 		ourInstance->myPlugins.push_back(new MobipocketPlugin());
+		ourInstance->myPlugins.push_back(new EReaderPlugin());  // not develope
 		ourInstance->myPlugins.push_back(new ZTXTPlugin());
 		ourInstance->myPlugins.push_back(new TcrPlugin());
 		ourInstance->myPlugins.push_back(new CHMPlugin());

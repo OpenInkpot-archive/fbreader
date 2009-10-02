@@ -36,12 +36,12 @@ bool OpenReaderPlugin::acceptsFile(const ZLFile &file) const {
 	return file.extension() == "orb";
 }
 
-bool OpenReaderPlugin::readDescription(const std::string &path, BookDescription &description) const {
-	return ORDescriptionReader(description).readDescription(path);
+bool OpenReaderPlugin::readDescription(const std::string &path, DBBook &book) const {
+	return ORDescriptionReader(book).readDescription(path);
 }
 
-bool OpenReaderPlugin::readModel(const BookDescription &description, BookModel &model) const {
-	return ORBookReader(model).readBook(description.fileName());
+bool OpenReaderPlugin::readModel(const DBBook &book, BookModel &model) const {
+	return ORBookReader(model).readBook(book.fileName());
 }
 
 const std::string &OpenReaderPlugin::iconName() const {

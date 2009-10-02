@@ -23,18 +23,18 @@
 #include "DummyPlugin.h"
 #include "DummyDescriptionReader.h"
 #include "DummyBookReader.h"
-#include "../../description/BookDescription.h"
+#include "../../database/booksdb/DBBook.h"
 
 bool DummyPlugin::acceptsFile(const ZLFile &file) const {
 	return file.extension() == "dummy";
 }
 
-bool DummyPlugin::readDescription(const std::string &path, BookDescription &description) const {
-	return DummyDescriptionReader(description).readDescription(ZLFile(path).inputStream());
+bool DummyPlugin::readDescription(const std::string &path, DBBook &book) const {
+	return DummyDescriptionReader(book).readDescription(ZLFile(path).inputStream());
 }
 
-bool DummyPlugin::readModel(const BookDescription &description, BookModel &model) const {
-	return DummyBookReader(model).readBook(ZLFile(description.fileName()).inputStream());
+bool DummyPlugin::readModel(const DBBook &book, BookModel &model) const {
+	return DummyBookReader(model).readBook(ZLFile(book.fileName()).inputStream());
 }
 
 const std::string &DummyPlugin::iconName() const {

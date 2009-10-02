@@ -261,18 +261,19 @@
 				<node name="Common" value="Common">
 					<node name="file" value="File" />
 					<node name="title" value="Title" />
-					<node name="authorDisplayName" value="Author (Display Name)" />
-					<node name="authorSortKey" value="Author (Sort Key)" />
 					<node name="language" value="Language" />
 					<node name="encodingSet" value="Encoding Set" />
 					<node name="encoding" value="Encoding" />
+				</node>
+				<node name="Authors" value="Authors">
+					<node name="authorDisplayName" value="Author Name" />
 				</node>
 				<node name="Series" value="Series">
 					<node name="seriesTitle" value="Series Title" />
 					<node name="bookNumber" value="Book Number" />
 				</node>
 				<node name="Tags" value="Tags">
-					<node name="tags" value="Tag List" />
+					<node name="tags" value="Tag Name" />
 				</node>
 				<node name="Text" value="Text">
 					<node name="breakType" value="Break Paragraph at" />
@@ -285,6 +286,15 @@
 					<node name="ignoreIndent" value="Ignore Indent Less than" />
 					<node name="buildTOC" value="Build Table of Contents" />
 					<node name="emptyLines" value="Empty Lines Before New Section" />
+				</node>
+			</node>
+		</node>
+		<node name="AuthorInfoDialog">
+			<node name="title" value="FBReader - Author Info" />
+			<node name="tab">
+				<node name="Common" value="Common">
+					<node name="name" value="Author Name" />
+					<node name="sortKey" value="Author Sort Key" />
 				</node>
 			</node>
 		</node>
@@ -406,7 +416,7 @@
 	<node name="mobipocketPlugin">
 		<node name="unknown" value="Unknown Error" />
 		<node name="unsupportedCompressionMethod" value="Unsupported Compression Method" />
-		<node name="encriptedFile" value="DRM-protected File" />
+		<node name="encryptedFile" value="DRM-protected File" />
 	</node>
 	<node name="networkLibrary">
 		<node name="caption" value="Network Library" />

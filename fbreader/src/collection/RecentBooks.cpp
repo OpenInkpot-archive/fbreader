@@ -24,46 +24,41 @@
 
 #include "BookCollection.h"
 
-const std::string GROUP = "LastOpenedBooks";
-const std::string BOOK = "Book";
+#include "../database/booksdb/BooksDBUtil.h"
+
 
 const size_t RecentBooks::MaxListSize = 10;
 
 RecentBooks::RecentBooks() {
-	for (size_t i = 0; i < MaxListSize; ++i) {
-		std::string num = BOOK;
-		ZLStringUtil::appendNumber(num, i);
-		std::string name = ZLStringOption(ZLCategoryKey::STATE, GROUP, num, "").value();
-		if (!name.empty()) {
-			BookDescriptionPtr description = BookDescription::getDescription(name, false);
-			if (!description.isNull()) {
-				myBooks.push_back(description);
-			}
-		}
-	}
+	BooksDBUtil::getRecentBooks(myBooks);
 }
 
 RecentBooks::~RecentBooks() {
-	const size_t size = std::min(MaxListSize, myBooks.size());
-	for (size_t i = 0; i < size; ++i) {
-		std::string num = BOOK;
-		ZLStringUtil::appendNumber(num, i);
-		ZLStringOption(ZLCategoryKey::STATE, GROUP, num, "").setValue(myBooks[i]->fileName());
-	}
+//	BooksDB::instance().saveRecentBooks(myBooks);
 }
 
-void RecentBooks::addBook(BookDescriptionPtr description) {
-	if (description.isNull()) {
+void RecentBooks::reload() {
+	myBooks.clear();
+	BooksDBUtil::getRecentBooks(myBooks);
+}
+
+void RecentBooks::addBook(shared_ptr<DBBook> book) {
+	if (book.isNull()) {
 		return;
 	}
 	for (Books::iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
-		if ((*it)->fileName() == description->fileName()) {
+		if ((*it)->fileName() == book->fileName()) {
+			if (it == myBooks.begin()) {
+				return;
+			}
 			myBooks.erase(it);
 			break;
 		}
 	}
-	myBooks.insert(myBooks.begin(), description);
+	myBooks.insert(myBooks.begin(), book);
 	if (myBooks.size() > MaxListSize) {
 		myBooks.erase(myBooks.begin() + MaxListSize, myBooks.end());
 	}
+	BooksDB::instance().saveRecentBooks(myBooks);
 }
+

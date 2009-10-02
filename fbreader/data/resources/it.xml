@@ -262,18 +262,19 @@
 				<node name="Common" value="Comuni">
 					<node name="file" value="File" />
 					<node name="title" value="Titolo" />
-					<node name="authorDisplayName" value="Autore (Nome Mostrato)" />
-					<node name="authorSortKey" value="Autore (Ordinamento)" />
 					<node name="language" value="Lingua" />
 					<node name="encodingSet" value="Insieme di Codifica" />
 					<node name="encoding" value="Codifica" />
+				</node>
+				<node name="Authors" value="Authors" toBeTranslated="true">
+					<node name="authorDisplayName" value="Author Name" toBeTranslated="true" />
 				</node>
 				<node name="Series" value="Serie">
 					<node name="seriesTitle" value="Titolo della Serie" />
 					<node name="bookNumber" value="Libro Numero" />
 				</node>
 				<node name="Tags" value="Tag">
-					<node name="tags" value="Elenco Tag" />
+					<node name="tags" value="Tag Name" toBeTranslated="true" />
 				</node>
 				<node name="Text" value="Testo">
 					<node name="breakType" value="Interrompi Paragrafo a" />
@@ -286,6 +287,15 @@
 					<node name="ignoreIndent" value="Ignora Rientri Inferiori a" />
 					<node name="buildTOC" value="Crea Indice" />
 					<node name="emptyLines" value="Righe Vuote Prima di Nuova Sezione" />
+				</node>
+			</node>
+		</node>
+		<node name="AuthorInfoDialog">
+			<node name="title" value="FBReader - Author Info" toBeTranslated="true" />
+			<node name="tab">
+				<node name="Common" value="Comuni">
+					<node name="name" value="Author Name" toBeTranslated="true" />
+					<node name="sortKey" value="Author Sort Key" toBeTranslated="true" />
 				</node>
 			</node>
 		</node>
@@ -407,7 +417,7 @@
 	<node name="mobipocketPlugin">
 		<node name="unknown" value="Errore Sconosciuto" />
 		<node name="unsupportedCompressionMethod" value="Metodo di Compressione non Supportato" />
-		<node name="encriptedFile" value="File Protetto da DRM" />
+		<node name="encryptedFile" value="File Protetto da DRM" />
 	</node>
 	<node name="networkLibrary">
 		<node name="caption" value="Biblioteca in Rete" />

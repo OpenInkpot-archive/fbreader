@@ -25,8 +25,9 @@
 #include <ZLOptions.h>
 
 #include "FBView.h"
-#include "../description/BookDescription.h"
 #include "../collection/BookCollection.h"
+
+#include "../database/booksdb/DBBook.h"
 
 class CollectionModel;
 
@@ -50,7 +51,7 @@ public:
 	void paint();
 	void synchronizeModel();
 
-	void openWithBook(BookDescriptionPtr book);
+	void openWithBook(shared_ptr<DBBook> book);
 
 	BookCollection &collection();
 
@@ -59,21 +60,24 @@ public:
 private:
 	bool hasContents() const;
 
-	void selectBook(BookDescriptionPtr book);
+	void selectBook(shared_ptr<DBBook> book);
 
 	CollectionModel &collectionModel();
 
-	void editBookInfo(BookDescriptionPtr book);
-	void removeBook(BookDescriptionPtr book);
-	void editTagInfo(const std::string &tag);
-	void removeTag(const std::string &tag);
+	void editBookInfo(shared_ptr<DBBook> book);
+	void removeBook(shared_ptr<DBBook> book);
+	void editTagInfo(shared_ptr<DBTag> tag, const std::string &special);
+	void removeTag(shared_ptr<DBTag> tag, const std::string &special);
 
 	enum BranchType { THIS_TAG_ONLY, TREE, TAG_AND_SUBTREE };
-	bool runEditTagInfoDialog(const bool tagIsSpecial, std::string &tag, bool &editNotClone, bool &includeSubtags, const bool showIncludeSubtagsEntry, const bool hasBooks);
+	bool runEditTagInfoDialog(const bool tagIsSpecial, std::string &tag, bool &editNotClone, bool &includeSubtags, 
+		const bool showIncludeSubtagsEntry, const bool hasBooks);
+
+	void editAuthorInfo(shared_ptr<DBAuthor> author);
 
 private:
 	BookCollection myCollection;
-	BookDescriptionPtr mySelectedBook;
+	shared_ptr<DBBook> mySelectedBook;
 	bool myTreeStateIsFrozen;
 	bool myDoSynchronizeCollection;
 	bool myDoUpdateModel;

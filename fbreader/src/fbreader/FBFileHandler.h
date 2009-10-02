@@ -23,7 +23,7 @@
 #include <ZLSelectionDialog.h>
 #include <ZLDir.h>
 
-#include "../description/BookDescription.h"
+#include "../database/booksdb/DBBook.h"
 
 class FBFileHandler : public ZLTreeOpenHandler {
 
@@ -34,7 +34,7 @@ public:
 	FBFileHandler();
 	~FBFileHandler();
 
-	BookDescriptionPtr description() const;
+	shared_ptr<DBBook> description() const;
 
 private:
 	bool accept(const ZLTreeNode &node);
@@ -50,11 +50,11 @@ private:
 	mutable bool myIsUpToDate;
 	mutable std::vector<ZLTreeNodePtr> mySubnodes;
 
-	mutable BookDescriptionPtr myDescription;
+	mutable shared_ptr<DBBook> myDescription;
 
 	int mySelectedIndex;
 };
 
-inline BookDescriptionPtr FBFileHandler::description() const { return myDescription; }
+inline shared_ptr<DBBook> FBFileHandler::description() const { return myDescription; }
 
 #endif /* __FBFILEHANDLER_H__ */

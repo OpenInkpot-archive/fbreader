@@ -18,22 +18,23 @@
  */
 
 #include <ZLInputStream.h>
+#include <ZLStringUtil.h>
 
 #include "DocBookDescriptionReader.h"
 
-DocBookDescriptionReader::DocBookDescriptionReader(BookDescription &description) : myDescription(description) {
+DocBookDescriptionReader::DocBookDescriptionReader(DBBook &book) : myBook(book) {
 	myReadTitle = false;
 	myReadAuthor = false;
 	for (int i = 0; i < 3; ++i) {
 		myReadAuthorName[i] = false;
 	}
-	myDescription.language() = "en";
+	myBook.setLanguage("en");
 	myDepth = 0;
 }
 
 void DocBookDescriptionReader::characterDataHandler(const char *text, size_t len) {
 	if (myReadTitle) {
-		myDescription.title().append(text, len);
+		myBook.setTitle(myBook.title() + std::string(text, len));
 	} else {
 		for (int i = 0; i < 3; ++i) {
 			if (myReadAuthorName[i]) {
@@ -87,8 +88,24 @@ void DocBookDescriptionReader::endElementHandler(int tag) {
 		case _TITLE:
 			myReadTitle = false;
 			break;
-		case _AUTHOR:
-			myDescription.addAuthor(myAuthorNames[0], myAuthorNames[1], myAuthorNames[2]);
+		case _AUTHOR: {
+				ZLStringUtil::stripWhiteSpaces(myAuthorNames[0]);
+				ZLStringUtil::stripWhiteSpaces(myAuthorNames[1]);
+				ZLStringUtil::stripWhiteSpaces(myAuthorNames[2]);
+				std::string fullName = myAuthorNames[0];
+				if (!fullName.empty() && !myAuthorNames[1].empty()) {
+					fullName += ' ';
+				}
+				fullName += myAuthorNames[1];
+				if (!fullName.empty() && !myAuthorNames[2].empty()) {
+					fullName += ' ';
+				}
+				fullName += myAuthorNames[2];
+				shared_ptr<DBAuthor> author = DBAuthor::create(fullName, myAuthorNames[2]);
+				if (!author.isNull()) {
+					myBook.authors().add( author );
+				}
+			}
 			myAuthorNames[0].erase();
 			myAuthorNames[1].erase();
 			myAuthorNames[2].erase();
@@ -109,5 +126,9 @@ void DocBookDescriptionReader::endElementHandler(int tag) {
 }
 
 bool DocBookDescriptionReader::readDescription(shared_ptr<ZLInputStream> stream) {
-	return readDocument(stream);
+	bool code = readDocument(stream);
+	if (myBook.authors().empty()) {
+		myBook.authors().push_back( new DBAuthor() );
+	}
+	return code;
 }

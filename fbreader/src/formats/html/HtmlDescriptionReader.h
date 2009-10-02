@@ -21,12 +21,12 @@
 #define __HTMLDESCRIPTIONREADER_H__
 
 #include "HtmlReader.h"
-#include "../../description/BookDescription.h"
+#include "../../database/booksdb/DBBook.h"
 
 class HtmlDescriptionReader : public HtmlReader {
 
 public:
-	HtmlDescriptionReader(BookDescription &description);
+	HtmlDescriptionReader(DBBook &book);
 	~HtmlDescriptionReader();
 
 protected:
@@ -38,7 +38,7 @@ protected:
 
 private:
 	bool myReadTitle;
-	WritableBookDescription myDescription;
+	DBBook &myBook;
 };
 
 inline HtmlDescriptionReader::~HtmlDescriptionReader() {}

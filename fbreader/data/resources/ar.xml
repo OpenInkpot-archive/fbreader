@@ -261,18 +261,19 @@
 				<node name="Common" value="عام">
 					<node name="file" value="الملف" />
 					<node name="title" value="العنوان" />
-					<node name="authorDisplayName" value="المؤلف (اسم العرض)" />
-					<node name="authorSortKey" value="المؤلف (مفتاح الترتيب)" />
 					<node name="language" value="اللغة" />
 					<node name="encodingSet" value="طقم الترميز" />
 					<node name="encoding" value="الترميز" />
+				</node>
+				<node name="Authors" value="Authors" toBeTranslated="true">
+					<node name="authorDisplayName" value="Author Name" toBeTranslated="true" />
 				</node>
 				<node name="Series" value="السلسلة">
 					<node name="seriesTitle" value="عنوان السلسلة" />
 					<node name="bookNumber" value="رقم الكتاب" />
 				</node>
 				<node name="Tags" value="الوسوم">
-					<node name="tags" value="قائمة الوسوم" />
+					<node name="tags" value="Tag Name" toBeTranslated="true" />
 				</node>
 				<node name="Text" value="النص">
 					<node name="breakType" value="اقطع الفقرات عند" />
@@ -285,6 +286,15 @@
 					<node name="ignoreIndent" value="تجاهل الإزاحة الأقل من" />
 					<node name="buildTOC" value="جهز جدول المحتويات" />
 					<node name="emptyLines" value="الأسطر الفارغة قبل الأقسام الجديدة" />
+				</node>
+			</node>
+		</node>
+		<node name="AuthorInfoDialog">
+			<node name="title" value="FBReader - Author Info" toBeTranslated="true" />
+			<node name="tab">
+				<node name="Common" value="عام">
+					<node name="name" value="Author Name" toBeTranslated="true" />
+					<node name="sortKey" value="Author Sort Key" toBeTranslated="true" />
 				</node>
 			</node>
 		</node>
@@ -406,7 +416,7 @@
 	<node name="mobipocketPlugin">
 		<node name="unknown" value="خطأ غير معروف" />
 		<node name="unsupportedCompressionMethod" value="طريقة ضغط غير مدعومة" />
-		<node name="encriptedFile" value="ملف محمي الحقوق رقميا (DRM)" />
+		<node name="encryptedFile" value="ملف محمي الحقوق رقميا (DRM)" />
 	</node>
 	<node name="networkLibrary">
 		<node name="caption" toBeTranslated="true" value="Network Library" />

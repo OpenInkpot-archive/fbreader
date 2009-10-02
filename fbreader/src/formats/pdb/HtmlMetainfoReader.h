@@ -21,7 +21,7 @@
 #define __HTMLMETAINFOREADER_H__
 
 #include "../html/HtmlReader.h"
-#include "../../description/BookDescription.h"
+#include "../../database/booksdb/DBBook.h"
 
 class HtmlMetainfoReader : public HtmlReader {
 
@@ -36,7 +36,7 @@ public:
 	};
 
 public:
-	HtmlMetainfoReader(BookDescription &description, ReadType readType);
+	HtmlMetainfoReader(DBBook &book, ReadType readType);
 
 private:
 	void startDocumentHandler();
@@ -46,7 +46,7 @@ private:
 	bool characterDataHandler(const char *text, size_t len, bool convert);
 
 private:
-	WritableBookDescription myDescription;
+	DBBook &myBook;
 	const ReadType myReadType;
 
 	bool myReadTitle;

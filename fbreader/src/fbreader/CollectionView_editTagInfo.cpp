@@ -126,7 +126,8 @@ void IncludeSubtagsEntry::onAccept(bool state) {
 	myValue = state;
 }
 
-bool CollectionView::runEditTagInfoDialog(const bool tagIsSpecial, std::string &tagValue, bool &editNotClone, bool &includeSubtags, const bool showIncludeSubtagsEntry, const bool hasBooks) {
+bool CollectionView::runEditTagInfoDialog(const bool tagIsSpecial, std::string &tagValue, 
+		bool &editNotClone, bool &includeSubtags, const bool showIncludeSubtagsEntry, const bool hasBooks) {
 	shared_ptr<ZLDialog> dialog = ZLDialogManager::instance().createDialog(ZLResourceKey("editTagInfoDialog"));
 
 	ZLResourceKey editOrCloneKey("editOrClone");
@@ -134,20 +135,21 @@ bool CollectionView::runEditTagInfoDialog(const bool tagIsSpecial, std::string &
 	editOrCloneEntry->setActive(!tagIsSpecial);
 	dialog->addOption(editOrCloneKey, editOrCloneEntry);
 
-	std::set<std::string> tagSet;
+	std::set<shared_ptr<DBTag> > tagSet;
 	const Books &books = myCollection.books();
 	for (Books::const_iterator it = books.begin(); it != books.end(); ++it) {
-		const std::vector<std::string> &bookTags = (*it)->tags();
+		const std::vector<shared_ptr<DBTag> > &bookTags = ((const DBBook &) **it).tags();
 		tagSet.insert(bookTags.begin(), bookTags.end());
 	}
-	std::set<std::string> fullTagSet = tagSet;
-	for (std::set<std::string>::const_iterator it = tagSet.begin(); it != tagSet.end(); ++it) {
-		for (int index = 0;;) {
-			index = it->find('/', index);
-			if (index == -1) {
+	std::set<std::string> fullTagSet;
+	for (std::set<shared_ptr<DBTag> >::const_iterator it = tagSet.begin(); it != tagSet.end(); ++it) {
+		DBTag *tagPtr = &**it;
+		while (true) {
+			fullTagSet.insert(tagPtr->fullName());
+			if (!tagPtr->hasParent()) {
 				break;
 			}
-			fullTagSet.insert(it->substr(0, index++));
+			tagPtr = &tagPtr->parent();
 		}
 	}
 	std::vector<std::string> names;
@@ -177,13 +179,13 @@ bool CollectionView::runEditTagInfoDialog(const bool tagIsSpecial, std::string &
 	}
 }
 
-void CollectionView::editTagInfo(const std::string &tag) {
-	if (tag.empty()) {
+void CollectionView::editTagInfo(shared_ptr<DBTag> tag, const std::string &special) {
+	const bool tagIsSpecial = (special == SpecialTagAllBooks) || (special == SpecialTagNoTagsBooks);
+	if (!tagIsSpecial && tag.isNull()) {
 		return;
 	}
-	const bool tagIsSpecial = (tag == SpecialTagAllBooks) || (tag == SpecialTagNoTagsBooks);
-	std::string tagValue = tagIsSpecial ? "" : tag;
-	bool editNotClone = tag != SpecialTagAllBooks;
+	std::string tagValue = tagIsSpecial ? "" : tag->fullName();
+	bool editNotClone = special != SpecialTagAllBooks;
 	bool includeSubtags = !tagIsSpecial && myCollection.hasSubtags(tag);
 	const bool showIncludeSubtagsEntry = includeSubtags;
 	const bool hasBooks = myCollection.hasBooks(tag);
@@ -194,19 +196,20 @@ void CollectionView::editTagInfo(const std::string &tag) {
 			ZLDialogManager::instance().errorBox(ZLResourceKey("tagMustBeNonEmpty"));
 			continue;
 		}
-		if (tagValue.find(',') != (size_t)-1) {
+		/*if (tagValue.find(',') != (size_t)-1) {
 			ZLDialogManager::instance().errorBox(ZLResourceKey("tagMustNotContainComma"));
 			continue;
-		}
+		}*/
 		collectionModel().removeAllMarks();
-		if (tag == SpecialTagAllBooks) {
-			myCollection.addTagToAllBooks(tagValue);
-		} else if (tag == SpecialTagNoTagsBooks) {
-			myCollection.addTagToBooksWithNoTags(tagValue);
+		shared_ptr<DBTag> to = DBTag::getSubTag(tagValue);
+		if (special == SpecialTagAllBooks) {
+			myCollection.addTagToAllBooks(to);
+		} else if (special == SpecialTagNoTagsBooks) {
+			myCollection.addTagToBooksWithNoTags(to);
 		} else if (editNotClone) {
-			myCollection.renameTag(tag, tagValue, includeSubtags);
+			myCollection.renameTag(tag, to, includeSubtags);
 		} else {
-			myCollection.cloneTag(tag, tagValue, includeSubtags);
+			myCollection.cloneTag(tag, to, includeSubtags);
 		}
 		myCollection.rebuild(true);
 		myDoUpdateModel = true;

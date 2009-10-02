@@ -25,38 +25,61 @@
 #include <ZLOptionEntry.h>
 
 #include "../collection/BookCollection.h"
-#include "../description/BookDescription.h"
 #include "../formats/FormatPlugin.h"
+
+#include "../database/booksdb/DBAuthor.h"
 
 class ZLOptionsDialog;
 class AuthorDisplayNameEntry;
-class AuthorSortKeyEntry;
 class SeriesTitleEntry;
+class BookNumberEntry;
+class BookTagEntry;
+
 
 class BookInfoDialog {
 
 public:
-	BookInfoDialog(const BookCollection &collection, const std::string &fileName);
+	BookInfoDialog(const BookCollection &collection, shared_ptr<DBBook> book);
 
 	ZLOptionsDialog &dialog();
 
 private:
+	void initAuthorEntries();
+	void initTagEntries();
+
+private:
 	shared_ptr<ZLOptionsDialog> myDialog;
 	const BookCollection &myCollection;
-	BookInfo myBookInfo;
+	shared_ptr<DBBook> myBook;
 	shared_ptr<FormatInfoPage> myFormatInfoPage;
 
-	AuthorDisplayNameEntry *myAuthorDisplayNameEntry;
-	AuthorSortKeyEntry *myAuthorSortKeyEntry;
 	ZLComboOptionEntry *myEncodingSetEntry;
 	ZLComboOptionEntry *myEncodingEntry;
 	ZLComboOptionEntry *myLanguageEntry;
 	SeriesTitleEntry *mySeriesTitleEntry;
-	ZLSpinOptionEntry *myBookNumberEntry;
+	BookNumberEntry *myBookNumberEntry;
+
+
+	ZLDialogContent *myTagsTab;
+	std::vector<BookTagEntry *> myTagEntries;
+	bool myTagsDone;
+
+	std::vector<std::string> myNewTags;
+
+
+	ZLDialogContent *myAuthorsTab;
+	std::vector<AuthorDisplayNameEntry *> myAuthorEntries;
+	bool myAuthorsDone;
+
 
 friend class AuthorDisplayNameEntry;
-friend class AuthorSortKeyEntry;
 friend class SeriesTitleEntry;
+friend class BookNumberEntry;
+friend class BookTitleEntry;
+friend class BookEncodingEntry;
+friend class BookLanguageEntry;
+friend class BookTagEntry;
+friend class BookInfoApplyAction;
 };
 
 inline ZLOptionsDialog &BookInfoDialog::dialog() { return *myDialog; }

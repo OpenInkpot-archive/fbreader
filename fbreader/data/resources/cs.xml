@@ -262,18 +262,19 @@
 				<node name="Common" value="Základní informace">
 					<node name="file" value="Soubor" />
 					<node name="title" value="Název" />
-					<node name="authorDisplayName" value="Jméno autora (Zobrazené)" />
-					<node name="authorSortKey" value="Jméno autora (Třidicí klíč)" />
 					<node name="language" value="Jazyk" />
 					<node name="encodingSet" value="Typ znakové sady" />
 					<node name="encoding" value="Kódování" />
+				</node>
+				<node name="Authors" value="Authors" toBeTranslated="true">
+					<node name="authorDisplayName" value="Author Name" toBeTranslated="true" />
 				</node>
 				<node name="Series" value="Série">
 					<node name="seriesTitle" value="Název série" />
 					<node name="bookNumber" value="Číslo knihy" />
 				</node>
 				<node name="Tags" value="Kategorie">
-					<node name="tags" value="Seznam kategorií" />
+					<node name="tags" value="Tag Name" toBeTranslated="true" />
 				</node>
 				<node name="Text" value="Text">
 					<node name="breakType" value="Nový odstavec po" />
@@ -286,6 +287,15 @@
 					<node name="ignoreIndent" value="Ignorovat rozestup menší než" />
 					<node name="buildTOC" value="Sestavit hlavičku" />
 					<node name="emptyLines" value="Vyčistit řádky před novou sekcí" />
+				</node>
+			</node>
+		</node>
+		<node name="AuthorInfoDialog">
+			<node name="title" value="FBReader - Author Info" toBeTranslated="true" />
+			<node name="tab">
+				<node name="Common" value="Základní informace">
+					<node name="name" value="Author Name" toBeTranslated="true" />
+					<node name="sortKey" value="Author Sort Key" toBeTranslated="true" />
 				</node>
 			</node>
 		</node>
@@ -407,7 +417,7 @@
 	<node name="mobipocketPlugin">
 		<node name="unknown" value="Neznámá chyba" />
 		<node name="unsupportedCompressionMethod" value="Nepodporovaná metoda komprese" />
-		<node name="encriptedFile" value="Soubor chráněný DRM" />
+		<node name="encryptedFile" value="Soubor chráněný DRM" />
 	</node>
 	<node name="networkLibrary">
 		<node name="caption" value="Síťová knihovna" />

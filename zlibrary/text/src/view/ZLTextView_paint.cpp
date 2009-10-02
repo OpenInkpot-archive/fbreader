@@ -331,6 +331,8 @@ void ZLTextView::prepareTextLine(const ZLTextLineInfo &info, int y) {
 				x += metrics.FullWidth - myStyle.textStyle()->lineEndIndent(metrics, myStyle.baseIsRtl()) - info.Width;
 			}
 			break;
+		case ALIGN_LINESTART:
+			break;
 		case ALIGN_CENTER:
 			x += (metrics.FullWidth - myStyle.textStyle()->lineEndIndent(metrics, myStyle.baseIsRtl()) - info.Width) / 2;
 			break;

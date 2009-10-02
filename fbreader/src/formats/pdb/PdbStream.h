@@ -45,9 +45,11 @@ protected:
 protected:
 	shared_ptr<ZLInputStream> myBase;
 	size_t myOffset;
-	PdbHeader myHeader;
-	char *myBuffer;
 
+	PdbHeader myHeader;
+  	unsigned long myBaseSize;
+	
+	char *myBuffer;
 	unsigned short myBufferLength;
 	unsigned short myBufferOffset;
 };

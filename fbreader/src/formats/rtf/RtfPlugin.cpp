@@ -24,7 +24,9 @@
 #include "RtfPlugin.h"
 #include "RtfDescriptionReader.h"
 #include "RtfBookReader.h"
-#include "../../description/BookDescription.h"
+#include "RtfReaderStream.h"
+
+#include "../../database/booksdb/DBBook.h"
 
 bool RtfPlugin::providesMetaInfo() const {
 	return false;
@@ -34,25 +36,26 @@ bool RtfPlugin::acceptsFile(const ZLFile &file) const {
 	return file.extension() == "rtf";
 }
 
-bool RtfPlugin::readDescription(const std::string &path, BookDescription &description) const {
+bool RtfPlugin::readDescription(const std::string &path, DBBook &book) const {
 	ZLFile file(path);
-	shared_ptr<ZLInputStream> stream = file.inputStream();
+	//shared_ptr<ZLInputStream> stream = file.inputStream();
+	shared_ptr<ZLInputStream> stream = new RtfReaderStream(path, 50000);
 
 	if (stream.isNull()) {
 		return false;
 	}
 
-	detectEncodingAndLanguage(description, *stream);
+	detectEncodingAndLanguage(book, *stream);
 
-	if (!RtfDescriptionReader(description).readDocument(path)) {
+	if (!RtfDescriptionReader(book).readDocument(path)) {
 		return false;
 	}
 	
 	return true;
 }
 
-bool RtfPlugin::readModel(const BookDescription &description, BookModel &model) const {
-	return RtfBookReader(model, description.encoding()).readDocument(description.fileName());
+bool RtfPlugin::readModel(const DBBook &book, BookModel &model) const {
+	return RtfBookReader(model, book.encoding()).readDocument(book.fileName());
 }
 
 const std::string &RtfPlugin::iconName() const {

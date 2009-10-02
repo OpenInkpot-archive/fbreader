@@ -262,18 +262,19 @@
 				<node name="Common" value="Yleiset">
 					<node name="file" value="Tiedosto" />
 					<node name="title" value="Nimi" />
-					<node name="authorDisplayName" value="Tekijä (nimi)" />
-					<node name="authorSortKey" value="Tekijä (lajitteluavain)" />
 					<node name="language" value="Kieli" />
 					<node name="encodingSet" value="Merkistöalue" />
 					<node name="encoding" value="Merkistö" />
+				</node>
+				<node name="Authors" value="Authors" toBeTranslated="true">
+					<node name="authorDisplayName" value="Author Name" toBeTranslated="true" />
 				</node>
 				<node name="Series" value="Kirjasarja">
 					<node name="seriesTitle" value="Sarjan nimi" />
 					<node name="bookNumber" value="Kirjan numero" />
 				</node>
 				<node name="Tags" value="Luokka">
-					<node name="tags" value="Luokkalista" />
+					<node name="tags" value="Tag Name" toBeTranslated="true" />
 				</node>
 				<node name="Text" value="Teksti">
 					<node name="breakType" value="Katkaise kappale" />
@@ -286,6 +287,15 @@
 					<node name="ignoreIndent" value="Hylkää pienempi sisennys kuin" />
 					<node name="buildTOC" value="Luo sisällysluettelo" />
 					<node name="emptyLines" value="Tyhjät rivit ennen uutta osaa" />
+				</node>
+			</node>
+		</node>
+		<node name="AuthorInfoDialog">
+			<node name="title" value="FBReader - Author Info" toBeTranslated="true" />
+			<node name="tab">
+				<node name="Common" value="Yleiset">
+					<node name="name" value="Author Name" toBeTranslated="true" />
+					<node name="sortKey" value="Author Sort Key" toBeTranslated="true" />
 				</node>
 			</node>
 		</node>
@@ -407,7 +417,7 @@
 	<node name="mobipocketPlugin">
 		<node name="unknown" value="Tuntematon virhe" />
 		<node name="unsupportedCompressionMethod" value="Tiivistysmuodolle ei tukea" />
-		<node name="encriptedFile" value="Digitaalisesti suojattu tiedosto" />
+		<node name="encryptedFile" value="Digitaalisesti suojattu tiedosto" />
 	</node>
 	<node name="networkLibrary">
 		<node name="caption" value="Verkkokirjasto" />

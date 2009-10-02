@@ -30,8 +30,9 @@
 #include <ZLKeyBindings.h>
 
 #include "../collection/BookCollection.h"
-#include "../description/BookDescription.h"
 #include "../external/ProgramCollection.h"
+
+#include "../database/booksdb/DBBook.h"
 
 class ZLViewWidget;
 class ZLMessageHandler;
@@ -44,7 +45,7 @@ class FBReader : public ZLApplication {
 
 public:
 	// returns true if description was found or error message was shown
-	static bool createDescription(const std::string &fileName, BookDescriptionPtr &description);
+	static bool createDescription(const std::string &fileName, shared_ptr<DBBook> &book);
 
 	static const std::string PageIndexParameter;
 
@@ -94,7 +95,7 @@ public:
 private:
 	void initWindow();
 
-	bool runBookInfoDialog(const std::string &fileName);
+	bool runBookInfoDialog(shared_ptr<DBBook> book);
 
 	void clearTextCaches();
 
@@ -102,7 +103,7 @@ private:
 
 	bool closeView();
 	std::string helpFileName(const std::string &language) const;
-	void openFile(const std::string &fileName);
+	//void openFile(const std::string &fileName);
 
 	bool isViewFinal() const;
 
@@ -119,7 +120,7 @@ public:
 	BookTextView &bookTextView() const;
 	CollectionView &collectionView() const;
 	void showBookTextView();
-	void openBook(BookDescriptionPtr description);
+	void openBook(shared_ptr<DBBook> book);
 
 	RecentBooks &recentBooks();
 	const RecentBooks &recentBooks() const;
@@ -127,7 +128,7 @@ public:
 private:
 	shared_ptr<ProgramCollection> dictionaryCollection() const;
 
-	void openBookInternal(BookDescriptionPtr description);
+	void openBookInternal(shared_ptr<DBBook> book);
 	friend class OpenBookRunnable;
 	void rebuildCollectionInternal();
 	friend class RebuildCollectionRunnable;

@@ -20,6 +20,8 @@
 #include "RecentBooksPopupData.h"
 #include "FBReader.h"
 
+#include "../database/booksdb/BooksDBUtil.h"
+
 RecentBooksPopupData::RecentBooksPopupData(FBReader &fbreader) : myFBReader(fbreader), myId(0) {
 }
 
@@ -40,8 +42,8 @@ const std::string RecentBooksPopupData::text(size_t index) {
 	if (index >= books.size()) {
 		return "";
 	}
-	const BookDescription &book = *books[index];
-	return book.author()->displayName() + ". " + book.title();
+	const DBBook &book = *books[index];
+	return book.authorDisplayName() + ". " + book.title();
 }
 
 void RecentBooksPopupData::run(size_t index) {

@@ -22,9 +22,9 @@
 #include "ORDescriptionReader.h"
 #include "../util/EntityFilesCollector.h"
 
-ORDescriptionReader::ORDescriptionReader(BookDescription &description) : myDescription(description) {
-	myDescription.clearAuthor();
-	myDescription.title().erase();
+ORDescriptionReader::ORDescriptionReader(DBBook &book) : myBook(book) {
+	myBook.authors().clear();
+	myBook.setTitle("");
 }
 
 // TODO: replace "dc" by real DC scheme name
@@ -41,7 +41,7 @@ void ORDescriptionReader::characterDataHandler(const char *text, size_t len) {
 			myCurrentAuthor.append(text, len);
 			break;
 		case READ_TITLE:
-			myDescription.title().append(text, len);
+			myBook.setTitle(myBook.title() + std::string(text, len));
 			break;
 	}
 }
@@ -68,7 +68,10 @@ void ORDescriptionReader::endElementHandler(const char *tag) {
 		interrupt();
 	} else {
 		if (!myCurrentAuthor.empty()) {
-			myDescription.addAuthor(myCurrentAuthor);
+			shared_ptr<DBAuthor> author = DBAuthor::create(myCurrentAuthor);
+			if (!author.isNull()) {
+				myBook.authors().push_back( author );
+			}
 			myCurrentAuthor.erase();
 		}
 		myReadState = READ_NONE;
@@ -78,7 +81,11 @@ void ORDescriptionReader::endElementHandler(const char *tag) {
 bool ORDescriptionReader::readDescription(const std::string &fileName) {
 	myReadMetaData = false;
 	myReadState = READ_NONE;
-	return readDocument(fileName);
+	bool code = readDocument(fileName);
+	if (myBook.authors().empty()) {
+		myBook.authors().push_back( new DBAuthor() );
+	}
+	return code;
 }
 
 const std::vector<std::string> &ORDescriptionReader::externalDTDs() const {

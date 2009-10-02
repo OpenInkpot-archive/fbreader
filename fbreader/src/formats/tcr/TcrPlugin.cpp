@@ -24,43 +24,46 @@
 #include "TcrStream.h"
 #include "PPLBookReader.h"
 #include "../util/TextFormatDetector.h"
-#include "../../description/BookDescription.h"
 #include "../txt/TxtBookReader.h"
 #include "../html/HtmlBookReader.h"
 #include "../txt/PlainTextFormat.h"
+
+#include "../../database/booksdb/DBBook.h"
+
 
 bool TcrPlugin::acceptsFile(const ZLFile &file) const {
 	return file.extension() == "tcr";
 }
 
-bool TcrPlugin::readDescription(const std::string &path, BookDescription &description) const {
+bool TcrPlugin::readDescription(const std::string &path, DBBook &book) const {
 	ZLFile file(path);
 
 	shared_ptr<ZLInputStream> stream = new TcrStream(file);
-	detectEncodingAndLanguage(description, *stream);
-	if (description.encoding().empty()) {
+	detectEncodingAndLanguage(book, *stream);
+	if (book.encoding().empty()) {
 		return false;
 	}
 
 	return true;
 }
 
-bool TcrPlugin::readModel(const BookDescription &description, BookModel &model) const {
-	ZLFile file(description.fileName());
+bool TcrPlugin::readModel(const DBBook &book, BookModel &model) const {
+	ZLFile file(book.fileName());
 	shared_ptr<ZLInputStream> stream = new TcrStream(file);
 
-	PlainTextFormat format(description.fileName());
+	PlainTextFormat format(book.fileName());
 	if (!format.initialized()) {
 		PlainTextFormatDetector detector;
 		detector.detect(*stream, format);
 	}
 
+	const std::string &encoding = book.encoding();
 	if (TextFormatDetector().isPPL(*stream)) {
-		PPLBookReader(model, description.encoding()).readDocument(*stream);
+		PPLBookReader(model, encoding).readDocument(*stream);
 	} else if (TextFormatDetector().isHtml(*stream)) {
-		HtmlBookReader("", model, format, description.encoding()).readDocument(*stream);
+		HtmlBookReader("", model, format, encoding).readDocument(*stream);
 	} else {
-		TxtBookReader(model, format, description.encoding()).readDocument(*stream);
+		TxtBookReader(model, format, encoding).readDocument(*stream);
 	}
 	return true;
 }

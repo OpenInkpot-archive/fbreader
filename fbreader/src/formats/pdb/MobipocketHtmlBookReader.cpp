@@ -28,7 +28,7 @@
 #include <ZLUnicodeUtil.h>
 
 #include "MobipocketHtmlBookReader.h"
-#include "MobipocketStream.h"
+#include "PalmDocStream.h"
 #include "../html/HtmlTagActions.h"
 #include "../../bookmodel/BookModel.h"
 
@@ -298,7 +298,7 @@ void MobipocketHtmlBookReader::readDocument(ZLInputStream &stream) {
 	int index = 0;
 	if (!fileStream.isNull() && fileStream->open()) {
 		char bu[10];
-		std::pair<int,int> firstImageLocation = ((MobipocketStream&)stream).imageLocation(0);
+		std::pair<int,int> firstImageLocation = ((PalmDocStream&)stream).imageLocation(0);
 		fileStream->seek(firstImageLocation.first, false);
 		while ((firstImageLocation.first > 0) && (firstImageLocation.second > 0)) {
 			if (firstImageLocation.second > 4) {
@@ -315,14 +315,14 @@ void MobipocketHtmlBookReader::readDocument(ZLInputStream &stream) {
 				fileStream->seek(firstImageLocation.second, false);
 			}
 			index++;
-			firstImageLocation = ((MobipocketStream&)stream).imageLocation(index);
+			firstImageLocation = ((PalmDocStream&)stream).imageLocation(index);
 		}
 		fileStream->close();
 	}
 
 	if (found) {
 		for (int i = 0; i < myImageCounter; i++) {
-			std::pair<int,int> imageLocation = ((MobipocketStream&)stream).imageLocation(i + index);
+			std::pair<int,int> imageLocation = ((PalmDocStream&)stream).imageLocation(i + index);
 			if ((imageLocation.first > 0) && (imageLocation.second > 0)) {
 				std::string id;
 				ZLStringUtil::appendNumber(id, i + 1);

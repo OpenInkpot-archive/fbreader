@@ -262,18 +262,19 @@
 				<node name="Common" value="Umum">
 					<node name="file" value="Berkas" />
 					<node name="title" value="Judul" />
-					<node name="authorDisplayName" value="Pengarang (Tertampil)" />
-					<node name="authorSortKey" value="Pengarang (Pengurut)" />
 					<node name="language" value="Bahasa" />
 					<node name="encodingSet" value="Set Enkode" />
 					<node name="encoding" value="Enkode" />
+				</node>
+				<node name="Authors" value="Authors" toBeTranslated="true">
+					<node name="authorDisplayName" value="Author Name" toBeTranslated="true" />
 				</node>
 				<node name="Series" value="Seri">
 					<node name="seriesTitle" value="Judul Seri" />
 					<node name="bookNumber" value="Nomor Buku" />
 				</node>
 				<node name="Tags" value="Tag">
-					<node name="tags" value="Daftar Tag" />
+					<node name="tags" value="Tag Name" toBeTranslated="true" />
 				</node>
 				<node name="Text" value="Teks">
 					<node name="breakType" value="Penggal Paragraf pada" />
@@ -286,6 +287,15 @@
 					<node name="ignoreIndent" value="Abaikan Indentasi Kurang dari" />
 					<node name="buildTOC" value="Buat Daftar Isi" />
 					<node name="emptyLines" value="Baris Kosong Sebelum Seksi Baru" />
+				</node>
+			</node>
+		</node>
+		<node name="AuthorInfoDialog">
+			<node name="title" value="FBReader - Author Info" toBeTranslated="true" />
+			<node name="tab">
+				<node name="Common" value="Umum">
+					<node name="name" value="Author Name" toBeTranslated="true" />
+					<node name="sortKey" value="Author Sort Key" toBeTranslated="true" />
 				</node>
 			</node>
 		</node>
@@ -407,7 +417,7 @@
 	<node name="mobipocketPlugin">
 		<node name="unknown" value="Ada Kesalahan" />
 		<node name="unsupportedCompressionMethod" value="Metode kompresi tidak didukung" />
-		<node name="encriptedFile" value="Berkas terproteksi DRM" />
+		<node name="encryptedFile" value="Berkas terproteksi DRM" />
 	</node>
 	<node name="networkLibrary">
 		<node name="caption" value="Pustaka Jaringan" />

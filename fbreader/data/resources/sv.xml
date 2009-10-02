@@ -262,18 +262,19 @@
 				<node name="Common" value="Allmänt">
 					<node name="file" value="Fil" />
 					<node name="title" value="Titel" />
-					<node name="authorDisplayName" value="Författare (Visningsnamn)" />
-					<node name="authorSortKey" value="Författare (Sorteringsnyckel)" />
 					<node name="language" value="Språk" />
 					<node name="encodingSet" value="Teckenuppsättning" />
 					<node name="encoding" value="Kodning" />
+				</node>
+				<node name="Authors" value="Authors" toBeTranslated="true">
+					<node name="authorDisplayName" value="Author Name" toBeTranslated="true" />
 				</node>
 				<node name="Series" value="Serier">
 					<node name="seriesTitle" value="Serietitel" />
 					<node name="bookNumber" value="Boknummer" />
 				</node>
 				<node name="Tags" toBeTranslated="true" value="Tags">
-					<node name="tags" toBeTranslated="true" value="Tag List" />
+					<node name="tags" value="Tag Name" toBeTranslated="true" />
 				</node>
 				<node name="Text" value="Text">
 					<node name="breakType" value="Bryt stycke vid" />
@@ -286,6 +287,15 @@
 					<node name="ignoreIndent" value="Ignorera indentering mindre än" />
 					<node name="buildTOC" value="Bygg innehållsförteckning" />
 					<node name="emptyLines" value="Tomma rader innan nytt avsnitt" />
+				</node>
+			</node>
+		</node>
+		<node name="AuthorInfoDialog">
+			<node name="title" value="FBReader - Author Info" toBeTranslated="true" />
+			<node name="tab">
+				<node name="Common" value="Allmänt">
+					<node name="name" value="Author Name" toBeTranslated="true" />
+					<node name="sortKey" value="Author Sort Key" toBeTranslated="true" />
 				</node>
 			</node>
 		</node>
@@ -407,7 +417,7 @@
 	<node name="mobipocketPlugin">
 		<node name="unknown" value="Okänt fel" />
 		<node name="unsupportedCompressionMethod" value="Komprimeringsmetoden stöds inte" />
-		<node name="encriptedFile" value="DRM-skyddad fil" />
+		<node name="encryptedFile" value="DRM-skyddad fil" />
 	</node>
 	<node name="networkLibrary">
 		<node name="caption" toBeTranslated="true" value="Network Library" />

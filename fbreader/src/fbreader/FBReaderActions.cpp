@@ -36,6 +36,8 @@
 #include "../bookmodel/BookModel.h"
 #include "../optionsDialog/OptionsDialog.h"
 
+#include "../database/booksdb/BooksDBUtil.h"
+
 FBAction::FBAction(FBReader &fbreader) : myFBReader(fbreader) {
 }
 
@@ -57,12 +59,12 @@ ShowHelpAction::ShowHelpAction(FBReader &fbreader) : FBAction(fbreader) {
 }
 
 void ShowHelpAction::run() {
-	BookDescriptionPtr description = BookDescription::getDescription(fbreader().helpFileName(ZLibrary::Language()));
-	if (description.isNull()) {
-		description = BookDescription::getDescription(fbreader().helpFileName("en"));
+	shared_ptr<DBBook> book = BooksDBUtil::getBook(fbreader().helpFileName(ZLibrary::Language()));
+	if (book.isNull()) {
+		book = BooksDBUtil::getBook(fbreader().helpFileName("en"));
 	}
-	if (!description.isNull()) {
-		fbreader().openBook(description);
+	if (!book.isNull()) {
+		fbreader().openBook(book);
 		fbreader().setMode(FBReader::BOOK_TEXT_MODE);
 		fbreader().refreshWindow();
 	} else {
@@ -91,10 +93,9 @@ AddBookAction::AddBookAction(FBReader &fbreader, int visibleInModes) : ModeDepen
 void AddBookAction::run() {
 	FBFileHandler handler;
 	if (ZLDialogManager::instance().selectionDialog(ZLResourceKey("addFileDialog"), handler)) {
-		BookDescriptionPtr description = handler.description();
-		const std::string &fileName = description->fileName();
-		if (!description.isNull() && fbreader().runBookInfoDialog(fileName)) {
-			fbreader().openFile(fileName);
+		shared_ptr<DBBook> book = handler.description();
+		if (!book.isNull() && fbreader().runBookInfoDialog(book)) {
+			fbreader().openBook(book);
 			fbreader().setMode(FBReader::BOOK_TEXT_MODE);
 		}
 	}
@@ -149,9 +150,9 @@ ShowBookInfoAction::ShowBookInfoAction(FBReader &fbreader) : ModeDependentAction
 }
 
 void ShowBookInfoAction::run() {
-	const std::string &fileName = fbreader().myModel->fileName();
-	if (fbreader().runBookInfoDialog(fileName)) {
-		fbreader().openFile(fileName);
+	shared_ptr<DBBook> book = fbreader().myModel->book();
+	if (fbreader().runBookInfoDialog(book)) {
+		fbreader().openBook(book);
 	}
 }
 
@@ -250,7 +251,7 @@ bool OpenPreviousBookAction::isVisible() const {
 
 void OpenPreviousBookAction::run() {
 	Books books = fbreader().recentBooks().books();
-	fbreader().openBook(books[1]);
+	fbreader().openBook( books[1] );
 	fbreader().refreshWindow();
 	fbreader().resetWindowCaption();
 }

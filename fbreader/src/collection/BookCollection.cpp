@@ -17,6 +17,7 @@
  * 02110-1301, USA.
  */
 
+#include <iostream>
 #include <queue>
 #include <algorithm>
 
@@ -26,46 +27,48 @@
 #include <ZLDir.h>
 
 #include "BookCollection.h"
-#include "BookList.h"
-#include "../description/BookDescription.h"
-#include "../description/BookDescriptionUtil.h"
-#include "../description/Author.h"
 #include "../formats/FormatPlugin.h"
+
+#include "../database/booksdb/BooksDBUtil.h"
+
 
 class DescriptionComparator {
 
 public:
-	bool operator() (const BookDescriptionPtr d1, const BookDescriptionPtr d2);
+	bool operator() (const shared_ptr<DBBook> b1, const shared_ptr<DBBook> b2);
 };
 
-bool DescriptionComparator::operator() (const BookDescriptionPtr d1, const BookDescriptionPtr d2) {
-	AuthorPtr author1 = d1->author();
-	AuthorPtr author2 = d2->author();
+bool DescriptionComparator::operator() (const shared_ptr<DBBook> b1, const shared_ptr<DBBook> b2) {
+	const DBBook &book1 = (const DBBook &) *b1;
+	const DBBook &book2 = (const DBBook &) *b2;
 
-	int comp = author1->sortKey().compare(author2->sortKey());
+	int comp = book1.authorSortKey().compare(book2.authorSortKey());
 	if (comp != 0) {
 		return comp < 0;
 	}
-	comp = author1->displayName().compare(author2->displayName());
+	comp = book1.authorDisplayName().compare(book2.authorDisplayName());
 	if (comp != 0) {
 		return comp < 0;
 	}
 
-	const std::string &seriesName1 = d1->seriesName();
-	const std::string &seriesName2 = d2->seriesName();
+	const std::string &seriesName1 = book1.seriesName();
+	const std::string &seriesName2 = book2.seriesName();
 	if (seriesName1.empty() && seriesName2.empty()) {
-		return d1->title() < d2->title();
+		return b1->title() < b2->title();
 	}
 	if (seriesName1.empty()) {
-		return d1->title() < seriesName2;
+		return b1->title() < seriesName2;
 	}
 	if (seriesName2.empty()) {
-		return seriesName1 <= d2->title();
+		return seriesName1 <= b2->title();
 	}
 	if (seriesName1 != seriesName2) {
 		return seriesName1 < seriesName2;
 	}
-	return d1->numberInSeries() < d2->numberInSeries();
+	if (book1.numberInSeries() == 0 && book2.numberInSeries() == 0) {
+		return book1.title() < book2.title();
+	}
+	return book1.numberInSeries() < book2.numberInSeries();
 }
 
 static const std::string OPTIONS = "Options";
@@ -90,32 +93,42 @@ void BookCollection::collectBookFileNames(std::set<std::string> &bookFileNames) 
 	std::set<std::string> dirs;
 	collectDirNames(dirs);
 
-	for (std::set<std::string>::iterator it = dirs.begin(); it != dirs.end(); ++it) {
+	//for (std::set<std::string>::iterator it = dirs.begin(); it != dirs.end(); ++it) {
+	while (!dirs.empty()) {
+		std::string dirname = *dirs.begin();
+		dirs.erase(dirs.begin());
+		
+		ZLFile dirfile(dirname);
 		std::vector<std::string> files;
-		shared_ptr<ZLDir> dir = ZLFile(*it).directory();
+		bool inZip = false;
+
+		shared_ptr<ZLDir> dir = dirfile.directory();
 		if (dir.isNull()) {
 			continue;
 		}
-		dir->collectFiles(files, true);
+
+		if (dirfile.extension() == "zip") {
+			ZLFile phys(dirfile.physicalFilePath());
+			if (!BooksDBUtil::checkInfo(phys)) {
+				BooksDBUtil::resetZipInfo(phys);
+				BooksDBUtil::saveInfo(phys);
+			}
+			BooksDBUtil::listZipEntries(dirfile, files);
+			inZip = true;
+		} else {
+			dir->collectFiles(files, true);
+		}
 		if (!files.empty()) {
 			const bool collectBookWithoutMetaInfo = CollectAllBooksOption.value();
 			for (std::vector<std::string>::const_iterator jt = files.begin(); jt != files.end(); ++jt) {
-				const std::string fileName = dir->itemPath(*jt);
+				const std::string fileName = (inZip) ? (*jt) : (dir->itemPath(*jt));
 				ZLFile file(fileName);
 				if (PluginCollection::instance().plugin(file, !collectBookWithoutMetaInfo) != 0) {
 					bookFileNames.insert(fileName);
 				// TODO: zip -> any archive
 				} else if (file.extension() == "zip") {
-					if (!BookDescriptionUtil::checkInfo(file)) {
-						BookDescriptionUtil::resetZipInfo(file);
-						BookDescriptionUtil::saveInfo(file);
-					}
-					std::vector<std::string> zipEntries;
-					BookDescriptionUtil::listZipEntries(file, zipEntries);
-					for (std::vector<std::string>::const_iterator zit = zipEntries.begin(); zit != zipEntries.end(); ++zit) {
-						if (PluginCollection::instance().plugin(ZLFile(*zit), !collectBookWithoutMetaInfo) != 0) {
-							bookFileNames.insert(*zit);
-						}
+					if (myScanSubdirs || !inZip) {
+						dirs.insert(fileName);
 					}
 				}
 			}
@@ -141,39 +154,55 @@ bool BookCollection::synchronize() const {
 	if (doStrongRebuild) {
 		myBooks.clear();
 		myAuthors.clear();
-		myExternalBooks.clear();
+		myExternalBookFileNames.clear();
+		
+		std::map<std::string, shared_ptr<DBBook> > booksmap;
+		BooksDBUtil::getBooks(booksmap);
 
 		std::set<std::string> fileNamesSet;
 		collectBookFileNames(fileNamesSet);
 		for (std::set<std::string>::iterator it = fileNamesSet.begin(); it != fileNamesSet.end(); ++it) {
-			addDescription(BookDescription::getDescription(*it));
+			std::map<std::string, shared_ptr<DBBook> >::iterator jt = booksmap.find(*it);
+			if (jt == booksmap.end()) {
+				addBook(BooksDBUtil::getBook(*it));
+			} else {
+				addBook(jt->second);
+				booksmap.erase(jt);
+			}
 		}
 
-		BookList bookList;
-		const std::set<std::string> &bookListSet = bookList.fileNames();
-		for (std::set<std::string>::const_iterator it = bookListSet.begin(); it != bookListSet.end(); ++it) {
-			if (fileNamesSet.find(*it) == fileNamesSet.end()) {
-				BookDescriptionPtr description = BookDescription::getDescription(*it);
-				if (!description.isNull()) {
-					addDescription(description);
-					myExternalBooks.insert(description);
+		for (std::map<std::string, shared_ptr<DBBook> >::iterator jt = booksmap.begin(); jt != booksmap.end(); ++jt) {
+			shared_ptr<DBBook> book = jt->second;
+			if (!book.isNull()) {
+				if (BooksDB::instance().checkBookList(*book)) {
+					addBook(book);
+					myExternalBookFileNames.insert(book->fileName());
 				}
 			}
 		}
 	} else {
-		BookList bookList;
-		const std::set<std::string> &bookListSet = bookList.fileNames();
 		std::vector<std::string> fileNames;
 		for (Books::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
-			if ((myExternalBooks.find(*it) == myExternalBooks.end()) || 
-					(bookListSet.find((*it)->fileName()) != bookListSet.end())) {
-				fileNames.push_back((*it)->fileName());
+			const std::string itname = (*it)->fileName();
+			if (myExternalBookFileNames.find(itname) == myExternalBookFileNames.end() || 
+					BooksDB::instance().checkBookList(**it)) {
+				fileNames.push_back(itname);
 			}
 		}
 		myBooks.clear();
 		myAuthors.clear();
+
+		std::map<std::string, shared_ptr<DBBook> > booksmap;
+		BooksDBUtil::getBooks(booksmap, false);
+
 		for (std::vector<std::string>::iterator it = fileNames.begin(); it != fileNames.end(); ++it) {
-			addDescription(BookDescription::getDescription(*it, false));
+			std::map<std::string, shared_ptr<DBBook> >::iterator jt = booksmap.find(*it);
+			if (jt != booksmap.end()) {
+				addBook(jt->second);
+			} else { 
+				// TODO: remove debug code
+				std::cerr << "BookCollection::synchronize(): Weak Rebuild Error (book isn't in db)" << std::endl;
+			}
 		}
 	}
 
@@ -219,128 +248,76 @@ void BookCollection::collectDirNames(std::set<std::string> &nameSet) const {
 BookCollection::~BookCollection() {
 }
 
-void BookCollection::addDescription(BookDescriptionPtr description) const {
-	if (!description.isNull()) {
-		myBooks.push_back(description);
+void BookCollection::addBook(shared_ptr<DBBook> book) const {
+	if (!book.isNull()) {
+		myBooks.push_back(book);
 	}
 }
 
-void BookCollection::collectSeriesNames(AuthorPtr author, std::set<std::string> &set) const {
-	synchronize();
-	if (myBooks.empty()) {
-		return;
-	}
-	AuthorComparator comparator;
-	Books::const_iterator left = myBooks.begin();
-	if (comparator(author, (*left)->author())) {
-		return;
-	}
-	Books::const_iterator right = myBooks.end() - 1;
-	if (comparator((*right)->author(), author)) {
-		return;
-	}
-	while (right > left) {
-		Books::const_iterator middle = left + (right - left) / 2;
-		if (comparator((*middle)->author(), author)) {
-			left = middle + 1;
-		} else if (comparator(author, (*middle)->author())) {
-			right = middle;
-		} else {
-			for (Books::const_iterator it = middle; !comparator((*it)->author(), author); --it) {
-				set.insert((*it)->seriesName());
-				if (it == left) {
-					break;
-				}
-			}
-			for (Books::const_iterator it = middle; !comparator(author, (*it)->author()); ++it) {
-				set.insert((*it)->seriesName());
-				if (it == right) {
-					break;
-				}
-			}
-			break;
-		}
-	}
-}
-
-const std::vector<AuthorPtr> &BookCollection::authors() const {
+const std::vector<shared_ptr<DBAuthor> > &BookCollection::authors() const {
 	synchronize();
 	if (myAuthors.empty() && !myBooks.empty()) {
-		AuthorPtr author;
+		DBAuthorComparator comparator;
 		for (Books::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
-			AuthorPtr newAuthor = (*it)->author();
-			if (author.isNull() || (author->sortKey() != newAuthor->sortKey()) || (author->displayName() != newAuthor->displayName())) {
-				author = newAuthor;
-				myAuthors.push_back(author);
+			const std::vector<shared_ptr<DBAuthor> > &bookAuthors = ((const DBBook &) **it).authors();
+			for(std::vector<shared_ptr<DBAuthor> >::const_iterator jt = bookAuthors.begin(); jt != bookAuthors.end(); ++jt) {
+				shared_ptr<DBAuthor> author = *jt;
+				std::vector<shared_ptr<DBAuthor> >::iterator middle = std::lower_bound(myAuthors.begin(), myAuthors.end(), author, comparator);
+				if (middle == myAuthors.end() || comparator(author, *middle)) {
+					myAuthors.insert(middle, author);
+				}
 			}
-		}
+		} // myAuthors is sorted ascending
 	}
 	return myAuthors;
 }
 
-void BookCollection::removeTag(const std::string &tag, bool includeSubTags) {
+void BookCollection::removeTag(shared_ptr<DBTag> tag, bool includeSubTags) {
 	synchronize();
 	for (Books::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
-		WritableBookDescription wbd(**it);
-		wbd.removeTag(tag, includeSubTags);
+		BooksDBUtil::removeTag(*it, tag, includeSubTags);
 	}
 }
 
-void BookCollection::addTagToAllBooks(const std::string &to) {
-	std::string checkedName = to;
-	BookDescriptionUtil::removeWhiteSpacesFromTag(checkedName);
-	if (!checkedName.empty()) {
-		synchronize();
-		for (Books::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
-			WritableBookDescription wbd(**it);
-			wbd.addTag(checkedName, false);
-		}
-	}
-}
-
-void BookCollection::addTagToBooksWithNoTags(const std::string &to) {
-	std::string checkedName = to;
-	BookDescriptionUtil::removeWhiteSpacesFromTag(checkedName);
-	if (!checkedName.empty()) {
-		synchronize();
-		for (Books::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
-			if ((*it)->tags().empty()) {
-				WritableBookDescription wbd(**it);
-				wbd.addTag(checkedName, false);
-			}
-		}
-	}
-}
-
-void BookCollection::renameTag(const std::string &from, const std::string &to, bool includeSubTags) {
-	std::string checkedName = to;
-	BookDescriptionUtil::removeWhiteSpacesFromTag(checkedName);
-	if (!checkedName.empty() && (checkedName != from)) {
-		synchronize();
-		for (Books::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
-			WritableBookDescription wbd(**it);
-			wbd.renameTag(from, checkedName, includeSubTags);
-		}
-	}
-}
-
-void BookCollection::cloneTag(const std::string &from, const std::string &to, bool includeSubTags) {
-	std::string checkedName = to;
-	BookDescriptionUtil::removeWhiteSpacesFromTag(checkedName);
-	if (!checkedName.empty() && (checkedName != from)) {
-		synchronize();
-		for (Books::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
-			WritableBookDescription wbd(**it);
-			wbd.cloneTag(from, checkedName, includeSubTags);
-		}
-	}
-}
-
-bool BookCollection::hasBooks(const std::string &tag) const {
+void BookCollection::addTagToAllBooks(shared_ptr<DBTag> tag) {
 	synchronize();
 	for (Books::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
-		const std::vector<std::string> &tags = (*it)->tags();
-		for (std::vector<std::string>::const_iterator jt = tags.begin(); jt != tags.end(); ++jt) {
+		BooksDBUtil::addTag(*it, tag);
+	}
+}
+
+void BookCollection::addTagToBooksWithNoTags(shared_ptr<DBTag> tag) {
+	synchronize();
+	for (Books::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
+		if (((const DBBook &) **it).tags().empty()) {
+			BooksDBUtil::addTag(*it, tag);
+		}
+	}
+}
+
+void BookCollection::renameTag(shared_ptr<DBTag> from, shared_ptr<DBTag> to, bool includeSubTags) {
+	if (to != from) {
+		synchronize();
+		for (Books::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
+			BooksDBUtil::renameTag(*it, from, to, includeSubTags);
+		}
+	}
+}
+
+void BookCollection::cloneTag(shared_ptr<DBTag> from, shared_ptr<DBTag> to, bool includeSubTags) {
+	if (to != from) {
+		synchronize();
+		for (Books::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
+			BooksDBUtil::cloneTag(*it, from, to, includeSubTags);
+		}
+	}
+}
+
+bool BookCollection::hasBooks(shared_ptr<DBTag> tag) const {
+	synchronize();
+	for (Books::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
+		const std::vector<shared_ptr<DBTag> > &tags = ((const DBBook &) **it).tags();
+		for (std::vector<shared_ptr<DBTag> >::const_iterator jt = tags.begin(); jt != tags.end(); ++jt) {
 			if (*jt == tag) {
 				return true;
 			}
@@ -349,16 +326,25 @@ bool BookCollection::hasBooks(const std::string &tag) const {
 	return false;
 }
 
-bool BookCollection::hasSubtags(const std::string &tag) const {
+bool BookCollection::hasSubtags(shared_ptr<DBTag> tag) const {
 	synchronize();
-	const std::string prefix = tag + '/';
 	for (Books::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
-		const std::vector<std::string> &tags = (*it)->tags();
-		for (std::vector<std::string>::const_iterator jt = tags.begin(); jt != tags.end(); ++jt) {
-			if (ZLStringUtil::stringStartsWith(*jt, prefix)) {
+		const std::vector<shared_ptr<DBTag> > &tags = ((const DBBook &) **it).tags();
+		for (std::vector<shared_ptr<DBTag> >::const_iterator jt = tags.begin(); jt != tags.end(); ++jt) {
+			if ((*jt)->isChildFor(*tag)) {
 				return true;
 			}
 		}
 	}
 	return false;
 }
+
+void BookCollection::updateAuthor(shared_ptr<DBAuthor> from, shared_ptr<DBAuthor> to) {
+	if (*to != *from) {
+		synchronize();
+		for (Books::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
+			BooksDBUtil::updateAuthor(*it, from, to);
+		}
+	}
+}
+

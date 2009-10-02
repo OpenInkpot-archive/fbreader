@@ -18,6 +18,8 @@
  */
 
 #include <string.h>
+#include <iostream>
+#include <typeinfo>
 
 #include <ZLFile.h>
 
@@ -35,9 +37,12 @@ bool PdbStream::open() {
 	if (myBase.isNull() || !myBase->open() || !myHeader.read(myBase)) {
 		return false;
 	}
-
+	// myBase offset: startOffset + 78 + 8 * records number ( myHeader.Offsets.size() )
+	
+	myBaseSize = myBase->sizeOfOpened();
 	myBase->seek(myHeader.Offsets[0], true);
-
+	// myBase offset: Offset[0] - zero record
+	
 	myBufferLength = 0;
 	myBufferOffset = 0;
 
@@ -53,6 +58,7 @@ size_t PdbStream::read(char *buffer, size_t maxSize) {
 			break;
 		}
 		size_t size = std::min((size_t)(maxSize - realSize), (size_t)(myBufferLength - myBufferOffset));
+		
 		if (size > 0) {
 			if (buffer != 0) {
 				memcpy(buffer + realSize, myBuffer + myBufferOffset, size);

@@ -27,9 +27,10 @@
 
 #include <ZLOptions.h>
 
-#include "../description/BookDescription.h"
+#include "../database/booksdb/DBBook.h"
 
-typedef std::vector<BookDescriptionPtr> Books;
+typedef std::vector<shared_ptr<DBBook> > Books;
+
 
 class BookCollection {
 
@@ -42,32 +43,33 @@ public:
 	BookCollection();
 	~BookCollection();
 
-	const std::vector<AuthorPtr> &authors() const;
+	const std::vector<shared_ptr<DBAuthor> > &authors() const;
 	const Books &books() const;
-	bool isBookExternal(BookDescriptionPtr description) const;
+	bool isBookExternal(shared_ptr<DBBook> book) const;
 
 	void rebuild(bool strong);
 	bool synchronize() const;
 
-	void collectSeriesNames(AuthorPtr author, std::set<std::string> &list) const;
-	void removeTag(const std::string &tag, bool includeSubTags);
-	void renameTag(const std::string &from, const std::string &to, bool includeSubTags);
-	void cloneTag(const std::string &from, const std::string &to, bool includeSubTags);
-	void addTagToAllBooks(const std::string &to);
-	void addTagToBooksWithNoTags(const std::string &to);
-	bool hasBooks(const std::string &tag) const;
-	bool hasSubtags(const std::string &tag) const;
-	
+	void removeTag(shared_ptr<DBTag> tag, bool includeSubTags);
+	void renameTag(shared_ptr<DBTag> from, shared_ptr<DBTag> to, bool includeSubTags);
+	void cloneTag(shared_ptr<DBTag> from, shared_ptr<DBTag> to, bool includeSubTags);
+	void addTagToAllBooks(shared_ptr<DBTag> tag);
+	void addTagToBooksWithNoTags(shared_ptr<DBTag> tag);
+	bool hasBooks(shared_ptr<DBTag> tag) const;
+	bool hasSubtags(shared_ptr<DBTag> tag) const;
+
+	void updateAuthor(shared_ptr<DBAuthor> from, shared_ptr<DBAuthor> to);
+
 private:
 	void collectDirNames(std::set<std::string> &names) const;
 	void collectBookFileNames(std::set<std::string> &bookFileNames) const;
 
-	void addDescription(BookDescriptionPtr description) const;
+	void addBook(shared_ptr<DBBook> book) const;
 
 private:
 	mutable Books myBooks;
-	mutable std::vector<AuthorPtr> myAuthors;
-	mutable std::set<BookDescriptionPtr> myExternalBooks;
+	mutable std::vector<shared_ptr<DBAuthor> > myAuthors;
+	mutable std::set<std::string> myExternalBookFileNames;
 
 	mutable std::string myPath;
 	mutable bool myScanSubdirs;
@@ -83,8 +85,10 @@ public:
 public:
 	RecentBooks();
 	~RecentBooks();
-	void addBook(BookDescriptionPtr description);
+	void addBook(shared_ptr<DBBook> book);
 	const Books &books() const;
+
+	void reload();
 
 private:
 	Books myBooks;
@@ -95,9 +99,9 @@ inline const Books &BookCollection::books() const {
 	return myBooks;
 }
 
-inline bool BookCollection::isBookExternal(BookDescriptionPtr description) const {
+inline bool BookCollection::isBookExternal(shared_ptr<DBBook> book) const {
 	synchronize();
-	return myExternalBooks.find(description) != myExternalBooks.end();
+	return myExternalBookFileNames.find(book->fileName()) != myExternalBookFileNames.end();
 }
 
 inline const Books &RecentBooks::books() const { return myBooks; }

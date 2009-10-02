@@ -25,7 +25,8 @@
 
 #include "../bookmodel/FBTextKind.h"
 #include "../collection/BookCollection.h"
-#include "../description/BookDescription.h"
+
+#include "../database/booksdb/DBBook.h"
 
 class CollectionView;
 
@@ -44,15 +45,17 @@ public:
 	CollectionModel(CollectionView &view, BookCollection &collection);
 	~CollectionModel();
 
-	BookDescriptionPtr bookByParagraphIndex(int num);
-	const std::vector<int> &paragraphIndicesByBook(BookDescriptionPtr book);
-	const std::string &tagByParagraphIndex(int num);
+	shared_ptr<DBBook> bookByParagraphIndex(int num);
+	const std::vector<int> &paragraphIndicesByBook(shared_ptr<DBBook> book);
+	shared_ptr<DBTag> tagByParagraphIndex(int num, std::string &special);
 
 	void update();
 
-	void removeBook(BookDescriptionPtr book);
+	void removeBook(shared_ptr<DBBook> book);
 
 	bool empty() const;
+
+	shared_ptr<DBAuthor> authorByParagraphIndex(int num);
 
 private:
 	void build();
@@ -71,9 +74,14 @@ private:
 	BookCollection &myCollection;
 
 	ZLImageMap myImageMap;
-	std::map<ZLTextParagraph*,BookDescriptionPtr> myParagraphToBook;
-	std::map<ZLTextParagraph*,std::string> myParagraphToTag;
-	std::map<BookDescriptionPtr,std::vector<int> > myBookToParagraph;
+	std::map<ZLTextParagraph*, shared_ptr<DBBook> > myParagraphToBook;
+	std::map<ZLTextParagraph*, shared_ptr<DBTag> > myParagraphToTag;
+	std::map<std::string, std::vector<int> > myBookToParagraph;
+
+	ZLTextTreeParagraph *myAllBooksParagraph;
+	ZLTextTreeParagraph *myBooksWithoutTagsParagraph;
+
+	std::map<ZLTextParagraph*, shared_ptr<DBAuthor> > myParagraphToAuthor;
 };
 
 #endif /* __COLLECTIONMODEL_H__ */

@@ -22,9 +22,13 @@
 
 #include <deque>
 
+#include "ReadingState.h"
+
 #include <ZLOptions.h>
 
 #include "FBView.h"
+
+#include "../database/booksdb/DBBook.h"
 
 class BookTextView : public FBView {
 
@@ -35,7 +39,7 @@ public:
 	BookTextView(FBReader &reader, shared_ptr<ZLPaintContext> context);
 	~BookTextView();
 
-	void setModel(shared_ptr<ZLTextModel> model, const std::string &language, const std::string &fileName);
+	void setModel(shared_ptr<ZLTextModel> model, const std::string &language, shared_ptr<DBBook> book);
 	void setContentsModel(shared_ptr<ZLTextModel> contentsModel);
 	void saveState();
 
@@ -53,7 +57,7 @@ public:
 	bool onStylusClick(int x, int y, int count);
 
 private:
-	typedef std::pair<int,int> Position;
+	typedef ReadingState Position;
 	Position cursorPosition(const ZLTextWordCursor &cursor) const;
 	bool pushCurrentPositionIntoStack(bool doPushSamePosition = true);
 	void replaceCurrentPositionInStack();
@@ -79,9 +83,14 @@ private:
 	friend class BookTextView::PositionIndicatorWithLabels;
 
 private:
+	void readBookState(const DBBook &book);
+	int readStackPos(const DBBook &book);
+	void saveBookState(const DBBook &book);
+
+private:
 	shared_ptr<ZLTextModel> myContentsModel;
 
-	std::string myFileName;
+	shared_ptr<DBBook> myBook;
 
 	typedef std::deque<Position> PositionStack;
 	PositionStack myPositionStack;
@@ -89,6 +98,7 @@ private:
 	unsigned int myMaxStackSize;
 
 	bool myLockUndoStackChanges;
+	bool myStackChanged;
 };
 
 inline void BookTextView::preparePaintInfo() {

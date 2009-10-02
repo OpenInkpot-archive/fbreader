@@ -21,7 +21,7 @@
 
 #include "DummyDescriptionReader.h"
 
-DummyDescriptionReader::DummyDescriptionReader(BookDescription &description) : myDescription(description) {
+DummyDescriptionReader::DummyDescriptionReader(DBBook &book) : myBook(book) {
 }
 
 /*

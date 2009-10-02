@@ -261,18 +261,19 @@
 				<node name="Common" value="Основная информация">
 					<node name="file" value="Файл" />
 					<node name="title" value="Название" />
-					<node name="authorDisplayName" value="Имя автора" />
-					<node name="authorSortKey" value="Имя для сортировки" />
 					<node name="language" value="Язык" />
 					<node name="encodingSet" value="Набор кодировок" />
 					<node name="encoding" value="Кодировка" />
+				</node>
+				<node name="Authors" value="Авторы">
+					<node name="authorDisplayName" value="Имя автора" />
 				</node>
 				<node name="Series" value="Серия">
 					<node name="seriesTitle" value="Название серии" />
 					<node name="bookNumber" value="Номер книги в серии" />
 				</node>
 				<node name="Tags" value="Категории">
-					<node name="tags" value="Список категорий" />
+					<node name="tags" value="Название категории" />
 				</node>
 				<node name="Text" value="Текст">
 					<node name="breakType" value="Новый параграф по" />
@@ -285,6 +286,15 @@
 					<node name="ignoreIndent" value="Игнорировать отступы меньше" />
 					<node name="buildTOC" value="Строить оглавление" />
 					<node name="emptyLines" value="Пустых строк между главами" />
+				</node>
+			</node>
+		</node>
+		<node name="AuthorInfoDialog">
+			<node name="title" value="FBReader - Информация об авторе" />
+			<node name="tab">
+				<node name="Common" value="Основная информация">
+					<node name="name" value="Имя Автора" />
+					<node name="sortKey" value="Author Sort Key" />
 				</node>
 			</node>
 		</node>
@@ -406,7 +416,7 @@
 	<node name="mobipocketPlugin">
 		<node name="unknown" value="неизвестная ошибка" />
 		<node name="unsupportedCompressionMethod" value="неподдерживаемый метод сжатия" />
-		<node name="encriptedFile" value="файл защищен DRM" />
+		<node name="encryptedFile" value="файл защищен DRM" />
 	</node>
 	<node name="networkLibrary">
 		<node name="caption" value="Поиск в сетевых библиотеках" />

@@ -24,12 +24,12 @@
 
 #include <ZLXMLReader.h>
 
-#include "../../description/BookDescription.h"
+#include "../../database/booksdb/DBBook.h"
 
 class OEBDescriptionReader : public ZLXMLReader {
 
 public:
-	OEBDescriptionReader(BookDescription &description);
+	OEBDescriptionReader(DBBook &book);
 	bool readDescription(const std::string &fileName);
 
 	void startElementHandler(const char *tag, const char **attributes);
@@ -42,7 +42,7 @@ private:
 	bool isOPFNamespace(const std::string &nsId) const;
 
 private:
-	WritableBookDescription myDescription;
+	DBBook &myBook;
 
 	bool myReadMetaData;
 	enum {

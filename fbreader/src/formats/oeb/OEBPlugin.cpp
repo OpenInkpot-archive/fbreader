@@ -26,7 +26,6 @@
 #include "OEBDescriptionReader.h"
 #include "OEBBookReader.h"
 #include "OEBTextStream.h"
-#include "../../description/BookDescription.h"
 #include "../../bookmodel/BookModel.h"
 
 static const std::string OPF = "opf";
@@ -66,13 +65,13 @@ std::string OEBPlugin::opfFileName(const std::string &oebFileName) {
 	return "";
 }
 
-bool OEBPlugin::readDescription(const std::string &path, BookDescription &description) const {
+bool OEBPlugin::readDescription(const std::string &path, DBBook &book) const {
 	shared_ptr<ZLInputStream> lock = ZLFile(path).inputStream();
 	const std::string opf = opfFileName(path);
-	bool code = OEBDescriptionReader(description).readDescription(opf);
-	if (code && description.language().empty()) {
+	bool code = OEBDescriptionReader(book).readDescription(opf);
+	if (code && book.language().empty()) {
 		shared_ptr<ZLInputStream> oebStream = new OEBTextStream(opf);
-		detectLanguage(description, *oebStream);
+		detectLanguage(book, *oebStream);
 	}
 	return code;
 }
@@ -89,12 +88,12 @@ private:
 InputStreamLock::InputStreamLock(shared_ptr<ZLInputStream> stream) : myStream(stream) {
 }
 
-bool OEBPlugin::readModel(const BookDescription &description, BookModel &model) const {
+bool OEBPlugin::readModel(const DBBook &book, BookModel &model) const {
 	model.addUserData(
 		"inputStreamLock",
-		new InputStreamLock(ZLFile(description.fileName()).inputStream())
+		new InputStreamLock(ZLFile(book.fileName()).inputStream())
 	);
-	return OEBBookReader(model).readBook(opfFileName(description.fileName()));
+	return OEBBookReader(model).readBook(opfFileName(book.fileName()));
 }
 
 const std::string &OEBPlugin::iconName() const {

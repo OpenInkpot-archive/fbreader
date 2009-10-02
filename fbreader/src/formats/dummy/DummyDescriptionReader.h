@@ -22,12 +22,12 @@
 
 #include <string>
 
-#include "../../description/BookDescription.h"
+#include "../../database/booksdb/DBBook.h"
 
 class DummyDescriptionReader {
 
 public:
-	DummyDescriptionReader(BookDescription &description);
+	DummyDescriptionReader(DBBook &book);
 	~DummyDescriptionReader();
 	bool readDescription(shared_ptr<ZLInputStream> stream);
 
@@ -38,7 +38,7 @@ public:
 	*/
 
 private:
-	WritableBookDescription myDescription;
+	DBBook &myBook;
 };
 
 inline DummyDescriptionReader::~DummyDescriptionReader() {}

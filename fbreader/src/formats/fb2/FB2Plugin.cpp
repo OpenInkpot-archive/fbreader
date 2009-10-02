@@ -22,26 +22,29 @@
 #include "FB2Plugin.h"
 #include "FB2DescriptionReader.h"
 #include "FB2BookReader.h"
-#include "../../description/BookDescription.h"
+
+#include "../../database/booksdb/BooksDBUtil.h"
 
 bool FB2Plugin::acceptsFile(const ZLFile &file) const {
 	return file.extension() == "fb2";
 }
 
-bool FB2Plugin::readDescription(const std::string &path, BookDescription &description) const {
-	return FB2DescriptionReader(description).readDescription(path);
+bool FB2Plugin::readDescription(const std::string &path, DBBook &book) const {
+	return FB2DescriptionReader(book).readDescription(path);
 }
 
 static const std::string AUTO = "auto";
 
-bool FB2Plugin::readModel(const BookDescription &description, BookModel &model) const {
+bool FB2Plugin::readModel(const DBBook &book, BookModel &model) const {
 	// this code fixes incorrect config entry created by fbreader of version <= 0.6.1
 	// makes no sense if old fbreader was not used
-	if (description.encoding() != AUTO) {
-		BookInfo(description.fileName()).EncodingOption.setValue(AUTO);
+
+	if (book.encoding() != AUTO) {
+		//BookInfo(description.fileName()).EncodingOption.setValue(AUTO);
+		BooksDBUtil::fixFB2Encoding(book);
 	}
 
-	return FB2BookReader(model).readBook(description.fileName());
+	return FB2BookReader(model).readBook(book.fileName());
 }
 
 const std::string &FB2Plugin::iconName() const {

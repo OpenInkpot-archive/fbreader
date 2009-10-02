@@ -22,8 +22,9 @@
 #include <ZLOptions.h>
 
 #include "PdbPlugin.h"
-#include "../../description/BookDescriptionUtil.h"
 #include "../../options/FBOptions.h"
+
+#include "../../database/booksdb/BooksDBUtil.h"
 
 PdbPlugin::~PdbPlugin() {
 }
@@ -34,13 +35,14 @@ std::string PdbPlugin::fileType(const ZLFile &file) {
 		return "";
 	}
 
-	std::string fileName = file.path();
-	int index = fileName.find(':');
-	ZLFile baseFile = (index == -1) ? file : ZLFile(fileName.substr(0, index));
-	bool upToDate = BookDescriptionUtil::checkInfo(baseFile);
+	const std::string &fileName = file.path();
+	//int index = fileName.find(':');
+	//ZLFile baseFile = (index == -1) ? file : ZLFile(fileName.substr(0, index));
+	ZLFile baseFile(file.physicalFilePath());
+	bool upToDate = BooksDBUtil::checkInfo(baseFile);
 
-	ZLStringOption palmTypeOption(FBCategoryKey::BOOKS, file.path(), "PalmType", "");
-	std::string palmType = palmTypeOption.value();
+	//ZLStringOption palmTypeOption(FBCategoryKey::BOOKS, file.path(), "PalmType", "");
+	std::string palmType = BooksDB::instance().getPalmType(fileName);
 	if ((palmType.length() != 8) || !upToDate) {
 		shared_ptr<ZLInputStream> stream = file.inputStream();
 		if (stream.isNull() || !stream->open()) {
@@ -52,9 +54,10 @@ std::string PdbPlugin::fileType(const ZLFile &file) {
 		stream->close();
 		palmType = std::string(id, 8);
 		if (!upToDate) {
-			BookDescriptionUtil::saveInfo(baseFile);
+			BooksDBUtil::saveInfo(baseFile);
 		}
-		palmTypeOption.setValue(palmType);
+		//palmTypeOption.setValue(palmType);
+		BooksDB::instance().setPalmType(fileName, palmType);
 	}
 	return palmType;
 }

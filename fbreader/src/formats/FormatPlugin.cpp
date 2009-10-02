@@ -22,11 +22,9 @@
 
 #include "FormatPlugin.h"
 
-#include "../description/BookDescription.h"
-
-void FormatPlugin::detectEncodingAndLanguage(BookDescription &description, ZLInputStream &stream) {
-	std::string language = description.language();
-	std::string encoding = description.encoding();
+void FormatPlugin::detectEncodingAndLanguage(DBBook &book, ZLInputStream &stream) {
+	std::string language = book.language();
+	std::string encoding = book.encoding();
 	if (!encoding.empty() && !language.empty()) {
 		return;
 	}
@@ -56,12 +54,12 @@ void FormatPlugin::detectEncodingAndLanguage(BookDescription &description, ZLInp
 			}
 		}
 	}
-	WritableBookDescription(description).encoding() = encoding;
-	WritableBookDescription(description).language() = language;
+	book.setEncoding(encoding);
+	book.setLanguage(language);
 }
 
-void FormatPlugin::detectLanguage(BookDescription &description, ZLInputStream &stream) {
-	std::string language = description.language();
+void FormatPlugin::detectLanguage(DBBook &book, ZLInputStream &stream) {
+	std::string language = book.language();
 	if (!language.empty()) {
 		return;
 	}
@@ -84,7 +82,7 @@ void FormatPlugin::detectLanguage(BookDescription &description, ZLInputStream &s
 			}
 		}
 	}
-	WritableBookDescription(description).language() = language;
+	book.setLanguage(language);
 }
 
 const std::string &FormatPlugin::tryOpen(const std::string&) const {

@@ -262,18 +262,19 @@
 				<node name="Common" value="Основна інформація">
 					<node name="file" value="Файл" />
 					<node name="title" value="Назва" />
-					<node name="authorDisplayName" value="Ім&apos;я автора" />
-					<node name="authorSortKey" value="Ім&apos;я для сортування" />
 					<node name="language" value="Мова" />
 					<node name="encodingSet" value="Набір кодувань" />
 					<node name="encoding" value="Кодування" />
+				</node>
+				<node name="Authors" value="Authors" toBeTranslated="true">
+					<node name="authorDisplayName" value="Author Name" toBeTranslated="true" />
 				</node>
 				<node name="Series" value="Серія">
 					<node name="seriesTitle" value="Назва серії" />
 					<node name="bookNumber" value="Номер книги у серії" />
 				</node>
 				<node name="Tags" toBeTranslated="true" value="Tags">
-					<node name="tags" toBeTranslated="true" value="Tag List" />
+					<node name="tags" value="Tag Name" toBeTranslated="true" />
 				</node>
 				<node name="Text" value="Текст">
 					<node name="breakType" value="Новий параграф по" />
@@ -286,6 +287,15 @@
 					<node name="ignoreIndent" value="Ігнорувати відступи менше" />
 					<node name="buildTOC" value="Побудувати зміст" />
 					<node name="emptyLines" value="Порожніх рядків між главами" />
+				</node>
+			</node>
+		</node>
+		<node name="AuthorInfoDialog">
+			<node name="title" value="FBReader - Author Info" toBeTranslated="true" />
+			<node name="tab">
+				<node name="Common" value="Основна інформація">
+					<node name="name" value="Author Name" toBeTranslated="true" />
+					<node name="sortKey" value="Author Sort Key" toBeTranslated="true" />
 				</node>
 			</node>
 		</node>
@@ -407,7 +417,7 @@
 	<node name="mobipocketPlugin">
 		<node name="unknown" value="невідома помилка" />
 		<node name="unsupportedCompressionMethod" value="метод натискання, що не підтримується" />
-		<node name="encriptedFile" value="файл захищений DRM" />
+		<node name="encryptedFile" value="файл захищений DRM" />
 	</node>
 	<node name="networkLibrary">
 		<node name="caption" toBeTranslated="true" value="Network Library" />

@@ -23,10 +23,11 @@
 #include "OEBDescriptionReader.h"
 #include "../../constants/XMLNamespace.h"
 
-OEBDescriptionReader::OEBDescriptionReader(BookDescription &description) : myDescription(description) {
-	myDescription.clearAuthor();
-	myDescription.title().erase();
-	myDescription.removeAllTags();
+
+OEBDescriptionReader::OEBDescriptionReader(DBBook &book) : myBook(book) {
+	myBook.authors().clear();
+	myBook.setTitle("");
+	myBook.tags().clear();
 }
 
 static const std::string METADATA = "metadata";
@@ -49,7 +50,7 @@ void OEBDescriptionReader::characterDataHandler(const char *text, size_t len) {
 			myBuffer.append(text, len);
 			break;
 		case READ_TITLE:
-			myDescription.title().append(text, len);
+			myBook.appendTitle(std::string(text, len));
 			break;
 	}
 }
@@ -116,7 +117,8 @@ void OEBDescriptionReader::endElementHandler(const char *tag) {
 			} else if (myReadState == READ_AUTHOR2) {
 				myAuthorList2.push_back(myBuffer);
 			} else if (myReadState == READ_SUBJECT) {
-				myDescription.addTag(myBuffer);
+				//myBook.addTag(myBuffer);
+				myBook.addTag(  DBTag::getSubTag(myBuffer)  );
 			} else if (myReadState == READ_LANGUAGE) {
 				int index = myBuffer.find('-');
 				if (index >= 0) {
@@ -129,7 +131,7 @@ void OEBDescriptionReader::endElementHandler(const char *tag) {
 				if (myBuffer == "cz") {
 					myBuffer = "cs";
 				}
-				myDescription.language() = myBuffer;
+				myBook.setLanguage(myBuffer);
 			}
 			myBuffer.erase();
 		}
@@ -148,12 +150,21 @@ bool OEBDescriptionReader::readDescription(const std::string &fileName) {
 	if (code) {
 		if (!myAuthorList.empty()) {
 			for (std::vector<std::string>::const_iterator it = myAuthorList.begin(); it != myAuthorList.end(); ++it) {
-				myDescription.addAuthor(*it);
+				const shared_ptr<DBAuthor> author = DBAuthor::create(*it);
+				if (!author.isNull()) {
+					myBook.authors().push_back( author );
+				}
 			}
 		} else {
 			for (std::vector<std::string>::const_iterator it = myAuthorList2.begin(); it != myAuthorList2.end(); ++it) {
-				myDescription.addAuthor(*it);
+				const shared_ptr<DBAuthor> author = DBAuthor::create(*it);
+				if (!author.isNull()) {
+					myBook.authors().push_back( author );
+				}
 			}
+		}
+		if (myBook.authors().empty()) {
+			myBook.authors().push_back( new DBAuthor() );
 		}
 	}
 	return code;

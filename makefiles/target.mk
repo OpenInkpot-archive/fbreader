@@ -8,17 +8,15 @@
 #TARGET_ARCH = qvfb
 #UI_TYPE = opie
 
-TARGET_ARCH = maemo
+#TARGET_ARCH = maemo
 #UI_TYPE = maemo2
-#UI_TYPE = maemo3
-UI_TYPE = maemo4
-#UI_TYPE = maemo5
+#UI_TYPE = maemo4
 
 #TARGET_ARCH = ebr
 #UI_TYPE = nanoX
 
-#TARGET_ARCH = desktop
-#UI_TYPE = gtk
+TARGET_ARCH = desktop
+UI_TYPE = gtk
 #UI_TYPE = qt
 #UI_TYPE = qt4
 
@@ -48,7 +46,9 @@ UI_TYPE = maemo4
 #TARGET_ARCH = palm
 #UI_TYPE = palm
 
-TARGET_STATUS = release
-#TARGET_STATUS = debug
-#ZLSHARED = no
+#TARGET_ARCH = macosx
+#UI_TYPE = cocoa
+
+#TARGET_STATUS = release
+TARGET_STATUS = debug
 #TARGET_STATUS = profile

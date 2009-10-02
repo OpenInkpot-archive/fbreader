@@ -25,8 +25,9 @@
 #include "FBReader.h"
 #include "FBReaderActions.h"
 #include "BookInfoDialog.h"
+#include "AuthorInfoDialog.h"
 
-#include "../collection/BookList.h"
+#include "../database/booksdb/BooksDB.h"
 
 class RebuildCollectionRunnable : public ZLRunnable {
 
@@ -68,7 +69,7 @@ const std::string &CollectionView::caption() const {
 	return ZLResource::resource("library")["caption"].value();
 }
 
-void CollectionView::selectBook(BookDescriptionPtr book) {
+void CollectionView::selectBook(shared_ptr<DBBook> book) {
 	mySelectedBook = book;
 
 	if (myDoUpdateModel) {
@@ -125,7 +126,7 @@ bool CollectionView::_onStylusMove(int x, int y) {
 
 	int index = paragraphIndexByCoordinates(x, y);
 	if (index != -1) {
-		BookDescriptionPtr book = collectionModel().bookByParagraphIndex(index);
+		shared_ptr<DBBook> book = collectionModel().bookByParagraphIndex(index);
 		if (!book.isNull()) {
 			fbreader().setHyperlinkCursor(true);
 			return true;
@@ -159,10 +160,17 @@ bool CollectionView::_onStylusPress(int x, int y) {
 			removeBook(collectionModel().bookByParagraphIndex(imageArea->ParagraphIndex));
 			return true;
 		} else if (id == CollectionModel::RemoveTagImageId) {
-			removeTag(collectionModel().tagByParagraphIndex(imageArea->ParagraphIndex));
+			std::string special;
+			shared_ptr<DBTag> tag = collectionModel().tagByParagraphIndex(imageArea->ParagraphIndex, special);
+			removeTag(tag, special);
 			return true;
 		} else if (id == CollectionModel::TagInfoImageId) {
-			editTagInfo(collectionModel().tagByParagraphIndex(imageArea->ParagraphIndex));
+			std::string special;
+			shared_ptr<DBTag> tag = collectionModel().tagByParagraphIndex(imageArea->ParagraphIndex, special);
+			editTagInfo(tag, special);
+			return true;
+		} else if (id == CollectionModel::AuthorInfoImageId) {
+			editAuthorInfo(collectionModel().authorByParagraphIndex(imageArea->ParagraphIndex));
 			return true;
 		} else {
 			return false;
@@ -174,7 +182,7 @@ bool CollectionView::_onStylusPress(int x, int y) {
 		return false;
 	}
 
-	BookDescriptionPtr book = collectionModel().bookByParagraphIndex(index);
+	shared_ptr<DBBook> book = collectionModel().bookByParagraphIndex(index);
 	if (!book.isNull()) {
 		fbreader().openBook(book);
 		fbreader().showBookTextView();
@@ -184,8 +192,8 @@ bool CollectionView::_onStylusPress(int x, int y) {
 	return false;
 }
 
-void CollectionView::editBookInfo(BookDescriptionPtr book) {
-	if (!book.isNull() && BookInfoDialog(myCollection, book->fileName()).dialog().run()) {
+void CollectionView::editBookInfo(shared_ptr<DBBook> book) {
+	if (!book.isNull() && BookInfoDialog(myCollection, book).dialog().run()) {
 		myCollection.rebuild(false);
 		myDoUpdateModel = true;
 		selectBook(book);
@@ -193,7 +201,7 @@ void CollectionView::editBookInfo(BookDescriptionPtr book) {
 	}
 }
 
-void CollectionView::removeBook(BookDescriptionPtr book) {
+void CollectionView::removeBook(shared_ptr<DBBook> book) {
 	if (book.isNull()) {
 		return;
 	}
@@ -210,7 +218,7 @@ void CollectionView::removeBook(BookDescriptionPtr book) {
 	if (ZLDialogManager::instance().questionBox(boxKey, message,
 		ZLDialogManager::YES_BUTTON, ZLDialogManager::NO_BUTTON) == 0) {
 		cModel.removeAllMarks();
-		BookList().removeFileName(book->fileName());
+		BooksDB::instance().deleteFromBookList(*book);
 		
 		cModel.removeBook(book);
 		if (cModel.paragraphsNumber() == 0) {
@@ -232,14 +240,14 @@ void CollectionView::removeBook(BookDescriptionPtr book) {
 	}
 }
 
-void CollectionView::removeTag(const std::string &tag) {
-	if (tag.empty()) {
+void CollectionView::removeTag(shared_ptr<DBTag> tag, const std::string &special) {
+	if (tag.isNull()) {
 		return;
 	}
 
 	ZLResourceKey boxKey("removeTagBox");
 	const std::string message =
-		ZLStringUtil::printf(ZLDialogManager::dialogMessage(boxKey), tag);
+		ZLStringUtil::printf(ZLDialogManager::dialogMessage(boxKey), tag->fullName());
 	enum { REMOVE_TAG, REMOVE_SUBTREE, DONT_REMOVE } code = DONT_REMOVE;
 	if (myCollection.hasSubtags(tag)) {
 		if (myCollection.hasBooks(tag)) {
@@ -281,7 +289,7 @@ CollectionModel &CollectionView::collectionModel() {
 	return (CollectionModel&)*model();
 }
 
-void CollectionView::openWithBook(BookDescriptionPtr book) {
+void CollectionView::openWithBook(shared_ptr<DBBook> book) {
 	RebuildCollectionRunnable runnable(*this);
 	ZLDialogManager::instance().wait(ZLResourceKey("loadingBookList"), runnable);
 	if (book != 0) {
@@ -296,3 +304,13 @@ bool CollectionView::organizeByTags() const {
 bool CollectionView::hasContents() const {
 	return !((CollectionModel&)*model()).empty();
 }
+
+void CollectionView::editAuthorInfo(shared_ptr<DBAuthor> author) {
+	if (!author.isNull() && AuthorInfoDialog(myCollection, author).dialog().run()) {
+		myCollection.rebuild(false);
+		myDoUpdateModel = true;
+		selectBook(mySelectedBook);
+		application().refreshWindow();
+	}
+}
+

@@ -19,8 +19,9 @@
 
 #include "HtmlDescriptionReader.h"
 
-HtmlDescriptionReader::HtmlDescriptionReader(BookDescription &description) : HtmlReader(description.encoding()), myDescription(description) {
-	myDescription.title().erase();
+
+HtmlDescriptionReader::HtmlDescriptionReader(DBBook &book) : HtmlReader(book.encoding()), myBook(book) {
+	myBook.setTitle("");
 }
 
 void HtmlDescriptionReader::startDocumentHandler() {
@@ -28,18 +29,18 @@ void HtmlDescriptionReader::startDocumentHandler() {
 }
 
 void HtmlDescriptionReader::endDocumentHandler() {
-	if (!myDescription.title().empty()) {
-		const char *titleStart = myDescription.title().data();
-		const char *titleEnd = titleStart + myDescription.title().length();
+	if (!myBook.title().empty()) {
+		const char *titleStart = myBook.title().data();
+		const char *titleEnd = titleStart + myBook.title().length();
 		std::string newTitle;
 		myConverter->convert(newTitle, titleStart, titleEnd);
-		myDescription.title() = newTitle;
+		myBook.setTitle(newTitle);
 	}
 }
 
 bool HtmlDescriptionReader::tagHandler(const HtmlTag &tag) {
 	if (tag.Name == "TITLE") {
-		myReadTitle = tag.Start && myDescription.title().empty();
+		myReadTitle = tag.Start && myBook.title().empty();
 		return true;
 	}
 	return tag.Name != "BODY";
@@ -47,7 +48,7 @@ bool HtmlDescriptionReader::tagHandler(const HtmlTag &tag) {
 
 bool HtmlDescriptionReader::characterDataHandler(const char *text, size_t len, bool) {
 	if (myReadTitle) {
-		myDescription.title().append(text, len);
+		myBook.appendTitle(std::string(text, len));
 	}
 	return true;
 }

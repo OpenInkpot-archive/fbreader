@@ -26,7 +26,8 @@
 #include <ZLTextModel.h>
 #include <ZLTextParagraph.h>
 #include <ZLUserData.h>
-#include "../description/BookDescription.h"
+
+#include "../database/booksdb/DBBook.h"
 
 class ZLImage;
 
@@ -51,7 +52,7 @@ public:
 	};
 
 public:
-	BookModel(const BookDescriptionPtr description);
+	BookModel(const shared_ptr<DBBook> book);
 	~BookModel();
 
 	const std::string &fileName() const;
@@ -62,10 +63,10 @@ public:
 	const ZLImageMap &imageMap() const;
 	Label label(const std::string &id) const;
 
-	const BookDescriptionPtr description() const;
+	const shared_ptr<DBBook> book() const;
 
 private:
-	const BookDescriptionPtr myDescription;
+	const shared_ptr<DBBook> myBook;
 	shared_ptr<ZLTextModel> myBookTextModel;
 	shared_ptr<ZLTextModel> myContentsModel;
 	ZLImageMap myImages;
@@ -78,6 +79,7 @@ friend class BookReader;
 inline shared_ptr<ZLTextModel> BookModel::bookTextModel() const { return myBookTextModel; }
 inline shared_ptr<ZLTextModel> BookModel::contentsModel() const { return myContentsModel; }
 inline const ZLImageMap &BookModel::imageMap() const { return myImages; }
-inline const BookDescriptionPtr BookModel::description() const { return myDescription; }
+inline const shared_ptr<DBBook> BookModel::book() const { return myBook; }
+inline const std::string &BookModel::fileName() const { return myBook->fileName(); }
 
 #endif /* __BOOKMODEL_H__ */

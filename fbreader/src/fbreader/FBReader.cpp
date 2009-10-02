@@ -47,11 +47,13 @@
 #include "../options/FBOptions.h"
 #include "../bookmodel/BookModel.h"
 #include "../formats/FormatPlugin.h"
-#include "../collection/BookList.h"
+
+
+#include "../database/booksdb/BooksDB.h"
+#include "../database/booksdb/BooksDBUtil.h"
+
 
 static const std::string OPTIONS = "Options";
-static const std::string STATE = "State";
-static const std::string BOOK = "Book";
 
 const std::string LARGE_SCROLLING = "LargeScrolling";
 const std::string SMALL_SCROLLING = "SmallScrolling";
@@ -187,31 +189,34 @@ void FBReader::initWindow() {
 	MigrationRunnable migration;
 	if (migration.shouldMigrate()) {
 		ZLDialogManager::instance().wait(ZLResourceKey("migrate"), migration);
+		myRecentBooks.reload();
 	}
 
 	if (!myBookAlreadyOpen) {
-		BookDescriptionPtr description;
+		shared_ptr<DBBook> book;
 		if (!myBookToOpen.empty()) {
-			createDescription(myBookToOpen, description);
+			createDescription(myBookToOpen, book);
 		}
-		if (description.isNull()) {
-			ZLStringOption bookName(ZLCategoryKey::STATE, STATE, BOOK, "");
-			description = BookDescription::getDescription(bookName.value());
+		if (book.isNull()) {
+			const std::vector<shared_ptr<DBBook> > &books = myRecentBooks.books();
+			if (!books.empty()) {
+				book = books[0];
+			}
 		}
-		if (description.isNull()) {
-			description = BookDescription::getDescription(helpFileName(ZLibrary::Language()));
+		if (book.isNull()) {
+			book = BooksDBUtil::getBook(helpFileName(ZLibrary::Language()));
 		}
-		if (description.isNull()) {
-			description = BookDescription::getDescription(helpFileName("en"));
+		if (book.isNull()) {
+			book = BooksDBUtil::getBook(helpFileName("en"));
 		}
-		openBook(description);
+		openBook(book);
 	}
 	refreshWindow();
 
 	ZLTimeManager::instance().addTask(new TimeUpdater(*this), 1000);
 }
 
-bool FBReader::createDescription(const std::string& fileName, BookDescriptionPtr &description) {
+bool FBReader::createDescription(const std::string& fileName, shared_ptr<DBBook> &book) {
 	ZLFile bookFile = ZLFile(fileName);
 
 	FormatPlugin *plugin = PluginCollection::instance().plugin(ZLFile(fileName), false);
@@ -224,8 +229,10 @@ bool FBReader::createDescription(const std::string& fileName, BookDescriptionPtr
 				ZLStringUtil::printf(ZLDialogManager::dialogMessage(boxKey), error)
 			);
 		} else {
-			BookList().addFileName(bookFile.path());
-			description = BookDescription::getDescription(bookFile.path());
+			book = BooksDBUtil::getBook(bookFile.path());
+			if (!book.isNull()) {
+				BooksDB::instance().insertIntoBookList(*book);
+			}
 		}
 		return true;
 	}
@@ -251,7 +258,7 @@ bool FBReader::createDescription(const std::string& fileName, BookDescriptionPtr
 			ZLFile subFile(itemName);
 			if (subFile.isArchive()) {
 				archiveNames.push(itemName);
-			} else if (createDescription(itemName, description)) {
+			} else if (createDescription(itemName, book)) {
 				return true;
 			}
 		}
@@ -264,46 +271,45 @@ bool FBReader::createDescription(const std::string& fileName, BookDescriptionPtr
 class OpenBookRunnable : public ZLRunnable {
 
 public:
-	OpenBookRunnable(FBReader &reader, BookDescriptionPtr description) : myReader(reader), myDescription(description) {}
-	void run() { myReader.openBookInternal(myDescription); }
+	OpenBookRunnable(FBReader &reader, shared_ptr<DBBook> book) : myReader(reader), myBook(book) {}
+	void run() { myReader.openBookInternal(myBook); }
 
 private:
 	FBReader &myReader;
-	BookDescriptionPtr myDescription;
+	shared_ptr<DBBook> myBook;
 };
 
-void FBReader::openBook(BookDescriptionPtr description) {
-	OpenBookRunnable runnable(*this, description);
+void FBReader::openBook(shared_ptr<DBBook> book) {
+	OpenBookRunnable runnable(*this, book);
 	ZLDialogManager::instance().wait(ZLResourceKey("loadingBook"), runnable);
 	resetWindowCaption();
 }
 
-void FBReader::openBookInternal(BookDescriptionPtr description) {
-	if (!description.isNull()) {
+void FBReader::openBookInternal(shared_ptr<DBBook> book) {
+	if (!book.isNull()) {
 		BookTextView &bookTextView = (BookTextView&)*myBookTextView;
 		ContentsView &contentsView = (ContentsView&)*myContentsView;
 		FootnoteView &footnoteView = (FootnoteView&)*myFootnoteView;
 
 		bookTextView.saveState();
-		bookTextView.setModel(0, "", "");
+		bookTextView.setModel(0, "", 0);
 		bookTextView.setContentsModel(0);
 		contentsView.setModel(0, "");
 		if (myModel != 0) {
 			delete myModel;
 		}
-		myModel = new BookModel(description);
-		ZLStringOption(ZLCategoryKey::STATE, STATE, BOOK, std::string()).setValue(myModel->fileName());
-		const std::string &lang = description->language();
+		myModel = new BookModel(book);
+		const std::string &lang = book->language();
 		ZLTextHyphenator::instance().load(lang);
-		bookTextView.setModel(myModel->bookTextModel(), lang, description->fileName());
-		bookTextView.setCaption(description->title());
+		bookTextView.setModel(myModel->bookTextModel(), lang, book);
+		bookTextView.setCaption(book->title());
 		bookTextView.setContentsModel(myModel->contentsModel());
 		footnoteView.setModel(0, lang);
-		footnoteView.setCaption(description->title());
+		footnoteView.setCaption(book->title());
 		contentsView.setModel(myModel->contentsModel(), lang);
-		contentsView.setCaption(description->title());
+		contentsView.setCaption(book->title());
 
-		myRecentBooks.addBook(description);
+		myRecentBooks.addBook(book);
 		((RecentBooksPopupData&)*myRecentBooksPopupData).updateId();
 	}
 }
@@ -325,7 +331,7 @@ void FBReader::tryShowFootnoteView(const std::string &id, const std::string &typ
 					bookTextView().gotoParagraph(label.ParagraphNumber);
 				} else {
 					FootnoteView &view = ((FootnoteView&)*myFootnoteView);
-					view.setModel(label.Model, myModel->description()->language());
+					view.setModel(label.Model, myModel->book()->language());
 					setMode(FOOTNOTE_MODE);
 					view.gotoParagraph(label.ParagraphNumber);
 				}
@@ -378,7 +384,7 @@ void FBReader::setMode(ViewMode mode) {
 			setView(myFootnoteView);
 			break;
 		case BOOK_COLLECTION_MODE:
-			collectionView().openWithBook((myModel != 0) ? myModel->description() : 0);
+			collectionView().openWithBook((myModel != 0) ? myModel->book() : 0);
 			setView(myCollectionView);
 			break;
 		case BOOKMARKS_MODE:
@@ -392,9 +398,9 @@ void FBReader::setMode(ViewMode mode) {
 	}
 }
 
-bool FBReader::runBookInfoDialog(const std::string &fileName) {
+bool FBReader::runBookInfoDialog(shared_ptr<DBBook> book) {
 	BookCollection &collection = ((CollectionView&)*myCollectionView).collection();
-	if (BookInfoDialog(collection, fileName).dialog().run()) {
+	if (BookInfoDialog(collection, book).dialog().run()) {
 		collection.rebuild(false);
 		return true;
 	}
@@ -432,14 +438,14 @@ std::string FBReader::helpFileName(const std::string &language) const {
 	return ZLibrary::ApplicationDirectory() + ZLibrary::FileNameDelimiter + "help" + ZLibrary::FileNameDelimiter + "MiniHelp." + language + ".fb2";
 }
 
-void FBReader::openFile(const std::string &fileName) {
-	BookDescriptionPtr description;
-	createDescription(fileName, description);
-	if (!description.isNull()) {
-		openBook(description);
+/*void FBReader::openFile(const std::string &fileName) {
+	shared_ptr<DBBook> book;
+	createDescription(fileName, book);
+	if (!book.isNull()) {
+		openBook(book);
 		refreshWindow();
 	}
-}
+}*/
 
 void FBReader::clearTextCaches() {
 	((ZLTextView&)*myBookTextView).clearCaches();

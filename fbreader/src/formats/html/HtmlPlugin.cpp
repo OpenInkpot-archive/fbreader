@@ -26,15 +26,16 @@
 #include "HtmlBookReader.h"
 #include "HtmlReaderStream.h"
 #include "../txt/PlainTextFormat.h"
-#include "../../description/BookDescription.h"
 #include "../util/MiscUtil.h"
+
+#include "../../database/booksdb/DBBook.h"
 
 bool HtmlPlugin::acceptsFile(const ZLFile &file) const {
 	const std::string &extension = file.extension();
 	return ZLStringUtil::stringEndsWith(extension, "html") || (extension == "htm");
 }
 
-bool HtmlPlugin::readDescription(const std::string &path, BookDescription &description) const {
+bool HtmlPlugin::readDescription(const std::string &path, DBBook &book) const {
 	ZLFile file(path);
 	shared_ptr<ZLInputStream> stream = file.inputStream();
 	if (stream.isNull()) {
@@ -42,17 +43,17 @@ bool HtmlPlugin::readDescription(const std::string &path, BookDescription &descr
 	}
 
 	shared_ptr<ZLInputStream> htmlStream = new HtmlReaderStream(stream, 50000);
-	detectEncodingAndLanguage(description, *htmlStream);
-	if (description.encoding().empty()) {
+	detectEncodingAndLanguage(book, *htmlStream);
+	if (book.encoding().empty()) {
 		return false;
 	}
-	HtmlDescriptionReader(description).readDocument(*stream);
+	HtmlDescriptionReader(book).readDocument(*stream);
 
 	return true;
 }
 
-bool HtmlPlugin::readModel(const BookDescription &description, BookModel &model) const {
-	std::string fileName = description.fileName();
+bool HtmlPlugin::readModel(const DBBook &book, BookModel &model) const {
+	std::string fileName = book.fileName();
 	shared_ptr<ZLInputStream> stream = ZLFile(fileName).inputStream();
 	if (stream.isNull()) {
 		return false;
@@ -65,7 +66,7 @@ bool HtmlPlugin::readModel(const BookDescription &description, BookModel &model)
 	}
 
 	std::string directoryPrefix = MiscUtil::htmlDirectoryPrefix(fileName);
-	HtmlBookReader reader(directoryPrefix, model, format, description.encoding());
+	HtmlBookReader reader(directoryPrefix, model, format, book.encoding());
 	reader.setFileName(MiscUtil::htmlFileName(fileName));
 	reader.readDocument(*stream);
 

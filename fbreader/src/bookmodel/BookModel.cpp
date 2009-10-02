@@ -24,22 +24,19 @@
 #include "BookReader.h"
 
 #include "../formats/FormatPlugin.h"
+#include "../database/booksdb/BooksDBUtil.h"
 
-BookModel::BookModel(const BookDescriptionPtr description) : myDescription(description) {
+BookModel::BookModel(const shared_ptr<DBBook> book) : myBook(book) {
 	myBookTextModel = new ZLTextPlainModel(102400);
 	myContentsModel = new ContentsModel();
-	ZLFile file(description->fileName());
+	ZLFile file(book->fileName());
 	FormatPlugin *plugin = PluginCollection::instance().plugin(file, false);
 	if (plugin != 0) {
-		plugin->readModel(*description, *this);
+		plugin->readModel(*book, *this);
 	}
 }
 
 BookModel::~BookModel() {
-}
-
-const std::string &BookModel::fileName() const {
-	return myDescription->fileName();
 }
 
 BookModel::Label BookModel::label(const std::string &id) const {

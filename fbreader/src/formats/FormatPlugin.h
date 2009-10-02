@@ -25,7 +25,8 @@
 
 #include <ZLOptions.h>
 
-class BookDescription;
+#include "../database/booksdb/DBBook.h"
+
 class BookModel;
 class ZLOptionsDialog;
 class ZLOptionsDialogTab;
@@ -55,12 +56,12 @@ public:
 	virtual FormatInfoPage *createInfoPage(ZLOptionsDialog &dialog, const std::string &path);
 
 	virtual const std::string &tryOpen(const std::string &path) const;
-	virtual bool readDescription(const std::string &path, BookDescription &description) const = 0;
-	virtual bool readModel(const BookDescription &description, BookModel &model) const = 0;
+	virtual bool readDescription(const std::string &path, DBBook &book) const = 0;
+	virtual bool readModel(const DBBook &book, BookModel &model) const = 0;
 
 protected:
-	static void detectEncodingAndLanguage(BookDescription &description, ZLInputStream &stream);
-	static void detectLanguage(BookDescription &description, ZLInputStream &stream);
+	static void detectEncodingAndLanguage(DBBook &book, ZLInputStream &stream);
+	static void detectLanguage(DBBook &book, ZLInputStream &stream);
 };
 
 class PluginCollection {

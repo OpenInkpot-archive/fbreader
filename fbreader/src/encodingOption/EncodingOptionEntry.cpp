@@ -24,8 +24,8 @@
 
 static const std::string AUTO = "auto";
 
-EncodingEntry::EncodingEntry(ZLStringOption &encodingOption) : myEncodingOption(encodingOption) {
-	const std::string &value = myEncodingOption.value();
+AbstractEncodingEntry::AbstractEncodingEntry(const std::string &currentValue) {
+	const std::string &value = currentValue;
 	if (value == AUTO) {
 		myInitialSetName = value;
 		myInitialValues[value] = value;
@@ -53,7 +53,7 @@ EncodingEntry::EncodingEntry(ZLStringOption &encodingOption) : myEncodingOption(
 	}
 }
 
-const std::vector<std::string> &EncodingEntry::values() const {
+const std::vector<std::string> &AbstractEncodingEntry::values() const {
 	if (initialValue() == AUTO) {
 		static std::vector<std::string> AUTO_ENCODING;
 		if (AUTO_ENCODING.empty()) {
@@ -65,7 +65,7 @@ const std::vector<std::string> &EncodingEntry::values() const {
 	return it->second;
 }
 
-const std::string &EncodingEntry::initialValue() const {
+const std::string &AbstractEncodingEntry::initialValue() const {
 	if (myInitialValues[myInitialSetName].empty()) {
 		std::map<std::string,std::vector<std::string> >::const_iterator it = myValues.find(myInitialSetName);
 		myInitialValues[myInitialSetName] = it->second[0];
@@ -73,17 +73,33 @@ const std::string &EncodingEntry::initialValue() const {
 	return myInitialValues[myInitialSetName];
 }
 
-void EncodingEntry::onAccept(const std::string &value) {
+void AbstractEncodingEntry::onAccept(const std::string &value) {
 	if (initialValue() != AUTO) {
-		myEncodingOption.setValue(myValueByName[value]);
+		onAcceptValue(myValueByName[value]);
 	}
 }
 
-void EncodingEntry::onValueSelected(int index) {
+void AbstractEncodingEntry::onValueSelected(int index) {
 	myInitialValues[myInitialSetName] = values()[index];
 }
 
-EncodingSetEntry::EncodingSetEntry(EncodingEntry &encodingEntry) : myEncodingEntry(encodingEntry) {
+
+
+
+
+EncodingEntry::EncodingEntry(ZLStringOption &encodingOption) : 
+	AbstractEncodingEntry(encodingOption.value()), 
+	myEncodingOption(encodingOption) {
+}
+
+void EncodingEntry::onAcceptValue(const std::string &value) {
+	myEncodingOption.setValue(value);
+}
+
+
+
+
+EncodingSetEntry::EncodingSetEntry(AbstractEncodingEntry &encodingEntry) : myEncodingEntry(encodingEntry) {
 }
 
 const std::string &EncodingSetEntry::initialValue() const {

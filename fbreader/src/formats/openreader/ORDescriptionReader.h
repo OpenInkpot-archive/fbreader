@@ -22,12 +22,12 @@
 
 #include <ZLXMLReader.h>
 
-#include "../../description/BookDescription.h"
+#include "../../database/booksdb/DBBook.h"
 
 class ORDescriptionReader : public ZLXMLReader {
 
 public:
-	ORDescriptionReader(BookDescription &description);
+	ORDescriptionReader(DBBook &book);
 	bool readDescription(const std::string &fileName);
 
 private:
@@ -38,7 +38,7 @@ private:
 	const std::vector<std::string> &externalDTDs() const;
 
 private:
-	WritableBookDescription myDescription;
+	DBBook &myBook;
 
 	bool myReadMetaData;
 	enum {

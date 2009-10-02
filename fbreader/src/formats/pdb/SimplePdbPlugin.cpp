@@ -19,53 +19,56 @@
 
 #include <ZLFile.h>
 #include <ZLInputStream.h>
+#include <iostream>
 
 #include "PdbPlugin.h"
-#include "../../description/BookDescription.h"
 #include "../txt/TxtBookReader.h"
 #include "../html/HtmlBookReader.h"
 #include "HtmlMetainfoReader.h"
 #include "../util/TextFormatDetector.h"
 
-bool SimplePdbPlugin::readDescription(const std::string &path, BookDescription &description) const {
-	ZLFile file(path);
+#include "../../database/booksdb/DBBook.h"
 
+bool SimplePdbPlugin::readDescription(const std::string &path, DBBook &book) const {
+	ZLFile file(path);
+	std::cerr << "Read description specified by SimplePdbPlugin...\n";
 	shared_ptr<ZLInputStream> stream = createStream(file);
-	detectEncodingAndLanguage(description, *stream);
-	if (description.encoding().empty()) {
+	detectEncodingAndLanguage(book, *stream);
+	if (book.encoding().empty()) {
 		return false;
 	}
 	int readType = HtmlMetainfoReader::NONE;
-	if (description.title().empty()) {
+	if (book.title().empty()) {
 		readType |= HtmlMetainfoReader::TITLE;
 	}
-	if (description.author().isNull()) {
+	if (book.authors().empty()) {
 		readType |= HtmlMetainfoReader::AUTHOR;
 	}
 	if ((readType != HtmlMetainfoReader::NONE) && TextFormatDetector().isHtml(*stream)) {
 		readType |= HtmlMetainfoReader::TAGS;
-		HtmlMetainfoReader metainfoReader(description, (HtmlMetainfoReader::ReadType)readType);
+		HtmlMetainfoReader metainfoReader(book, (HtmlMetainfoReader::ReadType)readType);
 		metainfoReader.readDocument(*stream);
 	}
 
 	return true;
 }
 
-bool SimplePdbPlugin::readModel(const BookDescription &description, BookModel &model) const {
-	ZLFile file(description.fileName());
+bool SimplePdbPlugin::readModel(const DBBook &book, BookModel &model) const {
+	std::cerr << "Read model specified by SimplePdbPlugin...\n";
+	ZLFile file(book.fileName());
 	shared_ptr<ZLInputStream> stream = createStream(file);
 
-	PlainTextFormat format(description.fileName());
+	PlainTextFormat format(book.fileName());
 	if (!format.initialized()) {
 		PlainTextFormatDetector detector;
 		detector.detect(*stream, format);
 	}
-
-	readDocumentInternal(description.fileName(), model, format, description.encoding(), *stream);
+	readDocumentInternal(book.fileName(), model, format, book.encoding(), *stream);
 	return true;
 }
 
 void SimplePdbPlugin::readDocumentInternal(const std::string&, BookModel &model, const PlainTextFormat &format, const std::string &encoding, ZLInputStream &stream) const {
+	std::cerr << "Read document internal specified by SimplePdbPlugin...\n";
 	if (TextFormatDetector().isHtml(stream)) {
 		HtmlBookReader("", model, format, encoding).readDocument(stream);
 	} else {

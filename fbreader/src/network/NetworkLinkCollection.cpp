@@ -30,6 +30,8 @@
 
 #include "../options/FBOptions.h"
 
+#include "../database/booksdb/BooksDB.h"
+
 NetworkLinkCollection *NetworkLinkCollection::ourInstance = 0;
 
 NetworkLinkCollection &NetworkLinkCollection::instance() {
@@ -64,13 +66,14 @@ static std::string normalize(const std::string &url) {
 }
 
 std::string NetworkLinkCollection::bookFileName(const std::string &url) const {
-	return ZLStringOption(ZLCategoryKey::NETWORK, "Files", ::normalize(url), "").value();
+	//return ZLStringOption(ZLCategoryKey::NETWORK, "Files", ::normalize(url), "").value();
+	return BooksDB::instance().getNetFile(::normalize(url));
 }
 
 std::string NetworkLinkCollection::downloadBook(const std::string &url, std::string &fileName) const {
 	const std::string nURL = ::normalize(url);
-	ZLStringOption fileNameOption(ZLCategoryKey::NETWORK, "Files", nURL, "");
-	std::string storedFileName = fileNameOption.value();
+	//ZLStringOption fileNameOption(ZLCategoryKey::NETWORK, "Files", nURL, "");
+	std::string storedFileName = BooksDB::instance().getNetFile(nURL);
 	if (!storedFileName.empty() && ZLFile(storedFileName).exists()) {
 		fileName = storedFileName;
 		return "";
@@ -93,7 +96,8 @@ std::string NetworkLinkCollection::downloadBook(const std::string &url, std::str
 	if (ZLFile(fileName).exists()) {
 		ZLFile(fileName).remove();
 	}
-	fileNameOption.setValue(fileName);
+	//fileNameOption.setValue(fileName);
+	BooksDB::instance().setNetFile(nURL, fileName);
 	return ZLNetworkManager::instance().downloadFile(nURL, fileName);
 }
 
