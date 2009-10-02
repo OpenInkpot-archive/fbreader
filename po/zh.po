@@ -342,11 +342,6 @@ msgstr "书籍语言"
 msgid "Break Paragraph At"
 msgstr "换行在"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1058
-#, c-format
-msgid "Key %d"
-msgstr "按钮 %d"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1085
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1289
 msgid "Format & Style"
@@ -411,11 +406,6 @@ msgstr "字符集"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1241
 msgid "Break Paragraph at"
 msgstr "分段点"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1249
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1293
-msgid "Keys"
-msgstr "按钮"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1281
 msgid "Settings"
@@ -496,6 +486,16 @@ msgstr "禁用"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1123
 msgid "Offset From Text"
 msgstr "状态条间距"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1249
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1293
+msgid "Keys"
+msgstr "按键"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1058
+#, c-format
+msgid "Key %d"
+msgstr "按键 %d"
 
 #~ msgid "Full path: "
 #~ msgstr "全路径："
