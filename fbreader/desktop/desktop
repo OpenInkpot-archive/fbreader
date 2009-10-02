@@ -18,4 +18,4 @@ Terminal=false
 Type=Application
 Icon=FBReader.png
 Categories=Office;Viewer;Literature;
-MimeType=application/epub+zip;application/x-fictionbook+xml;application/x-zip-compressed-fb2;application/prs.plucker;application/oebps-package+xml;text/html;application/xhtml+xml;text/plain;application/x-ztxt+palm-database;application/x-aportisdoc;application/x-psion-compressed-text;application/x-mobipocket-ebook;application/x-chm;application/rtf;application/x-gzip;application/x-bzip;application/x-tar;
+MimeType=application/epub+zip;application/x-fictionbook+xml;application/x-zip-compressed-fb2;application/prs.plucker;application/oebps-package+xml;text/html;application/xhtml+xml;text/plain;application/x-ztxt+palm-database;application/x-aportisdoc;application/x-psion-compressed-text;application/x-mobipocket-ebook;application/x-chm;application/rtf;application/x-gzip;application/x-bzip;application/x-tar;application/zip;
