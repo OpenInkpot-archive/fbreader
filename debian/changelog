@@ -1,3 +1,11 @@
+fbreader (0.10.7-6) asimov; urgency=low
+
+  * Fix race conditions in singletone code
+  * Add application/zip mime type to .desktop file
+  * Bulgarian in desktop file
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 03 Oct 2009 17:22:10 +0200
+
 fbreader (0.10.7-5) asimov; urgency=low
 
   * enable multiline text in fullscreen choicebox 
