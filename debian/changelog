@@ -1,3 +1,9 @@
+fbreader (0.10.7-7) UNRELEASED; urgency=low
+
+  * .desktop translations added: Chinese, Hungarian.
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Mon, 05 Oct 2009 03:15:23 +0700
+
 fbreader (0.10.7-6) asimov; urgency=low
 
   * Fix race conditions in singletone code
