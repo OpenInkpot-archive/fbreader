@@ -2,6 +2,7 @@
 Name=FBReader
 GenericName=E-book reader
 GenericName[bg]=Четене на електронни книги
+GenericName[hu]=E-könyv olvasó
 GenericName[pl]=Czytnik e-booków
 GenericName[ru]=Чтение электронных книг
 TryExec=FBReader
