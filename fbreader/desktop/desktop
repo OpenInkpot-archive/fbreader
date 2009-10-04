@@ -5,6 +5,7 @@ GenericName[bg]=Четене на електронни книги
 GenericName[hu]=E-könyv olvasó
 GenericName[pl]=Czytnik e-booków
 GenericName[ru]=Чтение электронных книг
+GenericName[zh]=电子书阅读器
 TryExec=FBReader
 Exec=FBReader %F
 StartupNotify=true
