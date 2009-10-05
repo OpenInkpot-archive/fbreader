@@ -9,7 +9,7 @@
 	<style id="32" name="Header 2" fontSizeDelta="2" bold="true" spaceAfter="5" alignment="center" allowHyphenations="false"/>
 	<style id="5" name="Annotation" fontSizeDelta="-2" firstLineIndentDelta="20" allowHyphenations="true"/>
 	<style id="6" name="Epigraph" fontSizeDelta="-2" italic="true" leftIndent="80" allowHyphenations="true"/>
-	<style id="4" name="Subtitle" bold="true" allowHyphenations="true"/>
+	<style id="4" name="Subtitle" bold="true" allowHyphenations="true" spaceAfter="4" alignment="center"/>
 	<style id="33" name="Header 3" bold="true" allowHyphenations="true"/>
 	<style id="34" name="Header 4" bold="true" allowHyphenations="true"/>
 	<style id="13" name="Author" leftIndent="20" allowHyphenations="false"/>
