@@ -52,6 +52,7 @@ extern "C" {
 extern const xcb_atom_t INTEGER;
 
 #define FBR_FIFO "/tmp/.FBReader-fifo"
+#define PIDFILE "/tmp/fbreader.pid"
 
 #ifndef NAME_MAX
 #define NAME_MAX 4096
@@ -95,58 +96,94 @@ char *get_rotated_key(char **keys)
 
 class ZLEwlLibraryImplementation : public ZLibraryImplementation {
 
-private:
-	void init(int &argc, char **&argv);
-	ZLPaintContext *createContext();
-	void run(ZLApplication *application);
+	private:
+		void init(int &argc, char **&argv);
+		ZLPaintContext *createContext();
+		void run(ZLApplication *application);
 };
 
 void initLibrary() {
 	new ZLEwlLibraryImplementation();
 }
 
+void sigalrm_handler(int)
+{
+}
+
 void ZLEwlLibraryImplementation::init(int &argc, char **&argv) {
 	int pid;
-	FILE *pidof = popen("pidof FBReader", "r");
-	if(pidof) {
-		while(fscanf(pidof, "%d", &pid) != EOF && pid == getpid());
-		pclose(pidof);
+	struct stat pid_stat;
+	FILE *pidfile;
 
-		do {
-			if(pid <= 0 || pid == getpid())
-				break;
+	int done;
 
-			if(mkfifo(FBR_FIFO, 0666) && errno != EEXIST)
-				break;
+	do {
+		done = 1;
 
-			kill(pid, SIGUSR1);
+		if(stat(PIDFILE, &pid_stat) == -1)
+			break;
 
-			int fifo = open(FBR_FIFO, O_WRONLY);
-			if(!fifo) {
-				unlink(FBR_FIFO);
-				break;
+		pidfile = fopen(PIDFILE, "r");
+		if(!pidfile)
+			break;
+
+		fscanf(pidfile, "%d", &pid);
+		fclose(pidfile);
+
+		if(!pid)
+			break;
+
+		if(pid <= 0 || pid == getpid() || kill(pid, 0))
+			break;
+
+		struct sigaction act;
+		act.sa_handler = sigalrm_handler;
+		sigemptyset(&act.sa_mask);
+		act.sa_flags = 0;
+		sigaction(SIGALRM, &act, NULL);
+
+		if(mkfifo(FBR_FIFO, 0666) && errno != EEXIST)
+			break;
+
+		kill(pid, SIGUSR1);
+
+		alarm(1);
+		int fifo = open(FBR_FIFO, O_WRONLY);
+		if(fifo < 0) {
+			if(errno == EINTR) {
+				done = 0;
+				continue;
 			}
 
-			char *p;
-			if(argc > 1)
-				p = argv[1];
-			else
-				p = "";
-			int len = strlen(p);
-			int ret;
-			while(len) {
-				ret = write(fifo, p, len);
-				if(ret == -1 && errno == EINTR)
-					break;
-
-				len -= ret;
-				p += ret;
-			}
-
-			close(fifo);
 			unlink(FBR_FIFO);
-			exit(0);
-		} while(0);
+			break;
+		}
+
+		char *p;
+		if(argc > 1)
+			p = argv[1];
+		else
+			p = "";
+		int len = strlen(p);
+		int ret;
+		while(len) {
+			ret = write(fifo, p, len);
+			if(ret == -1 && errno != EINTR)
+				break;
+
+			len -= ret;
+			p += ret;
+		}
+
+		close(fifo);
+		unlink(FBR_FIFO);
+		exit(0);
+	} while(!done);
+
+	pidfile = fopen(PIDFILE, "w");
+	if(pidfile) {
+		fprintf(pidfile, "%d", getpid());
+		fclose(pidfile);
 	}
 
 	if(!ewl_init(&argc, argv)) {
@@ -552,6 +589,7 @@ void ZLEwlLibraryImplementation::run(ZLApplication *application) {
 	init_properties();
 	set_properties();
 	main_loop(application);
+	unlink(PIDFILE);
 	delete_properties();
 	delete application;
 }

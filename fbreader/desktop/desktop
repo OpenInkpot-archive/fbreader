@@ -1,16 +1,12 @@
 [Desktop Entry]
 Name=FBReader
-Name[bg]=FBReader
-Name[pl]=FBReader
-Name[ru]=FBReader
 GenericName=E-book reader
 GenericName[bg]=Четене на електронни книги
+GenericName[cs]=Čtečka e-knih
+GenericName[hu]=E-könyv olvasó
 GenericName[pl]=Czytnik e-booków
 GenericName[ru]=Чтение электронных книг
-Comment=E-book reader
-Comment[bg]=Четене на електронни книги
-Comment[pl]=Czytnik e-booków
-Comment[ru]=Чтение электронных книг
+GenericName[zh]=电子书阅读器
 TryExec=FBReader
 Exec=FBReader %F
 StartupNotify=true
@@ -18,4 +14,4 @@ Terminal=false
 Type=Application
 Icon=FBReader.png
 Categories=Office;Viewer;Literature;
-MimeType=application/epub+zip;application/x-fictionbook+xml;application/x-zip-compressed-fb2;application/prs.plucker;application/oebps-package+xml;text/html;application/xhtml+xml;text/plain;application/x-ztxt+palm-database;application/x-aportisdoc;application/x-psion-compressed-text;application/x-mobipocket-ebook;application/x-chm;application/rtf;application/x-gzip;application/x-bzip;application/x-tar;
+MimeType=application/epub+zip;application/x-fictionbook+xml;application/x-zip-compressed-fb2;application/prs.plucker;application/oebps-package+xml;text/html;application/xhtml+xml;text/plain;application/x-ztxt+palm-database;application/x-aportisdoc;application/x-psion-compressed-text;application/x-mobipocket-ebook;application/x-chm;application/rtf;application/x-gzip;application/x-bzip;application/x-tar;application/zip;

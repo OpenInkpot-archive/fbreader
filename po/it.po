@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: messages_fr\n"
 "Report-Msgid-Bugs-To: @PACKAGE_BUGREPORT@\n"
 "POT-Creation-Date: 2009-09-24 15:50+0200\n"
-"PO-Revision-Date: 2009-08-21 13:22+0200\n"
+"PO-Revision-Date: 2009-10-06 09:00+0200\n"
 "Last-Translator: Mascal <mascal@mascal.it>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:144
 msgid "FBReader: Help"
-msgstr ""
+msgstr "FBReader: Aiuto"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
 msgid "None"
@@ -490,12 +490,12 @@ msgstr "Menu del Libro"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
 msgid "On"
-msgstr ""
+msgstr "Acceso"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:184
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
 msgid "Off"
-msgstr ""
+msgstr "Spento"
 
 #~ msgid "Full path: "
 #~ msgstr "Percorso completo: "
