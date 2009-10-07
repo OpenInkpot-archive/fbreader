@@ -1,8 +1,11 @@
-fbreader (0.10.7-7) UNRELEASED; urgency=low
+fbreader (0.10.7-7) asimov; urgency=low
 
+  * Virtual keyboard updated: added Ukrainian symbols.
+  * subtitle style changed: centered.
   * .desktop translations added: Chinese, Hungarian, Czech.
+  * Translations updated: Chinese, Italian.
 
- -- Mikhail Gusarov <dottedmag@dottedmag.net>  Mon, 05 Oct 2009 03:15:23 +0700
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Wed, 07 Oct 2009 17:02:53 +0700
 
 fbreader (0.10.7-6) asimov; urgency=low
 
