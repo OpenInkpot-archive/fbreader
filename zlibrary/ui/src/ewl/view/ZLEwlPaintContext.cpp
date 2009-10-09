@@ -222,6 +222,9 @@ void ZLEwlPaintContext::setFillColor(ZLColor color, FillStyle style) {
 */
 
 int ZLEwlPaintContext::stringWidth(const char *str, int len, bool rtl) const {
+	if(!len)
+		return 0;
+
 	int w = 0;
 	int ch_w;
 	char *p = (char *)str;
@@ -409,6 +412,9 @@ void ZLEwlPaintContext::drawString(int x, int y, const char *str, int len, bool 
 	kerningCache = &fc->kerningCacheAll;
 	glyphIdxCache = &fc->glyphIdxCacheAll;
 */
+
+	if(!len)
+		return;
 
 	FT_GlyphSlot  slot = face->glyph;
 	FT_BitmapGlyph glyph;
