@@ -16,92 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
-msgid "None"
-msgstr "не призначено"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:76
-msgid "Add Bookmark"
-msgstr "додати закладку"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:77
-msgid "Show Bookmarks"
-msgstr "показати закладки"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:78
-msgid "Hyperlinks mode"
-msgstr "навігація по посиланнях"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:79
-msgid "Show Footnotes"
-msgstr "переглянути виноски"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:80
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:150
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1395
-msgid "Go To Page"
-msgstr "перейти на сторінку"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:81
-msgid "Show Table of Contents"
-msgstr "зміст"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
-msgid "Go to Home"
-msgstr "до початку книги"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
-msgid "Go to Start of Section"
-msgstr "до початку розділу"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
-msgid "Go to End of Section"
-msgstr "у кінець розділу"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
-msgid "Go to Next TOC Section"
-msgstr "до наступного розділу"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
-msgid "Go to Previous TOC Section"
-msgstr "до попереднього розділу"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
-msgid "Large Scroll Forward"
-msgstr "на наступну сторінку"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
-msgid "Large Scroll Backward"
-msgstr "на попередню сторінку"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
-msgid "Undo"
-msgstr "відмінити перехід"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
-msgid "Redo"
-msgstr "повторити перехід"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:352
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:378
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:401
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1399
-msgid "Search"
-msgstr "пошук"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
-msgid "Increase Font Size"
-msgstr "збільшити розмір шрифту"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
-msgid "Decrease Font Size"
-msgstr "зменшити розмір шрифту"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
-msgid "Toggle Position Indicator"
-msgstr "перемикнути рядок статусу"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
 msgid "Arabic"
 msgstr "арабська"
@@ -181,10 +95,6 @@ msgstr "українська"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
 msgid "Chinese"
 msgstr "китайська"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
-msgid "Other"
-msgstr "не вказано"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
 msgid "undefined"
@@ -337,10 +247,6 @@ msgstr "Товщина рядка статусу"
 msgid "Offset From Text"
 msgstr "Відстань до тексту"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:747
-msgid "Indicator Font Size"
-msgstr "Розмір шрифта рядка статусу"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:821
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1151
 msgid "Default Language"
@@ -389,10 +295,6 @@ msgstr "Автоматичний перенос слів"
 msgid "Indicator"
 msgstr "Рядок статусу"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1117
-msgid "Show Indicator"
-msgstr "Відображати рядок статусу"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1118
 msgid "Show TOC Marks"
 msgstr "Позначки розділів"
@@ -414,10 +316,6 @@ msgstr "Заряд батареї"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1291
 msgid "Language"
 msgstr "Мова"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1142
-msgid "Detect Language and Encoding"
-msgstr "Автоматично визначати мову та кодування"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1168
 msgid "iso-8859-1 -> win-1251"
@@ -448,10 +346,6 @@ msgstr "Призначення кнопок пристрою"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1281
 msgid "Settings"
 msgstr "Налаштування"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1292
-msgid "Book settings"
-msgstr "Налаштування книжки"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1307
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1393
@@ -487,15 +381,121 @@ msgstr "Меню книжки"
 msgid "FBReader: Help"
 msgstr "FBReader: Довідка"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:184
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
-msgid "Off"
-msgstr "ні"
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1117
+msgid "Show Indicator"
+msgstr "Показувати рядок статусу"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1142
+msgid "Detect Language and Encoding"
+msgstr "Визначати мову та кодування"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1292
+msgid "Book settings"
+msgstr "Налаштування документу"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
+msgid "Other"
+msgstr "не вказано"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
+msgid "None"
+msgstr "Не призначено"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:77
+msgid "Show Bookmarks"
+msgstr "Показати закладки"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:76
+msgid "Add Bookmark"
+msgstr "Додати закладку"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:79
+msgid "Show Footnotes"
+msgstr "Переглянути виноски"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:78
+msgid "Hyperlinks mode"
+msgstr "Навігація по посиланнях"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:81
+msgid "Show Table of Contents"
+msgstr "Зміст"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:80
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:150
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1395
+msgid "Go To Page"
+msgstr "Перейти на сторінку"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
+msgid "Go to Start of Section"
+msgstr "До початку розділу"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
+msgid "Go to Home"
+msgstr "До початку книги"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
+msgid "Decrease Font Size"
+msgstr "Зменшити розмір шрифту"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
+msgid "Increase Font Size"
+msgstr "Збільшити розмір шрифту"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
+msgid "Go to Next TOC Section"
+msgstr "До наступного розділу"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
+msgid "Go to End of Section"
+msgstr "У кінець розділу"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
+msgid "Large Scroll Forward"
+msgstr "На наступну сторінку"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
+msgid "Go to Previous TOC Section"
+msgstr "До попереднього розділу"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+msgid "Undo"
+msgstr "Відмінити перехід"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
+msgid "Large Scroll Backward"
+msgstr "На попередню сторінку"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:352
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:378
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:401
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1399
+msgid "Search"
+msgstr "Пошук"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
+msgid "Redo"
+msgstr "Повторити перехід"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:747
+msgid "Indicator Font Size"
+msgstr "Розмір шрифту рядка статусу"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+msgid "Toggle Position Indicator"
+msgstr "Перемикнути рядок статусу"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
 msgid "On"
 msgstr "так"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:184
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
+msgid "Off"
+msgstr "ні"
 
 #~ msgid "Full path: "
 #~ msgstr "Шлях до файлу:"

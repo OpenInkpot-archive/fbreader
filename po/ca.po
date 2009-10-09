@@ -1,14 +1,14 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
-#
+# 
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
 # Miguel <ink@canteras.org>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: messages_fr\n"
-"Report-Msgid-Bugs-To: @PACKAGE_BUGREPORT@\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-24 15:50+0200\n"
 "PO-Revision-Date: 2009-06-26 14:22+0200\n"
 "Last-Translator: Miguel <ink@canteras.org>\n"
@@ -16,11 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:144
-msgid "FBReader: Help"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
 msgid "None"
@@ -246,21 +241,6 @@ msgstr "Pàgina "
 msgid "Bookmark added"
 msgstr "Marcador afegit"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:346
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:372
-msgid "<- Search ->"
-msgstr "<- Cercar ->"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:348
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:374
-msgid "Search ->"
-msgstr "Cercar ->"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:350
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:376
-msgid "<- Search"
-msgstr "<- Cercar"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:359
 msgid "Text not found"
 msgstr "Text no trobat"
@@ -425,10 +405,6 @@ msgstr "Idioma"
 msgid "Detect Language and Encoding"
 msgstr "Detectar idioma i codificació"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1168
-msgid "iso-8859-1 -> win-1251"
-msgstr "iso-8859-1 -> win-1251"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1178
 msgid "Book Settings"
 msgstr "Preferències del llibre"
@@ -488,15 +464,41 @@ msgstr "Nombre de llibre: "
 msgid "Book Menu"
 msgstr "Menú del llibre"
 
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:350
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:376
+msgid "<- Search"
+msgstr "← Cercar"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:348
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:374
+msgid "Search ->"
+msgstr "Cercar →"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:346
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:372
+msgid "<- Search ->"
+msgstr "← Cercar →"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1168
+msgid "iso-8859-1 -> win-1251"
+msgstr "iso-8859-1 → win-1251"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:144
+msgid "FBReader: Help"
+msgstr ""
+"FBReader:\r\n"
+"Ajuda"
+
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
 msgid "On"
-msgstr ""
+msgstr "Encès"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:184
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
 msgid "Off"
-msgstr ""
+msgstr "Apagat"
 
 #~ msgid "Full path: "
 #~ msgstr "Ruta completa: "
