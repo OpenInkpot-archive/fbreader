@@ -1,3 +1,18 @@
+fbreader (0.10.7-8) asimov; urgency=low
+
+  [ Alexander Kerner ]
+  * Fix NULL pointer dereference in text rendering code.
+
+  [ Mikhail Gusarov ]
+  * Translations updated: Czech, Spanish, Catalan, Ukrainian.
+  * .desktop translations added: German.
+  * Help translations added: Chinese, German, Spanish.
+
+  [ Tomasz Długosz ]
+  * Help translations added: Czech.
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Sun, 18 Oct 2009 15:47:03 +0700
+
 fbreader (0.10.7-7) asimov; urgency=low
 
   * Virtual keyboard updated: added Ukrainian symbols.
