@@ -257,21 +257,6 @@ msgstr ""
 msgid "Auto Hyphenations"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1109
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1290
-msgid "Indicator"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1121
-msgid "Show Battery"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1131
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1193
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1291
-msgid "Language"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1142
 msgid "Detect Language and Encoding"
 msgstr ""
@@ -311,10 +296,6 @@ msgstr ""
 msgid "Book Info"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1322
-msgid "File: "
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1324
 msgid "Title: "
 msgstr "শিরোনাম:"
@@ -334,16 +315,6 @@ msgstr "বইয়ের নম্বর:"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1388
 msgid "Book Menu"
 msgstr "বইয়ের মেনু"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
-msgid "On"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:184
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
-msgid "Off"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1168
 msgid "iso-8859-1 -> win-1251"
@@ -500,3 +471,32 @@ msgstr "জাস্টিফাই অ্যালাইনমেন্ট"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
 msgid "Line With Indent"
 msgstr "ইন্ডেন্টসহ লাইন"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1109
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1290
+msgid "Indicator"
+msgstr "ইন্ডিকেটর"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1131
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1193
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1291
+msgid "Language"
+msgstr "ভাষা"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1121
+msgid "Show Battery"
+msgstr "ব্যাটারির অবস্থা প্রদর্শন করুন"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1322
+msgid "File: "
+msgstr "ফাইল:"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:184
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
+msgid "Off"
+msgstr "বন্ধ"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
+msgid "On"
+msgstr "চালু"
