@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
-"Report-Msgid-Bugs-To: @PACKAGE_BUGREPORT@\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-24 15:50+0200\n"
 "PO-Revision-Date: 2009-09-04 12:56+0530\n"
 "Last-Translator: sankarshan mukhopadhyay <sankarshan@fedoraproject.org>\n"
@@ -17,11 +17,6 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Virtaal 0.4.0\n"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:144
-msgid "FBReader: Help"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
 msgid "None"
@@ -73,14 +68,6 @@ msgstr "পরের TOC সেকশন-এ যাওয়া হবে"
 msgid "Go to Previous TOC Section"
 msgstr "আগের TOC সেকশন-এ যাওয়া হবে"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
-msgid "Large Scroll Forward"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
-msgid "Large Scroll Backward"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
 msgid "Undo"
 msgstr "পূর্বাবস্থা"
@@ -105,10 +92,6 @@ msgstr "ফন্টের মাপ বাড়ানো হবে"
 msgid "Decrease Font Size"
 msgstr "ফন্টের মাপ কমানো হবে"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
-msgid "Toggle Position Indicator"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
 msgid "Arabic"
 msgstr ""
@@ -122,10 +105,6 @@ msgstr "চেক"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
 msgid "German"
 msgstr "জার্মান"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
-msgid "German (traditional orthography)"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
 msgid "Greek"
@@ -162,34 +141,6 @@ msgstr "ইন্দোনেশীয়"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "Italian"
 msgstr "ইতালিয়ান"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
-msgid "Norwegian"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
-msgid "Portuguese"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
-msgid "Russian"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
-msgid "Swedish"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
-msgid "Turkish"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
-msgid "Ukrainian"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
-msgid "Chinese"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
 msgid "Other"
@@ -249,21 +200,6 @@ msgstr "পৃষ্ঠা"
 msgid "Bookmark added"
 msgstr "বুকমার্ক যোগ করা হয়েছে"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:346
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:372
-msgid "<- Search ->"
-msgstr "<- Search ->"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:348
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:374
-msgid "Search ->"
-msgstr "Search ->"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:350
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:376
-msgid "<- Search"
-msgstr "<- Search"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:359
 msgid "Text not found"
 msgstr "টেক্সট খুঁজে পাওয়া যায়নি"
@@ -315,26 +251,6 @@ msgstr "ফন্টের ছাঁদ"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1124
 msgid "Font Size"
 msgstr "ফন্টের আকার"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:673
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1096
-msgid "Line Spacing"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:680
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1097
-msgid "Alignment"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:690
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1098
-msgid "Margins"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:707
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1099
-msgid "First Line Indent"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:733
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1122
@@ -428,10 +344,6 @@ msgstr ""
 msgid "Detect Language and Encoding"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1168
-msgid "iso-8859-1 -> win-1251"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1178
 msgid "Book Settings"
 msgstr ""
@@ -500,3 +412,91 @@ msgstr ""
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
 msgid "Off"
 msgstr ""
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1168
+msgid "iso-8859-1 -> win-1251"
+msgstr "iso-8859-1 → win-1251"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:350
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:376
+msgid "<- Search"
+msgstr "← Search"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:348
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:374
+msgid "Search ->"
+msgstr "Search →"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:346
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:372
+msgid "<- Search ->"
+msgstr "← Search →"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:707
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1099
+msgid "First Line Indent"
+msgstr "প্রথম লাইনের ইন্ডেন্ট"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:680
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1097
+msgid "Alignment"
+msgstr "দিশা"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:690
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1098
+msgid "Margins"
+msgstr "মার্জিন"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:673
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1096
+msgid "Line Spacing"
+msgstr "লাইনের মধ্যবর্তী স্থান"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
+msgid "Ukrainian"
+msgstr "ইউক্রেনিয়ান"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
+msgid "Chinese"
+msgstr "চাইনিজ"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:144
+msgid "FBReader: Help"
+msgstr "FBReader:সহায়িকা"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
+msgid "Large Scroll Backward"
+msgstr "স্ক্রোল করে পিছিয়ে চলুন"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
+msgid "Large Scroll Forward"
+msgstr "স্ক্রোল করে এগিয়ে চলুন"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
+msgid "German (traditional orthography)"
+msgstr "জার্মান"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+msgid "Toggle Position Indicator"
+msgstr ""
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
+msgid "Russian"
+msgstr "রাশিয়ান"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
+msgid "Portuguese"
+msgstr "পর্তুগীজ"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
+msgid "Norwegian"
+msgstr "নরওয়েজিয়ান"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
+msgid "Turkish"
+msgstr "তুর্কী"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
+msgid "Swedish"
+msgstr "সুইডিশ"
