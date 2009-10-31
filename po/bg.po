@@ -495,7 +495,7 @@ msgstr "Изкл."
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1388
 msgid "Book Menu"
-msgstr "Книгa"
+msgstr "Книжно меню"
 
 #~ msgid "Full path: "
 #~ msgstr "Пълен път: "
