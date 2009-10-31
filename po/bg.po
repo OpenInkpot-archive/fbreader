@@ -16,6 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:144
+msgid "FBReader: Help"
+msgstr "FBReader: Помощ"
+
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
 msgid "None"
 msgstr "Нищо"
@@ -478,24 +483,19 @@ msgstr "Серия: "
 msgid "Book number: "
 msgstr "Номер на книга: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1388
-msgid "Book Menu"
-msgstr "Книги"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:144
-msgid "FBReader: Help"
-msgstr "FBReader: Помощ"
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
+msgid "On"
+msgstr "Вкл."
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:184
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
 msgid "Off"
 msgstr "Изкл."
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
-msgid "On"
-msgstr "Вкл."
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1388
+msgid "Book Menu"
+msgstr "Книгa"
 
 #~ msgid "Full path: "
 #~ msgstr "Пълен път: "
