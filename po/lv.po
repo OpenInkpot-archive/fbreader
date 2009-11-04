@@ -1,0 +1,502 @@
+# FBReader translation file.
+#
+# Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
+# This file is distributed under the same license as the FBReader package.
+# Alexander Kerner <lunohod@openinkpot.org>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: FBreader\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-09-24 15:50+0200\n"
+"PO-Revision-Date: 2009-10-22 16:44+0200\n"
+"Last-Translator: Dainis <druumais@inbox.lv>\n"
+"Language-Team: Russian <openinkpot-l10n@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:144
+msgid "FBReader: Help"
+msgstr "FBReader: Palīdzība"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
+msgid "None"
+msgstr "Nav darbības"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:76
+msgid "Add Bookmark"
+msgstr "Pievienot grāmatzīmi"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:77
+msgid "Show Bookmarks"
+msgstr "Rādīt grāmatzīmes"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:78
+msgid "Hyperlinks mode"
+msgstr "Hipersaites režīms"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:79
+msgid "Show Footnotes"
+msgstr "Rādīt zemsvītras piezīmes"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:80
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:150
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1395
+msgid "Go To Page"
+msgstr "Iet uz lpp."
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:81
+msgid "Show Table of Contents"
+msgstr "Rādīt saturu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
+msgid "Go to Home"
+msgstr "Uz sākumlapu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
+msgid "Go to Start of Section"
+msgstr "Uz sadaļas sākumu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
+msgid "Go to End of Section"
+msgstr "Uz sadaļas beigām"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
+msgid "Go to Next TOC Section"
+msgstr "Uz nākamo sadaļu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
+msgid "Go to Previous TOC Section"
+msgstr "Uz iepriekšējo sadaļu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
+msgid "Large Scroll Forward"
+msgstr "Uz nākamo lappusi"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
+msgid "Large Scroll Backward"
+msgstr "Uz iepriekšējo lappusi"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+msgid "Undo"
+msgstr "Atgriezties"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
+msgid "Redo"
+msgstr "Atkārtot"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:352
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:378
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:401
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1399
+msgid "Search"
+msgstr "Meklēt"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
+msgid "Increase Font Size"
+msgstr "Palielināt šrifta lielumu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
+msgid "Decrease Font Size"
+msgstr "Samazināt šrifta lielumu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+msgid "Toggle Position Indicator"
+msgstr "Iesl./Izsl. stāvokļa indikators"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
+msgid "Arabic"
+msgstr "Arābu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
+msgid "Czech"
+msgstr "Čehu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
+msgid "German"
+msgstr "Vācu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
+msgid "German (traditional orthography)"
+msgstr "Vācu (tradicionālā)"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
+msgid "Greek"
+msgstr "Grieķu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:111
+msgid "English"
+msgstr "Angļu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:112
+msgid "Esperanto"
+msgstr "Esperanto"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:113
+msgid "Spanish"
+msgstr "Spāņu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:114
+msgid "Finnish"
+msgstr "Somu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
+msgid "French"
+msgstr "Franču"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:116
+msgid "Hebrew"
+msgstr "Ivrits"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:117
+msgid "Indonesian"
+msgstr "Indonēziešu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
+msgid "Italian"
+msgstr "Itāļu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
+msgid "Norwegian"
+msgstr "Norvēģu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
+msgid "Portuguese"
+msgstr "Portugāļu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
+msgid "Russian"
+msgstr "Krievu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
+msgid "Swedish"
+msgstr "Zviedru"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
+msgid "Turkish"
+msgstr "Turku"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
+msgid "Ukrainian"
+msgstr "Ukraiņu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
+msgid "Chinese"
+msgstr "Ķīniešu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
+msgid "Other"
+msgstr "Cita"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
+msgid "undefined"
+msgstr "nenoteikts"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
+msgid "left"
+msgstr "kreisā puse"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
+msgid "right"
+msgstr "labā puse"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
+msgid "center"
+msgstr "centrs"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
+msgid "justify"
+msgstr "izlīdzināšana"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+msgid "New Line"
+msgstr "Jauna rinda"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+msgid "Empty Line"
+msgstr "Tukša rinda"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+msgid "Line With Indent"
+msgstr "Rinda ar atkāpi"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:229
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1397
+msgid "Table Of Contents"
+msgstr "Satura rādītājs"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:294
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1401
+msgid "Bookmarks"
+msgstr "Grāmatzīmes"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:295
+msgid "Delete"
+msgstr "Dzēst"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:303
+msgid "Page "
+msgstr "Lappuse"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:317
+msgid "Bookmark added"
+msgstr "Grāmatzīme pievienota"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:359
+msgid "Text not found"
+msgstr "Teksts nav atrasts"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:483
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:676
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1096
+#, c-format
+msgid "%d%%"
+msgstr "%d%%"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:500
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:556
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:669
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:750
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1094
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1124
+#, c-format
+msgid "%dpt"
+msgstr "%dpt"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:617
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:700
+msgid "Left Margin"
+msgstr "Kreisā atkāpe"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:620
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:701
+msgid "Right Margin"
+msgstr "Labā atkāpe"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:623
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:702
+msgid "Top Margin"
+msgstr "Atkāpe no augšas"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:626
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:703
+msgid "Bottom Margin"
+msgstr "Atkāpe no apakšas"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:659
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1093
+msgid "Font Family"
+msgstr "Šrifts"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:666
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1094
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1124
+msgid "Font Size"
+msgstr "Šrifta lielums"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:673
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1096
+msgid "Line Spacing"
+msgstr "Intervāls starp rindām"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:680
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1097
+msgid "Alignment"
+msgstr "Līdzinājums"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:690
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1098
+msgid "Margins"
+msgstr "Lauki"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:707
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1099
+msgid "First Line Indent"
+msgstr "Pirmās rindas atkāpe"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:733
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1122
+msgid "Indicator Height"
+msgstr "Lieluma indikators"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:740
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1123
+msgid "Offset From Text"
+msgstr "Atkāpe no teksta"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:747
+msgid "Indicator Font Size"
+msgstr "Šrifta lieluma indikators"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:821
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1151
+msgid "Default Language"
+msgstr "Noklusējuma valoda"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:829
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:996
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1160
+msgid "Default Encoding Set"
+msgstr "Noklusējuma kodējumu komplekts"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:836
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1003
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1161
+msgid "Default Encoding"
+msgstr "Noklusējuma kodējums"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:985
+msgid "Book Language"
+msgstr "Grāmatas valoda"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1029
+msgid "Break Paragraph At"
+msgstr "Noslēgt rindkopu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1058
+#, c-format
+msgid "Key %d"
+msgstr "Poga %d"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1085
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1289
+msgid "Format & Style"
+msgstr "Formāts un stils"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1095
+msgid "Bold"
+msgstr "Pustreknais"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1100
+msgid "Auto Hyphenations"
+msgstr "Automātiskā vārdu pārnešana"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1109
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1290
+msgid "Indicator"
+msgstr "Indikators"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1117
+msgid "Show Indicator"
+msgstr "Rādīt indikatoru"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1118
+msgid "Show TOC Marks"
+msgstr "Rādīt nodaļu iezīmējumus"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1119
+msgid "Show Position"
+msgstr "Rādīt pozīciju"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1120
+msgid "Show Time"
+msgstr "Rādīt laiku"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1121
+msgid "Show Battery"
+msgstr "Rādīt bateriju"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1131
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1193
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1291
+msgid "Language"
+msgstr "Valoda"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1142
+msgid "Detect Language and Encoding"
+msgstr "Noteikt valodu un kodējumu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1178
+msgid "Book Settings"
+msgstr "Grāmatas uzstādījumi"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1196
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1206
+msgid "Encoding"
+msgstr "Kodējums"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1205
+msgid "Encoding Set"
+msgstr "Kodējumu komplekts"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1241
+msgid "Break Paragraph at"
+msgstr "Noslēgt rindkopu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1249
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1293
+msgid "Keys"
+msgstr "Pogas"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1281
+msgid "Settings"
+msgstr "Uzstādījumi"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1292
+msgid "Book settings"
+msgstr "Grāmatas uzstādījumi"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1307
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1393
+msgid "Book Info"
+msgstr "Grāmatas info"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1322
+msgid "File: "
+msgstr "Fails:"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1324
+msgid "Title: "
+msgstr "Nosaukums:"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1325
+msgid "Author: "
+msgstr "Autors:"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1328
+msgid "Series: "
+msgstr "Sērija:"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1331
+msgid "Book number: "
+msgstr "Grāmatas numurs:"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1388
+msgid "Book Menu"
+msgstr "Grāmatas Izvēlne"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
+msgid "On"
+msgstr ""
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:184
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
+msgid "Off"
+msgstr ""
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:350
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:376
+msgid "<- Search"
+msgstr "<- Meklēt"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:348
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:374
+msgid "Search ->"
+msgstr "Meklēt ->"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:346
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:372
+msgid "<- Search ->"
+msgstr "<- Meklēt ->"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1168
+msgid "iso-8859-1 -> win-1251"
+msgstr "iso-8859-1 -> win-1251"
+
+#~ msgid "Full path: "
+#~ msgstr "Путь:"
+
