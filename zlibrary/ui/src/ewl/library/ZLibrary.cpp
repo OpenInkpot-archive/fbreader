@@ -64,6 +64,8 @@ extern xcb_screen_t *screen;
 ZLApplication *myapplication;
 static bool in_main_loop;
 
+std::string cover_image_file = "";
+
 static void init_properties();
 static void set_properties();
 static void delete_properties();
@@ -432,6 +434,8 @@ void sigusr1_handler(int)
 	BookDescriptionPtr description;
 	f->createDescription(filename, description);
 	if (!description.isNull()) {
+		cover_image_file = "";
+
 		f->openBook(description);
 		f->refreshWindow();
 		set_properties();
@@ -455,6 +459,7 @@ static struct atom {
 	"ACTIVE_DOC_CURRENT_PAGE", 0,
 	"ACTIVE_DOC_PAGES_COUNT", 0,
 	"ACTIVE_DOC_WINDOW_ID", 0,
+	"ACTIVE_DOC_COVER_IMAGE", 0,
 };
 
 static void init_properties()
@@ -542,6 +547,15 @@ void set_properties()
 			8,
 			strlen("FBReader") * 2 + 2,
 			"FBReader\0FBReader");
+
+	xcb_change_property(connection,
+			XCB_PROP_MODE_REPLACE,
+			window,
+			atoms[13].atom,
+			STRING,
+			8,
+			cover_image_file.length(),
+			cover_image_file.c_str());
 
 	xcb_flush(connection);
 

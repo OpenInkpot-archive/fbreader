@@ -204,6 +204,7 @@ void FB2BookReader::startElementHandler(int tag, const char **xmlattributes) {
 				myCurrentImage = new Base64EncodedImage(contentType);
 				myModelReader.addImage(id, myCurrentImage);
 				myProcessingImage = true;
+				myProcessingImageId = id;
 			}
 			break;
 		}
@@ -226,6 +227,9 @@ void FB2BookReader::startElementHandler(int tag, const char **xmlattributes) {
 }
 
 void FB2BookReader::endElementHandler(int tag) {
+	extern std::string cover_image_id;
+	extern std::string cover_image_file;
+
 	switch (tag) {
 		case _P:
 			myModelReader.endParagraph();
@@ -303,10 +307,20 @@ void FB2BookReader::endElementHandler(int tag) {
 		case _BINARY:
 			if (!myImageBuffer.empty() && (myCurrentImage != 0)) {
 				myCurrentImage->addData(myImageBuffer);
+
+				if(!cover_image_id.compare(myProcessingImageId)) {
+					shared_ptr<std::string> image_data = myCurrentImage->stringData();
+					if(image_data != NULL)
+						cover_image_file = *image_data;
+					else
+						cover_image_file = "";
+				}
+
 				myImageBuffer.clear();
 				myCurrentImage = 0;
 			}
 			myProcessingImage = false;
+			myProcessingImageId = "";
 			break;
 		case _BODY:
 			myModelReader.popKind();
