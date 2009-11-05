@@ -1,3 +1,10 @@
+fbreader (0.10.7-9) asimov; urgency=low
+
+  * Translations updated: Bengali, Bulgarian
+  * Translations added: Latvian
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Fri, 06 Nov 2009 04:25:37 +0600
+
 fbreader (0.10.7-8) asimov; urgency=low
 
   [ Alexander Kerner ]
