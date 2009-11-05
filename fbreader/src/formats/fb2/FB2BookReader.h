@@ -51,6 +51,7 @@ private:
 
 	Base64EncodedImage *myCurrentImage;
 	bool myProcessingImage;
+	std::string myProcessingImageId;
 	std::vector<std::string> myImageBuffer;
 
 	bool mySectionStarted;
