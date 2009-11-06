@@ -1,3 +1,9 @@
+fbreader (0.10.7-10) asimov; urgency=low
+
+  * Export cover image through ACTIVE_DOC_COVER_IMAGE(STRING) property
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Fri, 06 Nov 2009 17:27:30 +0100
+
 fbreader (0.10.7-9) asimov; urgency=low
 
   * Translations updated: Bengali, Bulgarian
