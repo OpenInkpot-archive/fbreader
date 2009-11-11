@@ -1,9 +1,9 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
@@ -317,11 +317,6 @@ msgstr "Lauki"
 msgid "First Line Indent"
 msgstr "Pirmās rindas atkāpe"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:733
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1122
-msgid "Indicator Height"
-msgstr "Lieluma indikators"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:740
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1123
 msgid "Offset From Text"
@@ -497,6 +492,10 @@ msgstr "<- Meklēt ->"
 msgid "iso-8859-1 -> win-1251"
 msgstr "iso-8859-1 -> win-1251"
 
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:733
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1122
+msgid "Indicator Height"
+msgstr "Indikatora lielums"
+
 #~ msgid "Full path: "
 #~ msgstr "Путь:"
-
