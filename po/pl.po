@@ -17,6 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:144
+msgid "FBReader: Help"
+msgstr "FBReader: Pomoc"
+
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
 msgid "None"
 msgstr "Brak"
@@ -78,10 +83,6 @@ msgstr "Duży skok wstecz"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
 msgid "Undo"
 msgstr "Cofnij"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
-msgid "Redo"
-msgstr "Powtórz\t"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:352
@@ -483,20 +484,19 @@ msgstr "Numer książki: "
 msgid "Book Menu"
 msgstr "Menu książki"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:144
-msgid "FBReader: Help"
-msgstr "FBReader: Pomoc"
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
+msgid "On"
+msgstr "Tak"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:184
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
 msgid "Off"
 msgstr "Nie"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
-msgid "On"
-msgstr "Tak"
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
+msgid "Redo"
+msgstr "Powtórz"
 
 #~ msgid "Full path: "
 #~ msgstr "Pełna ścieżka: "
