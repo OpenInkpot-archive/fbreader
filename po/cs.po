@@ -1,14 +1,14 @@
 # FBReader translation file.
-# 
+#
 # Copyright (C) 2009 ben1981 <ben1981@centrum.cz>
 # This file is distributed under the same license as the FBReader package.
 # ben1981 <ben1981@centrum.cz>, 2009.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-24 15:50+0200\n"
+"Report-Msgid-Bugs-To: @PACKAGE_BUGREPORT@\n"
+"POT-Creation-Date: 2009-11-14 17:26+0100\n"
 "PO-Revision-Date: 2009-09-30 17:38+0100\n"
 "Last-Translator: ben1981 <ben1981@centrum.cz>\n"
 "Language-Team: Czech <openinkpot-l10n@googlegroups.com>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:144
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:142
 msgid "FBReader: Help"
 msgstr "FBReader: Nápověda"
 
@@ -25,213 +25,471 @@ msgstr "FBReader: Nápověda"
 msgid "None"
 msgstr "Žádný"
 
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:76
+msgid "Add Bookmark"
+msgstr "Přidat záložku"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:77
+msgid "Show Bookmarks"
+msgstr "Zobrazit záložky"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:78
+msgid "Hyperlinks mode"
+msgstr "Hyperlink mód"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:79
+msgid "Show Footnotes"
+msgstr "Zobrazit zápatí"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:80
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:151
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1396
+msgid "Go To Page"
+msgstr "Jít na stránku"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:81
+msgid "Show Table of Contents"
+msgstr "Zobrazit Obsah"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
+msgid "Go to Home"
+msgstr "Jít na začátek"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
+msgid "Go to Start of Section"
+msgstr "Jít na začátek kapitoly"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
+msgid "Go to End of Section"
+msgstr "Jít na konec kapitoly"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
+msgid "Go to Next TOC Section"
+msgstr "Jít na další kapitolu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
+msgid "Go to Previous TOC Section"
+msgstr "Jít na předchozí kapitolu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
+msgid "Large Scroll Forward"
+msgstr "Rychlý přesun vpřed"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
+msgid "Large Scroll Backward"
+msgstr "Rychlý přesun vzad"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+msgid "Undo"
+msgstr "Zpět"
+
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
 msgid "Redo"
 msgstr "Odvolat Zpět"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:352
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:378
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:401
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1399
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:353
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:379
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:402
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1400
 msgid "Search"
 msgstr "Hledat"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
+msgid "Increase Font Size"
+msgstr "Zvětšit font"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
+msgid "Decrease Font Size"
+msgstr "Zmenšit font"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+msgid "Toggle Bold Font"
+msgstr ""
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
+msgid "Toggle Position Indicator"
+msgstr "Zapnout indikátor pozice"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
 msgid "Arabic"
 msgstr "Arabština"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
 msgid "Czech"
 msgstr "Čeština"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
 msgid "German"
 msgstr "Němčina"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
 msgid "German (traditional orthography)"
 msgstr "Němčina (tradiční pravopis)"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:111
 msgid "Greek"
 msgstr "Řečtina"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:111
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:112
 msgid "English"
 msgstr "Angličtina"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:112
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:113
 msgid "Esperanto"
 msgstr "Esperanto"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:113
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:114
 msgid "Spanish"
 msgstr "Španělština"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:114
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
 msgid "Finnish"
 msgstr "Finština"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:116
 msgid "French"
 msgstr "Francouzština"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:116
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:117
 msgid "Hebrew"
 msgstr "Hebrejština"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:117
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "Indonesian"
 msgstr "Indonéština"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
 msgid "Italian"
 msgstr "Italština"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
 msgid "Norwegian"
 msgstr "Norština"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
 msgid "Portuguese"
 msgstr "Portugalština"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
 msgid "Russian"
 msgstr "Ruština"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
 msgid "Swedish"
 msgstr "Švédština"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
 msgid "Turkish"
 msgstr "Turečtina"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
 msgid "Ukrainian"
 msgstr "Ukrajinština"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
 msgid "Chinese"
 msgstr "Čínština"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:127
 msgid "Other"
 msgstr "Jiný"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+msgid "undefined"
+msgstr "neurčeno"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
 msgid "left"
 msgstr "vlevo"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
 msgid "right"
 msgstr "vpravo"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
 msgid "center"
 msgstr "na střed"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
 msgid "justify"
 msgstr "zarovnat"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:229
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1397
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
+msgid "New Line"
+msgstr "Nový řádek"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
+msgid "Empty Line"
+msgstr "Prázdný řádek"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
+msgid "Line With Indent"
+msgstr "Řádek s odsazením"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:230
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1398
 msgid "Table Of Contents"
 msgstr "Obsah"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:294
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1401
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:295
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1402
 msgid "Bookmarks"
 msgstr "Záložky"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:295
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:296
 msgid "Delete"
 msgstr "Smazat"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:303
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:304
 msgid "Page "
 msgstr "Stránka "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:317
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:318
 msgid "Bookmark added"
 msgstr "Záložka přidána"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:359
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:347
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:373
+msgid "<- Search ->"
+msgstr "<- Hledat ->"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:349
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:375
+msgid "Search ->"
+msgstr "Hledat ->"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:351
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:377
+msgid "<- Search"
+msgstr "<- Hledat"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:360
 msgid "Text not found"
 msgstr "Text nenalezen"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:483
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:676
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1096
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:484
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:677
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1097
 #, c-format
 msgid "%d%%"
 msgstr "%d%%"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:500
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:556
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:669
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:750
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1094
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1124
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:501
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:557
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:670
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:751
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1095
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1125
 #, c-format
 msgid "%dpt"
 msgstr "%dpt"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:673
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1096
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:618
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:701
+msgid "Left Margin"
+msgstr "Levý okraj"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:621
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:702
+msgid "Right Margin"
+msgstr "Pravý okraj"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:624
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:703
+msgid "Top Margin"
+msgstr "Horní okraj"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:627
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:704
+msgid "Bottom Margin"
+msgstr "Spodní okraj"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:660
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1094
+msgid "Font Family"
+msgstr "Rodina písem"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:667
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1095
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1125
+msgid "Font Size"
+msgstr "Velikost fontu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:674
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1097
 msgid "Line Spacing"
 msgstr "Řádkování"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:680
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1097
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:681
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1098
 msgid "Alignment"
 msgstr "Zarovnání"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:690
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1098
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:691
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1099
 msgid "Margins"
 msgstr "Okraje"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1058
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:708
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1100
+msgid "First Line Indent"
+msgstr "Odsazení prvního řádku"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:734
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1123
+msgid "Indicator Height"
+msgstr "Výška indikátoru"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:741
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1124
+msgid "Offset From Text"
+msgstr "Odsazení od textu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:748
+msgid "Indicator Font Size"
+msgstr "Velikost fontu indikátoru"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:822
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1152
+msgid "Default Language"
+msgstr "Výchozí jazyk"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:830
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:997
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1161
+msgid "Default Encoding Set"
+msgstr "Výchozí sada kódování"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:837
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1004
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1162
+msgid "Default Encoding"
+msgstr "Výchozí kódování"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:986
+msgid "Book Language"
+msgstr "Jazyk knihy"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1030
+msgid "Break Paragraph At"
+msgstr "Zalomit odstavec na"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1059
 #, c-format
 msgid "Key %d"
 msgstr "Klávesa %d"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1109
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1086
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1290
+msgid "Format & Style"
+msgstr "Formát a styl"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1096
+msgid "Bold"
+msgstr "Tučně"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1101
+msgid "Auto Hyphenations"
+msgstr "Automatické dělení slov"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1110
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1291
 msgid "Indicator"
 msgstr "Indikátor"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1281
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1118
+msgid "Show Indicator"
+msgstr "Zobrazit indikátor"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1119
+msgid "Show TOC Marks"
+msgstr "Vyznačit položky obsahu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1120
+msgid "Show Position"
+msgstr "Zobrazit pozici"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1121
+msgid "Show Time"
+msgstr "Zobrazit čas"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1122
+msgid "Show Battery"
+msgstr "Zobrazit baterii"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1132
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1194
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1292
+msgid "Language"
+msgstr "Jazyk"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1143
+msgid "Detect Language and Encoding"
+msgstr "Detekovat jazyk a kódování"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1169
+msgid "iso-8859-1 -> win-1251"
+msgstr "iso-8859-1 -> win-1251"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1179
+msgid "Book Settings"
+msgstr "Nastavení knihy"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1197
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1207
+msgid "Encoding"
+msgstr "Kódování"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1206
+msgid "Encoding Set"
+msgstr "Kódovací sada"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1242
+msgid "Break Paragraph at"
+msgstr "Zalomit odstavec na"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1250
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1294
+msgid "Keys"
+msgstr "Klávesy"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1282
 msgid "Settings"
 msgstr "Nastavení"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1292
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1293
 msgid "Book settings"
 msgstr "Nastavení knihy"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1322
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1308
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1394
+msgid "Book Info"
+msgstr "Informace o knize"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1323
 msgid "File: "
 msgstr "Soubor: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1324
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1325
 msgid "Title: "
 msgstr "Název: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1325
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1326
 msgid "Author: "
 msgstr "Autor: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1328
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1329
 msgid "Series: "
 msgstr "Série: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1331
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1332
 msgid "Book number: "
 msgstr "Číslo knihy: "
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1389
+msgid "Book Menu"
+msgstr "Menu knihy"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
@@ -242,260 +500,6 @@ msgstr "Zapnuto"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
 msgid "Off"
 msgstr "Vypnuto"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:350
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:376
-msgid "<- Search"
-msgstr "<- Hledat"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:348
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:374
-msgid "Search ->"
-msgstr "Hledat ->"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:346
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:372
-msgid "<- Search ->"
-msgstr "<- Hledat ->"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1168
-msgid "iso-8859-1 -> win-1251"
-msgstr "iso-8859-1 -> win-1251"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:666
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1094
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1124
-msgid "Font Size"
-msgstr "Velikost fontu"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:707
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1099
-msgid "First Line Indent"
-msgstr "Odsazení prvního řádku"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:747
-msgid "Indicator Font Size"
-msgstr "Velikost fontu indikátoru"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:733
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1122
-msgid "Indicator Height"
-msgstr "Výška indikátoru"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
-msgid "Line With Indent"
-msgstr "Řádek s odsazením"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:620
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:701
-msgid "Right Margin"
-msgstr "Pravý okraj"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:623
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:702
-msgid "Top Margin"
-msgstr "Horní okraj"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:626
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:703
-msgid "Bottom Margin"
-msgstr "Spodní okraj"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1117
-msgid "Show Indicator"
-msgstr "Zobrazit indikátor"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1118
-msgid "Show TOC Marks"
-msgstr "Vyznačit položky obsahu"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1100
-msgid "Auto Hyphenations"
-msgstr "Automatické dělení slov"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1121
-msgid "Show Battery"
-msgstr "Zobrazit baterii"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1131
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1193
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1291
-msgid "Language"
-msgstr "Jazyk"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1119
-msgid "Show Position"
-msgstr "Zobrazit pozici"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1120
-msgid "Show Time"
-msgstr "Zobrazit čas"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1142
-msgid "Detect Language and Encoding"
-msgstr "Detekovat jazyk a kódování"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1178
-msgid "Book Settings"
-msgstr "Nastavení knihy"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1095
-msgid "Bold"
-msgstr "Tučně"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1085
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1289
-msgid "Format & Style"
-msgstr "Formát a styl"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1205
-msgid "Encoding Set"
-msgstr "Kódovací sada"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1196
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1206
-msgid "Encoding"
-msgstr "Kódování"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1249
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1293
-msgid "Keys"
-msgstr "Klávesy"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1241
-msgid "Break Paragraph at"
-msgstr "Zalomit odstavec na"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1307
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1393
-msgid "Book Info"
-msgstr "Informace o knize"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:617
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:700
-msgid "Left Margin"
-msgstr "Levý okraj"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1029
-msgid "Break Paragraph At"
-msgstr "Zalomit odstavec na"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
-msgid "undefined"
-msgstr "neurčeno"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:76
-msgid "Add Bookmark"
-msgstr "Přidat záložku"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:78
-msgid "Hyperlinks mode"
-msgstr "Hyperlink mód"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:77
-msgid "Show Bookmarks"
-msgstr "Zobrazit záložky"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:80
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:150
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1395
-msgid "Go To Page"
-msgstr "Jít na stránku"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:79
-msgid "Show Footnotes"
-msgstr "Zobrazit zápatí"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
-msgid "Go to Home"
-msgstr "Jít na začátek"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:81
-msgid "Show Table of Contents"
-msgstr "Zobrazit Obsah"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
-msgid "Increase Font Size"
-msgstr "Zvětšit font"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
-msgid "Go to End of Section"
-msgstr "Jít na konec kapitoly"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
-msgid "Go to Start of Section"
-msgstr "Jít na začátek kapitoly"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
-msgid "Go to Previous TOC Section"
-msgstr "Jít na předchozí kapitolu"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
-msgid "Go to Next TOC Section"
-msgstr "Jít na další kapitolu"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
-msgid "Large Scroll Backward"
-msgstr "Rychlý přesun vzad"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
-msgid "Large Scroll Forward"
-msgstr "Rychlý přesun vpřed"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
-msgid "Undo"
-msgstr "Zpět"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
-msgid "New Line"
-msgstr "Nový řádek"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:659
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1093
-msgid "Font Family"
-msgstr "Rodina písem"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
-msgid "Empty Line"
-msgstr "Prázdný řádek"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:985
-msgid "Book Language"
-msgstr "Jazyk knihy"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:836
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1003
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1161
-msgid "Default Encoding"
-msgstr "Výchozí kódování"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:829
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:996
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1160
-msgid "Default Encoding Set"
-msgstr "Výchozí sada kódování"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:821
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1151
-msgid "Default Language"
-msgstr "Výchozí jazyk"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
-msgid "Decrease Font Size"
-msgstr "Zmenšit font"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
-msgid "Toggle Position Indicator"
-msgstr "Zapnout indikátor pozice"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1388
-msgid "Book Menu"
-msgstr "Menu knihy"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:740
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1123
-msgid "Offset From Text"
-msgstr "Odsazení od textu"
 
 #~ msgid "Offset from Text"
 #~ msgstr "Odsazení od Textu"
