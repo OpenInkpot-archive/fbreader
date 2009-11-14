@@ -24,6 +24,7 @@
 #include <ZLDialogManager.h>
 #include <ZLDialog.h>
 #include <ZLOptionsDialog.h>
+#include <ZLOptions.h>
 #include <optionEntries/ZLSimpleOptionEntry.h>
 #include <ZLibrary.h>
 
@@ -712,4 +713,23 @@ Help::Help(FBReader &fbreader) : FBAction(fbreader) {
 void Help::run() {
 	FBReader &f = fbreader();
 	ZLEwlHelpDialog(f);
+}
+
+BoldToggle::BoldToggle(FBReader &fbreader) : ModeDependentAction(fbreader, FBReader::BOOK_TEXT_MODE) {
+}
+
+bool BoldToggle::isEnabled() const {
+	if (!isVisible()) {
+		return false;
+	}
+    return true;
+}
+
+void BoldToggle::run() {
+	FBReader &f = fbreader();
+
+	ZLBooleanOption *option = &ZLTextStyleCollection::instance().baseStyle().BoldOption;
+	option->setValue(option->value() ? false : true);
+	fbreader().clearTextCaches();
+	fbreader().refreshWindow();
 }

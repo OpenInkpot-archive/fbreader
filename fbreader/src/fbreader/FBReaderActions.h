@@ -81,6 +81,7 @@ public:
 	static const std::string BMK_ADD;
 	static const std::string BMK_SHOW;
 	static const std::string HELP;
+	static const std::string BOLD_TOGGLE;
 
 private:
 	ActionCode();
@@ -440,6 +441,14 @@ class Help : public FBAction {
 public:
 	Help(FBReader &fbreader);
 	void run();
+};
+
+class BoldToggle : public ModeDependentAction {
+
+public:
+    BoldToggle(FBReader &fbreader);
+	bool isEnabled() const;
+    void run();
 };
 
 #endif /* __FBREADERACTIONS_H__ */

@@ -91,6 +91,7 @@ static struct _action {
 	"search",				_("Search"),
 	"increaseFont",			_("Increase Font Size"),
 	"decreaseFont",			_("Decrease Font Size"),
+    "toggleBold",           _("Toggle Bold Font"),
 	"toggleIndicator",		_("Toggle Position Indicator"),
 //	"preferences",			_("Show Options Dialog"),
 //	"bookInfo",				_("Show Book Info Dialog"),
