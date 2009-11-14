@@ -1,3 +1,18 @@
+fbreader (0.10.7-11) asimov; urgency=low
+
+  [ lozhkinet ]
+  * l10n: Updates to Latvian (lv) translation
+
+  [ Tomasz Długosz ]
+  * l10n: Updates to Polish (pl) translation
+
+  [ Alexander Kerner ]
+  * Add toggleBold action
+  * Update translations
+  * Bind toggleBold action to the zoom button on N516
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 14 Nov 2009 18:14:00 +0100
+
 fbreader (0.10.7-10) asimov; urgency=low
 
   * Export cover image through ACTIVE_DOC_COVER_IMAGE(STRING) property
