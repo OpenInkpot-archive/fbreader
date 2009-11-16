@@ -1,8 +1,8 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
-#
+# 
 # Mascal <mascal@mascal.it>, 2009.
 msgid ""
 msgstr ""
@@ -102,10 +102,6 @@ msgstr "Aumenta la dimensione dei caratteri"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
 msgid "Decrease Font Size"
 msgstr "Riduci la dimensione dei caratteri"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
-msgid "Toggle Bold Font"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
 msgid "Toggle Position Indicator"
@@ -500,6 +496,10 @@ msgstr "Acceso"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
 msgid "Off"
 msgstr "Spento"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+msgid "Toggle Bold Font"
+msgstr "Caratteri in grassetto"
 
 #~ msgid "Full path: "
 #~ msgstr "Percorso completo: "
