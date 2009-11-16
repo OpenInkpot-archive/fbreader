@@ -1,9 +1,9 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBReader\n"
@@ -102,14 +102,6 @@ msgstr "Збільшити розмір шрифту"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
 msgid "Decrease Font Size"
 msgstr "Зменшити розмір шрифту"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
-msgid "Toggle Bold Font"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
-msgid "Toggle Position Indicator"
-msgstr "Перемикнути рядок статусу"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
 msgid "Arabic"
@@ -500,6 +492,14 @@ msgstr "так"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
 msgid "Off"
 msgstr "ні"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+msgid "Toggle Bold Font"
+msgstr "Перемикнути напівжирний шрифт"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
+msgid "Toggle Position Indicator"
+msgstr "Перемикнути рядок статусу"
 
 #~ msgid "Full path: "
 #~ msgstr "Шлях до файлу:"
