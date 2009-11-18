@@ -1,9 +1,9 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 ben1981 <ben1981@centrum.cz>
 # This file is distributed under the same license as the FBReader package.
 # ben1981 <ben1981@centrum.cz>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
@@ -102,10 +102,6 @@ msgstr "Zvětšit font"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
 msgid "Decrease Font Size"
 msgstr "Zmenšit font"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
-msgid "Toggle Bold Font"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
 msgid "Toggle Position Indicator"
@@ -500,6 +496,10 @@ msgstr "Zapnuto"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
 msgid "Off"
 msgstr "Vypnuto"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+msgid "Toggle Bold Font"
+msgstr "Zapnutí tučného písma"
 
 #~ msgid "Offset from Text"
 #~ msgstr "Odsazení od Textu"
