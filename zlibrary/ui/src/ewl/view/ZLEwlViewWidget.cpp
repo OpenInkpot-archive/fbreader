@@ -40,6 +40,55 @@ xcb_gcontext_t		gc;
 unsigned int *pal;
 int xcb_pal_colours;
 
+static
+xcb_atom_t
+get_atom(const char *name)
+{
+    xcb_intern_atom_cookie_t cookie;
+    xcb_generic_error_t *err;
+    xcb_intern_atom_reply_t *reply;
+    if (!connection)
+        return XCB_NONE;
+    cookie = xcb_intern_atom(connection, 0, strlen(name), name);
+
+    reply = xcb_intern_atom_reply(connection, cookie, &err);
+    if (err) {
+        free(err);
+        return XCB_NONE;
+    }
+    xcb_atom_t atom = reply->atom;
+    free(reply);
+    return atom;
+}
+
+static
+void
+wprop_set_active_win_id(xcb_window_t root, xcb_window_t win)
+{
+    if (!connection)
+        return;
+
+    xcb_atom_t active_doc_window_id = get_atom("ACTIVE_DOC_WINDOW_ID");
+    if (!active_doc_window_id) {
+        printf("No atom\n");
+        return;
+    }
+
+    xcb_atom_t window_atom = get_atom("WINDOW");
+    if (!window_atom) {
+        printf("Can't get atom WINDOW\n");
+        return;
+    }
+
+    xcb_change_property(connection,
+                        XCB_PROP_MODE_REPLACE,
+                        root,
+                        active_doc_window_id,
+                        window_atom,
+                        sizeof(xcb_window_t) * 8,
+                        1, (unsigned char *) &win);
+}
+
 static void updatePoint(ZLEwlViewWidget *viewWidget, int &x, int &y) {
 	switch (viewWidget->rotation()) {
 		default:
@@ -217,6 +266,7 @@ ZLEwlViewWidget::ZLEwlViewWidget(ZLApplication *application, ZLView::Angle initi
 	}
 
 	xcb_flush(connection);
+    wprop_set_active_win_id(screen->root, window);
 }
 
 ZLEwlViewWidget::~ZLEwlViewWidget() {
