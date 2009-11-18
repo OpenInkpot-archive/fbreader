@@ -1,3 +1,23 @@
+fbreader (0.10.7-12) asimov; urgency=low
+
+  [ Tomasz Długosz ]
+  * l10n: Updates to Polish (pl) translation
+
+  [ András Csehi ]
+  * l10n: Updates to Hungarian (hu) translation
+
+  [ mascal ]
+  * l10n: Updates to Italian (it) translation
+
+  [ Artem Naluzhnyy ]
+  * l10n: Updates to Ukrainian (uk) translation
+
+  [ Alexander Kerner ]
+  * Handle WM_DELETE_WINDOW
+  * Set ACTIVE_DOC_WINDOW_ID property ASAP
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Wed, 18 Nov 2009 20:18:28 +0100
+
 fbreader (0.10.7-11) asimov; urgency=low
 
   [ lozhkinet ]
