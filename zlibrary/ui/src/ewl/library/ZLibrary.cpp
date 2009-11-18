@@ -265,6 +265,22 @@ void main_loop(ZLApplication *application)
 {
 	xcb_generic_event_t  *e;
 	xcb_visibility_t visibility;
+
+	xcb_intern_atom_cookie_t cookie;
+	xcb_intern_atom_reply_t *reply = NULL;
+
+	xcb_atom_t wm_protocols_atom, wm_delete_window_atom;
+
+	cookie = xcb_intern_atom_unchecked(connection, 0, strlen("WM_DELETE_WINDOW"), "WM_DELETE_WINDOW");
+	reply = xcb_intern_atom_reply(connection, cookie, NULL);
+	wm_delete_window_atom = reply->atom;
+	free(reply);
+
+	cookie = xcb_intern_atom_unchecked(connection, 0, strlen("WM_PROTOCOLS"), "WM_PROTOCOLS");
+	reply = xcb_intern_atom_reply(connection, cookie, NULL);
+	wm_protocols_atom = reply->atom;
+	free(reply);
+
 	static bool alt_pressed = false;
 
 	std::map<int, struct _key *> kmap;
@@ -275,13 +291,10 @@ void main_loop(ZLApplication *application)
 		i++;
 	}
 
-//	init_timer();
-	
 	std::vector<xcb_generic_event_t *> efifo;
 
 	_fbreader_closed = false;
 	while (!_fbreader_closed) {
-//		set_timer();
 		in_main_loop = true;
 
 		if(efifo.empty()) {
@@ -296,8 +309,6 @@ void main_loop(ZLApplication *application)
 			fprintf(stderr, "Connection to server closed\n");
 			break;
 		}
-
-//		busy();
 
 		if(efifo.empty())
 			continue;
@@ -373,15 +384,18 @@ void main_loop(ZLApplication *application)
 						ZLEwlViewWidget *view = (ZLEwlViewWidget*)application->myViewWidget;
 						if(view->width() != conf->width || view->height() != conf->height) {
 							view->resize(conf->width, conf->height);
-
-					/*		if(visibility == XCB_VISIBILITY_UNOBSCURED) {
-								printf("configure visible -> redraw\n");
-								application->refreshWindow();
-							}
-					*/
 						}
-						
+
 						break;
+					}
+				case XCB_CLIENT_MESSAGE:
+					{
+						xcb_client_message_event_t *msg = (xcb_client_message_event_t *)e;
+						if((msg->type == wm_protocols_atom) &&
+								(msg->format == 32) &&
+								(msg->data.data32[0] == (uint32_t)wm_delete_window_atom)) {
+							_fbreader_closed = true;
+						}
 					}
 			}
 			free (e);
