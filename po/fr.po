@@ -485,12 +485,6 @@ msgstr "Numéro du livre: "
 msgid "Book Menu"
 msgstr "Menu du livre"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:142
-#, fuzzy
-msgid "FBReader: Help"
-msgstr "FBReader: Aide"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
 msgid "Toggle Bold Font"
 msgstr "Activer/désactiver les caractères gras"
@@ -504,6 +498,11 @@ msgstr "Active"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
 msgid "Off"
 msgstr "Inactif"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:142
+msgid "FBReader: Help"
+msgstr "FBReader: Aide"
 
 #~ msgid "Offset from Text"
 #~ msgstr "Éloignement par rapport au texte"
