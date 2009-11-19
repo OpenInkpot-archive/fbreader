@@ -1,9 +1,9 @@
 # translation of messages_fr.po to French
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
-#
+# 
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
 # Louvre <diogenedebian@gmail.com>, 2009.
 msgid ""
@@ -18,11 +18,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:142
-msgid "FBReader: Help"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
 msgid "None"
@@ -105,10 +100,6 @@ msgstr "Augmenter la taille de la police"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
 msgid "Decrease Font Size"
 msgstr "Diminuer la taille de la police"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
-msgid "Toggle Bold Font"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
 msgid "Toggle Position Indicator"
@@ -494,15 +485,25 @@ msgstr "Numéro du livre: "
 msgid "Book Menu"
 msgstr "Menu du livre"
 
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:142
+#, fuzzy
+msgid "FBReader: Help"
+msgstr "FBReader: Aide"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+msgid "Toggle Bold Font"
+msgstr "Activer/désactiver les caractères gras"
+
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
 msgid "On"
-msgstr ""
+msgstr "Active"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:184
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
 msgid "Off"
-msgstr ""
+msgstr "Inactif"
 
 #~ msgid "Offset from Text"
 #~ msgstr "Éloignement par rapport au texte"
