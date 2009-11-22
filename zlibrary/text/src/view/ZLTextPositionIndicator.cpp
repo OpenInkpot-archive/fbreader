@@ -272,6 +272,9 @@ void ZLTextView::PositionIndicator::draw() {
 	if (myInfo.isTimeShown()) {
 		drawExtraText(timeString());
 	}
+	extern bool turbo;
+	if(turbo)
+		drawExtraText("T");
 	if (myInfo.isBatteryShown()) {
 		drawExtraText(batteryString());
 	}

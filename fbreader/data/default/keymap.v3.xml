@@ -12,6 +12,7 @@
 	<binding key="Alt+5" action="gotoSectionEnd"/>
 	<binding key="6" action="showFootnotes"/>
 	<binding key="7" action="toc"/>
+	<binding key="Alt+7" action="toggleTurbo"/>
 	<binding key="8" action="hyperlinkNavStart"/>
 	<binding key="Alt+8" action="search"/>
 	<binding key="9" action="largeScrollBackward"/>

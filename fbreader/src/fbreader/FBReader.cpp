@@ -177,6 +177,7 @@ FBReader::FBReader(const std::string &bookToOpen) :
 
 	addAction(ActionCode::HELP, new Help(*this));
 	addAction(ActionCode::BOLD_TOGGLE, new BoldToggle(*this));
+	addAction(ActionCode::TURBO_TOGGLE, new TurboToggle(*this));
 
 	myOpenFileHandler = new OpenFileHandler(*this);
 	ZLCommunicationManager::instance().registerHandler("openFile", myOpenFileHandler);

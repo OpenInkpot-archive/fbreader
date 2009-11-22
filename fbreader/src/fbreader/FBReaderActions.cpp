@@ -733,3 +733,25 @@ void BoldToggle::run() {
 	fbreader().clearTextCaches();
 	fbreader().refreshWindow();
 }
+
+TurboToggle::TurboToggle(FBReader &fbreader) : ModeDependentAction(fbreader, FBReader::BOOK_TEXT_MODE) {
+}
+
+bool TurboToggle::isEnabled() const {
+	if (!isVisible()) {
+		return false;
+	}
+    return true;
+}
+
+void TurboToggle::run() {
+	ZLBooleanOption useTurbo(ZLCategoryKey::LOOK_AND_FEEL, "Options", "useTurbo", false);
+
+    if(!useTurbo.value())
+        return;
+
+    extern bool turbo;
+    turbo = !turbo;
+
+	fbreader().refreshWindow();
+}

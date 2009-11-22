@@ -82,6 +82,7 @@ public:
 	static const std::string BMK_SHOW;
 	static const std::string HELP;
 	static const std::string BOLD_TOGGLE;
+	static const std::string TURBO_TOGGLE;
 
 private:
 	ActionCode();
@@ -447,6 +448,14 @@ class BoldToggle : public ModeDependentAction {
 
 public:
     BoldToggle(FBReader &fbreader);
+	bool isEnabled() const;
+    void run();
+};
+
+class TurboToggle : public ModeDependentAction {
+
+public:
+    TurboToggle(FBReader &fbreader);
 	bool isEnabled() const;
     void run();
 };

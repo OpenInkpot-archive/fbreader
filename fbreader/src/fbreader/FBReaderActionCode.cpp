@@ -66,6 +66,7 @@ const std::string ActionCode::BMK_ADD = "addBookmark";
 const std::string ActionCode::BMK_SHOW = "showBookmarks";
 const std::string ActionCode::HELP = "help";
 const std::string ActionCode::BOLD_TOGGLE = "toggleBold";
+const std::string ActionCode::TURBO_TOGGLE = "toggleTurbo";
 const std::string ActionCode::GOTO_PAGE_NUMBER_WITH_PARAMETER = "gotoPageNumberWithParameter";
 const std::string ActionCode::SEARCH_ON_NETWORK = "searchOnNetwork";
 const std::string ActionCode::ADVANCED_SEARCH_ON_NETWORK = "advancedSearchOnNetwork";
