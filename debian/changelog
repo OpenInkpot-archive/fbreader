@@ -1,3 +1,24 @@
+fbreader (0.10.7-13) asimov; urgency=low
+
+  [ idle ]
+  * l10n: Updates to Czech (cs) translation
+
+  [ Siorghlas ]
+  * l10n: Updates to Spanish (Castilian) (es) translation
+  * l10n: Updates to French (fr) translation
+  * l10n: Updates to French (fr) translation
+
+  [ Mikhail Gusarov ]
+  * l10n: Updates to Russian (ru) translation
+
+  [ Vasil Badev ]
+  * l10n: Updates to Bulgarian (bg) translation
+
+  [ Alexander Kerner ]
+  * Add Turbo action, enable it on V3 and bind to LP-7
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Mon, 23 Nov 2009 22:38:17 +0100
+
 fbreader (0.10.7-12) asimov; urgency=low
 
   [ Tomasz Długosz ]
