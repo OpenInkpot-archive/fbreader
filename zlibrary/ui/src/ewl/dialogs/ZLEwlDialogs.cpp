@@ -1421,3 +1421,84 @@ void ZLEwlHelpDialog(FBReader &f)
 {
     show_help();
 }
+
+/*
+int font_size_dialog_handler(int idx, bool is_alt)
+{
+	ZLIntegerRangeOption &option = ZLTextStyleCollection::instance().baseStyle().FontSizeOption;
+	option.setValue(FONT_SIZE(idx));
+
+	do_refresh = 2;
+
+	return 1;
+}
+
+void _ZLEwlFontSizeDialog(FBReader &f)
+{
+	myFbreader = &f;
+
+	if(!list)
+		list = new cb_list;
+	else
+		list->items.clear();
+
+	list->name = _("Font Size");
+	list->alt_text = "";
+	list->item_handler = font_size_dialog_handler;
+
+	cb_list_item item;
+	for(int i = 0; i <= FONT_SIZE_MAX; i++) {
+		stringstream s;
+		s << FONT_SIZE(i);
+		s << "pt";
+		item.text = s.str();
+		list->items.push_back(item);
+	}
+
+	ZLIntegerRangeOption &option = ZLTextStyleCollection::instance().baseStyle().FontSizeOption;
+
+	cb_fcb_new(list, option.value() - FONT_SIZE(0));
+
+	if(list) {
+		delete list;
+		list = NULL;
+	}
+	refresh_view();
+}
+*/
+
+void font_size_dialog_handler(int idx, bool is_alt)
+{
+	ZLIntegerRangeOption &option = ZLTextStyleCollection::instance().baseStyle().FontSizeOption;
+	option.setValue(FONT_SIZE(idx));
+
+	do_refresh = 2;
+}
+
+void ZLEwlFontSizeDialog(FBReader &f)
+{
+	myFbreader = &f;
+	myContext = &(*f.context());
+
+	cb_olist *options = new cb_olist;
+	olists.push_back(options);
+
+	options->name = _("Font Size");
+	options->parent = NULL;
+	options->parent_item_idx = -1;
+	options->item_handler = font_size_dialog_handler;
+	options->destroy_handler = refresh_view;
+
+	cb_olist_item i;
+
+	for(int idx = 0; idx <= FONT_SIZE_MAX; idx++) {
+		stringstream s;
+		s << FONT_SIZE(idx);
+		s << "pt";
+		ADD_SUBMENU_ITEM(s.str());
+	}
+
+	ZLIntegerRangeOption &option = ZLTextStyleCollection::instance().baseStyle().FontSizeOption;
+
+	cb_lcb_new(option.value() - FONT_SIZE(0));
+}

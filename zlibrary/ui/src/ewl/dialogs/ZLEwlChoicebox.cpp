@@ -32,6 +32,8 @@
 #include <Edje.h>
 
 
+#include <libintl.h>
+
 extern "C" {
 #include <xcb/xcb.h>
 #include <libchoicebox.h>
@@ -147,6 +149,8 @@ static void lcb_handler(Evas_Object* choicebox,
 	if(!l || !l->item_handler)
 		return;
 
+	choicebox_set_selection(choicebox, item_num);
+
 	if(l->items.at(item_num).item_handler != NULL)
 		l->items.at(item_num).item_handler(item_num, is_alt);
 	else
@@ -261,8 +265,14 @@ static void lcb_win_key_up_handler(void* param, Evas* e, Evas_Object* o, void* e
             return;
 		}
 	}
+	
+	// fixme
+	if(!strcmp(ev->keyname, "XF86Search") && !olists.back()->name.compare(gettext("Font Size"))) {
+		choicebox_request_close(r);
+		return;
+	}
 
-    choicebox_aux_key_up_handler(o, ev);
+	choicebox_aux_key_up_handler(o, ev);
 }
 
 static void lcb_close_handler(Evas_Object* choicebox, void* param)
@@ -351,7 +361,7 @@ static int lcb_screen_change_handler(void *data, int type, void *event)
 	return 0;
 }
 
-void cb_lcb_new()
+void cb_lcb_new(int select_item)
 {
 	ee_init();
 
@@ -443,6 +453,11 @@ void cb_lcb_new()
 	evas_object_resize(choicebox, w/2, h - header_h - footer_h);
 	evas_object_move(choicebox, 0, header_h);
 	evas_object_show(choicebox);
+
+	if(select_item >= 0) {
+		choicebox_scroll_to(choicebox, select_item);
+		choicebox_set_selection(choicebox, select_item);
+	}
 
     eoi_register_fullscreen_choicebox(choicebox);
 
@@ -808,7 +823,7 @@ void cb_fcb_redraw(int newsize)
 	bookmark_delete_mode = false;
 }
 
-void cb_fcb_new(cb_list *list)
+void cb_fcb_new(cb_list *list, int select_item)
 {
 	Evas_Object *bg;
 
@@ -904,6 +919,11 @@ void cb_fcb_new(cb_list *list)
 				NULL);
 
 		ecore_evas_callback_resize_set(fcb_win, fcb_win_resize_handler);
+
+		if(select_item >= 0) {
+			choicebox_scroll_to(choicebox, select_item);
+			choicebox_set_selection(choicebox, select_item);
+		}
 	}
 
 	ecore_evas_show(fcb_win);

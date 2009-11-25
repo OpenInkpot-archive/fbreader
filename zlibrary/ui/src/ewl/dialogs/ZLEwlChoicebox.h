@@ -99,14 +99,14 @@ struct _cb_vlist {
 };
 
 
-void cb_fcb_new(cb_list *list);
+void cb_fcb_new(cb_list *list, int select_item = -1);
 void cb_fcb_redraw(int newsize = -1);
 void cb_fcb_invalidate(int idx);
 void cb_fcb_invalidate_interval(int start, int end);
 
 void cb_rcb_new();
 
-void cb_lcb_new();
+void cb_lcb_new(int select_item = -1);
 void cb_lcb_redraw();
 void cb_lcb_invalidate(int idx);
 

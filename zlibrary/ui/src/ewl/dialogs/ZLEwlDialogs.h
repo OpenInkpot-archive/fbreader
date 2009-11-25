@@ -32,5 +32,6 @@ void ZLEwlBookInfo(FBReader &f);
 //void redraw_text();
 void ZLEwlMainMenu(FBReader &f);
 void ZLEwlHelpDialog(FBReader &f);
+void ZLEwlFontSizeDialog(FBReader &f);
 
 #endif

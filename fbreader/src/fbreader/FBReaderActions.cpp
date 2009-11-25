@@ -755,3 +755,18 @@ void TurboToggle::run() {
 
 	fbreader().refreshWindow();
 }
+
+FontSizeDialog::FontSizeDialog(FBReader &fbreader) : ModeDependentAction(fbreader, FBReader::BOOK_TEXT_MODE) {
+}
+
+bool FontSizeDialog::isEnabled() const {
+	if (!isVisible()) {
+		return false;
+	}
+    return true;
+}
+
+void FontSizeDialog::run() {
+	FBReader &f = fbreader();
+	ZLEwlFontSizeDialog(f);
+}

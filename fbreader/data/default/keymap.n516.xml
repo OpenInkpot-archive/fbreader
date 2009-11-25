@@ -25,5 +25,5 @@
 	<binding key="Left" action="largeScrollBackward"/>
 
 	<binding key="XF86AudioPlay" action="toggleIndicator"/>
-	<binding key="XF86Search" action="toggleBold"/>
+	<binding key="XF86Search" action="fontSizeDialog"/>
 </keymap>

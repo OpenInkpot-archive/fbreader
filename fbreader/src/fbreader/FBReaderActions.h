@@ -83,6 +83,7 @@ public:
 	static const std::string HELP;
 	static const std::string BOLD_TOGGLE;
 	static const std::string TURBO_TOGGLE;
+	static const std::string FONT_SIZE_DIALOG;
 
 private:
 	ActionCode();
@@ -459,5 +460,14 @@ public:
 	bool isEnabled() const;
     void run();
 };
+
+class FontSizeDialog : public ModeDependentAction {
+
+public:
+    FontSizeDialog(FBReader &fbreader);
+	bool isEnabled() const;
+    void run();
+};
+
 
 #endif /* __FBREADERACTIONS_H__ */
