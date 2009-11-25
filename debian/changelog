@@ -16,8 +16,9 @@ fbreader (0.10.7-13) asimov; urgency=low
 
   [ Alexander Kerner ]
   * Add Turbo action, enable it on V3 and bind to LP-7
+  * Add FontSizeDialog action and bind it to Zoom key on N516
 
- -- Alexander Kerner <lunohod@openinkpot.org>  Mon, 23 Nov 2009 22:38:17 +0100
+ -- Alexander Kerner <lunohod@openinkpot.org>  Wed, 25 Nov 2009 01:25:36 +0100
 
 fbreader (0.10.7-12) asimov; urgency=low
 
