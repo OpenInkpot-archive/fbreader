@@ -200,20 +200,8 @@ msgid "undefined"
 msgstr "неопределенный"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
-msgid "left"
-msgstr "влево"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
-msgid "right"
-msgstr "вправо"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
 msgid "center"
 msgstr "по центру"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
-msgid "justify"
-msgstr "выключить строку"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
 msgid "New Line"
@@ -500,6 +488,18 @@ msgstr "Вкл"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
 msgid "Off"
 msgstr "Выкл"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+msgid "right"
+msgstr "по правому краю"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+msgid "left"
+msgstr "по левому краю"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+msgid "justify"
+msgstr "по ширине"
 
 #~ msgid "Full path: "
 #~ msgstr "Путь:"
