@@ -531,9 +531,10 @@ void set_properties()
 	set_prop_str(4, ZLFile::fileNameToUtf8(ZLFile(fileName).path()).c_str());
 	set_prop_str(5, myBookInfo->SeriesNameOption.value().c_str());
 	set_prop_int(6, myBookInfo->NumberInSeriesOption.value());
-	set_prop_int(9, f->bookTextView().positionIndicator()->textPosition());
+/*	set_prop_int(9, f->bookTextView().positionIndicator()->textPosition());
 	set_prop_int(10, f->bookTextView().positionIndicator()->currentPage());
 	set_prop_int(11, f->bookTextView().positionIndicator()->pagesCount());
+*/
 
 	xcb_change_property(connection,
 			XCB_PROP_MODE_REPLACE,

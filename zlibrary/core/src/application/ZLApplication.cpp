@@ -81,7 +81,12 @@ void ZLApplication::initWindow() {
 		grabAllKeys(true);
 	}
 	myWindow->init();
-	setView(myInitialView);
+
+	//setView(myInitialView);
+	if (!myInitialView.isNull() && myViewWidget != 0) {
+		myViewWidget->setView(myInitialView);
+		resetWindowCaption();
+	}
 }
 
 bool ZLApplication::closeView() {

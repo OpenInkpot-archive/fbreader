@@ -219,7 +219,9 @@ void FBReader::initWindow() {
 		}
 		openBook(description);
 	}
-	refreshWindow();
+	// this refresh is not needed
+	// the page will be rendered when the window becomes unobscured
+	//refreshWindow();
 
 //	ZLTimeManager::instance().addTask(new TimeUpdater(*this), 1000);
 }
