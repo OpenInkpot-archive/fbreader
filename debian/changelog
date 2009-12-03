@@ -1,3 +1,13 @@
+fbreader (0.10.7-14) asimov; urgency=low
+
+  [ Alexander Kerner ]
+  * Fix displaying PNG pictures with alpha channel
+  
+  [ lozhkinet ]
+  * l10n: Updates to Russian (ru) translation
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Thu, 03 Dec 2009 13:13:03 +0600
+
 fbreader (0.10.7-13) asimov; urgency=low
 
   [ idle ]
