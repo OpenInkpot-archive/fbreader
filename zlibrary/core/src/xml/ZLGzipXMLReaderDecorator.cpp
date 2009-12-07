@@ -17,11 +17,11 @@
  * 02110-1301, USA.
  */
 
-#include <iostream>
-#include <string.h>
+
+//#include <iostream>
 
 #include "ZLGzipXMLReaderDecorator.h"
-
+#include <string.h>
 
 static const size_t OUT_BUFFER_SIZE = 32768;
 
@@ -53,25 +53,25 @@ ZLGzipXMLReaderDecorator::~ZLGzipXMLReaderDecorator() {
 
 
 bool ZLGzipXMLReaderDecorator::readFromBuffer(const char *data, size_t len) {
-std::cerr << "enter: readFromBuffer(data = " << std::hex << ((unsigned int) data) << std::dec << ", len = " << len <<  ");" << std::endl;
+//std::cerr << "enter: readFromBuffer(data = " << std::hex << ((unsigned int) data) << std::dec << ", len = " << len <<  ");" << std::endl;
 	if (myEndOfStream) {
-std::cerr << "error: myEndOfStream == true" << std::endl;
-std::cerr << "leave: readFromBuffer(...) = false" << std::endl;
+//std::cerr << "error: myEndOfStream == true" << std::endl;
+//std::cerr << "leave: readFromBuffer(...) = false" << std::endl;
 		return false;
 	}
 	while (myOffset < len && myStreamState) {
-std::cerr << "header: myStreamState = " << myStreamState << "; myOffset = " << myOffset << std::endl;
+//std::cerr << "header: myStreamState = " << myStreamState << "; myOffset = " << myOffset << std::endl;
 		if (!skipHeader(data, len)) {
-std::cerr << "error: skipHeader(...) = false" << std::endl;
-std::cerr << "leave: readFromBuffer(...) = false" << std::endl;
+//std::cerr << "error: skipHeader(...) = false" << std::endl;
+//std::cerr << "leave: readFromBuffer(...) = false" << std::endl;
 			return false;
 		}
 	}
 	if (myOffset >= len) {
-std::cerr << "header break: myStreamState = " << myStreamState << "; myOffset = " << myOffset << "; len = " << len << std::endl;
+//std::cerr << "header break: myStreamState = " << myStreamState << "; myOffset = " << myOffset << "; len = " << len << std::endl;
 		myOffset -= len;
-std::cerr << "header break: new myOffset = " << myOffset << std::endl;
-std::cerr << "leave: readFromBuffer(...) = true" << std::endl;
+//std::cerr << "header break: new myOffset = " << myOffset << std::endl;
+//std::cerr << "leave: readFromBuffer(...) = true" << std::endl;
 		return true;
 	}
 	myZStream->next_in = (Bytef*) data + myOffset;
@@ -79,17 +79,17 @@ std::cerr << "leave: readFromBuffer(...) = true" << std::endl;
 	myOffset = 0;
 	bool forcedCall = false;
 	while (!myEndOfStream && (myZStream->avail_in > 0 || forcedCall)) {
-std::cerr << "iterate: myZStream->avail_in = " << myZStream->avail_in << ", forcedCall = " << forcedCall << std::endl;
+//std::cerr << "iterate: myZStream->avail_in = " << myZStream->avail_in << ", forcedCall = " << forcedCall << std::endl;
 		forcedCall = false;
 		myZStream->avail_out = myOutBufferSize;
 		myZStream->next_out = (Bytef*) myOutBuffer;
 		int code = ::inflate(myZStream, Z_SYNC_FLUSH);
 		if ((code != Z_OK) && (code != Z_STREAM_END)) {
-std::cerr << "inflate: code = " << code << std::endl;
-std::cerr << "leave: readFromBuffer(...) = false" << std::endl;
+//std::cerr << "inflate: code = " << code << std::endl;
+//std::cerr << "leave: readFromBuffer(...) = false" << std::endl;
 			return false;
 		}
-std::cerr << "inflate: myZStream->avail_out = " << myZStream->avail_out << ", code = " << code << std::endl;
+//std::cerr << "inflate: myZStream->avail_out = " << myZStream->avail_out << ", code = " << code << std::endl;
 		if (myOutBufferSize != myZStream->avail_out) {
 			if (myZStream->avail_out == 0) {
 				forcedCall = true;
@@ -100,7 +100,7 @@ std::cerr << "inflate: myZStream->avail_out = " << myZStream->avail_out << ", co
 			}
 		}
 	}
-std::cerr << "leave: readFromBuffer(...) = true" << std::endl;
+//std::cerr << "leave: readFromBuffer(...) = true" << std::endl;
 	return true;
 }
 

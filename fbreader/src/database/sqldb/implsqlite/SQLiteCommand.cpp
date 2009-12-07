@@ -31,15 +31,15 @@ std::string SQLiteCommand::packCommand(const std::string &command) {
 	std::string stripped = command;
 	ZLStringUtil::stripWhiteSpaces(stripped);
 	
-	unsigned pos = 0;
+	uint64_t pos = 0;
 	while (true) {
 		pos = stripped.find_first_of(_spaces, pos);
 		if (pos == std::string::npos) {
 			break;
 		}
 		stripped[pos++] = ' ';
-		const int next = stripped.find_first_not_of(_spaces, pos);
-		if (next - pos > 0) {
+		const uint64_t next = stripped.find_first_not_of(_spaces, pos);
+		if (pos != std::string::npos && next > pos) {
 			stripped.erase(pos, next - pos);
 		}
 	}

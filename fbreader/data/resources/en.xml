@@ -337,7 +337,6 @@
 			<node name="title" value="Remove Book" />
 			<node name="message" value="Remove Book&#10;&#8220;%s&#8221;&#10;from the Library?" />
 			<node name="deleteFile" value="Are you sure you want to&#10;remove file&#10;&#8220;%s&#8221;&#10;from the disk?" />
-			<node name="deleteMode" value="Remove Book&#10;&#8220;%s&#8221;&#10;from the Library?" />
 		</node>
 		<node name="removeTagBox">
 			<node name="title" value="Remove Tag" />

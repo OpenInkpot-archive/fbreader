@@ -68,8 +68,8 @@
 			<node name="go" value="&amp;Искать" />
 			<node name="thisOnly" value="Только эту" />
 			<node name="withSubtags" value="С подкатегориями" />
-			<node name="removeLink" value="Удалить Ссылку" />
-			<node name="removeFile" value="Удалить Файл" />
+			<node name="removeLink" value="Удалить из библиотеки" toBeTranslated="true" />
+			<node name="removeFile" value="Удалить с диска" toBeTranslated="true" />
 		</node>
 		<node name="OptionsDialog">
 			<node name="title" value="FBReader - Настройки" />
@@ -336,8 +336,7 @@
 		<node name="removeBookBox">
 			<node name="title" value="Удаление книги" />
 			<node name="message" value="Удалить книгу&#10;«%s»&#10;из библиотеки?" />
-			<node name="deleteFile" value="Вы действительно хотите&#10;полностью удалить с диска файл&#10;&#8220;%s&#8221;?" />
-			<node name="deleteMode" value="Удалить Книгу&#10;&#8220;%s&#8221;&#10;из Библиотеки?&#10;Вы также можете удалить файл с диска." />
+			<node name="deleteFile" value="Вы действительно хотите&#10;удалить с диска файл&#10;&#8220;%s&#8221;?" />
 		</node>
 		<node name="removeTagBox">
 			<node name="title" value="Удаление категории" />

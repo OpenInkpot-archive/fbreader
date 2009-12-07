@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +21,7 @@
 
 #include "LitResDataParser.h"
 
-
-LitResDataParser::LitResDataParser(NetworkBookList &books) : myBooks(books) {
-	myState = START;
-}
+#include "LitResUtil.h"
 
 
 static const std::string TAG_CATALOG = "catalit-fb2-books";
@@ -42,6 +39,12 @@ static const std::string TAG_ANNOTATION = "annotation";
 static const std::string TAG_DATE = "date";
 static const std::string TAG_SEQUENCE = "sequence";
 static const std::string TAG_LANGUAGE = "lang";
+
+
+LitResDataParser::LitResDataParser(NetworkBookList &books) : myBooks(books) {
+	myState = START;
+}
+
 
 void LitResDataParser::startElementHandler(const char *tag, const char **attributes) {
 	myAttributes.clear();
@@ -77,7 +80,9 @@ void LitResDataParser::processState(const std::string &tag, bool closed) {
 		if (!closed && TAG_BOOK == tag) {
 			myCurrentBook = new NetworkBookInfo(myAttributes["hub_id"]);
 			myCurrentBook->Cover = myAttributes["cover_preview"];
-			myCurrentBook->URLByType[NetworkBookInfo::LINK_HTTP] = myAttributes["url"];
+			std::string &url = myCurrentBook->URLByType[NetworkBookInfo::LINK_HTTP];
+			url = myAttributes["url"];
+			LitResUtil::appendLFrom(url);
 			//const std::string &hasTrial = myAttributes["has_trial"];
 		}
 		break;
@@ -156,17 +161,29 @@ void LitResDataParser::processState(const std::string &tag, bool closed) {
 		}
 		break;
 	case ANNOTATION: 
-		if (closed) {
+		if (!closed) {
+			ZLStringUtil::stripWhiteSpaces(myBuffer);
+			if (!myBuffer.empty()) {
+				myCurrentBook->Annotation.append(myBuffer);
+				myCurrentBook->Annotation.append(" ");
+			}
+		} else {
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
 			myCurrentBook->Annotation.append(myBuffer);
 			int size = myCurrentBook->Annotation.size();
-			if (TAG_ANNOTATION == tag) {
-				if (size > 0 && myCurrentBook->Annotation[size - 1] == '\n') {
-					myCurrentBook->Annotation.erase();
-				}
-			} else {
-				if (size > 0 && myCurrentBook->Annotation[size - 1] != '\n') {
-					myCurrentBook->Annotation.append("\n");
+			if (size > 0) {
+				if (TAG_ANNOTATION == tag) {
+					if (myCurrentBook->Annotation[size - 1] == '\n') {
+						myCurrentBook->Annotation.erase(size - 1);
+					}
+				} else if ("p" == tag) {
+					if (myCurrentBook->Annotation[size - 1] != '\n') {
+						myCurrentBook->Annotation.append("\n");
+					}
+				} else {
+					if (!myBuffer.empty() && myCurrentBook->Annotation[size - 1] != '\n') {
+						myCurrentBook->Annotation.append(" ");
+					}
 				}
 			}
 		}

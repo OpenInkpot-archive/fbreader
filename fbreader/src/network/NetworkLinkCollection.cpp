@@ -47,9 +47,9 @@ NetworkLinkCollection &NetworkLinkCollection::instance() {
 NetworkLinkCollection::NetworkLinkCollection() :
 	DirectoryOption(ZLCategoryKey::NETWORK, "Options", "DownloadDirectory", "") {
 	//myLinks.push_back(new FeedBooksLink());
-	myLinks.push_back(new FBReaderOrgLink());
+	//myLinks.push_back(new FBReaderOrgLink());
 	myLinks.push_back(new FeedBooksAtomLink());
-	//myLinks.push_back(new LitResLink());
+	myLinks.push_back(new LitResLink());
 }
 
 NetworkLinkCollection::~NetworkLinkCollection() {

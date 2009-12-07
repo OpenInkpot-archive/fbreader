@@ -37,11 +37,11 @@ class RebuildCollectionRunnable : public ZLRunnable {
 public:
 	RebuildCollectionRunnable(CollectionView &view) : myView(view) {}
 	void run() {
-		if (myView.myDoSynchronizeCollection) {
+		/*if (myView.myDoSynchronizeCollection) {
 			if (!myView.collection().synchronize()) {
 				return;
 			}
-		}
+		}*/
 		myView.collection().rebuild(true);
 		myView.myDoUpdateModel = true;
 		myView.collection().authors();
@@ -99,9 +99,9 @@ void CollectionView::selectBook(shared_ptr<DBBook> book) {
 
 void CollectionView::paint() {
 	if (myDoSynchronizeCollection) {
-		myDoSynchronizeCollection = false;
 		RebuildCollectionRunnable runnable(*this);
 		ZLDialogManager::instance().wait(ZLResourceKey("loadingBookList"), runnable);
+		myDoSynchronizeCollection = false;
 	}
 	if ((myOrganizeByTags != organizeByTags()) ||
 			(myShowAllBooksList != ShowAllBooksTagOption.value())) {
@@ -216,7 +216,8 @@ bool CollectionView::removeBookDialog(shared_ptr<DBBook> book, bool &removeFile)
 	const ZLResource &msgResource = ZLResource::resource("dialog")[boxKey];
 
 	if (!canRemoveLink) {
-		const std::string message = ZLStringUtil::printf(msgResource["deleteFile"].value(), book->title());
+		ZLFile physFile(ZLFile(book->fileName()).physicalFilePath());
+		const std::string message = ZLStringUtil::printf(msgResource["deleteFile"].value(), physFile.name(false));
 		if (ZLDialogManager::instance().questionBox(boxKey, message, ZLDialogManager::YES_BUTTON, ZLDialogManager::NO_BUTTON) == 0) {
 			removeFile = true;
 			return true;
@@ -234,7 +235,7 @@ bool CollectionView::removeBookDialog(shared_ptr<DBBook> book, bool &removeFile)
 	ZLResourceKey removeFileKey("removeFile");
 	ZLResourceKey removeLinkKey("removeLink");
 
-	const std::string message = ZLStringUtil::printf(msgResource["deleteMode"].value(), book->title());
+	const std::string message = ZLStringUtil::printf(ZLDialogManager::dialogMessage(boxKey), book->title());
 	int res = ZLDialogManager::instance().questionBox(boxKey, message, removeLinkKey, removeFileKey, ZLDialogManager::CANCEL_BUTTON);
 	if (res != 2) {
 		removeFile = (res == 1);

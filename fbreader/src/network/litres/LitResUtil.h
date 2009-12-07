@@ -17,27 +17,20 @@
  * 02110-1301, USA.
  */
 
-#ifndef __LITRESLINK_H__
-#define __LITRESLINK_H__
+#ifndef __LITRESUTIL_H__
+#define __LITRESUTIL_H__
 
 
-#include <map>
 #include <string>
 
-#include "../NetworkLink.h"
-
-class LitResLink : public NetworkLink {
+class LitResUtil {
 
 private:
-	static std::map<std::string, std::string> ourGenres;
-	static void loadGenres();
-	static void fillGenres(const std::string &tag, std::vector<std::string> &ids);
+	LitResUtil();
 
 public:
-	LitResLink();
+	static void appendLFrom(std::string &url);
 
-	shared_ptr<ZLNetworkData> simpleSearchData(SearchResult &result, const std::string &pattern);
-	shared_ptr<ZLNetworkData> advancedSearchData(SearchResult &result, const std::string &title, const std::string &author, const std::string &series, const std::string &tag, const std::string &annotation);
 };
 
-#endif /* __LITRESLINK_H__ */
+#endif /* __LITRESUTIL_H__ */

@@ -17,27 +17,34 @@
  * 02110-1301, USA.
  */
 
-#ifndef __LITRESLINK_H__
-#define __LITRESLINK_H__
+#ifndef __LITRESGENRESPARSER_H__
+#define __LITRESGENRESPARSER_H__
 
 
 #include <map>
+#include <vector>
 #include <string>
 
-#include "../NetworkLink.h"
+#include <ZLXMLReader.h>
 
-class LitResLink : public NetworkLink {
 
-private:
-	static std::map<std::string, std::string> ourGenres;
-	static void loadGenres();
-	static void fillGenres(const std::string &tag, std::vector<std::string> &ids);
+class LitResGenresParser : public ZLXMLReader {
 
 public:
-	LitResLink();
+	LitResGenresParser(std::map<std::string, std::string> &genres);
 
-	shared_ptr<ZLNetworkData> simpleSearchData(SearchResult &result, const std::string &pattern);
-	shared_ptr<ZLNetworkData> advancedSearchData(SearchResult &result, const std::string &title, const std::string &author, const std::string &series, const std::string &tag, const std::string &annotation);
+private:
+	void startElementHandler(const char *tag, const char **attributes);
+	void endElementHandler(const char *tag);
+	void characterDataHandler(const char *text, size_t len);
+
+	const std::string &titlePrefix();
+
+private:
+	std::map<std::string, std::string> &myGenres;
+	std::vector<std::string> myTitleStack;
+	std::string myTitlePrefix;
+	bool mySkipGenreClosing;
 };
 
-#endif /* __LITRESLINK_H__ */
+#endif /* __LITRESGENRESPARSER_H__ */

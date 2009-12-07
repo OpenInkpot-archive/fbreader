@@ -43,7 +43,7 @@ ZLQtWaitMessage::ZLQtWaitMessage(const std::string &message) : QWidget(0, 0, WSt
 	if (main == 0) {
 		main = QApplication::desktop();
 	}
-	QPoint position = main->mapToGlobal(main->pos());
+	QPoint position = main->pos();
 	QFontMetrics metrics = fontMetrics();
 	const int w = metrics.width(myLabelText) + 20;
 	const int h = metrics.height() + 20;
