@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+	<group name="Style">
+		<option name="Base:fontFamily" value="SSong"/>
+		<option name="Base:fontSize" value="18"/>
+	</group>
 	<group name="Options">
 		<option name="BookPath" value="/mmc/mmca1/books/fiction"/>
 		<option name="DownloadDirectory" value="/mmc/mmca1/books/fiction"/>

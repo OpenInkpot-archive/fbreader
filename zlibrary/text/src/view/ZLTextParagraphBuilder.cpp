@@ -88,7 +88,7 @@ void ZLTextParagraphBuilder::fill() {
 				ImageEntry &imageEntry = (ImageEntry&)*it.entry();
 				shared_ptr<const ZLImage> image = imageEntry.image();
 				if (!image.isNull()) {
-					shared_ptr<ZLImageData> data = ZLImageManager::instance().imageData(*image);
+					shared_ptr<ZLImageData> data = ZLImageManager::Instance().imageData(*image);
 					if (!data.isNull()) {
 
 						extern std::string cover_image_id;

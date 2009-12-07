@@ -33,16 +33,17 @@
 #include "ZLTextWord.h"
 #include "ZLTextSelectionModel.h"
 
-ZLTextView::ZLTextView(ZLApplication &application, shared_ptr<ZLPaintContext> context) : ZLView(application, context), myPaintState(NOTHING_TO_PAINT), myOldWidth(-1), myOldHeight(-1), myStyle(context), mySelectionModel(*this, application), myTreeStateIsFrozen(false), myDoUpdateScrollbar(false) {
+const std::string ZLTextView::TYPE_ID = "ZLTextView";
+
+const std::string &ZLTextView::typeId() const {
+	return TYPE_ID;
+}
+
+ZLTextView::ZLTextView(ZLPaintContext &context) : ZLView(context), myPaintState(NOTHING_TO_PAINT), myOldWidth(-1), myOldHeight(-1), myStyle(*this, context), mySelectionModel(*this), myTreeStateIsFrozen(false), myDoUpdateScrollbar(false) {
 }
 
 ZLTextView::~ZLTextView() {
 	clear();
-}
-
-void ZLTextView::setPaintContext(shared_ptr<ZLPaintContext> context) {
-	ZLView::setPaintContext(context);
-	myStyle.setPaintContext(context);
 }
 
 void ZLTextView::clear() {
@@ -127,7 +128,7 @@ void ZLTextView::scrollToStartOfText() {
 
 	std::vector<size_t>::const_iterator i = nextBreakIterator();
 	gotoParagraph((i != myTextBreaks.begin()) ? *(i - 1) : 0, false);
-	application().refreshWindow();
+	ZLApplication::Instance().refreshWindow();
 }
 
 void ZLTextView::scrollToEndOfText() {
@@ -148,7 +149,7 @@ void ZLTextView::scrollToEndOfText() {
 		gotoParagraph(*i - 1, true);
 	}
 	myEndCursor.moveToParagraphEnd();
-	application().refreshWindow();
+	ZLApplication::Instance().refreshWindow();
 }
 
 int ZLTextView::paragraphIndexByCoordinates(int x, int y) const {
@@ -229,7 +230,7 @@ void ZLTextView::gotoMark(ZLTextMark mark) {
 		preparePaintInfo();
 	}
 	if (doRepaint) {
-		application().refreshWindow();
+		ZLApplication::Instance().refreshWindow();
 	}
 }
 
@@ -323,7 +324,7 @@ bool ZLTextView::search(const std::string &text, bool ignoreCase, bool wholeText
 							(backward ? myModel->lastMark() : myModel->firstMark()) :
 							(backward ? myModel->previousMark(position) : //myModel->nextMark(position)));
 							 myModel->nextMark(position).ParagraphIndex > -1 ? myModel->nextMark(position) : myModel->previousMark(position)));
-		application().refreshWindow();
+		ZLApplication::Instance().refreshWindow();
 	}
 
 	if(myModel->marks().empty())
@@ -372,7 +373,7 @@ bool ZLTextView::onStylusPress(int x, int y) {
 		bool indicatorAnswer = positionIndicator()->onStylusPress(x, y);
 		myTreeStateIsFrozen = false;
 		if (indicatorAnswer) {
-			application().refreshWindow();
+			ZLApplication::Instance().refreshWindow();
 			return true;
 		}
 	}
@@ -406,7 +407,7 @@ bool ZLTextView::onStylusPress(int x, int y) {
 				gotoParagraph(paragraphIndex);
 				preparePaintInfo();
 			}
-			application().refreshWindow();
+			ZLApplication::Instance().refreshWindow();
 
 			return true;
 		}
@@ -418,7 +419,7 @@ bool ZLTextView::onStylusPress(int x, int y) {
 void ZLTextView::activateSelection(int x, int y) {
 	if (isSelectionEnabled()) {
 		mySelectionModel.activate(visualX(x), y);
-		application().refreshWindow();
+		ZLApplication::Instance().refreshWindow();
 	}
 }
 
@@ -428,32 +429,32 @@ bool ZLTextView::onStylusMove(int x, int y) {
 			ZLTextTreeNodeMap::const_iterator it =
 				std::find_if(myTreeNodeMap.begin(), myTreeNodeMap.end(), ZLTextTreeNodeArea::RangeChecker(x, y));
 			if (it != myTreeNodeMap.end()) {
-				application().setHyperlinkCursor(true);
+				ZLApplication::Instance().setHyperlinkCursor(true);
 				return true;
 			}
 		}
-		application().setHyperlinkCursor(false);
+		ZLApplication::Instance().setHyperlinkCursor(false);
 	}
 	return false;
 }
 
 bool ZLTextView::onStylusMovePressed(int x, int y) {
 	if (mySelectionModel.extendTo(visualX(x), y)) {
-		application().refreshWindow();
+		ZLApplication::Instance().refreshWindow();
 		copySelectedTextToClipboard(ZLDialogManager::CLIPBOARD_SELECTION);
 	}
 	return true;
 }
 
 void ZLTextView::copySelectedTextToClipboard(ZLDialogManager::ClipboardType type) const {
-	if (ZLDialogManager::instance().isClipboardSupported(type)) {
+	if (ZLDialogManager::Instance().isClipboardSupported(type)) {
 		std::string text = mySelectionModel.text();
 		if (!text.empty()) {
-			ZLDialogManager::instance().setClipboardText(text, type);
+			ZLDialogManager::Instance().setClipboardText(text, type);
 		} else {
 			shared_ptr<ZLImageData> image = mySelectionModel.image();
 			if (!image.isNull()) {
-				ZLDialogManager::instance().setClipboardImage(*image, type);
+				ZLDialogManager::Instance().setClipboardImage(*image, type);
 			}
 		}
 	}
@@ -464,19 +465,22 @@ bool ZLTextView::onStylusClick(int x, int y, int count) {
 		return true;
 	} else if (count > 10) {
 		mySelectionModel.extendWordSelectionToParagraph();
-		application().refreshWindow();
+		ZLApplication::Instance().refreshWindow();
 		copySelectedTextToClipboard(ZLDialogManager::CLIPBOARD_SELECTION);
 		myDoubleClickInfo.Count = 20;
 		return true;
 	} else if (count > 2) {
 		if (mySelectionModel.selectWord(visualX(x), y)) {
-			application().refreshWindow();
+			ZLApplication::Instance().refreshWindow();
 			copySelectedTextToClipboard(ZLDialogManager::CLIPBOARD_SELECTION);
 			myDoubleClickInfo.Count = 10;
 			return true;
 		} else {
 			myDoubleClickInfo.Count = 0;
 		}
+	} else {
+		mySelectionModel.clear();
+		ZLApplication::Instance().refreshWindow();
 	}
 
 	return true;
@@ -494,7 +498,7 @@ bool ZLTextView::onStylusRelease(int x, int y) {
 }
 
 void ZLTextView::drawString(int x, int y, const char *str, int len, const ZLTextWord::Mark *mark, int shift, bool rtl) {
-	context().setColor(myStyle.textStyle()->color());
+	context().setColor(color(myStyle.textStyle()->colorStyle()));
 	if (mark == 0) {
 		context().drawString(x, y, str, len, rtl);
 	} else {
@@ -526,7 +530,7 @@ void ZLTextView::drawString(int x, int y, const char *str, int len, const ZLText
 				}
 			}
 			if (markStart < len) {
-				context().setColor(ZLTextStyleCollection::instance().baseStyle().SelectedTextColorOption.value());
+				context().setColor(color(ZLTextStyle::HIGHLIGHTED_TEXT));
 				{
 					int endPos = std::min(markStart + markLen, len);
 					if (rtl) {
@@ -537,7 +541,7 @@ void ZLTextView::drawString(int x, int y, const char *str, int len, const ZLText
 						x += context().stringWidth(str + markStart, endPos - markStart, rtl);
 					}
 				}
-				context().setColor(myStyle.textStyle()->color());
+				context().setColor(color(myStyle.textStyle()->colorStyle()));
 			}
 			pos = markStart + markLen;
 		}
@@ -705,14 +709,14 @@ void ZLTextView::onScrollbarMoved(Direction direction, size_t full, size_t from,
 	preparePaintInfo();
 	myTreeStateIsFrozen = false;
 	myDoUpdateScrollbar = false;
-	application().refreshWindow();
+	ZLApplication::Instance().refreshWindow();
 }
 
 void ZLTextView::onScrollbarStep(Direction direction, int steps) {
 	if (direction == VERTICAL) {
 		const bool forward = steps > 0;
 		scrollPage(forward, SCROLL_LINES, forward ? steps : -steps);
-		application().refreshWindow();
+		ZLApplication::Instance().refreshWindow();
 	}
 }
 
@@ -720,7 +724,7 @@ void ZLTextView::onScrollbarPageStep(Direction direction, int steps) {
 	if (direction == VERTICAL) {
 		const bool forward = steps > 0;
 		scrollPage(forward, NO_OVERLAPPING, forward ? steps : -steps);
-		application().refreshWindow();
+		ZLApplication::Instance().refreshWindow();
 	}
 }
 

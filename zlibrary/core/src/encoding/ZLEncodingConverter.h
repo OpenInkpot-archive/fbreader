@@ -91,14 +91,11 @@ class ZLEncodingConverterProvider;
 class ZLEncodingCollection {
 
 public:
-	static ZLEncodingCollection &instance();
+	static ZLEncodingCollection &Instance();
 	static std::string encodingDescriptionPath();
-	static ZLBooleanOption &useWindows1252HackOption();
-	static bool useWindows1252Hack();
 
 private:
 	static ZLEncodingCollection *ourInstance;
-	static ZLBooleanOption *ourUseWindows1252HackOption;
 
 public:
 	const std::vector<shared_ptr<ZLEncodingSet> > &sets();

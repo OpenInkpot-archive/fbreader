@@ -22,9 +22,13 @@
 
 #include <deque>
 
+#include "ReadingState.h"
+
 #include <ZLOptions.h>
 
 #include "FBView.h"
+
+class Book;
 
 class BookTextView : public FBView {
 
@@ -32,10 +36,10 @@ public:
 	ZLBooleanOption ShowTOCMarksOption;
 
 public:
-	BookTextView(FBReader &reader, shared_ptr<ZLPaintContext> context);
+	BookTextView(ZLPaintContext &context);
 	~BookTextView();
 
-	void setModel(shared_ptr<ZLTextModel> model, const std::string &language, const std::string &fileName);
+	void setModel(shared_ptr<ZLTextModel> model, const std::string &language, shared_ptr<Book> book);
 	void setContentsModel(shared_ptr<ZLTextModel> contentsModel);
 	void saveState();
 	void saveBookmarks();
@@ -54,7 +58,7 @@ public:
 	bool onStylusClick(int x, int y, int count);
 
 private:
-	typedef std::pair<int,int> Position;
+	typedef ReadingState Position;
 	Position cursorPosition(const ZLTextWordCursor &cursor) const;
 	bool pushCurrentPositionIntoStack(bool doPushSamePosition = true);
 	void replaceCurrentPositionInStack();
@@ -80,9 +84,14 @@ private:
 	friend class BookTextView::PositionIndicatorWithLabels;
 
 private:
+	void readBookState(const Book &book);
+	int readStackPos(const Book &book);
+	void saveBookState(const Book &book);
+
+private:
 	shared_ptr<ZLTextModel> myContentsModel;
 
-	std::string myFileName;
+	shared_ptr<Book> myBook;
 
 	typedef std::deque<Position> PositionStack;
 	PositionStack myPositionStack;
@@ -93,6 +102,8 @@ private:
 
 	int myPressedX;
 	int myPressedY;
+
+	bool myStackChanged;
 
 	typedef std::vector<std::pair<Position, int> > BookmarkVector;
 	typedef std::vector<std::pair<Position, std::pair<int, std::string> > > BookmarkTextVector;
