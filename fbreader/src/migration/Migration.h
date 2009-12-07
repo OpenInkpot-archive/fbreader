@@ -26,8 +26,6 @@
 #include <shared_ptr.h>
 #include <ZLOptions.h>
 
-#include "../database/booksdb/BooksDB.h"
-
 class Migration {
 
 public:

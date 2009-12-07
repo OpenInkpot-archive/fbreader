@@ -20,20 +20,30 @@
 #ifndef __SEARCHRESULT_H__
 #define __SEARCHRESULT_H__
 
-#include "NetworkBookInfo.h"
+#include "NetworkBookCollection.h"
 
-struct SearchResult {
+class SearchResult {
 
-	void clear();
+private:
+	static SearchResult ourLastSearchResult;
 
-	NetworkBookList Books;
-	std::string ResumeURI;
+private:
+	SearchResult();
+
+public:
+	static const SearchResult &lastSearchResult();
+	static void setLastSearchResult(const std::string &summary, shared_ptr<NetworkBookCollection> bookCollection);
+
+public:
+	const std::string &summary() const;
+	shared_ptr<NetworkBookCollection> collection() const;
+
+private:
+	std::string mySummary;
+	shared_ptr<NetworkBookCollection> myBookCollection;
 };
 
-
-inline void SearchResult::clear() {
-	Books.clear();
-	ResumeURI.clear();
-}
+inline const std::string &SearchResult::summary() const { return mySummary; }
+inline shared_ptr<NetworkBookCollection> SearchResult::collection() const { return myBookCollection; }
 
 #endif /* __SEARCHRESULT_H__ */

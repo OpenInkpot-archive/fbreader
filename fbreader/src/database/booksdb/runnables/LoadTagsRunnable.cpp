@@ -17,86 +17,77 @@
  * 02110-1301, USA.
  */
 
-
 #include "../DBRunnables.h"
+#include "../../../library/Book.h"
+#include "../../../library/Tag.h"
 #include "../../sqldb/implsqlite/SQLiteFactory.h"
 
+static const std::string LOAD_BOOK_TAGS_QUERY =
+	"SELECT tag_id FROM BookTag WHERE book_id = @book_id";
+
+static const std::string LOAD_SINGLE_TAG_QUERY =
+	"SELECT name, parent_id FROM Tags WHERE tag_id = @tag_id";
 
 LoadTagsRunnable::LoadTagsRunnable(DBConnection &connection) {
-	myLoadTags = SQLiteFactory::createCommand(BooksDBQuery::LOAD_TAGS, connection, "@book_id", DBValue::DBINT);
-	myFindParentTag = SQLiteFactory::createCommand(BooksDBQuery::FIND_PARENT_TAG, connection, "@tag_id", DBValue::DBINT);
+	myLoadBookTags = SQLiteFactory::createCommand(
+		LOAD_BOOK_TAGS_QUERY, connection, "@book_id", DBValue::DBINT
+	);
+	myLoadSingleTag = SQLiteFactory::createCommand(
+		LOAD_SINGLE_TAG_QUERY, connection, "@tag_id", DBValue::DBINT
+	);
 }
 
-bool LoadTagsRunnable::run() {
-	((DBIntValue &) *myLoadTags->parameter("@book_id").value()) = myBookId;
-	shared_ptr<DBDataReader> reader = myLoadTags->executeReader();
-	if (reader.isNull()) {
+shared_ptr<Tag> LoadTagsRunnable::getTag(int id) {
+	if (id == 0) {
+		return 0;
+	}
+
+	shared_ptr<Tag> tag = Tag::getTagById(id);
+	if (!tag.isNull()) {
+		return tag;
+	}
+
+	((DBIntValue&)*myLoadSingleTag->parameter("@tag_id").value()) = id;
+	shared_ptr<DBDataReader> reader = myLoadSingleTag->executeReader();
+	if (reader.isNull() || !reader->next()) {
+		return 0;
+	}
+	const std::string name = reader->textValue(0);
+	const int parentId = reader->intValue(1);
+	reader.reset();
+
+	return Tag::getTag(name, getTag(parentId), id);
+}
+
+bool LoadTagsRunnable::run(Book &book) {
+	TagList tags;
+	if (!run(book.bookId(), tags)) {
 		return false;
 	}
 
-	std::vector<shared_ptr<DBTag> > dbTags;
-	while (reader->next()) {
-		if (reader->type(0) != DBValue::DBINT /* tag_id */
-			|| reader->type(1) != DBValue::DBTEXT /* name */) {
-			reader->close();
-			return false;
-		}
-		const int tagId = reader->intValue(0);
-		const std::string tag = reader->textValue(1);
-		DBTag *ptr = new DBTag(tag);
-		ptr->setTagId(tagId);
-		dbTags.push_back( ptr );
-	}
-	reader->close();
-	
-	myTags.clear();
-
-	DBIntValue &parentId = (DBIntValue &) *myFindParentTag->parameter("@tag_id").value();
-
-	for (unsigned i = 0; i < dbTags.size(); ++i) {
-		std::vector<shared_ptr<DBTag> > subtags;
-		subtags.push_back( dbTags[i] );
-		while (true) {
-			parentId.setValue( subtags.back()->tagId() );
-			shared_ptr<DBDataReader> reader = myFindParentTag->executeReader();
-			if (reader.isNull()) {
-				return false;
-			}
-			if (!reader->next()) {
-				reader->close();
-				break;
-			}
-			if (reader->type(0) != DBValue::DBINT /* tag_id */
-				|| reader->type(1) != DBValue::DBTEXT /* name */) {
-				reader->close();
-				return false;
-			}
-			const int tagId = reader->intValue(0);
-			const std::string tag = reader->textValue(1);
-			reader->close();
-
-			DBTag *ptr = new DBTag(tag);
-			ptr->setTagId(tagId);
-			subtags.push_back(ptr);
-		}
-		shared_ptr<DBTag> res = DBTag::getTag(subtags.back()->name(), false);
-		while (true) {
-			if (res.isNull()) {
-				return false;
-			}
-			res->setTagId( subtags.back()->tagId() );
-			subtags.pop_back();
-			if (subtags.empty()) {
-				break;
-			}
-			shared_ptr<DBTag> next = res->findChild(subtags.back()->name());
-			if (next.isNull()) {
-				next = res->addChild(subtags.back()->name(), false);
-			}
-			res = next;
-		}
-		myTags.push_back( res );
+	book.removeAllTags();
+	for (TagList::const_iterator it = tags.begin(); it != tags.end(); ++it) {
+		book.addTag(*it);
 	}
 	return true;
 }
 
+bool LoadTagsRunnable::run(int bookId, TagList &tags) {
+	((DBIntValue&)*myLoadBookTags->parameter("@book_id").value()) = bookId;
+
+	tags.clear();
+
+	shared_ptr<DBDataReader> reader = myLoadBookTags->executeReader();
+	if (reader.isNull()) {
+		return false;
+	}
+
+	while (reader->next()) {
+		shared_ptr<Tag> tag = getTag(reader->intValue(0));
+		if (!tag.isNull()) {
+			tags.push_back(tag);
+		}
+	}
+
+	return true;
+}

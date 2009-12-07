@@ -24,22 +24,19 @@
 
 #include <ZLOptionEntry.h>
 
-#include "../collection/BookCollection.h"
 #include "../formats/FormatPlugin.h"
 
-#include "../database/booksdb/DBAuthor.h"
-
 class ZLOptionsDialog;
+class ZLDialogContent;
 class AuthorDisplayNameEntry;
 class SeriesTitleEntry;
-class BookNumberEntry;
+class BookIndexEntry;
 class BookTagEntry;
-
 
 class BookInfoDialog {
 
 public:
-	BookInfoDialog(const BookCollection &collection, shared_ptr<DBBook> book);
+	BookInfoDialog(shared_ptr<Book> book);
 
 	ZLOptionsDialog &dialog();
 
@@ -49,16 +46,14 @@ private:
 
 private:
 	shared_ptr<ZLOptionsDialog> myDialog;
-	const BookCollection &myCollection;
-	shared_ptr<DBBook> myBook;
+	shared_ptr<Book> myBook;
 	shared_ptr<FormatInfoPage> myFormatInfoPage;
 
 	ZLComboOptionEntry *myEncodingSetEntry;
 	ZLComboOptionEntry *myEncodingEntry;
 	ZLComboOptionEntry *myLanguageEntry;
 	SeriesTitleEntry *mySeriesTitleEntry;
-	BookNumberEntry *myBookNumberEntry;
-
+	BookIndexEntry *myBookIndexEntry;
 
 	ZLDialogContent *myTagsTab;
 	std::vector<BookTagEntry *> myTagEntries;
@@ -66,15 +61,13 @@ private:
 
 	std::vector<std::string> myNewTags;
 
-
 	ZLDialogContent *myAuthorsTab;
 	std::vector<AuthorDisplayNameEntry *> myAuthorEntries;
 	bool myAuthorsDone;
 
-
 friend class AuthorDisplayNameEntry;
 friend class SeriesTitleEntry;
-friend class BookNumberEntry;
+friend class BookIndexEntry;
 friend class BookTitleEntry;
 friend class BookEncodingEntry;
 friend class BookLanguageEntry;

@@ -246,32 +246,6 @@ const std::string BooksDBQuery::LOAD_AUTHORS = \
 	"WHERE ba.book_id = @book_id " \
 	"ORDER BY author_index; ";
 
-const std::string BooksDBQuery::LOAD_TAGS = \
-	"SELECT " \
-	"	t.tag_id AS tag_id, " \
-	"	t.name AS name " \
-	"FROM BookTag AS bt " \
-	"	INNER JOIN Tags AS t ON t.tag_id = bt.tag_id " \
-	"WHERE bt.book_id = @book_id; ";
-
-
-
-const std::string BooksDBQuery::ADD_BOOKTAG = "INSERT INTO BookTag (book_id, tag_id) VALUES (@book_id, @tag_id); ";
-const std::string BooksDBQuery::DELETE_BOOKTAG = "DELETE FROM BookTag WHERE book_id = @book_id AND tag_id = @tag_id; ";
-
-const std::string BooksDBQuery::FIND_TAG_ID = \
-	"SELECT tag_id " \
-	"FROM Tags " \
-	"WHERE name = @name " \
-	"	AND coalesce(parent_id, 0) = @parent_id; ";
-
-const std::string BooksDBQuery::ADD_TAG = \
-	"INSERT INTO Tags (name, parent_id) VALUES (" \
-	"	@name, " \
-	"	nullif(@parent_id, 0)); " \
-	"SELECT last_insert_rowid() AS tag_id; ";
-
-
 const std::string BooksDBQuery::FIND_FILE_ID = \
 	"SELECT file_id FROM Files " \
 	"WHERE name = @name " \
@@ -356,14 +330,6 @@ const std::string BooksDBQuery::DELETE_FILE_ENTRIES = "DELETE FROM Files WHERE p
 
 const std::string BooksDBQuery::LOAD_FILE_ENTRY_IDS = "SELECT file_id FROM Files WHERE coalesce(parent_id, 0) = @file_id; ";
 
-const std::string BooksDBQuery::FIND_PARENT_TAG = \
-	"SELECT " \
-	"	t.tag_id AS tag_id, " \
-	"	t.name AS name " \
-	"FROM Tags AS t " \
-	"	INNER JOIN Tags AS t2 on t.tag_id = t2.parent_id " \
-	"WHERE t2.tag_id = @tag_id; ";
-
 const std::string BooksDBQuery::FIND_BOOK_ID = "SELECT book_id FROM Books WHERE file_id = @file_id; ";
 
 
@@ -378,19 +344,6 @@ const std::string BooksDBQuery::CLEAR_RECENT_BOOKS = "DELETE FROM RecentBooks; "
 const std::string BooksDBQuery::INSERT_RECENT_BOOKS = "INSERT INTO RecentBooks (book_id) VALUES (@book_id); ";
 
 const std::string BooksDBQuery::FIND_FILE_NAME = "SELECT name, parent_id FROM Files WHERE file_id = @file_id; ";
-
-const std::string BooksDBQuery::LOAD_SERIES_NAMES = \
-	"SELECT s.name " \
-	"FROM Series AS s " \
-	"	INNER JOIN BookSeries AS bs ON s.series_id = bs.series_id " \
-	"WHERE bs.book_id IN (SELECT ba.book_id FROM BookAuthor AS ba WHERE ba.author_id = @author_id); ";
-
-const std::string BooksDBQuery::LOAD_AUTHOR_NAMES = \
-	"SELECT a.name, a.sort_key " \
-	"FROM Authors AS a " \
-	"WHERE a.author_id IN (SELECT DISTINCT ba.author_id FROM BookAuthor AS ba) " \
-	"ORDER BY a.sort_key, a.name; ";
-
 
 const std::string BooksDBQuery::LOAD_BOOKS = "SELECT book_id, encoding, language, title, file_id FROM Books; ";
 

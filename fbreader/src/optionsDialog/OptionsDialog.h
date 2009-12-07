@@ -22,14 +22,13 @@
 
 #include <shared_ptr.h>
 
-class FBReader;
-
 class ZLOptionsDialog;
 class ZLDialogContent;
 class OptionsPage;
 class ScrollingOptionsPage;
 class KeyBindingsPage;
 class ConfigPage;
+class NetworkLibraryPage;
 class ZLPaintContext;
 class ProgramCollection;
 
@@ -40,14 +39,14 @@ class ZLOption;
 class OptionsDialog {
 
 public:
-	OptionsDialog(FBReader &fbreader);
+	OptionsDialog();
 	~OptionsDialog();
 
 	ZLOptionsDialog &dialog();
 
 private:
 	void createIntegrationTab(shared_ptr<ProgramCollection> collection, const ZLResourceKey &key, std::vector<std::pair<ZLResourceKey,ZLOptionEntry*> > &additionalOptions);
-	void createIndicatorTab(FBReader &fbreader);
+	void createIndicatorTab();
 	void storeTemporaryOption(ZLOption *option);
 
 private:
@@ -57,7 +56,10 @@ private:
 	shared_ptr<OptionsPage> myStylePage;
 	shared_ptr<KeyBindingsPage> myKeyBindingsPage;
 	shared_ptr<ConfigPage> myConfigPage;
+	shared_ptr<NetworkLibraryPage> myNetworkLibraryPage;
 	std::vector<shared_ptr<ZLOption> > myTemporaryOptions;
+
+friend class OptionsApplyRunnable;
 };
 
 inline ZLOptionsDialog &OptionsDialog::dialog() { return *myDialog; }

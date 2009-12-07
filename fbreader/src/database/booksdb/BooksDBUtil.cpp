@@ -17,7 +17,6 @@
  * 02110-1301, USA.
  */
 
-
 #include <ZLFile.h>
 #include <ZLDir.h>
 #include <ZLStringUtil.h>
@@ -25,42 +24,45 @@
 #include "BooksDBUtil.h"
 #include "BooksDB.h"
 
+#include "../../library/Book.h"
+#include "../../library/Tag.h"
+#include "../../library/Author.h"
 
-shared_ptr<DBBook> BooksDBUtil::getBook(const std::string &fileName, bool checkFile) {
-	const std::string physicalFileName = ZLFile(fileName).physicalFilePath();
+shared_ptr<Book> BooksDBUtil::getBook(const std::string &filePath, bool checkFile) {
+	const std::string physicalFilePath = ZLFile(filePath).physicalFilePath();
 
-	ZLFile file(physicalFileName);
+	ZLFile file(physicalFilePath);
 	if (checkFile && !file.exists()) {
 		return 0;
 	}
 
 	if (!checkFile || checkInfo(file)) {
-		shared_ptr<DBBook> book = loadFromDB(fileName);
+		shared_ptr<Book> book = loadFromDB(filePath);
 		if (!book.isNull() && isBookFull(*book)) {
 			return book;
 		}
 	} else {
-		if (physicalFileName != fileName) {
+		if (physicalFilePath != filePath) {
 			resetZipInfo(file);
 		}
 		saveInfo(file);
 	}
 
-	shared_ptr<DBBook> book = DBBook::loadFromFile(fileName);
+	shared_ptr<Book> book = Book::loadFromFile(filePath);
 	if (book.isNull()) {
 		return 0;
 	}
-	BooksDB::instance().saveBook(book);
+	BooksDB::Instance().saveBook(book);
 	return book;
 }
 
-bool BooksDBUtil::getRecentBooks(std::vector<shared_ptr<DBBook> > &books) {
+bool BooksDBUtil::getRecentBooks(BookList &books) {
 	std::vector<std::string> fileNames;
-	if (!BooksDB::instance().loadRecentBooks(fileNames)) {
+	if (!BooksDB::Instance().loadRecentBooks(fileNames)) {
 		return false;
 	}
 	for (std::vector<std::string>::const_iterator it = fileNames.begin(); it != fileNames.end(); ++it) {
-		shared_ptr<DBBook> book = getBook(*it /*, true OR false ? */); // TODO: check file ???
+		shared_ptr<Book> book = getBook(*it /*, true OR false ? */); // TODO: check file ???
 		if (!book.isNull()) {
 			books.push_back(book);
 		}
@@ -68,74 +70,65 @@ bool BooksDBUtil::getRecentBooks(std::vector<shared_ptr<DBBook> > &books) {
 	return true;
 }
 
-bool BooksDBUtil::getBooks(std::map<std::string, shared_ptr<DBBook> > &booksmap, bool checkFile) {
-	std::vector<shared_ptr<DBBook> > books;
-	if (!BooksDB::instance().loadBooks(books)) {
+bool BooksDBUtil::getBooks(std::map<std::string, shared_ptr<Book> > &booksmap, bool checkFile) {
+	BookList books;
+	if (!BooksDB::Instance().loadBooks(books)) {
 		return false;
 	}
-	for (std::vector<shared_ptr<DBBook> >::iterator it = books.begin(); it != books.end(); ++it) {
-		DBBook &book = **it;
-		const std::string &fileName = book.fileName();
-		const std::string physicalFileName = ZLFile(fileName).physicalFilePath();
-		ZLFile file(physicalFileName);
+	for (BookList::iterator it = books.begin(); it != books.end(); ++it) {
+		Book &book = **it;
+		const std::string &filePath = book.filePath();
+		const std::string physicalFilePath = ZLFile(filePath).physicalFilePath();
+		ZLFile file(physicalFilePath);
 		if (!checkFile || file.exists()) {
 			if (!checkFile || checkInfo(file)) {
 				if (isBookFull(book)) {
-					booksmap.insert(std::make_pair(fileName, *it));
+					booksmap.insert(std::make_pair(filePath, *it));
 					continue;
 				}
 			} else {
-				if (physicalFileName != fileName) {
+				if (physicalFilePath != filePath) {
 					resetZipInfo(file);
 				}
 				saveInfo(file);
 			}
-			shared_ptr<DBBook> bookptr = DBBook::loadFromFile(fileName);
+			shared_ptr<Book> bookptr = Book::loadFromFile(filePath);
 			if (!bookptr.isNull()) {
-				BooksDB::instance().saveBook(bookptr);
-				booksmap.insert(std::make_pair(fileName, bookptr));
+				BooksDB::Instance().saveBook(bookptr);
+				booksmap.insert(std::make_pair(filePath, bookptr));
 			}
 		}
 	}
 	return true;
 }
 
-bool BooksDBUtil::isBookFull(const DBBook &book) {
+bool BooksDBUtil::isBookFull(const Book &book) {
 	return
-		!book.authors().empty() &&
 		!book.title().empty() &&
 		!book.encoding().empty();
 }
 
-shared_ptr<DBBook> BooksDBUtil::loadFromDB(const std::string &fileName) {
-	if (fileName.empty()) {
+shared_ptr<Book> BooksDBUtil::loadFromDB(const std::string &filePath) {
+	if (filePath.empty()) {
 		return 0;
 	}
-	return BooksDB::instance().loadBook(fileName);
+	return BooksDB::Instance().loadBook(filePath);
 }
-
-
-void BooksDBUtil::fixFB2Encoding(const DBBook &book) {
-	static const std::string _auto = "auto";
-	// SEE: FB2Plugin.cpp:43
-	BooksDB::instance().setEncoding(book, _auto);
-}
-
 
 bool BooksDBUtil::checkInfo(const ZLFile &file) {
-	return BooksDB::instance().getFileSize(file.path()) == (int) file.size();
+	return BooksDB::Instance().getFileSize(file.path()) == (int) file.size();
 }
 
 void BooksDBUtil::saveInfo(const ZLFile &file) {
-	BooksDB::instance().setFileSize(file.path(), file.size());
+	BooksDB::Instance().setFileSize(file.path(), file.size());
 }
 
 void BooksDBUtil::listZipEntries(const ZLFile &zipFile, std::vector<std::string> &entries) {
 	entries.clear();
-	BooksDB::instance().loadFileEntries(zipFile.path(), entries);
+	BooksDB::Instance().loadFileEntries(zipFile.path(), entries);
 	if (entries.empty()) {
 		resetZipInfo(zipFile.path());
-		BooksDB::instance().loadFileEntries(zipFile.path(), entries);
+		BooksDB::Instance().loadFileEntries(zipFile.path(), entries);
 	}
 }
 
@@ -144,14 +137,14 @@ void BooksDBUtil::resetZipInfo(const ZLFile &zipFile) {
 	if (!zipDir.isNull()) {
 		std::vector<std::string> entries;
 		zipDir->collectFiles(entries, false);
-		BooksDB::instance().saveFileEntries(zipFile.path(), entries);
+		BooksDB::Instance().saveFileEntries(zipFile.path(), entries);
 	}
 }
 
-bool BooksDBUtil::canRemoveFile(const std::string &fileName) {
-	ZLFile bookFile(fileName);
+bool BooksDBUtil::canRemoveFile(const std::string &filePath) {
+	ZLFile bookFile(filePath);
 	std::string physicalPath = bookFile.physicalFilePath();
-	if (fileName != physicalPath) {
+	if (filePath != physicalPath) {
 		ZLFile zipFile(physicalPath);
 		shared_ptr<ZLDir> zipDir = zipFile.directory();
 		if (zipDir.isNull()) {
@@ -162,10 +155,31 @@ bool BooksDBUtil::canRemoveFile(const std::string &fileName) {
 		if (entries.size() != 1) {
 			return false;
 		}
-		if (zipDir->itemPath(entries[0]) != fileName) {
+		if (zipDir->itemPath(entries[0]) != filePath) {
 			return false;
 		}
 	}
 	return ZLFile(physicalPath).canRemove();
 }
 
+void BooksDBUtil::addTag(shared_ptr<Book> book, shared_ptr<Tag> tag) {
+	if (book->addTag(tag)) {
+		BooksDB::Instance().saveTags(book);
+	}
+}
+
+void BooksDBUtil::renameTag(shared_ptr<Book> book, shared_ptr<Tag> from, shared_ptr<Tag> to, bool includeSubTags) {
+	if (book->renameTag(from, to, includeSubTags)) {
+		BooksDB::Instance().saveTags(book);
+	}
+}
+
+void BooksDBUtil::cloneTag(shared_ptr<Book> book, shared_ptr<Tag> from, shared_ptr<Tag> to, bool includeSubTags) {
+	if (book->cloneTag(from, to, includeSubTags)) {
+		BooksDB::Instance().saveTags(book);
+	}
+}
+
+void BooksDBUtil::removeAllTags(shared_ptr<Book> book) {
+	book->removeAllTags();
+}

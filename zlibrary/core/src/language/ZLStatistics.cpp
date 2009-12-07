@@ -19,7 +19,6 @@
 
 #include <algorithm>
 #include <map>
-#include <iostream>
 
 #include "ZLCharSequence.h"
 #include "ZLStatistics.h"

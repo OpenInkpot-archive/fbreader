@@ -81,7 +81,7 @@ inline void SQLiteConnection::removeStatement(sqlite3_stmt *statement) {
 inline void SQLiteConnection::dumpError() const {
 	if (myDatabase != 0) {
 		const std::string msg = sqlite3_errmsg(myDatabase); // TODO: error & message handling
-		const unsigned code = sqlite3_errcode(myDatabase); // TODO: error & message handling
+		const int code = sqlite3_errcode(myDatabase); // TODO: error & message handling
 		std::cerr << "SQLITE IMPLEMENTATION ERROR: (" << code << ") " << msg << std::endl;
 	}
 }

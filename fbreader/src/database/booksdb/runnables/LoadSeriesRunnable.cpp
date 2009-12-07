@@ -17,10 +17,8 @@
  * 02110-1301, USA.
  */
 
-
 #include "../DBRunnables.h"
 #include "../../sqldb/implsqlite/SQLiteFactory.h"
-
 
 LoadSeriesRunnable::LoadSeriesRunnable(DBConnection &connection) {
 	myLoadSeries      = SQLiteFactory::createCommand(BooksDBQuery::LOAD_SERIES, connection, "@book_id", DBValue::DBINT);
@@ -28,7 +26,7 @@ LoadSeriesRunnable::LoadSeriesRunnable(DBConnection &connection) {
 
 bool LoadSeriesRunnable::run() {
 	mySeriesName = "";
-	myNumberInSeries = 0;
+	myIndexInSeries = 0;
 
 	((DBIntValue &) *myLoadSeries->parameter("@book_id").value()) = myBookId;
 	shared_ptr<DBDataReader> reader = myLoadSeries->executeReader();
@@ -48,11 +46,22 @@ bool LoadSeriesRunnable::run() {
 	}
 	mySeriesName = reader->textValue(0);
 	if (numType == DBValue::DBINT) {
-		myNumberInSeries = reader->intValue(1);
+		myIndexInSeries = reader->intValue(1);
 	} else {
-		myNumberInSeries = 0;
+		myIndexInSeries = 0;
 	}
 	reader->close();
 	return true;
 }
 
+void LoadSeriesRunnable::setBookId(int bookId) {
+	myBookId = bookId;
+}
+
+const std::string &LoadSeriesRunnable::seriesName() const {
+	return mySeriesName;
+}
+
+int LoadSeriesRunnable::indexInSeries() const {
+	return myIndexInSeries;
+}

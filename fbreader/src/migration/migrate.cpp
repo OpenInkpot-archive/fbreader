@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-#include "../options/FBOptions.h"
+#include "../options/FBCategoryKey.h"
 
 #include "Migration.h"
 #include "migrate.h"

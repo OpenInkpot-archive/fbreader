@@ -17,10 +17,9 @@
  * 02110-1301, USA.
  */
 
-
 #include "../DBRunnables.h"
+#include "../../../library/Author.h"
 #include "../../sqldb/implsqlite/SQLiteFactory.h"
-
 
 LoadRecentBooksRunnable::LoadRecentBooksRunnable(DBConnection &connection) {
 	myLoadRecentBooks = SQLiteFactory::createCommand(BooksDBQuery::LOAD_RECENT_BOOKS, connection);
@@ -46,3 +45,7 @@ bool LoadRecentBooksRunnable::run() {
 	return res;
 }
 
+void LoadRecentBooksRunnable::collectFileIds(std::vector<int> &fileIds) {
+	myFileIds.swap(fileIds);
+	myFileIds.clear();
+}

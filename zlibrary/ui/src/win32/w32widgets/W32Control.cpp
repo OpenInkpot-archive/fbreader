@@ -405,7 +405,7 @@ static std::string getTextFromBuffer(const ZLUnicodeUtil::Ucs2String &buffer) {
 
 const std::string W32LineEditor::VALUE_EDITED_EVENT = "LineEditor: value edited";
 
-W32LineEditor::W32LineEditor(const std::string &text) : W32AbstractEditor(ES_AUTOHSCROLL), myBlocked(true) {
+W32LineEditor::W32LineEditor(const std::string &text, bool passwordMode) : W32AbstractEditor(passwordMode ? (ES_AUTOHSCROLL | ES_PASSWORD) : ES_AUTOHSCROLL), myBlocked(true) {
 	::createNTWCHARString(myBuffer, text);
 }
 

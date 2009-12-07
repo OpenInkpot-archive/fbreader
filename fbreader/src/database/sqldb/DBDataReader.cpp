@@ -17,13 +17,10 @@
  * 02110-1301, USA.
  */
 
-
 #include "DBDataReader.h"
-
 
 DBDataReader::DBDataReader() {
 }
 
 DBDataReader::~DBDataReader() {
 }
-

@@ -22,9 +22,10 @@
 #include <ZLOptions.h>
 
 #include "PdbPlugin.h"
-#include "../../options/FBOptions.h"
+#include "../../options/FBCategoryKey.h"
 
 #include "../../database/booksdb/BooksDBUtil.h"
+#include "../../database/booksdb/BooksDB.h"
 
 PdbPlugin::~PdbPlugin() {
 }
@@ -42,7 +43,7 @@ std::string PdbPlugin::fileType(const ZLFile &file) {
 	bool upToDate = BooksDBUtil::checkInfo(baseFile);
 
 	//ZLStringOption palmTypeOption(FBCategoryKey::BOOKS, file.path(), "PalmType", "");
-	std::string palmType = BooksDB::instance().getPalmType(fileName);
+	std::string palmType = BooksDB::Instance().getPalmType(fileName);
 	if ((palmType.length() != 8) || !upToDate) {
 		shared_ptr<ZLInputStream> stream = file.inputStream();
 		if (stream.isNull() || !stream->open()) {
@@ -57,7 +58,7 @@ std::string PdbPlugin::fileType(const ZLFile &file) {
 			BooksDBUtil::saveInfo(baseFile);
 		}
 		//palmTypeOption.setValue(palmType);
-		BooksDB::instance().setPalmType(fileName, palmType);
+		BooksDB::Instance().setPalmType(fileName, palmType);
 	}
 	return palmType;
 }

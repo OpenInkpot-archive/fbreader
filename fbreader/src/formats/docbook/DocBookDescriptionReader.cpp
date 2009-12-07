@@ -22,7 +22,9 @@
 
 #include "DocBookDescriptionReader.h"
 
-DocBookDescriptionReader::DocBookDescriptionReader(DBBook &book) : myBook(book) {
+#include "../../library/Book.h"
+
+DocBookDescriptionReader::DocBookDescriptionReader(Book &book) : myBook(book) {
 	myReadTitle = false;
 	myReadAuthor = false;
 	for (int i = 0; i < 3; ++i) {
@@ -101,7 +103,7 @@ void DocBookDescriptionReader::endElementHandler(int tag) {
 					fullName += ' ';
 				}
 				fullName += myAuthorNames[2];
-				shared_ptr<DBAuthor> author = DBAuthor::create(fullName, myAuthorNames[2]);
+				shared_ptr<Author> author = Author::create(fullName, myAuthorNames[2]);
 				if (!author.isNull()) {
 					myBook.authors().add( author );
 				}
@@ -125,10 +127,10 @@ void DocBookDescriptionReader::endElementHandler(int tag) {
 	}
 }
 
-bool DocBookDescriptionReader::readDescription(shared_ptr<ZLInputStream> stream) {
+bool DocBookDescriptionReader::readMetaInfo(shared_ptr<ZLInputStream> stream) {
 	bool code = readDocument(stream);
 	if (myBook.authors().empty()) {
-		myBook.authors().push_back( new DBAuthor() );
+		myBook.authors().push_back( new Author() );
 	}
 	return code;
 }

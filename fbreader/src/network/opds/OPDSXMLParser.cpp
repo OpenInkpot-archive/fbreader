@@ -17,6 +17,8 @@
  * 02110-1301, USA.
  */
 
+#include <cstdlib>
+
 #include <ZLStringUtil.h>
 
 #include "OPDSXMLParser.h"
@@ -35,6 +37,8 @@ static const std::string TAG_CATEGORY = "category";
 static const std::string TAG_LINK = "link";
 static const std::string TAG_PUBLISHED = "published";
 static const std::string TAG_SUMMARY = "summary";
+static const std::string TAG_CONTENT = "content";
+static const std::string TAG_SUBTITLE = "subtitle";
 static const std::string TAG_TITLE = "title";
 static const std::string TAG_UPDATED = "updated";
 
@@ -42,6 +46,9 @@ static const std::string DC_TAG_LANGUAGE = "language";
 static const std::string DC_TAG_ISSUED = "issued";
 static const std::string DC_TAG_PUBLISHER = "publisher";
 
+static const std::string OPENSEARCH_TAG_TOTALRESULTS = "totalResults";
+static const std::string OPENSEARCH_TAG_ITEMSPERPAGE = "itemsPerPage";
+static const std::string OPENSEARCH_TAG_STARTINDEX = "startIndex";
 
 
 
@@ -54,21 +61,30 @@ bool OPDSXMLParser::processNamespaces() const {
 }
 
 void OPDSXMLParser::namespaceListChangedHandler() {
+	static const unsigned int DC_BIT = 0x01;
+	static const unsigned int ATOM_BIT = 0x02;
+	static const unsigned int OPENSEARCH_BIT = 0x04;
+	static const unsigned int BITS = DC_BIT | ATOM_BIT | OPENSEARCH_BIT;
 	myDCPrefix.erase();
 	myAtomPrefix.erase();
 	const std::map<std::string,std::string> &nsMap = namespaces();
-	int prefixes = 0;
-	for (std::map<std::string,std::string>::const_iterator it = nsMap.begin(); it != nsMap.end() && prefixes != 0x03; ++it) {
+	unsigned int prefixes = 0;
+	for (std::map<std::string,std::string>::const_iterator it = nsMap.begin(); it != nsMap.end() && prefixes != BITS; ++it) {
 		if (ZLStringUtil::stringStartsWith(it->second, XMLNamespace::DublinCoreTermsPrefix)) {
 			if (!it->first.empty()) {
 				myDCPrefix = it->first + ':';
 			}
-			prefixes |= 0x01;
+			prefixes |= DC_BIT;
 		} else if (it->second == XMLNamespace::Atom) {
 			if (!it->first.empty()) {
 				myAtomPrefix = it->first + ':';
 			}
-			prefixes |= 0x02;
+			prefixes |= ATOM_BIT;
+		} else if (ZLStringUtil::stringStartsWith(it->second, XMLNamespace::OpenSearchPrefix)) {
+			if (!it->first.empty()) {
+				myOpenSearchPrefix = it->first + ':';
+			}
+			prefixes |= OPENSEARCH_BIT;
 		}
 	}
 }
@@ -81,6 +97,11 @@ bool OPDSXMLParser::checkAtomTag(const std::string &tag, const std::string &patt
 bool OPDSXMLParser::checkDCTag(const std::string &tag, const std::string &pattern) const {
 	return checkNSTag(tag, myDCPrefix, pattern);
 }
+
+bool OPDSXMLParser::checkOpenSearchTag(const std::string &tag, const std::string &pattern) const {
+	return checkNSTag(tag, myOpenSearchPrefix, pattern);
+}
+
 
 bool OPDSXMLParser::checkNSTag(const std::string &tag, const std::string &nsprefix, const std::string &pattern) {
 	if (nsprefix.empty()) {
@@ -151,14 +172,14 @@ void OPDSXMLParser::processState(const std::string &tag, bool closed) {
 				myUpdated = new ATOMUpdated();
 				myUpdated->readAttributes(myAttributes);
 			} else if (checkAtomTag(tag, TAG_ENTRY)) {
-				myFeedReader->processFeedMetadata(myFeed);
-				//myFeed = 0; // TODO: check, that this can be done; that after this moment there will be no calls to myFeed
 				myEntry = new OPDSEntry();
 				myEntry->readAttributes(myAttributes);
+				mySummaryTagFound = false;
 			} 
 		} else {
 			if (checkAtomTag(tag, TAG_FEED)) {
-				//myReady = true;
+				myFeedReader->processFeedMetadata(myFeed);
+				myFeed.reset();
 				myFeedReader->processFeedEnd();
 			} 
 		}
@@ -183,6 +204,10 @@ void OPDSXMLParser::processState(const std::string &tag, bool closed) {
 			} else if (checkAtomTag(tag, TAG_SUMMARY)) {
 				//mySummary = new ATOMSummary(); // TODO: implement ATOMTextConstruct & ATOMSummary
 				//mySummary->readAttributes(myAttributes);
+			} else if (checkAtomTag(tag, TAG_CONTENT)) {
+				// ???
+			} else if (checkAtomTag(tag, TAG_SUBTITLE)) {
+				// ???
 			} else if (checkAtomTag(tag, TAG_TITLE)) {
 				//myTitle = new ATOMTitle(); // TODO: implement ATOMTextConstruct & ATOMTitle
 				//myTitle->readAttributes(myAttributes);
@@ -196,48 +221,57 @@ void OPDSXMLParser::processState(const std::string &tag, bool closed) {
 			} 
 		} else {
 			if (checkAtomTag(tag, TAG_ENTRY)) {
-				//myFeed->entries().push_back(myEntry);
 				myFeedReader->processFeedEntry(myEntry);
-				myEntry = 0;
+				myEntry.reset();
 			} 
 		}
 		break;
 	case F_ID: 
 		if (closed && checkAtomTag(tag, TAG_ID)) {
-			// FIXME: uri can be lost: buffer will be empty, if there are extention tags inside the <id> tag
+			// FIXME: uri can be lost: buffer will be truncated, if there are extention tags inside the <id> tag
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
 			myId->setUri(myBuffer);
-			myFeed->setId(myId);
-			myId = 0;
+			if (!myFeed.isNull()) {
+				myFeed->setId(myId);
+			}
+			myId.reset();
 		} 
 		break;
 	case F_LINK: 
 		if (closed && checkAtomTag(tag, TAG_LINK)) {
-			myFeed->links().push_back(myLink);
-			myLink = 0;
+			if (!myFeed.isNull()) {
+				myFeed->links().push_back(myLink);
+			}
+			myLink.reset();
 		} 
 		break;
 	case F_CATEGORY: 
 		if (closed && checkAtomTag(tag, TAG_CATEGORY)) {
-			myFeed->categories().push_back(myCategory);
-			myCategory = 0;
+			if (!myFeed.isNull()) {
+				myFeed->categories().push_back(myCategory);
+			}
+			myCategory.reset();
 		} 
 		break;
 	case F_TITLE: 
 		if (closed && checkAtomTag(tag, TAG_TITLE)) {
-			// FIXME: title can be lost: buffer will be empty, if there are extention tags inside the <title> tag
+			// FIXME: title can be lost: buffer will be truncated, if there are extention tags inside the <title> tag
 			// TODO: implement ATOMTextConstruct & ATOMTitle
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
-			myFeed->setTitle(myBuffer);
+			if (!myFeed.isNull()) {
+				myFeed->setTitle(myBuffer);
+			}
 		} 
 		break;
 	case F_UPDATED: 
 		if (closed && checkAtomTag(tag, TAG_UPDATED)) {
-			// FIXME: uri can be lost: buffer will be empty, if there are extention tags inside the <id> tag
+			// FIXME: uri can be lost: buffer will be truncated, if there are extention tags inside the <id> tag
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
 			ATOMDateConstruct::parse(myBuffer, *myUpdated);
-			myFeed->setUpdated(myUpdated);
-			myUpdated = 0;
+			if (!myFeed.isNull()) {
+				myFeed->setUpdated(myUpdated);
+			}
+			myUpdated.reset();
 		} 
 		break;
 	case F_AUTHOR: 
@@ -251,8 +285,10 @@ void OPDSXMLParser::processState(const std::string &tag, bool closed) {
 			} 
 		} else {
 			if (checkAtomTag(tag, TAG_AUTHOR)) {
-				myFeed->authors().push_back(myAuthor);
-				myAuthor = 0;
+				if (!myFeed.isNull()) {
+					myFeed->authors().push_back(myAuthor);
+				}
+				myAuthor.reset();
 			} 
 		}
 		break;
@@ -289,51 +325,70 @@ void OPDSXMLParser::processState(const std::string &tag, bool closed) {
 		} else {
 			if (checkAtomTag(tag, TAG_AUTHOR)) {
 				myEntry->authors().push_back(myAuthor);
-				myAuthor = 0;
+				myAuthor.reset();
 			} 
 		}
 		break;
 	case FE_ID: 
 		if (closed && checkAtomTag(tag, TAG_ID)) {
-			// FIXME: uri can be lost: buffer will be empty, if there are extention tags inside the <id> tag
+			// FIXME: uri can be lost: buffer will be truncated, if there are extention tags inside the <id> tag
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
 			myId->setUri(myBuffer);
 			myEntry->setId(myId);
-			myId = 0;
+			myId.reset();
 		}
 		break;
 	case FE_CATEGORY: 
 		if (closed && checkAtomTag(tag, TAG_CATEGORY)) {
 			myEntry->categories().push_back(myCategory);
-			myCategory = 0;
+			myCategory.reset();
 		}
 		break;
 	case FE_LINK: 
 		if (closed && checkAtomTag(tag, TAG_LINK)) {
 			myEntry->links().push_back(myLink);
-			myLink = 0;
+			myLink.reset();
 		}
 		break;
 	case FE_PUBLISHED: 
 		if (closed && checkAtomTag(tag, TAG_PUBLISHED)) {
-			// FIXME: uri can be lost: buffer will be empty, if there are extention tags inside the <id> tag
+			// FIXME: uri can be lost: buffer will be truncated, if there are extention tags inside the <id> tag
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
 			ATOMDateConstruct::parse(myBuffer, *myPublished);
 			myEntry->setPublished(myPublished);
-			myPublished = 0;
+			myPublished.reset();
 		}
 		break;
 	case FE_SUMMARY: 
 		if (closed && checkAtomTag(tag, TAG_SUMMARY)) {
-			// FIXME: summary can be lost: buffer will be empty, if there are extention tags inside the <summary> tag
+			// FIXME: summary can be lost: buffer will be truncated, if there are extention tags inside the <summary> tag
 			// TODO: implement ATOMTextConstruct & ATOMSummary
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
 			myEntry->setSummary(myBuffer);
+			mySummaryTagFound = true;
+		}
+		break;
+	case FE_CONTENT: 
+		if (closed && checkAtomTag(tag, TAG_CONTENT)) {
+			// TODO: check this accurately
+			if (!mySummaryTagFound) {
+				ZLStringUtil::stripWhiteSpaces(myBuffer);
+				myEntry->setSummary(myBuffer);
+			}
+		}
+		break;
+	case FE_SUBTITLE: 
+		if (closed && checkAtomTag(tag, TAG_SUBTITLE)) {
+			// TODO: check this accurately
+			if (!mySummaryTagFound) {
+				ZLStringUtil::stripWhiteSpaces(myBuffer);
+				myEntry->setSummary(myBuffer);
+			}
 		}
 		break;
 	case FE_TITLE: 
 		if (closed && checkAtomTag(tag, TAG_TITLE)) {
-			// FIXME: title can be lost: buffer will be empty, if there are extention tags inside the <title> tag
+			// FIXME: title can be lost: buffer will be truncated, if there are extention tags inside the <title> tag
 			// TODO: implement ATOMTextConstruct & ATOMTitle
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
 			myEntry->setTitle(myBuffer);
@@ -341,23 +396,23 @@ void OPDSXMLParser::processState(const std::string &tag, bool closed) {
 		break;
 	case FE_UPDATED: 
 		if (closed && checkAtomTag(tag, TAG_UPDATED)) {
-			// FIXME: uri can be lost: buffer will be empty, if there are extention tags inside the <id> tag
+			// FIXME: uri can be lost: buffer will be truncated, if there are extention tags inside the <id> tag
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
 			ATOMDateConstruct::parse(myBuffer, *myUpdated);
 			myEntry->setUpdated(myUpdated);
-			myUpdated = 0;
+			myUpdated.reset();
 		}
 		break;
 	case FE_DC_LANGUAGE: 
 		if (closed && checkDCTag(tag, DC_TAG_LANGUAGE)) {
-			// FIXME: language can be lost: buffer will be empty, if there are extention tags inside the <dc:language> tag
+			// FIXME: language can be lost: buffer will be truncated, if there are extention tags inside the <dc:language> tag
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
 			myEntry->setDCLanguage(myBuffer);
 		}
 		break;
 	case FE_DC_ISSUED: 
 		if (closed && checkDCTag(tag, DC_TAG_ISSUED)) {
-			// FIXME: issued can be lost: buffer will be empty, if there are extention tags inside the <dc:issued> tag
+			// FIXME: issued can be lost: buffer will be truncated, if there are extention tags inside the <dc:issued> tag
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
 			DCDate *issued = new DCDate();
 			ATOMDateConstruct::parse(myBuffer, *issued);
@@ -366,21 +421,36 @@ void OPDSXMLParser::processState(const std::string &tag, bool closed) {
 		break;
 	case FE_DC_PUBLISHER:
 		if (closed && checkDCTag(tag, DC_TAG_PUBLISHER)) {
-			// FIXME: publisher can be lost: buffer will be empty, if there are extention tags inside the <dc:publisher> tag
+			// FIXME: publisher can be lost: buffer will be truncated, if there are extention tags inside the <dc:publisher> tag
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
 			myEntry->setDCPublisher(myBuffer);
 		}
 		break;
-	case FEED_CONTENT:
-		if (!closed) {
-			if (checkAtomTag(tag, TAG_ENTRY)) {
-				myEntry = new OPDSEntry();
-				myEntry->readAttributes(myAttributes);
-			} 
-		} else {
-			if (checkAtomTag(tag, TAG_FEED)) {
-				myFeedReader->processFeedEnd();
-			} 
+	case OPENSEARCH_TOTALRESULTS:
+		if (closed && checkOpenSearchTag(tag, OPENSEARCH_TAG_TOTALRESULTS)) {
+			ZLStringUtil::stripWhiteSpaces(myBuffer);
+			int number = atoi(myBuffer.c_str());
+			if (!myFeed.isNull()) {
+				myFeed->setOpensearchTotalResults(number);
+			}
+		}
+		break;
+	case OPENSEARCH_ITEMSPERPAGE:
+		if (closed && checkOpenSearchTag(tag, OPENSEARCH_TAG_ITEMSPERPAGE)) {
+			ZLStringUtil::stripWhiteSpaces(myBuffer);
+			int number = atoi(myBuffer.c_str());
+			if (!myFeed.isNull()) {
+				myFeed->setOpensearchItemsPerPage(number);
+			}
+		}
+		break;
+	case OPENSEARCH_STARTINDEX:
+		if (closed && checkOpenSearchTag(tag, OPENSEARCH_TAG_STARTINDEX)) {
+			ZLStringUtil::stripWhiteSpaces(myBuffer);
+			int number = atoi(myBuffer.c_str());
+			if (!myFeed.isNull()) {
+				myFeed->setOpensearchStartIndex(number);
+			}
 		}
 		break;
 	}
@@ -410,6 +480,12 @@ OPDSXMLParser::State OPDSXMLParser::getNextState(const std::string &tag, bool cl
 				return F_UPDATED;
 			} else if (checkAtomTag(tag, TAG_ENTRY)) {
 				return F_ENTRY;
+			} else if (checkOpenSearchTag(tag, OPENSEARCH_TAG_TOTALRESULTS)) {
+				return OPENSEARCH_TOTALRESULTS;
+			} else if (checkOpenSearchTag(tag, OPENSEARCH_TAG_ITEMSPERPAGE)) {
+				return OPENSEARCH_ITEMSPERPAGE;
+			} else if (checkOpenSearchTag(tag, OPENSEARCH_TAG_STARTINDEX)) {
+				return OPENSEARCH_STARTINDEX;
 			} 
 		} else {
 			if (checkAtomTag(tag, TAG_FEED)) {
@@ -431,6 +507,10 @@ OPDSXMLParser::State OPDSXMLParser::getNextState(const std::string &tag, bool cl
 				return FE_PUBLISHED;
 			} else if (checkAtomTag(tag, TAG_SUMMARY)) {
 				return FE_SUMMARY;
+			} else if (checkAtomTag(tag, TAG_CONTENT)) {
+				return FE_CONTENT;
+			} else if (checkAtomTag(tag, TAG_SUBTITLE)) {
+				return FE_SUBTITLE;
 			} else if (checkAtomTag(tag, TAG_TITLE)) {
 				return FE_TITLE;
 			} else if (checkAtomTag(tag, TAG_UPDATED)) {
@@ -444,7 +524,7 @@ OPDSXMLParser::State OPDSXMLParser::getNextState(const std::string &tag, bool cl
 			}
 		} else {
 			if (checkAtomTag(tag, TAG_ENTRY)) {
-				return FEED_CONTENT;
+				return FEED;
 			} 
 		}
 		break;
@@ -543,6 +623,16 @@ OPDSXMLParser::State OPDSXMLParser::getNextState(const std::string &tag, bool cl
 			return F_ENTRY;
 		}
 		break;
+	case FE_CONTENT: 
+		if (closed && checkAtomTag(tag, TAG_CONTENT)) {
+			return F_ENTRY;
+		}
+		break;
+	case FE_SUBTITLE: 
+		if (closed && checkAtomTag(tag, TAG_SUBTITLE)) {
+			return F_ENTRY;
+		}
+		break;
 	case FE_TITLE: 
 		if (closed && checkAtomTag(tag, TAG_TITLE)) {
 			return F_ENTRY;
@@ -583,15 +673,19 @@ OPDSXMLParser::State OPDSXMLParser::getNextState(const std::string &tag, bool cl
 			return FE_AUTHOR;
 		}
 		break;
-	case FEED_CONTENT:
-		if (!closed) {
-			if (checkAtomTag(tag, TAG_ENTRY)) {
-				return F_ENTRY;
-			} 
-		} else {
-			if (checkAtomTag(tag, TAG_FEED)) {
-				return START;
-			} 
+	case OPENSEARCH_TOTALRESULTS:
+		if (closed && checkOpenSearchTag(tag, OPENSEARCH_TAG_TOTALRESULTS)) {
+			return FEED;
+		}
+		break;
+	case OPENSEARCH_ITEMSPERPAGE:
+		if (closed && checkOpenSearchTag(tag, OPENSEARCH_TAG_ITEMSPERPAGE)) {
+			return FEED;
+		}
+		break;
+	case OPENSEARCH_STARTINDEX:
+		if (closed && checkOpenSearchTag(tag, OPENSEARCH_TAG_STARTINDEX)) {
+			return FEED;
 		}
 		break;
 	}

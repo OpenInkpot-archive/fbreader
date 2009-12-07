@@ -19,7 +19,6 @@
 
 #include <ZLFile.h>
 #include <ZLResource.h>
-#include <iostream>
 
 #include "PalmDocLikeStream.h"
 
@@ -38,7 +37,7 @@ bool PalmDocLikeStream::open() {
 		return false;
 	}
 	
-	if(!processZeroRecord()) {
+	if (!processZeroRecord()) {
 		return false;
 	}
 
@@ -48,19 +47,17 @@ bool PalmDocLikeStream::open() {
 }
 
 bool PalmDocLikeStream::fillBuffer() {
-    while (myBufferOffset == myBufferLength) {
-        if (myRecordIndex + 1 > myMaxRecordIndex) {
-            return false;
-        }
-        ++myRecordIndex;
-		//std::cerr << "PalmDocLikeStream process record[" << myRecordIndex << "]\n";
-        if (!processRecord()) {
+	while (myBufferOffset == myBufferLength) {
+		if (myRecordIndex + 1 > myMaxRecordIndex) {
 			return false;
-		}  
-		//std::cerr << "PalmDocLikeStream processed record[" << myRecordIndex << "]\n";
-    }
-    //myBufferOffset = 0;
-    return true;
+		}
+		++myRecordIndex;
+		if (!processRecord()) {
+			return false;
+		} 
+	}
+	//myBufferOffset = 0;
+	return true;
 }
 
 const std::string &PalmDocLikeStream::error() const {
@@ -79,4 +76,3 @@ const std::string &PalmDocLikeStream::error() const {
 			return resource["encryptedFile"].value();
 	}
 }
-

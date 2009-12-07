@@ -21,7 +21,9 @@
 
 #include "HtmlMetainfoReader.h"
 
-HtmlMetainfoReader::HtmlMetainfoReader(DBBook &book, ReadType readType) : 
+#include "../../library/Book.h"
+
+HtmlMetainfoReader::HtmlMetainfoReader(Book &book, ReadType readType) : 
 	HtmlReader(book.encoding()), myBook(book), myReadType(readType) {
 }
 
@@ -31,8 +33,7 @@ bool HtmlMetainfoReader::tagHandler(const HtmlReader::HtmlTag &tag) {
 	} else if (((myReadType & TAGS) == TAGS) && (tag.Name == "DC:SUBJECT")) {
 		myReadTags = tag.Start;
 		if (!tag.Start && !myBuffer.empty()) {
-			//myBook.addTag(myBuffer);
-			myBook.addTag(  DBTag::getSubTag(myBuffer)  );
+			myBook.addTag(myBuffer);
 			myBuffer.erase();
 		}
 	} else if (((myReadType & TITLE) == TITLE) && (tag.Name == "DC:TITLE")) {
@@ -59,10 +60,7 @@ bool HtmlMetainfoReader::tagHandler(const HtmlReader::HtmlTag &tag) {
 		} else {
 			myReadAuthor = false;
 			if (!myBuffer.empty()) {
-				shared_ptr<DBAuthor> author = DBAuthor::create(myBuffer);
-				if (!author.isNull()) {
-					myBook.authors().push_back( author );
-				}
+				myBook.addAuthor(myBuffer);
 			}
 			myBuffer.erase();
 		}
@@ -77,9 +75,6 @@ void HtmlMetainfoReader::startDocumentHandler() {
 }
 
 void HtmlMetainfoReader::endDocumentHandler() {
-	if (myBook.authors().empty()) {
-		myBook.authors().push_back( new DBAuthor() );
-	}	
 }
 
 bool HtmlMetainfoReader::characterDataHandler(const char *text, size_t len, bool convert) {

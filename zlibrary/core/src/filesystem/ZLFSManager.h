@@ -35,7 +35,7 @@ class ZLFSManager {
 
 public:
 	static void deleteInstance();
-	static ZLFSManager &instance();
+	static ZLFSManager &Instance();
 
 protected:
 	static ZLFSManager *ourInstance;
@@ -72,7 +72,7 @@ friend class ZLFile;
 friend class ZLDir;
 };
 
-inline ZLFSManager &ZLFSManager::instance() { return *ourInstance; }
+inline ZLFSManager &ZLFSManager::Instance() { return *ourInstance; }
 inline ZLFSManager::ZLFSManager() {}
 inline ZLFSManager::~ZLFSManager() {}
 

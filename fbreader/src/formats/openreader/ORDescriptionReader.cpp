@@ -20,10 +20,12 @@
 #include <ZLUnicodeUtil.h>
 
 #include "ORDescriptionReader.h"
-#include "../util/EntityFilesCollector.h"
 
-ORDescriptionReader::ORDescriptionReader(DBBook &book) : myBook(book) {
-	myBook.authors().clear();
+#include "../util/EntityFilesCollector.h"
+#include "../../library/Book.h"
+
+ORDescriptionReader::ORDescriptionReader(Book &book) : myBook(book) {
+	myBook.removeAllAuthors();
 	myBook.setTitle("");
 }
 
@@ -68,26 +70,19 @@ void ORDescriptionReader::endElementHandler(const char *tag) {
 		interrupt();
 	} else {
 		if (!myCurrentAuthor.empty()) {
-			shared_ptr<DBAuthor> author = DBAuthor::create(myCurrentAuthor);
-			if (!author.isNull()) {
-				myBook.authors().push_back( author );
-			}
+			myBook.addAuthor(myCurrentAuthor);
 			myCurrentAuthor.erase();
 		}
 		myReadState = READ_NONE;
 	}
 }
 
-bool ORDescriptionReader::readDescription(const std::string &fileName) {
+bool ORDescriptionReader::readMetaInfo() {
 	myReadMetaData = false;
 	myReadState = READ_NONE;
-	bool code = readDocument(fileName);
-	if (myBook.authors().empty()) {
-		myBook.authors().push_back( new DBAuthor() );
-	}
-	return code;
+	return readDocument(myBook.filePath());
 }
 
 const std::vector<std::string> &ORDescriptionReader::externalDTDs() const {
-	return EntityFilesCollector::instance().externalDTDs("xhtml");
+	return EntityFilesCollector::Instance().externalDTDs("xhtml");
 }

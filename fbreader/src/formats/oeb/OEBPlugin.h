@@ -31,8 +31,10 @@ public:
 	~OEBPlugin();
 	bool providesMetaInfo() const;
 	bool acceptsFile(const ZLFile &file) const;
-	bool readDescription(const std::string &path, DBBook &book) const;
-	bool readModel(const DBBook &book, BookModel &model) const;
+	bool readMetaInfo(Book &book) const;
+	bool readModel(BookModel &model) const;
+	shared_ptr<ZLImage> coverImage(const Book &book) const;
+
 	const std::string &iconName() const;
 };
 

@@ -27,7 +27,7 @@
 
 //----------- Transaction subclass -----------------
 
-SQLiteDataBase::Transaction::Transaction(SQLiteDataBase &db) : myDataBase(db), mySuccess(false), myStarted(false), myDepth(-1) {
+SQLiteDataBase::Transaction::Transaction(SQLiteDataBase &db) : myDataBase(db), mySuccess(false), myStarted(false), myDepth((unsigned int)-1) {
 }
 
 SQLiteDataBase::Transaction::~Transaction() {

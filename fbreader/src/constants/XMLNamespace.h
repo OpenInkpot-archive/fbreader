@@ -34,6 +34,7 @@ public:
 	static const std::string XLink;
 	static const std::string OpenPackagingFormat;
 	static const std::string Atom;
+	static const std::string OpenSearchPrefix;
 };
 
 #endif /* __XMLNAMESPACE_H__ */

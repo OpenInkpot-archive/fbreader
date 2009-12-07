@@ -17,8 +17,6 @@
  * 02110-1301, USA.
  */
 
-
-
 #ifndef __BOOKSDB_H__
 #define __BOOKSDB_H__
 
@@ -26,10 +24,11 @@
 #include <deque>
 
 #include "../sqldb/implsqlite/SQLiteDataBase.h"
-#include "DBBook.h"
 #include "DBRunnables.h"
 
 #include "../../fbreader/ReadingState.h"
+
+class Book;
 
 class BooksDB : public SQLiteDataBase {
 
@@ -38,7 +37,7 @@ public:
 	static const std::string STATE_DATABASE_NAME;
 	static const std::string NET_DATABASE_NAME;
 
-	static BooksDB &instance();
+	static BooksDB &Instance();
 
 private:
 	static shared_ptr<BooksDB> ourInstance;
@@ -53,32 +52,29 @@ public:
 	bool isInitialized() const;
 	bool clearDatabase();
 
-	shared_ptr<DBBook> loadBook(const std::string &fileName);
-	bool saveBook(const shared_ptr<DBBook> book);
-	bool saveAuthors(const shared_ptr<DBBook> book);
-	bool saveSeries(const shared_ptr<DBBook> book);
-	bool saveTags(const shared_ptr<DBBook> book);
+	shared_ptr<Book> loadBook(const std::string &fileName);
+	bool saveBook(const shared_ptr<Book> book);
+	bool saveAuthors(const shared_ptr<Book> book);
+	bool saveSeries(const shared_ptr<Book> book);
+	bool saveTags(const shared_ptr<Book> book);
 
 	int getFileSize(const std::string fileName);
 	bool setFileSize(const std::string fileName, int size);
 
-	bool setEncoding(const DBBook &book, const std::string &encoding);
+	bool setEncoding(const Book &book, const std::string &encoding);
 
 	bool loadFileEntries(const std::string &fileName, std::vector<std::string> &entries);
 	bool saveFileEntries(const std::string &fileName, const std::vector<std::string> &entries);
 
 	bool loadRecentBooks(std::vector<std::string> &fileNames);
-	bool saveRecentBooks(const std::vector<shared_ptr<DBBook> > &books);
+	bool saveRecentBooks(const BookList &books);
 
-	bool collectSeriesNames(const DBAuthor &author, std::set<std::string> &list);
-	bool collectAuthorNames(std::vector<shared_ptr<DBAuthor> > &authors);
+	bool loadBooks(BookList &books);
 
-	bool loadBooks(std::vector<shared_ptr<DBBook> > &books);
+	bool loadBookStateStack(const Book &book, std::deque<ReadingState> &stack);
+	bool saveBookStateStack(const Book &book, const std::deque<ReadingState> &stack);
 
-	bool loadBookStateStack(const DBBook &book, std::deque<ReadingState> &stack);
-	bool saveBookStateStack(const DBBook &book, const std::deque<ReadingState> &stack);
-
-	bool removeBook(const DBBook &book);
+	bool removeBook(const Book &book);
 
 	std::string getPalmType(const std::string &fileName);
 	bool setPalmType(const std::string &fileName, const std::string &type);
@@ -86,20 +82,20 @@ public:
 	std::string getNetFile(const std::string &url);
 	bool setNetFile(const std::string &url, const std::string &fileName);
 
-	bool loadBookState(const DBBook &book, ReadingState &state);
-	bool setBookState(const DBBook &book, const ReadingState &state);
+	bool loadBookState(const Book &book, ReadingState &state);
+	bool setBookState(const Book &book, const ReadingState &state);
 
-	int loadStackPos(const DBBook &book);
-	bool setStackPos(const DBBook &book, int stackPos);
+	int loadStackPos(const Book &book);
+	bool setStackPos(const Book &book, int stackPos);
 	
-	bool insertIntoBookList(const DBBook &book);
-	bool deleteFromBookList(const DBBook &book);
-	bool checkBookList(const DBBook &book);
+	bool insertIntoBookList(const Book &book);
+	bool deleteFromBookList(const Book &book);
+	bool checkBookList(const Book &book);
 
 private:
-	shared_ptr<DBBook> loadTableBook(const std::string fileName);
-	bool loadAuthors(int bookId, std::vector<shared_ptr<DBAuthor> > &authors);
-	bool loadSeries(int bookId, std::string &seriesName, int &numberInSeries);
+	shared_ptr<Book> loadTableBook(const std::string fileName);
+	bool loadAuthors(int bookId, AuthorList &authors);
+	bool loadSeries(int bookId, std::string &seriesName, int &indexInSeries);
 
 	std::string getFileName(int fileId);
 
@@ -138,9 +134,9 @@ private:
 	shared_ptr<DBCommand> myFindFileName;
 
 	shared_ptr<DBCommand> myFindAuthorId;
-	shared_ptr<DBCommand> myLoadSeriesNames;
+	//shared_ptr<DBCommand> myLoadSeriesNames;
 
-	shared_ptr<DBCommand> myLoadAuthorNames;
+	//shared_ptr<DBCommand> myLoadAuthorNames;
 
 	shared_ptr<DBCommand> myLoadBooks;
 

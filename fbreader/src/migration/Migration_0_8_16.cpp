@@ -25,7 +25,7 @@
 #include "HtmlDCTagsReader.h"
 #include "BookInfo.h"
 
-#include "../options/FBOptions.h"
+#include "../options/FBCategoryKey.h"
 #include "../formats/oeb/OEBPlugin.h"
 #include "../formats/pdb/PdbPlugin.h"
 #include "../formats/pdb/PalmDocStream.h"
@@ -34,7 +34,7 @@ Migration_0_8_16::Migration_0_8_16() : Migration("0.8.16") {
 }
 
 void Migration_0_8_16::doMigrationInternal() {
-	PluginCollection &collection = PluginCollection::instance();
+	PluginCollection &collection = PluginCollection::Instance();
 
 	std::vector<std::string> optionGroups;
 	ZLOption::listOptionGroups(optionGroups);

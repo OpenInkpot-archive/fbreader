@@ -18,15 +18,13 @@
  */
 
 /* 
- * Information about Palm Markup Language was taken from next sources:
+ * Information about Palm Markup Language was taken from:
  * http://www.m.ereader.com/ereader/help/dropbook/pml.htm
  * http://ccit205.wikispaces.com/Palm+Markup+Language+(PML)
  */
 
-#include <stdlib.h>
-
+#include <cstdlib>
 #include <cctype>
-#include <iostream>
 
 #include <ZLFile.h>
 #include <ZLInputStream.h>

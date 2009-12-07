@@ -17,10 +17,8 @@
  * 02110-1301, USA.
  */
 
-
 #include "../DBRunnables.h"
 #include "../../sqldb/implsqlite/SQLiteFactory.h"
-
 
 LoadFileEntriesRunnable::LoadFileEntriesRunnable(DBConnection &connection) {
 	myLoadFileEntries = SQLiteFactory::createCommand(BooksDBQuery::LOAD_FILE_ENTRIES, connection, "@file_id", DBValue::DBINT);
@@ -58,3 +56,11 @@ bool LoadFileEntriesRunnable::run() {
 	return res;
 }
 
+void LoadFileEntriesRunnable::setFileName(const std::string &fileName) {
+	myFileName = fileName;
+}
+
+void LoadFileEntriesRunnable::collectEntries(std::vector<std::string> &entries) {
+	myEntries.swap(entries);
+	myEntries.clear();
+}

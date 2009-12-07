@@ -27,11 +27,13 @@
 
 #include <ZLXMLReader.h>
 
+#include "LitResGenre.h"
+
 
 class LitResGenresParser : public ZLXMLReader {
 
 public:
-	LitResGenresParser(std::map<std::string, std::string> &genres);
+	LitResGenresParser(std::map<std::string, LitResGenre> &genres);
 
 private:
 	void startElementHandler(const char *tag, const char **attributes);
@@ -41,7 +43,7 @@ private:
 	const std::string &titlePrefix();
 
 private:
-	std::map<std::string, std::string> &myGenres;
+	std::map<std::string, LitResGenre> &myGenres;
 	std::vector<std::string> myTitleStack;
 	std::string myTitlePrefix;
 	bool mySkipGenreClosing;

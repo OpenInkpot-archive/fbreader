@@ -43,9 +43,9 @@ private:
 		START, 
 		FEED, F_ENTRY, F_ID, F_LINK, F_CATEGORY, F_TITLE, F_UPDATED, F_AUTHOR,
 		FA_NAME, FA_URI, FA_EMAIL,
-		FE_AUTHOR, FE_ID, FE_CATEGORY, FE_LINK, FE_PUBLISHED, FE_SUMMARY, FE_TITLE, FE_UPDATED, FE_DC_LANGUAGE, FE_DC_ISSUED, FE_DC_PUBLISHER,
+		FE_AUTHOR, FE_ID, FE_CATEGORY, FE_LINK, FE_PUBLISHED, FE_SUMMARY, FE_CONTENT, FE_SUBTITLE, FE_TITLE, FE_UPDATED, FE_DC_LANGUAGE, FE_DC_ISSUED, FE_DC_PUBLISHER,
 		FEA_NAME, FEA_URI, FEA_EMAIL,
-		FEED_CONTENT,
+		OPENSEARCH_TOTALRESULTS, OPENSEARCH_ITEMSPERPAGE, OPENSEARCH_STARTINDEX,
 	};
 
 	void processState(const std::string &tag, bool closed);
@@ -54,6 +54,7 @@ private:
 private:
 	bool checkAtomTag(const std::string &tag, const std::string &pattern) const;
 	bool checkDCTag(const std::string &tag, const std::string &pattern) const;
+	bool checkOpenSearchTag(const std::string &tag, const std::string &pattern) const;
 
 	static bool checkNSTag(const std::string &tag, const std::string &nsprefix, const std::string &pattern);
 	
@@ -63,6 +64,7 @@ private:
 	std::string myBuffer;
 	std::string myDCPrefix;
 	std::string myAtomPrefix;
+	std::string myOpenSearchPrefix;
 
 	State myState;
 
@@ -79,6 +81,7 @@ private:
 	shared_ptr<ATOMPublished> myPublished;
 	//shared_ptr<ATOMTitle> myTitle;      // TODO: implement ATOMTextConstruct & ATOMTitle
 	//shared_ptr<ATOMSummary> mySummary;  // TODO: implement ATOMTextConstruct & ATOMSummary
+	bool mySummaryTagFound;
 };
 
 #endif /* __OPDSXMLPARSER_H__ */

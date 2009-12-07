@@ -21,10 +21,12 @@
 #include <ZLUnicodeUtil.h>
 #include <ZLStringUtil.h>
 
-#include <ZLXMLAbstractReader.h>
-#include <ZLGzipXMLReaderDecorator.h>
+#include <ZLXMLReader.h>
 
 #include "ZLNetworkXMLParserData.h"
+
+#include "ZLPlainAsynchronousInputStream.h"
+#include "ZLGzipAsynchronousInputStream.h"
 
 
 static const std::string CONTENT_ENCODING = "content-encoding:";
@@ -40,25 +42,41 @@ static size_t handleData(void *ptr, size_t size, size_t nmemb, void *data) {
 	return parserData->parseData(ptr, size, nmemb);
 }
 
-
-ZLNetworkXMLParserData::ZLNetworkXMLParserData(const std::string &url, shared_ptr<ZLXMLAbstractReader> reader) : 
+ZLNetworkXMLParserData::ZLNetworkXMLParserData(const std::string &url, shared_ptr<ZLXMLReader> reader) : 
 		ZLNetworkData(url), myReader(reader) {
+	init();
+}
+
+ZLNetworkXMLParserData::ZLNetworkXMLParserData(const std::string &url, const std::string &sslCertificate, shared_ptr<ZLXMLReader> reader) : 
+		ZLNetworkData(url, sslCertificate), myReader(reader) {
+	init();
+}
+
+void ZLNetworkXMLParserData::init() {
 	CURL *h = handle();
 	if (h != 0) {
 		curl_easy_setopt(h, CURLOPT_HEADERFUNCTION, handleHeader);
 		curl_easy_setopt(h, CURLOPT_WRITEHEADER, this);
 		curl_easy_setopt(h, CURLOPT_WRITEFUNCTION, handleData);
 		curl_easy_setopt(h, CURLOPT_WRITEDATA, this);
-		myReader->initialize();
 	}
 }
 
 ZLNetworkXMLParserData::~ZLNetworkXMLParserData() {
 	if (handle() != 0) {
-		myReader->shutdown();
+		if (!myInputStream.isNull() && myInputStream->initialized() && !myInputStream->eof()) {
+			myInputStream->setEof();
+			myReader->readDocument(myInputStream);
+		}
 	}
 }
 
+bool ZLNetworkXMLParserData::doBefore() {
+	return true;
+}
+
+void ZLNetworkXMLParserData::doAfter(bool success) {
+}
 
 size_t ZLNetworkXMLParserData::parseHeader(void *ptr, size_t size, size_t nmemb) {
 	std::string header = ZLUnicodeUtil::toLower(std::string((const char *) ptr, size * nmemb));
@@ -66,19 +84,22 @@ size_t ZLNetworkXMLParserData::parseHeader(void *ptr, size_t size, size_t nmemb)
 	if (ZLStringUtil::stringStartsWith(header, CONTENT_ENCODING)) {
 		std::string encoding = header.substr(CONTENT_ENCODING.size());
 		ZLStringUtil::stripWhiteSpaces(encoding);
-		myEncoding = encoding;
+		myHttpEncoding = encoding;
 	}
 
 	return size * nmemb;
 }
 
-
 size_t ZLNetworkXMLParserData::parseData(void *ptr, size_t size, size_t nmemb) {
-	if (myEncoding == "gzip") {
-		myReader = new ZLGzipXMLReaderDecorator(myReader);
-		myEncoding = "";
+	if (myInputStream.isNull()) {
+		if (myHttpEncoding == "gzip") {
+			myInputStream = new ZLGzipAsynchronousInputStream();
+		} else {
+			myInputStream = new ZLPlainAsynchronousInputStream();
+		}
 	}
-	if (!myReader->readFromBuffer((const char*)ptr, size * nmemb)) {
+	myInputStream->setBuffer((const char*) ptr, size * nmemb);
+	if (!myReader->readDocument(myInputStream)) {
 		return 0;
 	}
 	return size * nmemb;

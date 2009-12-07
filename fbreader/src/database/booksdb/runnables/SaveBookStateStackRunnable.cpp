@@ -44,7 +44,7 @@ bool SaveBookStateStackRunnable::run() {
 	DBIntValue &saveWord      = (DBIntValue &) *mySetBookStateStack->parameter("@word").value();
 	DBIntValue &saveChar      = (DBIntValue &) *mySetBookStateStack->parameter("@char").value();
 
-	for (unsigned i = 0; i < myStack.size(); ++i) {
+	for (size_t i = 0; i < myStack.size(); ++i) {
 		const ReadingState &pos = myStack[i];
 		savePosition = i + 1;
 		saveParagraph = pos.Paragraph;

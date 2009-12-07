@@ -31,8 +31,9 @@ public:
 	PalmDocStream(ZLFile &file);
 	~PalmDocStream();
 	
-	std::pair<int,int> imageLocation(int index);
+	std::pair<int,int> imageLocation(const PdbHeader &header, int index) const;
 	bool hasExtraSections() const;
+	int firstImageLocationIndex(const std::string &fileName);
 
 private:
 	bool processRecord();
@@ -41,7 +42,7 @@ private:
 private:
 	unsigned short myCompressionVersion;
 	unsigned long  myTextLength; //TODO: Warning: isn't used
-	unsigned short myTextRecords;
+	unsigned short myTextRecordNumber;
 
 	shared_ptr<HuffDecompressor> myHuffDecompressorPtr;
 };

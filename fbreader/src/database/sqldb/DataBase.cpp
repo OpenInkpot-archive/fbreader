@@ -17,18 +17,12 @@
  * 02110-1301, USA.
  */
 
-
 #include <ZLibrary.h>
 
 #include "DataBase.h"
 
 std::string DataBase::databaseDirName() {
-#ifdef XMLCONFIGHOMEDIR
-	const std::string home = XMLCONFIGHOMEDIR;
-#else
-	const std::string home = "~";
-#endif
-	return home + ZLibrary::FileNameDelimiter + "." + ZLibrary::ApplicationName();
+	return ZLibrary::ApplicationWritableDirectory();
 }
 
 DataBase::~DataBase() {

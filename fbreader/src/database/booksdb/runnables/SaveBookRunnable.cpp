@@ -18,6 +18,7 @@
  */
 
 #include "../DBRunnables.h"
+#include "../../../library/Book.h"
 
 SaveBookRunnable::SaveBookRunnable(SaveTableBookRunnable &saveTableBook, SaveAuthorsRunnable &saveAuthors, 
 		SaveSeriesRunnable &saveSeries, SaveTagsRunnable &saveTags) : 
@@ -34,4 +35,9 @@ bool SaveBookRunnable::run() {
 		&& mySaveTags.run();
 }
 
-
+void SaveBookRunnable::setBook(shared_ptr<Book> book) {
+	mySaveTableBook.setBook(book);
+	mySaveAuthors.setBook(book);
+	mySaveTags.setBook(book);
+	mySaveSeries.setBook(book);
+}

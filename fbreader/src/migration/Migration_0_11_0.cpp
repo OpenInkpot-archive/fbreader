@@ -30,17 +30,18 @@
 
 #include "BookInfo.h"
 #include "Migration.h"
-#include "../options/FBOptions.h"
+#include "../options/FBCategoryKey.h"
 
 #include "../formats/FormatPlugin.h"
 
 #include "../database/booksdb/BooksDBUtil.h"
-
+#include "../database/booksdb/BooksDB.h"
+#include "../library/Book.h"
+#include "../library/Tag.h"
 
 static const std::string BOOK_LIST_GROUP = "BookList";
 static const std::string BOOK_LIST_SIZE = "Size";
 static const std::string BOOK_LIST_PREFIX = "Book";
-
 
 static const std::string CURRENT_STATE_GROUP = "State";
 
@@ -63,8 +64,6 @@ static const std::string PALM_TYPE = "PalmType";
 
 static const std::string NET_FILES_GROUP = "Files";
 
-
-
 class Migration_0_11_0_Runnable : public DBRunnable {
 
 public:
@@ -78,7 +77,7 @@ private:
 
 	bool migrateBook(const std::string &fileName);
 
-	std::string tags2string(const std::vector<shared_ptr<DBTag> > &tags);
+	std::string tags2string(const TagList &tags);
 
 	bool stringEquals(const std::string &tags1, const std::string &tags2);
 
@@ -86,8 +85,8 @@ private:
 
 	bool migrateBooksState();
 
-	bool migrateBookStateStack(const std::string &fileName, const DBBook &book);
-	bool migrateBookLastState(const std::string &fileName, const DBBook &book);
+	bool migrateBookStateStack(const std::string &fileName, const Book &book);
+	bool migrateBookLastState(const std::string &fileName, const Book &book);
 
 	bool shouldReadDisk(const std::string &fileName);
 
@@ -99,7 +98,7 @@ private:
 	static void moveBookGroup(const std::string &oldgroup, const std::string &newgroup);
 
 private:
-	std::map<std::string, shared_ptr<DBBook> > myBooks;
+	std::map<std::string, shared_ptr<Book> > myBooks;
 };
 
 
@@ -178,7 +177,7 @@ Migration_0_11_0::Migration_0_11_0() : Migration("0.11.0") {
 
 void Migration_0_11_0::doMigrationInternal() {
 	Migration_0_11_0_Runnable r;
-	BooksDB::instance().executeAsTransaction(r);
+	BooksDB::Instance().executeAsTransaction(r);
 	//r.run();
 }
 
@@ -214,7 +213,7 @@ bool Migration_0_11_0_Runnable::migrateBooks() {
 	std::map<std::string, unsigned long> ext2num;
 	unsigned long totalTime = 0, totalNum = 0;*/
 
-	PluginCollection &collection = PluginCollection::instance();
+	PluginCollection &collection = PluginCollection::Instance();
 	std::vector<std::string> optionGroups;
 	ZLOption::listOptionGroups(optionGroups);
 
@@ -231,14 +230,14 @@ bool Migration_0_11_0_Runnable::migrateBooks() {
 			 */
 			const std::string palmType = ZLStringOption(FBCategoryKey::BOOKS, name, PALM_TYPE, "").value();
 			if (!palmType.empty()) {
-				BooksDB::instance().setPalmType(name, palmType);
+				BooksDB::Instance().setPalmType(name, palmType);
 			}
 			ZLStringOption(FBCategoryKey::BOOKS, name, PALM_TYPE, "").setValue(""); // clean books.xml
 			ZLFile file(name);
 			if (file.physicalFilePath() == name) {
 				int size = ZLIntegerOption(FBCategoryKey::BOOKS, name, SIZE, -1).value();
 				if (size != -1) {
-					BooksDB::instance().setFileSize(name, size);
+					BooksDB::Instance().setFileSize(name, size);
 				}
 			}
 			if (collection.plugin(file, false) != 0) {
@@ -288,34 +287,38 @@ bool Migration_0_11_0_Runnable::migrateBooks() {
 
 
 bool Migration_0_11_0_Runnable::migrateBook(const std::string &fileName) {
-	shared_ptr<DBBook> infoBook = DBBook::loadFromBookInfo(fileName);
+	shared_ptr<Book> infoBook = Book::loadFromBookInfo(fileName);
 	if (infoBook.isNull()) {
 		std::cerr << "ERROR: loading book from BookInfo failed: " << fileName << std::endl;
 		return false;
 	}
 	if (shouldReadDisk(fileName) && BooksDBUtil::isBookFull(*infoBook)) {
-		shared_ptr<DBBook> fileBook = DBBook::loadFromFile(fileName);
-		//shared_ptr<DBBook> fileBook = infoBook;
-		//shared_ptr<DBBook> fileBook;
+		shared_ptr<Book> fileBook = Book::loadFromFile(fileName);
+		//shared_ptr<Book> fileBook = infoBook;
+		//shared_ptr<Book> fileBook;
 		if (!fileBook.isNull()) {
-			std::string tagList1 = tags2string( infoBook->tags() );
-			std::string tagList2 = tags2string( fileBook->tags() );
+			std::string tagList1 = tags2string(infoBook->tags());
+			std::string tagList2 = tags2string(fileBook->tags());
 			if (stringEquals(tagList1, tagList2)) {
-				infoBook->tags().assign( fileBook->tags().begin(), fileBook->tags().end() );
+				infoBook->removeAllTags();
+				const TagList &tList = fileBook->tags();
+				for (TagList::const_iterator it = tList.begin(); it != tList.end(); ++it) {
+					infoBook->addTag(*it);
+				}
 			}
 		}
 	}
 	myBooks.insert(std::make_pair(fileName, infoBook));
-	const bool code = BooksDB::instance().saveBook(infoBook);
+	const bool code = BooksDB::Instance().saveBook(infoBook);
 	if (!code) {
 		std::cerr << "ERROR: saving book to database failed: " << fileName << std::endl;
 	}
 	return code;
 }
 
-std::string Migration_0_11_0_Runnable::tags2string(const std::vector<shared_ptr<DBTag> > &tags) {
+std::string Migration_0_11_0_Runnable::tags2string(const TagList &tags) {
 	std::string tagList;
-	std::vector<shared_ptr<DBTag> >::const_iterator it = tags.begin();
+	TagList::const_iterator it = tags.begin();
 	if (it != tags.end()) {
 		tagList += (*it++)->fullName();
 		while (it != tags.end()) {
@@ -369,11 +372,11 @@ bool Migration_0_11_0_Runnable::migrateBookList() {
 		ZLStringUtil::appendNumber(optionName, i);
 		const std::string &fileName = ZLStringOption(ZLCategoryKey::STATE, BOOK_LIST_GROUP, optionName, "").value();
 		if (!fileName.empty()) {
-			std::map<std::string, shared_ptr<DBBook> >::iterator it = myBooks.find(fileName);
+			std::map<std::string, shared_ptr<Book> >::iterator it = myBooks.find(fileName);
 			if (it != myBooks.end()) {
-				shared_ptr<DBBook> book = it->second;
+				shared_ptr<Book> book = it->second;
 				if (!book.isNull() && book->bookId() != 0) {
-					if (!BooksDB::instance().insertIntoBookList(*book)) {
+					if (!BooksDB::Instance().insertIntoBookList(*book)) {
 						std::cerr << "ERROR: insert into BookList failed: " << fileName << std::endl;
 						res = false;
 					}
@@ -401,26 +404,26 @@ bool Migration_0_11_0_Runnable::migrateState() {
 }
 
 bool Migration_0_11_0_Runnable::migrateRecentBooks() {
-	std::vector<shared_ptr<DBBook> > books;
+	BookList books;
 	for (size_t i = 0; i < MaxXmlListSize; ++i) {
 		std::string num = BOOK;
 		ZLStringUtil::appendNumber(num, i);
 		std::string name = ZLStringOption(ZLCategoryKey::STATE, RECENT_BOOKS_GROUP, num, "").value();
 		if (!name.empty()) {
-			//shared_ptr<DBBook> book = BooksDBUtil::getBook(name, false);
-			std::map<std::string, shared_ptr<DBBook> >::const_iterator it = myBooks.find(name);
+			//shared_ptr<Book> book = BooksDBUtil::getBook(name, false);
+			std::map<std::string, shared_ptr<Book> >::const_iterator it = myBooks.find(name);
 			if (it == myBooks.end()) {
 				if ((it = myBooks.find(ZLFile(name).resolvedPath())) == myBooks.end()) {
 					continue;
 				}
 			}
-			shared_ptr<DBBook> book = it->second;
+			shared_ptr<Book> book = it->second;
 			if (!book.isNull() && book->bookId() != 0 && std::find(books.begin(), books.end(), book) == books.end()) {
 				books.push_back(book);
 			}
 		}
 	}
-	bool res = BooksDB::instance().saveRecentBooks(books);
+	bool res = BooksDB::Instance().saveRecentBooks(books);
 	if (!res) {
 		std::cerr << "ERROR: saving recent books list failed (" << books.size() << " item[s])" << std::endl;
 	}
@@ -430,14 +433,14 @@ bool Migration_0_11_0_Runnable::migrateRecentBooks() {
 bool Migration_0_11_0_Runnable::migrateBooksState() {
 	bool res = true;
 
-	for (std::map<std::string, shared_ptr<DBBook> >::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
+	for (std::map<std::string, shared_ptr<Book> >::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
 		const std::string &fileName = it->first;
 		if (it->second.isNull()) {
 			std::cerr << "ERROR: book in map is null: " << fileName << std::endl;
 			res = false;
 			continue;
 		}
-		const DBBook &book = *it->second;
+		const Book &book = *it->second;
 		if (!migrateBookStateStack(fileName, book)) {
 			res = false;
 		}
@@ -449,7 +452,7 @@ bool Migration_0_11_0_Runnable::migrateBooksState() {
 }
 
 
-bool Migration_0_11_0_Runnable::migrateBookStateStack(const std::string &fileName, const DBBook &book) {
+bool Migration_0_11_0_Runnable::migrateBookStateStack(const std::string &fileName, const Book &book) {
 	std::deque<ReadingState> stack;
 	bool res = true;
 	int stackSize = ZLIntegerOption(ZLCategoryKey::STATE, fileName, BUFFER_SIZE, 0).value();
@@ -471,7 +474,7 @@ bool Migration_0_11_0_Runnable::migrateBookStateStack(const std::string &fileNam
 			ZLIntegerOption(ZLCategoryKey::STATE, fileName, bufferParagraph, -1).setValue(-1); // clean state.xml
 			ZLIntegerOption(ZLCategoryKey::STATE, fileName, bufferWord, -1).setValue(-1); // clean state.xml
 		}
-		if (!BooksDB::instance().saveBookStateStack(book, stack)) {
+		if (!BooksDB::Instance().saveBookStateStack(book, stack)) {
 			std::cerr << "ERROR: saving book state stack failed: " << fileName << std::endl;
 			res = false;
 		}
@@ -481,7 +484,7 @@ bool Migration_0_11_0_Runnable::migrateBookStateStack(const std::string &fileNam
 	return res;
 }
 
-bool Migration_0_11_0_Runnable::migrateBookLastState(const std::string &fileName, const DBBook &book) {
+bool Migration_0_11_0_Runnable::migrateBookLastState(const std::string &fileName, const Book &book) {
 	const ReadingState state(
 		ZLIntegerOption(ZLCategoryKey::STATE, fileName, PARAGRAPH_OPTION_NAME, 0).value(), 
 		ZLIntegerOption(ZLCategoryKey::STATE, fileName, WORD_OPTION_NAME, 0).value(), 
@@ -495,8 +498,8 @@ bool Migration_0_11_0_Runnable::migrateBookLastState(const std::string &fileName
 	ZLIntegerOption(ZLCategoryKey::STATE, fileName, WORD_OPTION_NAME, 0).setValue(0);
 	ZLIntegerOption(ZLCategoryKey::STATE, fileName, CHAR_OPTION_NAME, 0).setValue(0);
 	ZLIntegerOption(ZLCategoryKey::STATE, fileName, POSITION_IN_BUFFER, 0).setValue(0);
-	bool res1 = BooksDB::instance().setBookState(book, state);
-	bool res2 = BooksDB::instance().setStackPos(book, stackPos);
+	bool res1 = BooksDB::Instance().setBookState(book, state);
+	bool res2 = BooksDB::Instance().setStackPos(book, stackPos);
 	if (!res1) {
 		std::cerr << "ERROR: saving book last state failed: " << fileName << std::endl;
 	}
@@ -513,7 +516,7 @@ bool Migration_0_11_0_Runnable::migrateNetwork() {
 	for (std::vector<std::string>::const_iterator it = urls.begin(); it != urls.end(); ++it) {
 		const std::string &url = *it;
 		const std::string fileName = ZLStringOption(ZLCategoryKey::NETWORK, NET_FILES_GROUP, url, "").value();
-		if (!BooksDB::instance().setNetFile(url, fileName)) {
+		if (!BooksDB::Instance().setNetFile(url, fileName)) {
 			std::cerr << "ERROR: saving file's URL failed: " << std::endl 
 				<< "\tURL = " << url << std::endl
 				<< "\tfileName = " << fileName << std::endl;
@@ -526,7 +529,7 @@ bool Migration_0_11_0_Runnable::migrateNetwork() {
 
 bool Migration_0_11_0_Runnable::clearBooksOptions() {
 	bool res = true;
-	for (std::map<std::string, shared_ptr<DBBook> >::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
+	for (std::map<std::string, shared_ptr<Book> >::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
 		const std::string &fileName = it->first;
 		if (it->second.isNull()) {
 			std::cerr << "ERROR: book in map is null in clearBooksOptions: " << fileName << std::endl;

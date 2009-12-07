@@ -17,8 +17,6 @@
  * 02110-1301, USA.
  */
 
-#include <iostream>
-
 #include <ZLFile.h>
 #include <ZLInputStream.h>
 #include <ZLDir.h>
@@ -61,14 +59,16 @@ shared_ptr<ZLLanguageDetector::LanguageInfo> ZLLanguageDetector::findInfo(const 
 	ZLMapBasedStatistics bufferStatistics;//= new ZLMapBasedStatistics();
 	ZLStatisticsGenerator("\r\n ").generate(buffer, length, 3, bufferStatistics);
 	std::string ucs2;
-	if( ((unsigned char)buffer[0] == 0xFE) && ((unsigned char)buffer[1] == 0xFF) ) {
-		ucs2 = "UCS-2BE";	
-	}
-	if( ((unsigned char)buffer[0] == 0xFF) && ((unsigned char)buffer[1] == 0xFE) ) {
-		ucs2 = "UCS-2LE";	
+	if ((unsigned char)buffer[0] == 0xFE &&
+			(unsigned char)buffer[1] == 0xFF) {
+		ucs2 = "UTF-16BE";	
+	} else 
+	if ((unsigned char)buffer[0] == 0xFF &&
+			(unsigned char)buffer[1] == 0xFE) {
+		ucs2 = "UTF-16";	
 	}
 	for (SBVector::const_iterator it = myMatchers.begin(); it != myMatchers.end(); ++it) {
-		if ( (ucs2.empty()) || ( (*it)->info()->Encoding == ucs2 ) ) {
+		if (ucs2.empty() || (*it)->info()->Encoding == ucs2) {
 			int criterion = (*it)->criterion(bufferStatistics);
 			//std::cerr << (*it)->info()->Language << " " << criterion << "\n";
 			if (criterion > matchingCriterion) {

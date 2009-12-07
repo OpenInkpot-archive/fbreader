@@ -17,15 +17,16 @@
  * 02110-1301, USA.
  */
 
+#include <cstring>
+#include <algorithm>
+
 #include <ZLFile.h>
 #include <ZLResource.h>
 #include <ZLZDecompressor.h>
-#include <iostream>
 
 #include "PalmDocStream.h"
 #include "DocDecompressor.h"
 #include "HuffDecompressor.h"
-
 
 PalmDocStream::PalmDocStream(ZLFile &file) : PalmDocLikeStream(file) {
 }
@@ -35,18 +36,16 @@ PalmDocStream::~PalmDocStream() {
 }
 
 bool PalmDocStream::processRecord() {
-	size_t currentOffset = myHeader.Offsets[myRecordIndex];
+	const size_t currentOffset = recordOffset(myRecordIndex);
 	if (currentOffset < myBase->offset()) {
 	    return false;
 	}
 	myBase->seek(currentOffset, true);
-	size_t nextOffset =
-		(myRecordIndex + 1 < myHeader.Offsets.size()) ? 
-			myHeader.Offsets[myRecordIndex + 1] : myBase->sizeOfOpened();
+	const size_t nextOffset = recordOffset(myRecordIndex + 1);
 	if (nextOffset < currentOffset) {
 	    return false;
 	}
-	unsigned short recordSize = nextOffset - currentOffset;
+	const unsigned short recordSize = nextOffset - currentOffset;
 	switch(myCompressionVersion) {
 		case 17480://'DH'	// HuffCDic compression
 			myBufferLength = myHuffDecompressorPtr->decompress(*myBase, myBuffer, recordSize, myMaxRecordSize);
@@ -80,10 +79,10 @@ bool PalmDocStream::processZeroRecord() {
 	}	
 	myBase->seek(2, false);									// myBase offset: ^ + 4
 	PdbUtil::readUnsignedLongBE(*myBase, myTextLength); 	// myBase offset: ^ + 8	
-	PdbUtil::readUnsignedShort(*myBase, myTextRecords); 	// myBase offset: ^ + 10
+	PdbUtil::readUnsignedShort(*myBase, myTextRecordNumber); 	// myBase offset: ^ + 10
 
-	unsigned short endSectionIndex = myHeader.Offsets.size();
-	myMaxRecordIndex = std::min(myTextRecords, (unsigned short)(endSectionIndex - 1));
+	unsigned short endSectionIndex = header().Offsets.size();
+	myMaxRecordIndex = std::min(myTextRecordNumber, (unsigned short)(endSectionIndex - 1));
 	//TODO Insert in this point error message about uncompatible records and numRecords from Header
 	
 	PdbUtil::readUnsignedShort(*myBase, myMaxRecordSize); 	// myBase offset: ^ + 12
@@ -94,7 +93,7 @@ bool PalmDocStream::processZeroRecord() {
 
 	/*
 	std::cerr << "PalmDocStream::processRecord0():\n";
-	std::cerr << "PDB header indentificator            : " << myHeader.Id << "\n";
+	std::cerr << "PDB header indentificator            : " << header().Id << "\n";
 	std::cerr << "PDB file system: sizeof opened       : " << myBaseSize << "\n";
 	std::cerr << "PDB header/record[0] max index       : " << myMaxRecordIndex << "\n";
 	std::cerr << "PDB record[0][0..2] compression      : " << myCompressionVersion << "\n";
@@ -104,7 +103,7 @@ bool PalmDocStream::processZeroRecord() {
 	std::cerr << "PDB record[0][10..12] max record size: " << myMaxRecordSize << "\n";
 	*/
 
-	if (myHeader.Id == "BOOKMOBI") {
+	if (header().Id == "BOOKMOBI") {
 		unsigned short encrypted = 0;
 		PdbUtil::readUnsignedShort(*myBase, encrypted); 		// myBase offset: ^ + 14
 		if (encrypted) { 										//Always = 2, if encrypted 
@@ -121,7 +120,7 @@ bool PalmDocStream::processZeroRecord() {
 		unsigned long huffSectionIndex;
 		unsigned long huffSectionNumber;
 		unsigned short extraFlags;
-		unsigned long initialOffset = myHeader.Offsets[0];				// myBase offset: ^ 
+		unsigned long initialOffset = header().Offsets[0];				// myBase offset: ^ 
 		
 		myBase->seek(6, false); 										// myBase offset: ^ + 20
 		PdbUtil::readUnsignedLongBE(*myBase, mobiHeaderLength); 		// myBase offset: ^ + 24
@@ -143,14 +142,14 @@ bool PalmDocStream::processZeroRecord() {
 		std::cerr << "Huff's extraFlags    : " << extraFlags << "\n";
 		*/
 		const unsigned long endHuffSectionIndex = huffSectionIndex + huffSectionNumber; 
-		if ( endHuffSectionIndex > endSectionIndex || huffSectionNumber <= 1) {
+		if (endHuffSectionIndex > endSectionIndex || huffSectionNumber <= 1) {
 			myErrorCode = ERROR_COMPRESSION;
 			return false;
 		}
-		const unsigned long endHuffDataOffset = (endHuffSectionIndex == endSectionIndex) ? (unsigned long)myBase->sizeOfOpened() : myHeader.Offsets[endHuffSectionIndex]; 
-		std::vector<unsigned long>::const_iterator beginHuffSectionOffsetIt = myHeader.Offsets.begin() + huffSectionIndex;
+		const unsigned long endHuffDataOffset = recordOffset(endHuffSectionIndex);
+		std::vector<unsigned long>::const_iterator beginHuffSectionOffsetIt = header().Offsets.begin() + huffSectionIndex;
 		// point to first Huff section
-		std::vector<unsigned long>::const_iterator endHuffSectionOffsetIt =	myHeader.Offsets.begin() + endHuffSectionIndex;
+		std::vector<unsigned long>::const_iterator endHuffSectionOffsetIt =	header().Offsets.begin() + endHuffSectionIndex;
 		// point behind last Huff section 
 
 		
@@ -161,18 +160,51 @@ bool PalmDocStream::processZeroRecord() {
 }
 
 bool PalmDocStream::hasExtraSections() const {
-	return myMaxRecordIndex < myHeader.Offsets.size() - 1;
+	return myMaxRecordIndex < header().Offsets.size() - 1;
 }
 
-std::pair<int,int> PalmDocStream::imageLocation(int index) {
+std::pair<int,int> PalmDocStream::imageLocation(const PdbHeader &header, int index) const {
 	index += myMaxRecordIndex + 1;
-	int recordNumber = myHeader.Offsets.size();
+	int recordNumber = header.Offsets.size();
 	if (index > recordNumber - 1) {
 		return std::pair<int,int>(-1, -1);
 	} else {
-		int start = myHeader.Offsets[index];
+		int start = header.Offsets[index];
 		int end = (index < recordNumber - 1) ?
-			myHeader.Offsets[index + 1] : myBaseSize;
+			header.Offsets[index + 1] : myBase->offset();
 		return std::pair<int,int>(start, end - start);
 	}
+}
+
+int PalmDocStream::firstImageLocationIndex(const std::string &fileName) {
+	shared_ptr<ZLInputStream> fileStream = ZLFile(fileName).inputStream();
+	if (fileStream.isNull() || !fileStream->open()) {
+		return -1;
+	}
+
+	bool found = false;
+	int index = 0;
+	char bu[10];
+	std::pair<int,int> firstImageLocation = imageLocation(header(), 0);
+	fileStream->seek(firstImageLocation.first, false);
+	while ((firstImageLocation.first > 0) && (firstImageLocation.second > 0)) {
+		if (firstImageLocation.second > 4) {
+			fileStream->read(bu, 4);
+			static const char jpegStart[2] = { (char)0xFF, (char)0xd8 };
+			if ((strncmp(bu, "BM", 2) == 0) ||
+					(strncmp(bu, "GIF8", 4) == 0) ||
+					(strncmp(bu, jpegStart, 2) == 0)) {
+				found = true;
+				break;
+			}
+			fileStream->seek(firstImageLocation.second - 10, false);
+		} else {
+			fileStream->seek(firstImageLocation.second, false);
+		}
+		index++;
+		firstImageLocation = imageLocation(header(), index);
+	}
+
+	fileStream->close();
+	return found ? index : -1;
 }

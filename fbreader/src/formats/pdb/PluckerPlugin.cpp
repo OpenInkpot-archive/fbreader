@@ -23,7 +23,7 @@
 #include "PluckerBookReader.h"
 #include "PluckerTextStream.h"
 
-#include "../../database/booksdb/DBBook.h"
+#include "../../library/Book.h"
 
 bool PluckerPlugin::providesMetaInfo() const {
 	return false;
@@ -33,8 +33,8 @@ bool PluckerPlugin::acceptsFile(const ZLFile &file) const {
 	return PdbPlugin::fileType(file) == "DataPlkr";
 }
 
-bool PluckerPlugin::readDescription(const std::string &path, DBBook &book) const {
-	ZLFile file(path);
+bool PluckerPlugin::readMetaInfo(Book &book) const {
+	ZLFile file(book.filePath());
 
 	shared_ptr<ZLInputStream> stream = new PluckerTextStream(file);
 	detectEncodingAndLanguage(book, *stream);
@@ -45,8 +45,8 @@ bool PluckerPlugin::readDescription(const std::string &path, DBBook &book) const
 	return true;
 }
 
-bool PluckerPlugin::readModel(const DBBook &book, BookModel &model) const {
-	return PluckerBookReader(book.fileName(), model, book.encoding()).readDocument();
+bool PluckerPlugin::readModel(BookModel &model) const {
+	return PluckerBookReader(model).readDocument();
 }
 
 const std::string &PluckerPlugin::iconName() const {

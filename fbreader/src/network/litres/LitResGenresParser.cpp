@@ -18,7 +18,6 @@
  */
 
 #include <ZLStringUtil.h>
-#include <ZLUnicodeUtil.h>
 
 #include "LitResGenresParser.h"
 
@@ -26,7 +25,7 @@
 static const std::string TAG_GENRE = "genre";
 
 
-LitResGenresParser::LitResGenresParser(std::map<std::string, std::string> &genres) : myGenres(genres) {
+LitResGenresParser::LitResGenresParser(std::map<std::string, LitResGenre> &genres) : myGenres(genres) {
 	mySkipGenreClosing = false;
 }
 
@@ -34,13 +33,13 @@ void LitResGenresParser::startElementHandler(const char *tag, const char **attri
 	if (TAG_GENRE == tag) {
 		const char *id = attributeValue(attributes, "id");
 		const char *title = attributeValue(attributes, "title");
+		const char *token = attributeValue(attributes, "token");
 		if (title != 0) {
-			std::string titleStr = ZLUnicodeUtil::toLower(std::string(title));
-			if (id != 0) {
-				myGenres[titlePrefix() + titleStr] = std::string(id);
+			if (id != 0 && token != 0) {
+				myGenres[std::string(token)] = LitResGenre(std::string(id), titlePrefix() + std::string(title));
 				mySkipGenreClosing = true;
 			} else {
-				myTitleStack.push_back(titleStr);
+				myTitleStack.push_back(std::string(title));
 				myTitlePrefix = "";
 			}
 		}

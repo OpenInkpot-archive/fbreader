@@ -52,7 +52,6 @@ struct PdbRecord0 {
 	unsigned short MaxRecordSize; 		//[10..12]	PalmDoc, Mobipocket
 	unsigned short NontextOffset;		//[12..14]	Ereader
 	unsigned short NontextOffset2;		//[14..16]	Ereader  //PalmDoc, Mobipocket: encrypted - there is conflict !!!!
-
 	
 	unsigned long  MobipocketID;		//[16..20]	Mobipocket
 	unsigned long  MobipocketHeaderSize;//[20..24]	Mobipocket

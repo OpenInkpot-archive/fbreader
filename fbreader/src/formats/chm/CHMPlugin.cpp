@@ -33,7 +33,8 @@
 #include "../util/MergedStream.h"
 #include "../html/HtmlReaderStream.h"
 
-#include "../../database/booksdb/DBBook.h"
+#include "../../bookmodel/BookModel.h"
+#include "../../library/Book.h"
 
 bool CHMPlugin::acceptsFile(const ZLFile &file) const {
 	return file.extension() == "chm";
@@ -96,14 +97,14 @@ shared_ptr<ZLInputStream> CHMTextStream::nextStream() {
 	return 0;
 }
 
-bool CHMPlugin::readDescription(const std::string &path, DBBook &book) const {
-	ZLFile file(path);
+bool CHMPlugin::readMetaInfo(Book &book) const {
+	ZLFile file(book.filePath());
 	shared_ptr<ZLInputStream> stream = file.inputStream();
 	if (stream.isNull() || !stream->open()) {
 		return false;
 	}
 
-	CHMFileInfo chmFile(path);
+	CHMFileInfo chmFile(book.filePath());
 	if (!chmFile.init(*stream)) {
 		return false;
 	}
@@ -140,13 +141,36 @@ bool CHMPlugin::readDescription(const std::string &path, DBBook &book) const {
 	return true;
 }
 
-bool CHMPlugin::readModel(const DBBook &book, BookModel &model) const {
-	shared_ptr<ZLInputStream> stream = ZLFile(book.fileName()).inputStream();
+class CHMHyperlinkMatcher : public BookModel::HyperlinkMatcher {
+
+public:
+	BookModel::Label match(const std::map<std::string,BookModel::Label> &lMap, const std::string &id) const;
+};
+
+BookModel::Label CHMHyperlinkMatcher::match(const std::map<std::string,BookModel::Label> &lMap, const std::string &id) const {
+	std::map<std::string,BookModel::Label>::const_iterator it = lMap.find(id);
+	if (it != lMap.end()) {
+		return it->second;
+	}
+	size_t index = id.find('#');
+	if (index != std::string::npos) {
+		it = lMap.find(id.substr(0, index));
+	}
+	return (it != lMap.end()) ? it->second : BookModel::Label(0, -1);
+}
+
+bool CHMPlugin::readModel(BookModel &model) const {
+	model.setHyperlinkMatcher(new CHMHyperlinkMatcher());
+
+	const Book &book = *model.book();
+	const std::string &filePath = book.filePath();
+
+	shared_ptr<ZLInputStream> stream = ZLFile(filePath).inputStream();
 	if (stream.isNull() || !stream->open()) {
 		return false;
 	}
 
-	shared_ptr<CHMFileInfo> info = new CHMFileInfo(book.fileName());
+	shared_ptr<CHMFileInfo> info = new CHMFileInfo(filePath);
 	if (!info->init(*stream)) {
 		return false;
 	}
@@ -180,7 +204,7 @@ bool CHMPlugin::readModel(const DBBook &book, BookModel &model) const {
 	*/
 
 	int contentCounter = 0;
-	PlainTextFormat format(book.fileName());
+	PlainTextFormat format(filePath);
 	HtmlSectionReader reader(model, format, encoding, info, referenceCollection);
 	while (referenceCollection.containsNonProcessedReferences()) {
 		const std::string fileName = referenceCollection.nextReference();
@@ -217,6 +241,7 @@ bool CHMPlugin::readModel(const DBBook &book, BookModel &model) const {
 	}
 
 	hhcReader.setReferences();
+
 
 	return true;
 }

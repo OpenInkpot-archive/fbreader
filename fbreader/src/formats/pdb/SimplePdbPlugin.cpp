@@ -19,7 +19,6 @@
 
 #include <ZLFile.h>
 #include <ZLInputStream.h>
-#include <iostream>
 
 #include "PdbPlugin.h"
 #include "../txt/TxtBookReader.h"
@@ -27,11 +26,11 @@
 #include "HtmlMetainfoReader.h"
 #include "../util/TextFormatDetector.h"
 
-#include "../../database/booksdb/DBBook.h"
+#include "../../bookmodel/BookModel.h"
+#include "../../library/Book.h"
 
-bool SimplePdbPlugin::readDescription(const std::string &path, DBBook &book) const {
-	ZLFile file(path);
-	std::cerr << "Read description specified by SimplePdbPlugin...\n";
+bool SimplePdbPlugin::readMetaInfo(Book &book) const {
+	ZLFile file(book.filePath());
 	shared_ptr<ZLInputStream> stream = createStream(file);
 	detectEncodingAndLanguage(book, *stream);
 	if (book.encoding().empty()) {
@@ -53,22 +52,22 @@ bool SimplePdbPlugin::readDescription(const std::string &path, DBBook &book) con
 	return true;
 }
 
-bool SimplePdbPlugin::readModel(const DBBook &book, BookModel &model) const {
-	std::cerr << "Read model specified by SimplePdbPlugin...\n";
-	ZLFile file(book.fileName());
+bool SimplePdbPlugin::readModel(BookModel &model) const {
+	const Book &book = *model.book();
+	const std::string &filePath = book.filePath();
+	ZLFile file(filePath);
 	shared_ptr<ZLInputStream> stream = createStream(file);
 
-	PlainTextFormat format(book.fileName());
+	PlainTextFormat format(filePath);
 	if (!format.initialized()) {
 		PlainTextFormatDetector detector;
 		detector.detect(*stream, format);
 	}
-	readDocumentInternal(book.fileName(), model, format, book.encoding(), *stream);
+	readDocumentInternal(filePath, model, format, book.encoding(), *stream);
 	return true;
 }
 
 void SimplePdbPlugin::readDocumentInternal(const std::string&, BookModel &model, const PlainTextFormat &format, const std::string &encoding, ZLInputStream &stream) const {
-	std::cerr << "Read document internal specified by SimplePdbPlugin...\n";
 	if (TextFormatDetector().isHtml(stream)) {
 		HtmlBookReader("", model, format, encoding).readDocument(stream);
 	} else {

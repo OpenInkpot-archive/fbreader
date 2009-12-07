@@ -28,7 +28,7 @@
 
 #include "FBView.h"
 
-#include "../database/booksdb/DBBook.h"
+class Book;
 
 class BookTextView : public FBView {
 
@@ -36,10 +36,10 @@ public:
 	ZLBooleanOption ShowTOCMarksOption;
 
 public:
-	BookTextView(FBReader &reader, shared_ptr<ZLPaintContext> context);
+	BookTextView(ZLPaintContext &context);
 	~BookTextView();
 
-	void setModel(shared_ptr<ZLTextModel> model, const std::string &language, shared_ptr<DBBook> book);
+	void setModel(shared_ptr<ZLTextModel> model, const std::string &language, shared_ptr<Book> book);
 	void setContentsModel(shared_ptr<ZLTextModel> contentsModel);
 	void saveState();
 
@@ -83,14 +83,14 @@ private:
 	friend class BookTextView::PositionIndicatorWithLabels;
 
 private:
-	void readBookState(const DBBook &book);
-	int readStackPos(const DBBook &book);
-	void saveBookState(const DBBook &book);
+	void readBookState(const Book &book);
+	int readStackPos(const Book &book);
+	void saveBookState(const Book &book);
 
 private:
 	shared_ptr<ZLTextModel> myContentsModel;
 
-	shared_ptr<DBBook> myBook;
+	shared_ptr<Book> myBook;
 
 	typedef std::deque<Position> PositionStack;
 	PositionStack myPositionStack;

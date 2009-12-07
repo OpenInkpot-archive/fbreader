@@ -17,9 +17,8 @@
  * 02110-1301, USA.
  */
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <string>
-#include <iostream>
 #include <map>
 
 #include <ZLFile.h> 
@@ -57,21 +56,13 @@ shared_ptr<ZLArrayBasedStatistics> ZLStatisticsXMLReader::readStatistics(const s
 	}
 
 	shared_ptr<ZLInputStream> statisticsStream = ZLFile(fileName).inputStream();
-    if (statisticsStream.isNull() || !statisticsStream->open()) {
-       	//std::cerr << "null stream\n";
-        return 0;
-    }
-   	readDocument(statisticsStream);
+	if (statisticsStream.isNull() || !statisticsStream->open()) {
+ 		return 0;
+ 	}
+	readDocument(statisticsStream);
 	statisticsStream->close();
 
 	statisticsMap.insert(std::make_pair(fileName, myStatisticsPtr));
-
-	{ // print map sizing:
-		unsigned sz = statisticsMap.size();
-		unsigned ptrsize = sizeof(shared_ptr<ZLArrayBasedStatistics>);
-		unsigned statsize = sizeof(ZLArrayBasedStatistics);
-		std::cerr << "STATMAP: size = " << sz * (ptrsize + statsize) << " bytes\n";
-	}
 
 	return myStatisticsPtr; 
 }

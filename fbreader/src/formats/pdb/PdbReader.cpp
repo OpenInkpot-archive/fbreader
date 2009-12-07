@@ -18,7 +18,6 @@
  */
 
 #include <ZLFile.h>
-#include <iostream>
 
 #include "PdbReader.h"
 

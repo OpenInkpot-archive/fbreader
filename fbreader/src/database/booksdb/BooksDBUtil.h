@@ -17,35 +17,32 @@
  * 02110-1301, USA.
  */
 
-
 #ifndef __BOOKSDBUTIL_H__
 #define __BOOKSDBUTIL_H__
 
 #include <map>
 
-#include "BooksDB.h"
-#include "DBBook.h"
+#include <shared_ptr.h>
 
+#include "../../library/Lists.h"
 
+class Book;
 class ZLFile;
 
 class BooksDBUtil {
 
 public:
-	static shared_ptr<DBBook> getBook(const std::string &fileName, bool checkFile = true);
+	static shared_ptr<Book> getBook(const std::string &fileName, bool checkFile = true);
 
-	static bool getBooks(std::map<std::string, shared_ptr<DBBook> > &booksmap, bool checkFile = true);
+	static bool getBooks(std::map<std::string, shared_ptr<Book> > &booksmap, bool checkFile = true);
 
-	static bool getRecentBooks(std::vector<shared_ptr<DBBook> > &books);
+	static bool getRecentBooks(BookList &books);
 
 public:
-	static void fixFB2Encoding(const DBBook &book);
-
-	static void addTag(shared_ptr<DBBook> book, shared_ptr<DBTag> tag);
-	static void removeTag(shared_ptr<DBBook> book, shared_ptr<DBTag> tag, bool includeSubTags);
-	static void renameTag(shared_ptr<DBBook> book, shared_ptr<DBTag> from, shared_ptr<DBTag> to, bool includeSubTags);
-	static void cloneTag(shared_ptr<DBBook> book, shared_ptr<DBTag> from, shared_ptr<DBTag> to, bool includeSubTags);
-	static void removeAllTags(shared_ptr<DBBook> book);
+	static void addTag(shared_ptr<Book> book, shared_ptr<Tag> tag);
+	static void renameTag(shared_ptr<Book> book, shared_ptr<Tag> from, shared_ptr<Tag> to, bool includeSubTags);
+	static void cloneTag(shared_ptr<Book> book, shared_ptr<Tag> from, shared_ptr<Tag> to, bool includeSubTags);
+	static void removeAllTags(shared_ptr<Book> book);
 
 	static bool checkInfo(const ZLFile &file);
 	static void saveInfo(const ZLFile &file);
@@ -53,50 +50,12 @@ public:
 	static void listZipEntries(const ZLFile &zipFile, std::vector<std::string> &entries);
 	static void resetZipInfo(const ZLFile &zipFile);
 
-	static bool isBookFull(const DBBook &book);
-
-	static void updateAuthor(shared_ptr<DBBook> book, shared_ptr<DBAuthor> from, shared_ptr<DBAuthor> to);
+	static bool isBookFull(const Book &book);
 
 	static bool canRemoveFile(const std::string &fileName);
 
 private:
-	static shared_ptr<DBBook> loadFromDB(const std::string &fileName);
+	static shared_ptr<Book> loadFromDB(const std::string &fileName);
 };
-
-
-inline void BooksDBUtil::addTag(shared_ptr<DBBook> book, shared_ptr<DBTag> tag) {
-	if (book->addTag(tag)) {
-		BooksDB::instance().saveTags(book);
-	}
-}
-
-inline void BooksDBUtil::removeTag(shared_ptr<DBBook> book, shared_ptr<DBTag> tag, bool includeSubTags) {
-	if (book->removeTag(tag, includeSubTags)) {
-		BooksDB::instance().saveTags(book);
-	}
-}
-
-inline void BooksDBUtil::renameTag(shared_ptr<DBBook> book, shared_ptr<DBTag> from, shared_ptr<DBTag> to, bool includeSubTags) {
-	if (book->renameTag(from, to, includeSubTags)) {
-		BooksDB::instance().saveTags(book);
-	}
-}
-
-inline void BooksDBUtil::cloneTag(shared_ptr<DBBook> book, shared_ptr<DBTag> from, shared_ptr<DBTag> to, bool includeSubTags) {
-	if (book->cloneTag(from, to, includeSubTags)) {
-		BooksDB::instance().saveTags(book);
-	}
-}
-
-inline void BooksDBUtil::removeAllTags(shared_ptr<DBBook> book) {
-	book->removeAllTags();
-}
-
-inline void BooksDBUtil::updateAuthor(shared_ptr<DBBook> book, shared_ptr<DBAuthor> from, shared_ptr<DBAuthor> to) {
-	if (book->updateAuthor(from, to)) {
-		BooksDB::instance().saveAuthors(book);
-	}
-}
-
 
 #endif /* __BOOKSDBUTIL_H__ */

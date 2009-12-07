@@ -121,7 +121,7 @@ std::string ATOMDateConstruct::getDateTime(bool brief) const {
 	std::string time;
 	if (mySecondFraction >= 0.01) {
 		std::string sfr;
-		unsigned sfrnum = floor(100 * mySecondFraction + 0.5);
+		unsigned int sfrnum = (unsigned int) floor(100 * mySecondFraction + 0.5);
 		ZLStringUtil::appendNumber(sfr, sfrnum);
 		makeStringLength(sfr, 2);
 		time = "." + sfr;

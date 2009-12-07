@@ -26,15 +26,14 @@
 
 #include <shared_ptr.h>
 
-#include "ZLXMLAbstractReader.h"
-
 class ZLInputStream;
+class ZLAsynchronousInputStream;
 class ZLXMLReaderInternal;
 
-class ZLXMLReader : public ZLXMLAbstractReader {
+class ZLXMLReader {
 
 public:
-  static const char *attributeValue(const char **xmlattributes, const char *name);
+	static const char *attributeValue(const char **xmlattributes, const char *name);
 
 protected:
 	ZLXMLReader(const char *encoding = 0);
@@ -46,6 +45,9 @@ public:
 	bool readDocument(shared_ptr<ZLInputStream> stream);
 	bool readDocument(const std::string &fileName);
 
+	bool readDocument(shared_ptr<ZLAsynchronousInputStream> stream);
+
+private:
 	void initialize(const char *encoding = 0);
 	void shutdown();
 	bool readFromBuffer(const char *data, size_t len);
@@ -70,6 +72,7 @@ private:
 	std::vector<shared_ptr<std::map<std::string,std::string> > > myNamespaces;
 
 friend class ZLXMLReaderInternal;
+friend class ZLXMLReaderHandler;
 };
 
 inline bool ZLXMLReader::isInterrupted() const {

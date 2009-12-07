@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#include <iostream>
 
 #include <ZLFile.h>
 #include <ZLInputStream.h>
@@ -32,7 +31,6 @@ bool PalmDocPlugin::acceptsFile(const ZLFile &file) const {
 }
 
 void PalmDocPlugin::readDocumentInternal(const std::string &fileName, BookModel &model, const PlainTextFormat &format, const std::string &encoding, ZLInputStream &stream) const {
-	std::cerr << "Read document internal specified by PalmDocPlugin...\n";
 	stream.open();
 	bool readAsPalmDoc = ((PalmDocStream&)stream).hasExtraSections();
 	stream.close();
@@ -50,7 +48,6 @@ const std::string &PalmDocPlugin::iconName() const {
 
 FormatInfoPage *PalmDocPlugin::createInfoPage(ZLOptionsDialog &dialog, const std::string &fileName) {
 	ZLFile file(fileName);
-	std::cerr << "Create info page specified by PalmDocPlugin...\n";
 	shared_ptr<ZLInputStream> stream = createStream(file);
 	stream->open();
 	bool readAsPalmDoc = ((PalmDocStream&)*stream).hasExtraSections();

@@ -18,8 +18,8 @@
  */
 
 #include "../DBRunnables.h"
+#include "../../../library/Book.h"
 #include "../../sqldb/implsqlite/SQLiteFactory.h"
-
 
 SaveSeriesRunnable::SaveSeriesRunnable(DBConnection &connection) {
 	mySetBookSeries    = SQLiteFactory::createCommand(BooksDBQuery::SET_BOOKSERIES, connection, "@book_id", DBValue::DBINT, "@series_id", DBValue::DBINT, "@book_index", DBValue::DBINT);
@@ -49,7 +49,10 @@ bool SaveSeriesRunnable::run() {
 	}
 	((DBIntValue &) *mySetBookSeries->parameter("@book_id").value()) = myBook->bookId();
 	mySetBookSeries->parameter("@series_id").setValue( tableSeriesId );
-	((DBIntValue &) *mySetBookSeries->parameter("@book_index").value()) = myBook->numberInSeries();
+	((DBIntValue &) *mySetBookSeries->parameter("@book_index").value()) = myBook->indexInSeries();
 	return mySetBookSeries->execute();
 }
 
+void SaveSeriesRunnable::setBook(shared_ptr<Book> book) {
+	myBook = book;
+}

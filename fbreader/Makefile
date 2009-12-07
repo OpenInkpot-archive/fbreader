@@ -7,12 +7,12 @@ include $(MAKEFILESDIR)/config.mk
 TARGET = FBReader
 target = fbreader
 
-ALL_SUBDIRS = src src/database src/database/sqldb src/database/sqldb/implsqlite src/database/booksdb src/database/booksdb/runnables src/migration src/constants src/options src/collection src/bookmodel src/formats src/formats/fb2 src/formats/docbook src/formats/css src/formats/html src/formats/pdb src/formats/txt src/formats/tcr src/formats/chm src/formats/xhtml src/formats/oeb src/formats/rtf src/formats/openreader src/formats/pdf src/formats/dummy src/formats/util src/external src/optionsDialog src/fbreader src/encodingOption src/network src/network/feedbooks src/network/fbreaderOrg src/network/feedbooks_atom src/network/atom src/network/opds src/network/litres 
+ALL_SUBDIRS = src src/database src/database/sqldb src/database/sqldb/implsqlite src/database/booksdb src/database/booksdb/runnables src/migration src/constants src/options src/library src/bookmodel src/formats src/formats/fb2 src/formats/docbook src/formats/css src/formats/html src/formats/pdb src/formats/txt src/formats/tcr src/formats/chm src/formats/xhtml src/formats/oeb src/formats/rtf src/formats/openreader src/formats/pdf src/formats/dummy src/formats/util src/external src/optionsDialog src/fbreader src/encodingOption src/network src/network/opdsLink src/network/atom src/network/opds src/network/litres src/blockTree src/libraryTree src/networkTree
 ALL_ARCHSUBDIRS = desktop pdaxrom opie zaurus maemo openzaurus pma400 win32
 
-SUBDIRS = src/database src/database/sqldb src/database/sqldb/implsqlite src/database/booksdb src/database/booksdb/runnables src/migration src/constants src/options src/collection src/bookmodel \
+SUBDIRS = src/database src/database/sqldb src/database/sqldb/implsqlite src/database/booksdb src/database/booksdb/runnables src/migration src/constants src/options src/library src/bookmodel \
 	src/formats src/formats/fb2 src/formats/css src/formats/html src/formats/pdb src/formats/txt src/formats/tcr src/formats/chm src/formats/xhtml src/formats/oeb src/formats/rtf src/formats/openreader src/formats/util \
-	src/external src/optionsDialog src/fbreader src/encodingOption src/network src/network/feedbooks src/network/fbreaderOrg src/network/feedbooks_atom src/network/atom src/network/opds src/network/litres 
+	src/external src/optionsDialog src/fbreader src/encodingOption src/network src/network/opdsLink src/network/atom src/network/opds src/network/litres src/blockTree src/libraryTree src/networkTree
 
 all: .resources
 	@for subdir in $(SUBDIRS); do \
@@ -38,6 +38,10 @@ do_install:
 	@install -d $(FBSHAREDIR)
 	@install -d $(FBSHAREDIR)/help
 	@./scripts/install_help.sh $(VARIANT) $(FBSHAREDIR)/help
+	@install -d $(FBSHAREDIR)/network
+	@install -m 0644 $(wildcard data/network/*.xml) $(FBSHAREDIR)/network
+	@install -d $(FBSHAREDIR)/network/certificates
+	@install -m 0644 $(wildcard data/network/certificates/*.crt) $(FBSHAREDIR)/network/certificates
 	@install -d $(FBSHAREDIR)/formats/html
 	@install -m 0644 data/formats/html/html.ent $(FBSHAREDIR)/formats/html
 	@install -d $(FBSHAREDIR)/formats/xhtml
@@ -46,7 +50,7 @@ do_install:
 	@sed "s/VERSION/$(VERSION)/" data/formats/fb2/FBReaderVersion.ent > $(FBSHAREDIR)/formats/fb2/FBReaderVersion.ent
 	@install -m 0644 data/formats/fb2/fb2genres.xml $(FBSHAREDIR)/formats/fb2
 	@install -d $(FBSHAREDIR)/default
-	@./scripts/install_toolbar_and_menu.sh $(VARIANT) $(FBSHAREDIR)/default
+	@./scripts/install_toolbar_and_menu.sh $(VARIANT) $(UI_TYPE) $(FBSHAREDIR)/default
 	@install -m 0644 data/default/external.$(TARGET_ARCH).xml $(FBSHAREDIR)/default/external.xml
 	@if [ -f data/default/messages.$(TARGET_ARCH).xml ]; then \
 		install -m 0644 data/default/messages.$(TARGET_ARCH).xml $(FBSHAREDIR)/default/messages.xml; \
@@ -56,7 +60,7 @@ do_install:
 	@install -d $(DESTDIR)$(APPIMAGEDIR_REAL)
 	@install -m 0644 $(wildcard data/icons/toolbar/$(VARIANT)/*.*) $(DESTDIR)$(APPIMAGEDIR_REAL)
 	@install -m 0644 $(wildcard data/icons/filetree/$(VARIANT)/*.*) $(DESTDIR)$(APPIMAGEDIR_REAL)
-	@install -m 0644 $(wildcard data/icons/booktree/$(VARIANT)/*.*) $(DESTDIR)$(APPIMAGEDIR_REAL)
+	@install -m 0644 $(wildcard data/icons/booktree/new/*.*) $(DESTDIR)$(APPIMAGEDIR_REAL)
 	@make -C $(TARGET_ARCH) RESOLUTION=$(RESOLUTION) install
 
 clean:

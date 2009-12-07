@@ -23,21 +23,22 @@
 #include <string>
 
 #include "DocBookReader.h"
-#include "../../database/booksdb/DBBook.h"
+
+class Book;
 
 class DocBookDescriptionReader : public DocBookReader {
 
 public:
-	DocBookDescriptionReader(DBBook &book);
+	DocBookDescriptionReader(Book &book);
 	~DocBookDescriptionReader();
-	bool readDescription(shared_ptr<ZLInputStream> stream);
+	bool readMetaInfo(shared_ptr<ZLInputStream> stream);
 
 	void startElementHandler(int tag, const char **attributes);
 	void endElementHandler(int tag);
 	void characterDataHandler(const char *text, size_t len);
 
 private:
-	DBBook &myBook;
+	Book &myBook;
 
 	bool myReturnCode;
 

@@ -17,10 +17,8 @@
  * 02110-1301, USA.
  */
 
-
 #include "../DBRunnables.h"
 #include "../../sqldb/implsqlite/SQLiteFactory.h"
-
 
 DeleteFileEntriesRunnable::DeleteFileEntriesRunnable(DBConnection &connection) {
 	myDeleteFileEntries = SQLiteFactory::createCommand(BooksDBQuery::DELETE_FILE_ENTRIES, connection, "@file_id", DBValue::DBINT);

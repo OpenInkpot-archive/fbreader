@@ -17,24 +17,21 @@
  * 02110-1301, USA.
  */
 
-
 #include "SQLiteDataReader.h"
 
-
-shared_ptr<DBValue> SQLiteDataReader::makeDBValue(sqlite3_stmt *statement, int column) {
-	if (column < 0 || column >= sqlite3_column_count(statement)) {
+shared_ptr<DBValue> SQLiteDataReader::makeDBValue(sqlite3_stmt *statement, size_t column) {
+	if (column >= (size_t) sqlite3_column_count(statement)) {
 		return 0;
 	}
 	const int type = sqlite3_column_type(statement, column);
 	switch (type) {
-	case SQLITE_INTEGER: return new DBIntValue(sqlite3_column_int(statement, column));
-	case SQLITE_FLOAT:   return new DBRealValue(sqlite3_column_double(statement, column));
-	case SQLITE_TEXT:    return new DBTextValue((const char *) sqlite3_column_text(statement, column));
-	case SQLITE_NULL:    return DBValue::create(DBValue::DBNULL);
+		case SQLITE_INTEGER: return new DBIntValue(sqlite3_column_int(statement, column));
+		case SQLITE_FLOAT:   return new DBRealValue(sqlite3_column_double(statement, column));
+		case SQLITE_TEXT:    return new DBTextValue((const char *) sqlite3_column_text(statement, column));
+		case SQLITE_NULL:    return DBValue::create(DBValue::DBNULL);
 	}
 	return 0;
 }
-
 
 SQLiteDataReader::SQLiteDataReader(SQLiteCommand &command) : 
 	myCommand(command), 
@@ -46,9 +43,8 @@ SQLiteDataReader::~SQLiteDataReader() {
 	close();
 }
 
-
 bool SQLiteDataReader::next() {
-	std::vector<sqlite3_stmt *> statements = myCommand.statements();
+	const std::vector<sqlite3_stmt *> &statements = myCommand.statements();
 	while (true) {
 		int res = sqlite3_step(statements[myCurrentStatement]);
 		switch (res) {
@@ -80,14 +76,14 @@ void SQLiteDataReader::close() {
 	}
 }
 
-unsigned SQLiteDataReader::columnsNumber() const {
+size_t SQLiteDataReader::columnsNumber() const {
 	sqlite3_stmt *statement = currentStatement();
 	return sqlite3_column_count(statement);
 }
 
-DBValue::ValueType SQLiteDataReader::type(unsigned column) const {
+DBValue::ValueType SQLiteDataReader::type(size_t column) const {
 	sqlite3_stmt *statement = currentStatement();
-	if ((int) column >= sqlite3_column_count(statement)) {
+	if (column >= (size_t) sqlite3_column_count(statement)) {
 		return DBValue::DBNULL;
 	}
 	const int type = sqlite3_column_type(statement, column);
@@ -101,37 +97,48 @@ DBValue::ValueType SQLiteDataReader::type(unsigned column) const {
 	}
 }
 
-shared_ptr<DBValue> SQLiteDataReader::value(unsigned column) const {
+shared_ptr<DBValue> SQLiteDataReader::value(size_t column) const {
 	sqlite3_stmt *statement = currentStatement();
 	return makeDBValue(statement, column);
 }
 
-int SQLiteDataReader::intValue(unsigned column) const {
+int SQLiteDataReader::intValue(size_t column) const {
 	sqlite3_stmt *statement = currentStatement();
-	if ((int) column >= sqlite3_column_count(statement)) {
+	if (column >= (size_t)sqlite3_column_count(statement) ||
+			sqlite3_column_type(statement, column) != SQLITE_INTEGER) {
 		return 0;
 	}
 	return sqlite3_column_int(statement, column);
 }
 
-double SQLiteDataReader::realValue(unsigned column) const {
+double SQLiteDataReader::realValue(size_t column) const {
 	sqlite3_stmt *statement = currentStatement();
-	if ((int) column >= sqlite3_column_count(statement)) {
+	if (column >= (size_t)sqlite3_column_count(statement) ||
+			sqlite3_column_type(statement, column) != SQLITE_FLOAT) {
 		return 0;
 	}
 	return sqlite3_column_double(statement, column);
 }
 
-std::string SQLiteDataReader::textValue(unsigned column) const {
-	static const std::string _NULL_STR("NULL");
+std::string SQLiteDataReader::textValue(size_t column) const {
+	static const std::string NULL_STR("NULL");
+
 	sqlite3_stmt *statement = currentStatement();
-	if ((int) column >= sqlite3_column_count(statement)) {
-		return "";
+	if (column >= (size_t)sqlite3_column_count(statement)) {
+		return std::string();
 	}
-	const char *res = (const char *) sqlite3_column_text(statement, column);
+	switch (sqlite3_column_type(statement, column)) {
+		case SQLITE_NULL:
+			return NULL_STR;
+		case SQLITE_TEXT:
+			break;
+		default:
+			return std::string();
+	}
+
+	const char *res = (const char*)sqlite3_column_text(statement, column);
 	if (res == 0) {
-		return _NULL_STR;
+		return NULL_STR;
 	}
 	return res;
 }
-

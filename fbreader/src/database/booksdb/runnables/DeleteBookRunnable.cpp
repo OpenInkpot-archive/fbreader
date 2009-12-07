@@ -17,10 +17,8 @@
  * 02110-1301, USA.
  */
 
-
 #include "../DBRunnables.h"
 #include "../../sqldb/implsqlite/SQLiteFactory.h"
-
 
 DeleteBookRunnable::DeleteBookRunnable(DBConnection &connection) {
 	myFindFileId = new FindFileIdRunnable(connection);

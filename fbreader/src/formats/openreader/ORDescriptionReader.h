@@ -22,13 +22,13 @@
 
 #include <ZLXMLReader.h>
 
-#include "../../database/booksdb/DBBook.h"
+class Book;
 
 class ORDescriptionReader : public ZLXMLReader {
 
 public:
-	ORDescriptionReader(DBBook &book);
-	bool readDescription(const std::string &fileName);
+	ORDescriptionReader(Book &book);
+	bool readMetaInfo();
 
 private:
 	void startElementHandler(const char *tag, const char **attributes);
@@ -38,7 +38,7 @@ private:
 	const std::vector<std::string> &externalDTDs() const;
 
 private:
-	DBBook &myBook;
+	Book &myBook;
 
 	bool myReadMetaData;
 	enum {

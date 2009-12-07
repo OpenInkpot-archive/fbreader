@@ -24,7 +24,8 @@
 #include "TxtBookReader.h"
 #include "PlainTextFormat.h"
 
-#include "../../database/booksdb/DBBook.h"
+#include "../../bookmodel/BookModel.h"
+#include "../../library/Book.h"
 
 TxtPlugin::~TxtPlugin() {
 }
@@ -37,8 +38,8 @@ bool TxtPlugin::acceptsFile(const ZLFile &file) const {
 	return file.extension() == "txt";
 }
 
-bool TxtPlugin::readDescription(const std::string &path, DBBook &book) const {
-	ZLFile file(path);
+bool TxtPlugin::readMetaInfo(Book &book) const {
+	ZLFile file(book.filePath());
 
 	shared_ptr<ZLInputStream> stream = file.inputStream();
 	if (stream.isNull()) {
@@ -52,13 +53,15 @@ bool TxtPlugin::readDescription(const std::string &path, DBBook &book) const {
 	return true;
 }
 
-bool TxtPlugin::readModel(const DBBook &book, BookModel &model) const {
-	shared_ptr<ZLInputStream> stream = ZLFile(book.fileName()).inputStream();
+bool TxtPlugin::readModel(BookModel &model) const {
+	const Book &book = *model.book();
+	const std::string &filePath = book.filePath();
+	shared_ptr<ZLInputStream> stream = ZLFile(filePath).inputStream();
 	if (stream.isNull()) {
 		return false;
 	}
 
-	PlainTextFormat format(book.fileName());
+	PlainTextFormat format(filePath);
 	if (!format.initialized()) {
 		PlainTextFormatDetector detector;
 		detector.detect(*stream, format);

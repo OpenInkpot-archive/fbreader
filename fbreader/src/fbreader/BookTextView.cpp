@@ -34,6 +34,7 @@
 #include "../external/ProgramCollection.h"
 
 #include "../database/booksdb/BooksDB.h"
+#include "../library/Book.h"
 
 static const std::string LAST_STATE_GROUP = "LastState";
 
@@ -43,8 +44,8 @@ static const std::string CHAR_OPTION_NAME = "Char";
 static const std::string POSITION_IN_BUFFER = "PositionInBuffer";
 static const std::string STATE_VALID = "Valid";
 
-BookTextView::BookTextView(FBReader &reader, shared_ptr<ZLPaintContext> context) :
-	FBView(reader, context),
+BookTextView::BookTextView(ZLPaintContext &context) :
+	FBView(context),
 	ShowTOCMarksOption(ZLCategoryKey::LOOK_AND_FEEL, "Indicator", "ShowTOCMarks", false) {
 	myCurrentPointInStack = 0;
 	myMaxStackSize = 20;
@@ -56,27 +57,27 @@ BookTextView::~BookTextView() {
 	saveState();
 }
 
-void BookTextView::readBookState(const DBBook &book) {
+void BookTextView::readBookState(const Book &book) {
 	ReadingState state;
 	if (ZLBooleanOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, STATE_VALID, false).value()) {
 		state.Paragraph = ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, PARAGRAPH_OPTION_NAME, 0).value();
 		state.Word      = ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, WORD_OPTION_NAME, 0).value();
 		state.Character = ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, CHAR_OPTION_NAME, 0).value();
 	} else {
-		BooksDB::instance().loadBookState(book, state);
+		BooksDB::Instance().loadBookState(book, state);
 	}
 	gotoPosition(state.Paragraph, state.Word, state.Character);
 }
 
-int BookTextView::readStackPos(const DBBook &book) {
+int BookTextView::readStackPos(const Book &book) {
 	if (ZLBooleanOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, STATE_VALID, false).value()) {
 		return ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, POSITION_IN_BUFFER, 0).value();
 	} else {
-		return BooksDB::instance().loadStackPos(book);
+		return BooksDB::Instance().loadStackPos(book);
 	}
 }
 
-void BookTextView::saveBookState(const DBBook &book) {
+void BookTextView::saveBookState(const Book &book) {
 	const ReadingState state(
 		ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, PARAGRAPH_OPTION_NAME, 0).value(), 
 		ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, WORD_OPTION_NAME, 0).value(), 
@@ -84,8 +85,8 @@ void BookTextView::saveBookState(const DBBook &book) {
 	);
 	const int stackPos = ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, POSITION_IN_BUFFER, 0).value();
 
-	BooksDB::instance().setBookState(book, state);
-	BooksDB::instance().setStackPos(book, stackPos);
+	BooksDB::Instance().setBookState(book, state);
+	BooksDB::Instance().setStackPos(book, stackPos);
 
 	ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, PARAGRAPH_OPTION_NAME, 0).setValue(0);
 	ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, WORD_OPTION_NAME, 0).setValue(0);
@@ -94,7 +95,7 @@ void BookTextView::saveBookState(const DBBook &book) {
 	ZLBooleanOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, STATE_VALID, false).setValue(false);
 }
 
-void BookTextView::setModel(shared_ptr<ZLTextModel> model, const std::string &language, shared_ptr<DBBook> book) {
+void BookTextView::setModel(shared_ptr<ZLTextModel> model, const std::string &language, shared_ptr<Book> book) {
 	FBView::setModel(model, language);
 	if (!myBook.isNull()) {
 		saveBookState(*myBook);
@@ -106,7 +107,7 @@ void BookTextView::setModel(shared_ptr<ZLTextModel> model, const std::string &la
 	readBookState(*book);
 	myPositionStack.clear();
 	myCurrentPointInStack = 0;
-	BooksDB::instance().loadBookStateStack(*book, myPositionStack);
+	BooksDB::Instance().loadBookStateStack(*book, myPositionStack);
 	myStackChanged = false;
 	if (myPositionStack.size() > 0) {
 		int stackPos = readStackPos(*book);
@@ -143,7 +144,7 @@ void BookTextView::saveState() {
 		ZLBooleanOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, STATE_VALID, false).setValue(true);
 
 		if (myStackChanged) {
-			BooksDB::instance().saveBookStateStack(*myBook, myPositionStack);
+			BooksDB::Instance().saveBookStateStack(*myBook, myPositionStack);
 			myStackChanged = false;
 		}
 	}
@@ -230,7 +231,7 @@ void BookTextView::undoPageMove() {
 		gotoPosition(pos.Paragraph, pos.Word, pos.Character);
 		myLockUndoStackChanges = false;
 
-		application().refreshWindow();
+		FBReader::Instance().refreshWindow();
 	}
 }
 
@@ -252,7 +253,7 @@ void BookTextView::redoPageMove() {
 			myStackChanged = true;
 		}
 
-		application().refreshWindow();
+		FBReader::Instance().refreshWindow();
 	}
 }
 
@@ -288,20 +289,21 @@ bool BookTextView::_onStylusPress(int x, int y) {
 }
 
 bool BookTextView::onStylusClick(int x, int y, int count) {
+	FBReader &fbreader = FBReader::Instance();
 	const ZLTextElementArea *area = elementByCoordinates(x, y);
 	if (area != 0) {
 		std::string id;
 		std::string type;
 		if (getHyperlinkInfo(*area, id, type)) {
-			fbreader().tryShowFootnoteView(id, type);
+			fbreader.tryShowFootnoteView(id, type);
 			return true;
 		}
 		
-		if (fbreader().isDictionarySupported() &&
-				fbreader().EnableSingleClickDictionaryOption.value()) {
+		if (fbreader.isDictionarySupported() &&
+				fbreader.EnableSingleClickDictionaryOption.value()) {
 			const std::string txt = word(*area);
 			if (!txt.empty()) {
-				fbreader().openInDictionary(txt);
+				fbreader.openInDictionary(txt);
 				return true;
 			}
 		}
@@ -311,6 +313,7 @@ bool BookTextView::onStylusClick(int x, int y, int count) {
 }
 
 bool BookTextView::_onStylusRelease(int x, int y) {
+	FBReader &fbreader = FBReader::Instance();
 	if (!isReleasedWithoutMotion()) {
 		return false;
 	}
@@ -320,15 +323,15 @@ bool BookTextView::_onStylusRelease(int x, int y) {
 		std::string id;
 		std::string type;
 		if (getHyperlinkInfo(*area, id, type)) {
-			fbreader().tryShowFootnoteView(id, type);
+			fbreader.tryShowFootnoteView(id, type);
 			return true;
 		}
 		
-		if (fbreader().isDictionarySupported() &&
-				fbreader().EnableSingleClickDictionaryOption.value()) {
+		if (fbreader.isDictionarySupported() &&
+				fbreader.EnableSingleClickDictionaryOption.value()) {
 			const std::string txt = word(*area);
 			if (!txt.empty()) {
-				fbreader().openInDictionary(txt);
+				fbreader.openInDictionary(txt);
 				return true;
 			}
 		}
@@ -341,7 +344,7 @@ bool BookTextView::_onStylusMove(int x, int y) {
 	const ZLTextElementArea *area = elementByCoordinates(x, y);
 	std::string id;
 	std::string type;
-	fbreader().setHyperlinkCursor((area != 0) && getHyperlinkInfo(*area, id, type));
+	FBReader::Instance().setHyperlinkCursor((area != 0) && getHyperlinkInfo(*area, id, type));
 	return true;
 }
 
@@ -390,12 +393,12 @@ void BookTextView::scrollToHome() {
 	}
 
 	gotoParagraph(0, false);
-	fbreader().refreshWindow();
+	FBReader::Instance().refreshWindow();
 }
 
 void BookTextView::paint() {
 	FBView::paint();
 	std::string pn;
 	ZLStringUtil::appendNumber(pn, pageIndex());
-	fbreader().setVisualParameter(FBReader::PageIndexParameter, pn);
+	FBReader::Instance().setVisualParameter(FBReader::PageIndexParameter, pn);
 }

@@ -28,7 +28,11 @@ const std::string OPDSConstants::REL_LENDING       = "http://opds-spec.org/lendi
 const std::string OPDSConstants::REL_SUBSCRIPTION  = "http://opds-spec.org/subscription";
 const std::string OPDSConstants::REL_SAMPLE        = "http://opds-spec.org/sample";
 const std::string OPDSConstants::REL_COVER         = "http://opds-spec.org/cover";
+const std::string OPDSConstants::REL_STANZA_COVER  = "x-stanza-cover-image";
 const std::string OPDSConstants::REL_THUMBNAIL     = "http://opds-spec.org/thumbnail";
+const std::string OPDSConstants::REL_STANZA_THUMBNAIL = "x-stanza-cover-image-thumbnail";
+
+const std::string OPDSConstants::REL_ALTERNATE     = "alternate";
 
 const std::string OPDSConstants::MIME_OPDS_FULLENTRY = "application/atom+xml;type=entry";
 
@@ -37,6 +41,7 @@ const std::string OPDSConstants::MIME_APP_MOBI  = "application/x-mobipocket-eboo
 const std::string OPDSConstants::MIME_APP_PDF   = "application/pdf";
 const std::string OPDSConstants::MIME_APP_ATOM  = "application/atom+xml";
 const std::string OPDSConstants::MIME_IMG_PNG   = "image/png";
+const std::string OPDSConstants::MIME_IMG_JPEG  = "image/jpeg";
 const std::string OPDSConstants::MIME_TEXT_HTML = "text/html";
 
 
@@ -77,7 +82,7 @@ OPDSEntry::OPDSEntry(shared_ptr<ATOMId> id, const std::string &title, shared_ptr
 
 
 
-OPDSFeedMetadata::OPDSFeedMetadata() {
+OPDSFeedMetadata::OPDSFeedMetadata() : myOpensearchTotalResults(0), myOpensearchItemsPerPage(0), myOpensearchStartIndex(1) {
 }
 
 OPDSFeedMetadata::OPDSFeedMetadata(shared_ptr<ATOMId> id, const std::string &title, shared_ptr<ATOMUpdated> updated) :

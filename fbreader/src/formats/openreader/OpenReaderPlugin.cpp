@@ -25,6 +25,8 @@
 #include "ORDescriptionReader.h"
 #include "ORBookReader.h"
 
+#include "../../library/Book.h"
+
 OpenReaderPlugin::~OpenReaderPlugin() {
 }
 
@@ -36,12 +38,12 @@ bool OpenReaderPlugin::acceptsFile(const ZLFile &file) const {
 	return file.extension() == "orb";
 }
 
-bool OpenReaderPlugin::readDescription(const std::string &path, DBBook &book) const {
-	return ORDescriptionReader(book).readDescription(path);
+bool OpenReaderPlugin::readMetaInfo(Book &book) const {
+	return ORDescriptionReader(book).readMetaInfo();
 }
 
-bool OpenReaderPlugin::readModel(const DBBook &book, BookModel &model) const {
-	return ORBookReader(model).readBook(book.fileName());
+bool OpenReaderPlugin::readModel(BookModel &model) const {
+	return ORBookReader(model).readBook();
 }
 
 const std::string &OpenReaderPlugin::iconName() const {

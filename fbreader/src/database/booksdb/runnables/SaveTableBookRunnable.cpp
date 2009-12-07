@@ -17,16 +17,11 @@
  * 02110-1301, USA.
  */
 
-
-#include <ZLibrary.h>
-#include <ZLFile.h>
-
 #include "../DBRunnables.h"
+#include "../../../library/Book.h"
 #include "../../sqldb/implsqlite/SQLiteFactory.h"
 
-
 SaveTableBookRunnable::SaveTableBookRunnable(DBConnection &connection) {
-
 	myFindBookId = SQLiteFactory::createCommand(BooksDBQuery::FIND_BOOK_ID, connection, "@file_id", DBValue::DBINT);
 
 	myAddBook    = SQLiteFactory::createCommand(BooksDBQuery::ADD_BOOK, connection, "@encoding", DBValue::DBTEXT, "@language", DBValue::DBTEXT, "@title", DBValue::DBTEXT, "@file_id", DBValue::DBINT);
@@ -40,7 +35,7 @@ bool SaveTableBookRunnable::run() {
 		return updateTableBook(myBook);
 	}
 
-	myFindFileId->setFileName(myBook->fileName(), true);
+	myFindFileId->setFileName(myBook->filePath(), true);
 	if (!myFindFileId->run()) {
 		return false;
 	}
@@ -57,10 +52,7 @@ bool SaveTableBookRunnable::run() {
 	}
 }
 
-
-
-
-bool SaveTableBookRunnable::addTableBook(const shared_ptr<DBBook> book, int fileId) {
+bool SaveTableBookRunnable::addTableBook(const shared_ptr<Book> book, int fileId) {
 
 	((DBTextValue &) *myAddBook->parameter("@encoding").value()) = book->encoding();
 	((DBTextValue &) *myAddBook->parameter("@language").value()) = book->language();
@@ -71,15 +63,18 @@ bool SaveTableBookRunnable::addTableBook(const shared_ptr<DBBook> book, int file
 	if (dbBookId.isNull() || dbBookId->type() != DBValue::DBINT || ((DBIntValue &) *dbBookId).value() == 0) {
 		return false;
 	}
-	book->setBookId(((DBIntValue &) *dbBookId).value());
+	book->setBookId(((DBIntValue&)*dbBookId).value());
 	return true;
 }
 
-bool SaveTableBookRunnable::updateTableBook(const shared_ptr<DBBook> book) {
-	((DBTextValue &) *myUpdateBook->parameter("@encoding").value()) =  book->encoding();
-	((DBTextValue &) *myUpdateBook->parameter("@language").value()) =  book->language();
-	((DBTextValue &) *myUpdateBook->parameter("@title").value()) =  book->title();
-	((DBIntValue &) *myUpdateBook->parameter("@book_id").value()) =  book->bookId();
+bool SaveTableBookRunnable::updateTableBook(const shared_ptr<Book> book) {
+	((DBTextValue&)*myUpdateBook->parameter("@encoding").value()) = book->encoding();
+	((DBTextValue&)*myUpdateBook->parameter("@language").value()) = book->language();
+	((DBTextValue&)*myUpdateBook->parameter("@title").value()) = book->title();
+	((DBIntValue&)*myUpdateBook->parameter("@book_id").value()) = book->bookId();
 	return myUpdateBook->execute();
 }
 
+void SaveTableBookRunnable::setBook(shared_ptr<Book> book) {
+	myBook = book;
+}

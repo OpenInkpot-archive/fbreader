@@ -67,5 +67,5 @@ const DocBookReader::Tag *DocBookReader::tags() const {
 }
 
 const std::vector<std::string> &DocBookReader::externalDTDs() const {
-	return EntityFilesCollector::instance().externalDTDs("docbook");
+	return EntityFilesCollector::Instance().externalDTDs("docbook");
 }

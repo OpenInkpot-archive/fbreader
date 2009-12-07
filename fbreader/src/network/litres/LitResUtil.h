@@ -20,17 +20,41 @@
 #ifndef __LITRESUTIL_H__
 #define __LITRESUTIL_H__
 
-
 #include <string>
+#include <map>
+
+#include <shared_ptr.h>
+
+#include "LitResGenre.h"
 
 class LitResUtil {
 
+public:
+	static const std::string LFROM;
+	static const std::string CURRENCY_SUFFIX;
+
 private:
+	static shared_ptr<LitResUtil> ourInstance;
+
 	LitResUtil();
 
 public:
-	static void appendLFrom(std::string &url);
+	static LitResUtil &Instance();
 
+public:
+	static std::string appendLFrom(const std::string &url);
+	static std::string litresLink(const std::string &path);
+	static void makeDemoUrl(std::string &url, const std::string &bookId);
+
+	const std::map<std::string, LitResGenre> &genres();
+	void fillGenreIds(const std::string &tag, std::vector<std::string> &ids);
+
+private:
+	void loadGenres();
+
+private:
+	std::map<std::string, LitResGenre> myGenres;
+	bool myGenresValid;
 };
 
 #endif /* __LITRESUTIL_H__ */

@@ -26,18 +26,23 @@
 
 #include "../NetworkLink.h"
 
-class LitResLink : public NetworkLink {
 
-private:
-	static std::map<std::string, std::string> ourGenres;
-	static void loadGenres();
-	static void fillGenres(const std::string &tag, std::vector<std::string> &ids);
+class NetworkAuthenticationManager;
+
+class LitResLink : public NetworkLink {
 
 public:
 	LitResLink();
 
-	shared_ptr<ZLNetworkData> simpleSearchData(SearchResult &result, const std::string &pattern);
-	shared_ptr<ZLNetworkData> advancedSearchData(SearchResult &result, const std::string &title, const std::string &author, const std::string &series, const std::string &tag, const std::string &annotation);
+	shared_ptr<ZLExecutionData> simpleSearchData(NetworkOperationData &result, const std::string &pattern);
+	shared_ptr<ZLExecutionData> advancedSearchData(NetworkOperationData &result, const std::string &titleAndSeries, const std::string &author, const std::string &tag, const std::string &annotation);
+
+	shared_ptr<NetworkAuthenticationManager> authenticationManager();
+
+	shared_ptr<NetworkLibraryItem> libraryItem();
+
+private:
+	shared_ptr<NetworkAuthenticationManager> myAuthenticationManager;
 };
 
 #endif /* __LITRESLINK_H__ */

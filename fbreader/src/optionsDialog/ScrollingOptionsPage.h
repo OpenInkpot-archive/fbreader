@@ -30,7 +30,7 @@ class ZLComboOptionEntry;
 class ScrollingOptionsPage {
 
 public:
-	ScrollingOptionsPage(ZLDialogContent &dialogTab, FBReader &fbreader);
+	ScrollingOptionsPage(ZLDialogContent &dialogTab);
 
 private:
 
@@ -42,13 +42,13 @@ private:
 		ZLSpinOptionEntry *myLinesToScrollEntry;
 		ZLSpinOptionEntry *myPercentToScrollEntry;
 
-		void init(FBReader &fbreader, FBReader::ScrollingOptions &options);
+		void init(FBReader::ScrollingOptions &options);
 		void connect(ZLDialogContent &dialogTab);
 		void show(bool visible);
 	};
 
-	ScrollingEntries myLargeScrollingEntries;
-	ScrollingEntries mySmallScrollingEntries;
+	ScrollingEntries myPageScrollingEntries;
+	ScrollingEntries myLineScrollingEntries;
 	ScrollingEntries myMouseScrollingEntries;
 	ScrollingEntries myTapScrollingEntries;
 

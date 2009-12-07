@@ -22,14 +22,14 @@
 #include "PdbPlugin.h"
 #include "PalmDocStream.h"
 #include "PalmDocLikeStream.h"
-#include <iostream>
+
+#include "../../library/Book.h"
 
 bool PalmDocLikePlugin::providesMetaInfo() const {
 	return true;
 }
 
 shared_ptr<ZLInputStream> PalmDocLikePlugin::createStream(ZLFile &file) const {
-	std::cerr << "Create PalmDoc stream specified by PalmDocLikePlugin...\n";
 	return new PalmDocStream(file);
 }
 

@@ -20,14 +20,16 @@
 #include <ZLInputStream.h>
 
 #include "RtfDescriptionReader.h"
+
 #include "../FormatPlugin.h"
+#include "../../library/Book.h"
+#include "../../library/Author.h"
 
-
-RtfDescriptionReader::RtfDescriptionReader(DBBook &book) : RtfReader(book.encoding()), myBook(book) {
+RtfDescriptionReader::RtfDescriptionReader(Book &book) : RtfReader(book.encoding()), myBook(book) {
 }
 
 void RtfDescriptionReader::setEncoding(int code) {
-	ZLEncodingCollection &collection = ZLEncodingCollection::instance();
+	ZLEncodingCollection &collection = ZLEncodingCollection::Instance();
 	ZLEncodingConverterInfoPtr info = collection.info(code);
 	if (!info.isNull()) {
 		myConverter = info->createConverter();
@@ -40,11 +42,8 @@ void RtfDescriptionReader::setEncoding(int code) {
 bool RtfDescriptionReader::readDocument(const std::string &fileName) {
 	myDoRead = false;
 	bool code = RtfReader::readDocument(fileName);
-	if (myBook.authors().empty()) {
-		myBook.authors().push_back( new DBAuthor() );
-	}
 	if (myBook.encoding().empty()) {
-		myBook.setEncoding(PluginCollection::instance().DefaultEncodingOption.value());
+		myBook.setEncoding(PluginCollection::Instance().DefaultEncodingOption.value());
 	}
 	return code;
 }
@@ -76,10 +75,7 @@ void RtfDescriptionReader::switchDestination(DestinationType destination, bool o
 		case DESTINATION_AUTHOR:
 			myDoRead = on;
 			if (!on) {
-				shared_ptr<DBAuthor> author = DBAuthor::create(myBuffer);
-				if (!author.isNull()) {
-					myBook.authors().push_back( author );
-				}
+				myBook.addAuthor(myBuffer);
 				myBuffer.erase();
 			}
 			break;

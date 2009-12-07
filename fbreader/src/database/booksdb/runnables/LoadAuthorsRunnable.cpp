@@ -17,10 +17,9 @@
  * 02110-1301, USA.
  */
 
-
 #include "../DBRunnables.h"
+#include "../../../library/Author.h"
 #include "../../sqldb/implsqlite/SQLiteFactory.h"
-
 
 LoadAuthorsRunnable::LoadAuthorsRunnable(DBConnection &connection) {
 	myLoadAuthors = SQLiteFactory::createCommand(BooksDBQuery::LOAD_AUTHORS, connection, "@book_id", DBValue::DBINT);
@@ -46,12 +45,12 @@ bool LoadAuthorsRunnable::run() {
 		}
 		const std::string name = reader->textValue(0);
 		const std::string sortKey = reader->textValue(1);
-		const unsigned authorIndex = reader->intValue(2);
+		const size_t authorIndex = reader->intValue(2);
 		if (authorIndex != (1 + myAuthors.size())) {
 			reader->close();
 			return false;
 		}
-		shared_ptr<DBAuthor> author = DBAuthor::create(name, sortKey);
+		shared_ptr<Author> author = Author::getAuthor(name, sortKey);
 		if (author.isNull()) {
 			reader->close();
 			return false;
@@ -61,9 +60,16 @@ bool LoadAuthorsRunnable::run() {
 	reader->close();
 
 	if (myAuthors.empty()) {
-		myAuthors.push_back( new DBAuthor() );
+		//myAuthors.push_back( new Author() );
 	}
 	return true;
 }
 
+void LoadAuthorsRunnable::setBookId(int bookId) {
+	myBookId = bookId;
+}
 
+void LoadAuthorsRunnable::collectAuthors(AuthorList &authors) {
+	myAuthors.swap(authors);
+	myAuthors.clear();
+}

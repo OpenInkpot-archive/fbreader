@@ -19,8 +19,9 @@
 
 #include "HtmlDescriptionReader.h"
 
+#include "../../library/Book.h"
 
-HtmlDescriptionReader::HtmlDescriptionReader(DBBook &book) : HtmlReader(book.encoding()), myBook(book) {
+HtmlDescriptionReader::HtmlDescriptionReader(Book &book) : HtmlReader(book.encoding()), myBook(book) {
 	myBook.setTitle("");
 }
 
@@ -40,15 +41,42 @@ void HtmlDescriptionReader::endDocumentHandler() {
 
 bool HtmlDescriptionReader::tagHandler(const HtmlTag &tag) {
 	if (tag.Name == "TITLE") {
+		if (myReadTitle && !tag.Start) {
+			myBook.setTitle(myBuffer);
+			myBuffer.erase();
+		}
 		myReadTitle = tag.Start && myBook.title().empty();
 		return true;
+	} else if (tag.Start && tag.Name == "META") {
+		std::vector<HtmlAttribute>::const_iterator it = tag.Attributes.begin();
+		for (; it != tag.Attributes.end(); ++it) {
+			if (it->Name == "CONTENT") {
+				break;
+			}
+		}
+		if (it != tag.Attributes.end()) {
+			const std::string prefix = "charset=";
+			size_t index = it->Value.find(prefix);
+			if (index != std::string::npos) {
+				std::string charset = it->Value.substr(index + prefix.length());
+				index = charset.find(';');
+				if (index != std::string::npos) {
+					charset = charset.substr(0, index);
+				}
+				index = charset.find(' ');
+				if (index != std::string::npos) {
+					charset = charset.substr(0, index);
+				}
+				myBook.setEncoding(charset);
+			}
+		}
 	}
 	return tag.Name != "BODY";
 }
 
 bool HtmlDescriptionReader::characterDataHandler(const char *text, size_t len, bool) {
 	if (myReadTitle) {
-		myBook.appendTitle(std::string(text, len));
+		myBuffer.append(text, len);
 	}
 	return true;
 }

@@ -56,11 +56,11 @@ private:
 		SQLiteDataBase &myDataBase;
 		bool mySuccess;
 		bool myStarted;
-		unsigned myDepth;
+		unsigned int myDepth;
 	};
 
 private: // Transaction handling
-	unsigned myTransactionDepth;
+	unsigned int myTransactionDepth;
 	shared_ptr<DBCommand> myBeginTransaction;
 	shared_ptr<DBCommand> myCommitTransaction;
 	shared_ptr<DBCommand> myRollbackTransaction;

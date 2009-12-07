@@ -17,9 +17,7 @@
  * 02110-1301, USA.
  */
 
-#include <string.h>
-#include <iostream>
-#include <typeinfo>
+#include <cstring>
 
 #include <ZLFile.h>
 
@@ -39,7 +37,6 @@ bool PdbStream::open() {
 	}
 	// myBase offset: startOffset + 78 + 8 * records number ( myHeader.Offsets.size() )
 	
-	myBaseSize = myBase->sizeOfOpened();
 	myBase->seek(myHeader.Offsets[0], true);
 	// myBase offset: Offset[0] - zero record
 	
@@ -104,4 +101,9 @@ size_t PdbStream::offset() const {
 size_t PdbStream::sizeOfOpened() {
 	// TODO: implement
 	return 0;
+}
+
+size_t PdbStream::recordOffset(size_t index) const {
+	return index < myHeader.Offsets.size() ? 
+		myHeader.Offsets[index] : myBase->sizeOfOpened();
 }

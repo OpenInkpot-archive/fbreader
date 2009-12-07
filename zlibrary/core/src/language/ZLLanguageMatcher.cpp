@@ -19,8 +19,6 @@
 
 #include <ZLFile.h>
 #include <ZLInputStream.h>
-#include <iostream>
-#include <typeinfo>
 
 #include "ZLLanguageMatcher.h"
 #include "ZLStatistics.h"

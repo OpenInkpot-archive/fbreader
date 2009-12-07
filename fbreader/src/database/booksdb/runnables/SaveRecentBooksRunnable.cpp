@@ -17,12 +17,11 @@
  * 02110-1301, USA.
  */
 
-
 #include <iostream>
 
 #include "../DBRunnables.h"
+#include "../../../library/Book.h"
 #include "../../sqldb/implsqlite/SQLiteFactory.h"
-
 
 SaveRecentBooksRunnable::SaveRecentBooksRunnable(DBConnection &connection) {
 	myClearRecentBooks = SQLiteFactory::createCommand(BooksDBQuery::CLEAR_RECENT_BOOKS, connection);
@@ -34,10 +33,10 @@ bool SaveRecentBooksRunnable::run() {
 		return false;
 	}
 	DBIntValue &insertBookId = (DBIntValue &) *myInsertRecentBooks->parameter("@book_id").value();
-	for (std::vector<shared_ptr<DBBook> >::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
-		shared_ptr<DBBook> book = (*it);
+	for (BookList::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
+		shared_ptr<Book> book = (*it);
 if (book->bookId() == 0) { // TODO: remove debug code
-	std::cout << "SaveRecentBooksRunnable::run(): bookId == 0 in \"" << book->fileName() << "\"" << std::endl;
+	std::cout << "SaveRecentBooksRunnable::run(): bookId == 0 in \"" << book->filePath() << "\"" << std::endl;
 	return false;
 }
 		insertBookId = book->bookId();
@@ -48,3 +47,6 @@ if (book->bookId() == 0) { // TODO: remove debug code
 	return true;
 }
 
+void SaveRecentBooksRunnable::setBooks(const BookList &books) {
+	myBooks = books; // copy vector
+}

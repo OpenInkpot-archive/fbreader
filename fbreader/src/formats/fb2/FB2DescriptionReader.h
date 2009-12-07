@@ -23,21 +23,22 @@
 #include <string>
 
 #include "FB2Reader.h"
-#include "../../database/booksdb/DBBook.h"
+
+class Book;
 
 class FB2DescriptionReader : public FB2Reader {
 
 public:
-	FB2DescriptionReader(DBBook &book);
+	FB2DescriptionReader(Book &book);
 	~FB2DescriptionReader();
-	bool readDescription(const std::string &fileName);
+	bool readMetaInfo();
 
 	void startElementHandler(int tag, const char **attributes);
 	void endElementHandler(int tag);
 	void characterDataHandler(const char *text, size_t len);
 
 private:
-	DBBook &myBook;
+	Book &myBook;
 
 	bool myReturnCode;
 
@@ -54,7 +55,7 @@ private:
 	} myReadState;
 
 	std::string myAuthorNames[3];
-	std::string myGenreBuffer;
+	std::string myBuffer;
 };
 
 inline FB2DescriptionReader::~FB2DescriptionReader() {}

@@ -42,8 +42,12 @@ public:
 
 	// Entry level / other
 	static const std::string REL_COVER;
+	static const std::string REL_STANZA_COVER;
 	static const std::string REL_THUMBNAIL;
+	static const std::string REL_STANZA_THUMBNAIL;
 
+	// Any (?) level
+	static const std::string REL_ALTERNATE;
 
 	// MIME types / MIME type for "Full Entry" atom:link element
 	static const std::string MIME_OPDS_FULLENTRY;
@@ -56,6 +60,7 @@ public:
 
 	// MIME types / image
 	static const std::string MIME_IMG_PNG;
+	static const std::string MIME_IMG_JPEG;
 
 	// MIME types / text
 	static const std::string MIME_TEXT_HTML;
@@ -103,7 +108,27 @@ class OPDSFeedMetadata : public ATOMFeedMetadata {
 public:
 	OPDSFeedMetadata();
 	OPDSFeedMetadata(shared_ptr<ATOMId> id, const std::string &title, shared_ptr<ATOMUpdated> updated);
+
+	unsigned long getOpensearchTotalResults() const;
+	unsigned long getOpensearchItemsPerPage() const;
+	unsigned long getOpensearchStartIndex() const;
+
+	void setOpensearchTotalResults(unsigned long number);
+	void setOpensearchItemsPerPage(unsigned long number);
+	void setOpensearchStartIndex(unsigned long number);
+
+private:
+	unsigned long myOpensearchTotalResults;
+	unsigned long myOpensearchItemsPerPage;
+	unsigned long myOpensearchStartIndex;
 };
+
+inline unsigned long OPDSFeedMetadata::getOpensearchTotalResults() const { return myOpensearchTotalResults; }
+inline unsigned long OPDSFeedMetadata::getOpensearchItemsPerPage() const { return myOpensearchItemsPerPage; }
+inline unsigned long OPDSFeedMetadata::getOpensearchStartIndex() const { return myOpensearchStartIndex; }
+inline void OPDSFeedMetadata::setOpensearchTotalResults(unsigned long number) { myOpensearchTotalResults = number; }
+inline void OPDSFeedMetadata::setOpensearchItemsPerPage(unsigned long number) { myOpensearchItemsPerPage = number; }
+inline void OPDSFeedMetadata::setOpensearchStartIndex(unsigned long number) { myOpensearchStartIndex = number; }
 
 
 

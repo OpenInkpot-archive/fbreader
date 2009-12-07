@@ -17,10 +17,7 @@
  * 02110-1301, USA.
  */
 
-
-#include <string.h>
-
-#include <iostream>
+#include <cstring>
 #include <string>
 
 #include "BitReader.h"

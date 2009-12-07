@@ -50,7 +50,7 @@ class DBNullValue : public DBValue {
 friend class DBValue;
 
 public:
-	static const shared_ptr<DBValue> Instance; // the only instance of DBNullValue class
+	static const shared_ptr<DBValue> Instance; // the only Instance of DBNullValue class
 
 private:
 	DBNullValue();

@@ -17,8 +17,6 @@
  * 02110-1301, USA.
  */
 
-
-
 #ifndef __DBRUNNABLES_H__
 #define __DBRUNNABLES_H__
 
@@ -31,9 +29,9 @@
 #include "../sqldb/DBCommand.h"
 #include "../sqldb/DBRunnable.h"
 
-#include "DBBook.h"
 #include "BooksDBQuery.h"
 
+#include "../../library/Lists.h"
 
 class FindFileIdRunnable;
 class LoadAuthorsRunnable;
@@ -72,14 +70,14 @@ class SaveTableBookRunnable : public DBRunnable {
 public:
 	SaveTableBookRunnable(DBConnection &connection);
 	bool run();
-	void setBook(shared_ptr<DBBook> book);
+	void setBook(shared_ptr<Book> book);
 
 private:
-	bool addTableBook(const shared_ptr<DBBook> book, int fileId);
-	bool updateTableBook(const shared_ptr<DBBook> book);
+	bool addTableBook(const shared_ptr<Book> book, int fileId);
+	bool updateTableBook(const shared_ptr<Book> book);
 
 private:
-	shared_ptr<DBBook> myBook;
+	shared_ptr<Book> myBook;
 
 	shared_ptr<DBCommand> myFindBookId;
 
@@ -94,10 +92,10 @@ class SaveAuthorsRunnable : public DBRunnable {
 public:
 	SaveAuthorsRunnable(DBConnection &connection);
 	bool run();
-	void setBook(shared_ptr<DBBook> book);
+	void setBook(shared_ptr<Book> book);
 
 private:
-	shared_ptr<DBBook> myBook;
+	shared_ptr<Book> myBook;
 
 	shared_ptr<DBCommand> mySetBookAuthor;
 	shared_ptr<DBCommand> myTrimBookAuthors;
@@ -111,13 +109,13 @@ class SaveTagsRunnable : public DBRunnable {
 public:
 	SaveTagsRunnable(DBConnection &connection);
 	bool run();
-	void setBook(shared_ptr<DBBook> book);
+	void setBook(shared_ptr<Book> book);
 
 private:
-	int findTagId(DBTag &tag);
+	int findTagId(shared_ptr<Tag> tag);
 
 private:
-	shared_ptr<DBBook> myBook;
+	shared_ptr<Book> myBook;
 
 	shared_ptr<DBCommand> myAddBookTag;
 	shared_ptr<DBCommand> myDeleteBookTag;
@@ -134,10 +132,10 @@ class SaveSeriesRunnable : public DBRunnable {
 public:
 	SaveSeriesRunnable(DBConnection &connection);
 	bool run();
-	void setBook(shared_ptr<DBBook> book);
+	void setBook(shared_ptr<Book> book);
 
 private:
-	shared_ptr<DBBook> myBook;
+	shared_ptr<Book> myBook;
 
 	shared_ptr<DBCommand> mySetBookSeries;
 	shared_ptr<DBCommand> myDeleteBookSeries;
@@ -152,7 +150,7 @@ public:
 		SaveSeriesRunnable &saveSeries, SaveTagsRunnable &saveTags);
 
 	bool run();
-	void setBook(shared_ptr<DBBook> book);
+	void setBook(shared_ptr<Book> book);
 
 private:
 	SaveTableBookRunnable &mySaveTableBook;
@@ -183,10 +181,10 @@ class SaveRecentBooksRunnable : public DBRunnable {
 public:
 	SaveRecentBooksRunnable(DBConnection &connection);
 	bool run();
-	void setBooks(const std::vector<shared_ptr<DBBook> > &books);
+	void setBooks(const BookList &books);
 
 private:
-	std::vector<shared_ptr<DBBook> > myBooks;
+	BookList myBooks;
 
 	shared_ptr<DBCommand> myClearRecentBooks;
 	shared_ptr<DBCommand> myInsertRecentBooks;
@@ -242,25 +240,9 @@ private:
 inline InitBooksDBRunnable::InitBooksDBRunnable(DBConnection &connection) : myConnection(connection) {}
 inline ClearBooksDBRunnable::ClearBooksDBRunnable(DBConnection &connection) : myConnection(connection) {}
 
-inline void SaveTableBookRunnable::setBook(shared_ptr<DBBook> book) { myBook = book; }
-inline void SaveAuthorsRunnable::setBook(shared_ptr<DBBook> book) { myBook = book; }
-inline void SaveTagsRunnable::setBook(shared_ptr<DBBook> book) { myBook = book; }
-inline void SaveSeriesRunnable::setBook(shared_ptr<DBBook> book) { myBook = book; }
-
-inline void SaveBookRunnable::setBook(shared_ptr<DBBook> book) {
-	mySaveTableBook.setBook(book);
-	mySaveAuthors.setBook(book);
-	mySaveTags.setBook(book);
-	mySaveSeries.setBook(book);
-}
-
 inline void SaveFileEntriesRunnable::setEntries(const std::string &fileName, const std::vector<std::string> &entries) {
 	myFileName = fileName;
 	myEntries  = entries; // copy vector
-}
-
-inline void SaveRecentBooksRunnable::setBooks(const std::vector<shared_ptr<DBBook> > &books) {
-	myBooks = books; // copy vector
 }
 
 inline void SaveBookStateStackRunnable::setState(int bookId, const std::deque<ReadingState > &stack) {
@@ -314,29 +296,28 @@ public:
 	LoadAuthorsRunnable(DBConnection &connection);
 	bool run();
 	void setBookId(int bookId);
-	void collectAuthors(std::vector<shared_ptr<DBAuthor> > &authors);
+	void collectAuthors(AuthorList &authors);
 
 private:
 	int myBookId;
-	std::vector<shared_ptr<DBAuthor> > myAuthors;
+	AuthorList myAuthors;
 
 	shared_ptr<DBCommand> myLoadAuthors;
 };
 
-class LoadTagsRunnable : public DBRunnable {
+class LoadTagsRunnable {
 
 public:
 	LoadTagsRunnable(DBConnection &connection);
-	bool run();
-	void setBookId(int bookId);
-	void collectTags(std::vector<shared_ptr<DBTag> > &tags);
+	bool run(int bookId, TagList &tags);
+	bool run(Book &book);
 
 private:
-	int myBookId;
-	std::vector<shared_ptr<DBTag> > myTags;
+	shared_ptr<Tag> getTag(int id);
 
-	shared_ptr<DBCommand> myLoadTags;
-	shared_ptr<DBCommand> myFindParentTag;
+private:
+	shared_ptr<DBCommand> myLoadBookTags;
+	shared_ptr<DBCommand> myLoadSingleTag;
 };
 
 class LoadSeriesRunnable : public DBRunnable {
@@ -346,12 +327,12 @@ public:
 	bool run();
 	void setBookId(int bookId);
 	const std::string &seriesName() const;
-	int numberInSeries() const;
+	int indexInSeries() const;
 
 private:
 	int myBookId;
 	std::string mySeriesName;
-	int myNumberInSeries;
+	int myIndexInSeries;
 
 	shared_ptr<DBCommand> myLoadSeries;
 };
@@ -385,38 +366,5 @@ private:
 
 	shared_ptr<DBCommand> myLoadRecentBooks;
 };
-
-
-
-inline void LoadAuthorsRunnable::setBookId(int bookId) { myBookId = bookId; }
-inline void LoadAuthorsRunnable::collectAuthors(std::vector<shared_ptr<DBAuthor> > &authors) {
-	myAuthors.swap(authors);
-	myAuthors.clear();
-}
-
-
-inline void LoadTagsRunnable::setBookId(int bookId) { myBookId = bookId; }
-inline void LoadTagsRunnable::collectTags(std::vector<shared_ptr<DBTag> > &tags) {
-	myTags.swap(tags);
-	myTags.clear();
-}
-
-
-inline void LoadSeriesRunnable::setBookId(int bookId) { myBookId = bookId; }
-inline const std::string &LoadSeriesRunnable::seriesName() const { return mySeriesName; }
-inline int LoadSeriesRunnable::numberInSeries() const { return myNumberInSeries; }
-
-
-inline void LoadFileEntriesRunnable::setFileName(const std::string &fileName) { myFileName = fileName; }
-inline void LoadFileEntriesRunnable::collectEntries(std::vector<std::string> &entries) {
-	myEntries.swap(entries);
-	myEntries.clear();
-}
-
-inline void LoadRecentBooksRunnable::collectFileIds(std::vector<int> &fileIds) {
-	myFileIds.swap(fileIds);
-	myFileIds.clear();
-}
-
 
 #endif /* __DBRUNNABLES_H__ */

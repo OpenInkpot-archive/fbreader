@@ -27,16 +27,16 @@
 #include "HtmlReaderStream.h"
 #include "../txt/PlainTextFormat.h"
 #include "../util/MiscUtil.h"
-
-#include "../../database/booksdb/DBBook.h"
+#include "../../library/Book.h"
+#include "../../bookmodel/BookModel.h"
 
 bool HtmlPlugin::acceptsFile(const ZLFile &file) const {
 	const std::string &extension = file.extension();
 	return ZLStringUtil::stringEndsWith(extension, "html") || (extension == "htm");
 }
 
-bool HtmlPlugin::readDescription(const std::string &path, DBBook &book) const {
-	ZLFile file(path);
+bool HtmlPlugin::readMetaInfo(Book &book) const {
+	ZLFile file(book.filePath());
 	shared_ptr<ZLInputStream> stream = file.inputStream();
 	if (stream.isNull()) {
 		return false;
@@ -52,22 +52,23 @@ bool HtmlPlugin::readDescription(const std::string &path, DBBook &book) const {
 	return true;
 }
 
-bool HtmlPlugin::readModel(const DBBook &book, BookModel &model) const {
-	std::string fileName = book.fileName();
-	shared_ptr<ZLInputStream> stream = ZLFile(fileName).inputStream();
+bool HtmlPlugin::readModel(BookModel &model) const {
+	const Book& book = *model.book();
+	const std::string filePath = book.filePath();
+	shared_ptr<ZLInputStream> stream = ZLFile(filePath).inputStream();
 	if (stream.isNull()) {
 		return false;
 	}
 
-	PlainTextFormat format(fileName);
+	PlainTextFormat format(filePath);
 	if (!format.initialized()) {
 		PlainTextFormatDetector detector;
 		detector.detect(*stream, format);
 	}
 
-	std::string directoryPrefix = MiscUtil::htmlDirectoryPrefix(fileName);
+	std::string directoryPrefix = MiscUtil::htmlDirectoryPrefix(filePath);
 	HtmlBookReader reader(directoryPrefix, model, format, book.encoding());
-	reader.setFileName(MiscUtil::htmlFileName(fileName));
+	reader.setFileName(MiscUtil::htmlFileName(filePath));
 	reader.readDocument(*stream);
 
 	return true;
@@ -78,6 +79,6 @@ const std::string &HtmlPlugin::iconName() const {
 	return ICON_NAME;
 }
 
-FormatInfoPage *HtmlPlugin::createInfoPage(ZLOptionsDialog &dialog, const std::string &fileName) {
-	return new PlainTextInfoPage(dialog, fileName, ZLResourceKey("<PRE>"), false);
+FormatInfoPage *HtmlPlugin::createInfoPage(ZLOptionsDialog &dialog, const std::string &filePath) {
+	return new PlainTextInfoPage(dialog, filePath, ZLResourceKey("<PRE>"), false);
 }

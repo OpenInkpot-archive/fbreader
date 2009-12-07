@@ -17,8 +17,6 @@
  * 02110-1301, USA.
  */
 
-#include <iostream>
-
 #include <ZLTextParagraph.h>
 #include <ZLUnicodeUtil.h>
 #include <ZLStringUtil.h>

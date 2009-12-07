@@ -32,4 +32,5 @@
 	<binding key="&lt;Ctrl&gt;+&lt;UpArrow&gt;" action="previousTOCSection"/>
 	<binding key="&lt;Ctrl&gt;+&lt;C&gt;" action="copyToClipboard"/>
 	<binding key="&lt;G&gt;" action="gotoPageNumber"/>
+	<binding key="&lt;Z&gt;" action="debugNL"/>
 </keymap>

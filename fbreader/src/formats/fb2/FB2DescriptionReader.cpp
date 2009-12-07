@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #include <ZLInputStream.h>
 #include <ZLStringUtil.h>
@@ -25,20 +25,22 @@
 #include "FB2DescriptionReader.h"
 #include "FB2TagManager.h"
 
-FB2DescriptionReader::FB2DescriptionReader(DBBook &book) : myBook(book) {
-	myBook.authors().clear();
-	myBook.setTitle("");
-	myBook.setLanguage("");
-	myBook.tags().clear();
+#include "../../library/Book.h"
+
+FB2DescriptionReader::FB2DescriptionReader(Book &book) : myBook(book) {
+	myBook.removeAllAuthors();
+	myBook.setTitle(std::string());
+	myBook.setLanguage(std::string());
+	myBook.removeAllTags();
 }
 
 void FB2DescriptionReader::characterDataHandler(const char *text, size_t len) {
 	switch (myReadState) {
 		case READ_TITLE:
-			myBook.appendTitle(std::string(text, len));
+			myBuffer.append(text, len);
 			break;
 		case READ_LANGUAGE:
-			myBook.appendLanguage(std::string(text, len));
+			myBuffer.append(text, len);
 			break;
 		case READ_AUTHOR_NAME_0:
 			myAuthorNames[0].append(text, len);
@@ -50,7 +52,7 @@ void FB2DescriptionReader::characterDataHandler(const char *text, size_t len) {
 			myAuthorNames[2].append(text, len);
 			break;
 		case READ_GENRE:
-			myGenreBuffer.append(text, len);
+			myBuffer.append(text, len);
 			break;
 		default:
 			break;
@@ -109,7 +111,7 @@ void FB2DescriptionReader::startElementHandler(int tag, const char **attributes)
 					ZLStringUtil::stripWhiteSpaces(seriesName);
 					myBook.setSeriesName(seriesName);
 					const char *number = attributeValue(attributes, "number");
-					myBook.setNumberInSeries( (number != 0) ? atoi(number) : 0 );
+					myBook.setIndexInSeries(number != 0 ? atoi(number) : 0);
 				}
 			}
 			break;
@@ -125,25 +127,25 @@ void FB2DescriptionReader::endElementHandler(int tag) {
 			break;
 		case _BOOK_TITLE:
 			if (myReadState == READ_TITLE) {
+				myBook.setTitle(myBuffer);
+				myBuffer.erase();
 				myReadState = READ_SOMETHING;
 			}
 			break;
 		case _GENRE:
 			if (myReadState == READ_GENRE) {
-				ZLStringUtil::stripWhiteSpaces(myGenreBuffer);
-				if (!myGenreBuffer.empty()) {
+				ZLStringUtil::stripWhiteSpaces(myBuffer);
+				if (!myBuffer.empty()) {
 					const std::vector<std::string> &tags =
-						FB2TagManager::instance().humanReadableTags(myGenreBuffer);
+						FB2TagManager::Instance().humanReadableTags(myBuffer);
 					if (!tags.empty()) {
 						for (std::vector<std::string>::const_iterator it = tags.begin(); it != tags.end(); ++it) {
-							//myBook.addTag(*it, false);
-							myBook.addTag(  DBTag::getSubTag(*it)  );
+							myBook.addTag(*it);
 						}
 					} else {
-						//myBook.addTag(myGenreBuffer);
-						myBook.addTag(  DBTag::getSubTag(myGenreBuffer)  );
+						myBook.addTag(myBuffer);
 					}
-					myGenreBuffer.erase();
+					myBuffer.erase();
 				}
 				myReadState = READ_SOMETHING;
 			}
@@ -162,10 +164,7 @@ void FB2DescriptionReader::endElementHandler(int tag) {
 					fullName += ' ';
 				}
 				fullName += myAuthorNames[2];
-				shared_ptr<DBAuthor> author = DBAuthor::create(fullName, myAuthorNames[2]);
-				if (!author.isNull()) {
-					myBook.authors().push_back( author );
-				}
+				myBook.addAuthor(fullName, myAuthorNames[2]);
 				myAuthorNames[0].erase();
 				myAuthorNames[1].erase();
 				myAuthorNames[2].erase();
@@ -174,6 +173,8 @@ void FB2DescriptionReader::endElementHandler(int tag) {
 			break;
 		case _LANG:
 			if (myReadState == READ_LANGUAGE) {
+				myBook.setLanguage(myBuffer);
+				myBuffer.erase();
 				myReadState = READ_SOMETHING;
 			}
 			break;
@@ -197,15 +198,10 @@ void FB2DescriptionReader::endElementHandler(int tag) {
 	}
 }
 
-bool FB2DescriptionReader::readDescription(const std::string &fileName) {
+bool FB2DescriptionReader::readMetaInfo() {
 	myReadState = READ_NOTHING;
 	for (int i = 0; i < 3; ++i) {
 		myAuthorNames[i].erase();
 	}
-	myGenreBuffer.erase();
-	bool code = readDocument(fileName);
-	if (myBook.authors().empty()) {
-		myBook.authors().push_back( new DBAuthor() );
-	}
-	return code;
+	return readDocument(myBook.filePath());
 }

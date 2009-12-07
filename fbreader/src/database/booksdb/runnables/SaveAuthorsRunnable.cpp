@@ -21,8 +21,9 @@
 #include <algorithm>
 
 #include "../DBRunnables.h"
+#include "../../../library/Book.h"
+#include "../../../library/Author.h"
 #include "../../sqldb/implsqlite/SQLiteFactory.h"
-
 
 SaveAuthorsRunnable::SaveAuthorsRunnable(DBConnection &connection) {
 	mySetBookAuthor   = SQLiteFactory::createCommand(BooksDBQuery::SET_BOOK_AUTHOR, connection, "@author_id", DBValue::DBINT, "@book_id", DBValue::DBINT, "@author_index", DBValue::DBINT);
@@ -35,7 +36,7 @@ bool SaveAuthorsRunnable::run() {
 	if (myBook->bookId() == 0) {
 		return false;
 	}
-	const std::vector<shared_ptr<DBAuthor> > &bookAuthors = myBook->authors(); // save link to vector
+	const AuthorList &bookAuthors = myBook->authors(); // save link to vector
 
 	((DBIntValue &) *mySetBookAuthor->parameter("@book_id").value()) = myBook->bookId();
 	DBIntValue &setAuthorId    = (DBIntValue &) *mySetBookAuthor->parameter("@author_id").value();
@@ -45,26 +46,24 @@ bool SaveAuthorsRunnable::run() {
 	DBTextValue &addAuthor   = (DBTextValue &) *myAddAuthor->parameter("@name").value();
 	DBTextValue &addSortKey  = (DBTextValue &) *myAddAuthor->parameter("@sort_key").value();
 
-	unsigned index = 0;
-	for (std::vector<shared_ptr<DBAuthor> >::const_iterator it = bookAuthors.begin(); it != bookAuthors.end(); ++it) {
-		const DBAuthor &author = **it;
-		if (!author.isDefault()) {
-			findAuthor.setValue( author.name() );
-			findSortKey.setValue( author.sortKey() );
-			shared_ptr<DBValue> tableAuthorId = myFindAuthorId->executeScalar();
+	int index = 0;
+	for (AuthorList::const_iterator it = bookAuthors.begin(); it != bookAuthors.end(); ++it) {
+		const Author &author = **it;
+		findAuthor.setValue( author.name() );
+		findSortKey.setValue( author.sortKey() );
+		shared_ptr<DBValue> tableAuthorId = myFindAuthorId->executeScalar();
+		if (tableAuthorId.isNull() || tableAuthorId->type() != DBValue::DBINT || ((DBIntValue &) *tableAuthorId).value() == 0) {
+			addAuthor.setValue( author.name() );
+			addSortKey.setValue( author.sortKey() );
+			tableAuthorId = myAddAuthor->executeScalar();
 			if (tableAuthorId.isNull() || tableAuthorId->type() != DBValue::DBINT || ((DBIntValue &) *tableAuthorId).value() == 0) {
-				addAuthor.setValue( author.name() );
-				addSortKey.setValue( author.sortKey() );
-				tableAuthorId = myAddAuthor->executeScalar();
-				if (tableAuthorId.isNull() || tableAuthorId->type() != DBValue::DBINT || ((DBIntValue &) *tableAuthorId).value() == 0) {
-					return false;
-				}
-			}
-			setAuthorId = ((DBIntValue &) *tableAuthorId).value();
-			setAuthorIndex = ++index;
-			if (!mySetBookAuthor->execute()) {
 				return false;
 			}
+		}
+		setAuthorId = ((DBIntValue &) *tableAuthorId).value();
+		setAuthorIndex = ++index;
+		if (!mySetBookAuthor->execute()) {
+			return false;
 		}
 	}
 	((DBIntValue &) *myTrimBookAuthors->parameter("@book_id").value()) = myBook->bookId();
@@ -72,3 +71,6 @@ bool SaveAuthorsRunnable::run() {
 	return myTrimBookAuthors->execute();
 }
 
+void SaveAuthorsRunnable::setBook(shared_ptr<Book> book) {
+	myBook = book;
+}

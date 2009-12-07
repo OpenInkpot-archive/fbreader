@@ -20,14 +20,22 @@
 #ifndef __LITRESDATAPARSER_H__
 #define __LITRESDATAPARSER_H__
 
+#include <map>
+#include <set>
+
 #include <ZLXMLReader.h>
 
-#include "../NetworkBookInfo.h"
+#include "../NetworkLibraryItems.h"
+
+#include "LitResGenre.h"
+
+class NetworkAuthenticationManager;
+
 
 class LitResDataParser : public ZLXMLReader {
 
 public:
-	LitResDataParser(NetworkBookList &books);
+	LitResDataParser(NetworkLibraryItemList &books, const std::map<std::string, LitResGenre> &genres, shared_ptr<NetworkAuthenticationManager> mgr);
 
 private:
 	void startElementHandler(const char *tag, const char **attributes);
@@ -44,17 +52,25 @@ private:
 	void processState(const std::string &tag, bool closed);
 	State getNextState(const std::string &tag, bool closed);
 
+	NetworkLibraryBookItem &currentBook();
+
 private:
-	NetworkBookList &myBooks;
+	NetworkLibraryItemList &myBooks;
 	std::string myBuffer;
-	shared_ptr<NetworkBookInfo> myCurrentBook;
+	shared_ptr<NetworkLibraryItem> myCurrentBook;
+	unsigned int myIndex;
 
 	State myState;
 	std::map<std::string, std::string> myAttributes;
-	
+
 	std::string myAuthorFirstName;
 	std::string myAuthorMiddleName;
 	std::string myAuthorLastName;
+
+	const std::map<std::string, LitResGenre> &myGenres;
+	shared_ptr<NetworkAuthenticationManager> myAuthenticationManager;
 };
+
+inline NetworkLibraryBookItem &LitResDataParser::currentBook() { return (NetworkLibraryBookItem &) *myCurrentBook; }
 
 #endif /* __LITRESDATAPARSER_H__ */

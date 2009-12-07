@@ -18,15 +18,18 @@
  */
 
 #include <ZLFile.h>
+#include <ZLImage.h>
 #include <ZLStringUtil.h>
 #include <ZLDir.h>
 #include <ZLInputStream.h>
 
 #include "OEBPlugin.h"
-#include "OEBDescriptionReader.h"
+#include "OEBMetaInfoReader.h"
 #include "OEBBookReader.h"
+#include "OEBCoverReader.h"
 #include "OEBTextStream.h"
 #include "../../bookmodel/BookModel.h"
+#include "../../library/Book.h"
 
 static const std::string OPF = "opf";
 static const std::string OEBZIP = "oebzip";
@@ -65,10 +68,11 @@ std::string OEBPlugin::opfFileName(const std::string &oebFileName) {
 	return "";
 }
 
-bool OEBPlugin::readDescription(const std::string &path, DBBook &book) const {
+bool OEBPlugin::readMetaInfo(Book &book) const {
+	const std::string &path = book.filePath();
 	shared_ptr<ZLInputStream> lock = ZLFile(path).inputStream();
 	const std::string opf = opfFileName(path);
-	bool code = OEBDescriptionReader(book).readDescription(opf);
+	bool code = OEBMetaInfoReader(book).readMetaInfo(opf);
 	if (code && book.language().empty()) {
 		shared_ptr<ZLInputStream> oebStream = new OEBTextStream(opf);
 		detectLanguage(book, *oebStream);
@@ -88,12 +92,18 @@ private:
 InputStreamLock::InputStreamLock(shared_ptr<ZLInputStream> stream) : myStream(stream) {
 }
 
-bool OEBPlugin::readModel(const DBBook &book, BookModel &model) const {
+bool OEBPlugin::readModel(BookModel &model) const {
+	const std::string &filePath = model.book()->filePath();
 	model.addUserData(
 		"inputStreamLock",
-		new InputStreamLock(ZLFile(book.fileName()).inputStream())
+		new InputStreamLock(ZLFile(filePath).inputStream())
 	);
-	return OEBBookReader(model).readBook(opfFileName(book.fileName()));
+	return OEBBookReader(model).readBook(opfFileName(filePath));
+}
+
+shared_ptr<ZLImage> OEBPlugin::coverImage(const Book &book) const {
+	const std::string opf = opfFileName(book.filePath());
+	return OEBCoverReader().readCover(opf);
 }
 
 const std::string &OEBPlugin::iconName() const {

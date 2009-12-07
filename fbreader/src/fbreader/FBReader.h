@@ -29,23 +29,23 @@
 #include <ZLApplication.h>
 #include <ZLKeyBindings.h>
 
-#include "../collection/BookCollection.h"
+#include "../library/Library.h"
 #include "../external/ProgramCollection.h"
 
-#include "../database/booksdb/DBBook.h"
-
-class ZLViewWidget;
 class ZLMessageHandler;
 
+class Book;
 class BookModel;
 class BookTextView;
-class CollectionView;
 
 class FBReader : public ZLApplication {
 
 public:
+	static FBReader &Instance();
+
+public:
 	// returns true if description was found or error message was shown
-	static bool createDescription(const std::string &fileName, shared_ptr<DBBook> &book);
+	static bool createBook(const std::string &fileName, shared_ptr<Book> &book);
 
 	static const std::string PageIndexParameter;
 
@@ -56,9 +56,9 @@ public:
 		FOOTNOTE_MODE = 1 << 1,
 		CONTENTS_MODE = 1 << 2,
 		BOOKMARKS_MODE = 1 << 3,
-		BOOK_COLLECTION_MODE = 1 << 4,
-		NET_LIBRARY_MODE = 1 << 5,
-		ALL_MODES = 0x3F
+		LIBRARY_MODE = 1 << 4,
+		NETWORK_LIBRARY_MODE = 1 << 5,
+		ALL_MODES = 0xFF
 	};
 
 	struct ScrollingOptions {
@@ -74,8 +74,8 @@ public:
 public:
 	ZLBooleanOption QuitOnCancelOption;
 
-	ScrollingOptions LargeScrollingOptions;
-	ScrollingOptions SmallScrollingOptions;
+	ScrollingOptions PageScrollingOptions;
+	ScrollingOptions LineScrollingOptions;
 	ScrollingOptions MouseScrollingOptions;
 	ScrollingOptions TapScrollingOptions;
 	ZLBooleanOption EnableTapScrollingOption;
@@ -92,10 +92,10 @@ public:
 	void setMode(ViewMode mode);
 	ViewMode mode() const;
 
+	shared_ptr<Book> currentBook() const;
+
 private:
 	void initWindow();
-
-	bool runBookInfoDialog(shared_ptr<DBBook> book);
 
 	void clearTextCaches();
 
@@ -103,9 +103,11 @@ private:
 
 	bool closeView();
 	std::string helpFileName(const std::string &language) const;
-	//void openFile(const std::string &fileName);
+	void openFile(const std::string &fileName);
 
 	bool isViewFinal() const;
+
+	void showLibraryView();
 
 public:
 	shared_ptr<ZLKeyBindings> keyBindings();
@@ -115,35 +117,41 @@ public:
 	void openInDictionary(const std::string &word);
 
 	shared_ptr<ProgramCollection> webBrowserCollection() const;
+	void openLinkInBrowser(const std::string &url) const;
 
 	void tryShowFootnoteView(const std::string &id, const std::string &type);
 	BookTextView &bookTextView() const;
-	CollectionView &collectionView() const;
 	void showBookTextView();
-	void openBook(shared_ptr<DBBook> book);
+	void openBook(shared_ptr<Book> book);
 
 	RecentBooks &recentBooks();
 	const RecentBooks &recentBooks() const;
 
+	void invalidateNetworkView();
+	void invalidateAccountDependents();
+
 private:
 	shared_ptr<ProgramCollection> dictionaryCollection() const;
 
-	void openBookInternal(shared_ptr<DBBook> book);
+	void openBookInternal(shared_ptr<Book> book);
 	friend class OpenBookRunnable;
 	void rebuildCollectionInternal();
 	friend class RebuildCollectionRunnable;
 	friend class OptionsApplyRunnable;
 
+	void transformUrl(std::string &url) const;
+
 private:
 	ViewMode myMode;
 	ViewMode myPreviousMode;
 
-	shared_ptr<ZLView> myFootnoteView;	
-	shared_ptr<ZLView> myBookTextView;	
-	shared_ptr<ZLView> myContentsView;	
-	shared_ptr<ZLView> myCollectionView;	
-	shared_ptr<ZLView> myNetLibraryView;	
-	shared_ptr<ZLPopupData> myRecentBooksPopupData;	
+	shared_ptr<ZLView> myFootnoteView;
+	shared_ptr<ZLView> myBookTextView;
+	shared_ptr<ZLView> myContentsView;
+	shared_ptr<ZLView> myNetworkLibraryView;
+	shared_ptr<ZLView> myLibraryByAuthorView;
+	shared_ptr<ZLView> myLibraryByTagView;
+	shared_ptr<ZLPopupData> myRecentBooksPopupData;
 
 	ZLTime myLastScrollingTime;
 
@@ -172,7 +180,6 @@ friend class OpenFileHandler;
 
 friend class OptionsDialog;
 friend class FBView;
-friend class NetLibraryView;
 
 //friend class ShowCollectionAction;
 friend class ShowHelpAction;
@@ -202,6 +209,8 @@ friend class SelectionAction;
 friend class SearchOnNetworkAction;
 friend class AdvancedSearchOnNetworkAction;
 friend class FBFullscreenAction;
+friend class BooksOrderAction;
+friend class LogOutAction;
 };
 
 #endif /* __FBREADER_H__ */

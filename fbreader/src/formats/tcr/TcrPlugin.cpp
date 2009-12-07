@@ -28,15 +28,15 @@
 #include "../html/HtmlBookReader.h"
 #include "../txt/PlainTextFormat.h"
 
-#include "../../database/booksdb/DBBook.h"
-
+#include "../../bookmodel/BookModel.h"
+#include "../../library/Book.h"
 
 bool TcrPlugin::acceptsFile(const ZLFile &file) const {
 	return file.extension() == "tcr";
 }
 
-bool TcrPlugin::readDescription(const std::string &path, DBBook &book) const {
-	ZLFile file(path);
+bool TcrPlugin::readMetaInfo(Book &book) const {
+	ZLFile file(book.filePath());
 
 	shared_ptr<ZLInputStream> stream = new TcrStream(file);
 	detectEncodingAndLanguage(book, *stream);
@@ -47,11 +47,14 @@ bool TcrPlugin::readDescription(const std::string &path, DBBook &book) const {
 	return true;
 }
 
-bool TcrPlugin::readModel(const DBBook &book, BookModel &model) const {
-	ZLFile file(book.fileName());
+bool TcrPlugin::readModel(BookModel &model) const {
+	const Book &book = *model.book();
+	const std::string &filePath = book.filePath();
+
+	ZLFile file(filePath);
 	shared_ptr<ZLInputStream> stream = new TcrStream(file);
 
-	PlainTextFormat format(book.fileName());
+	PlainTextFormat format(filePath);
 	if (!format.initialized()) {
 		PlainTextFormatDetector detector;
 		detector.detect(*stream, format);
@@ -73,11 +76,11 @@ const std::string &TcrPlugin::iconName() const {
 	return ICON_NAME;
 }
 
-FormatInfoPage *TcrPlugin::createInfoPage(ZLOptionsDialog &dialog, const std::string &fileName) {
-	ZLFile file(fileName);
+FormatInfoPage *TcrPlugin::createInfoPage(ZLOptionsDialog &dialog, const std::string &filePath) {
+	ZLFile file(filePath);
 	shared_ptr<ZLInputStream> stream = new TcrStream(file);
 	if (TextFormatDetector().isPPL(*stream)) {
 		return 0;
 	}
-	return new PlainTextInfoPage(dialog, fileName, ZLResourceKey("Text"), !TextFormatDetector().isHtml(*stream));
+	return new PlainTextInfoPage(dialog, filePath, ZLResourceKey("Text"), !TextFormatDetector().isHtml(*stream));
 }

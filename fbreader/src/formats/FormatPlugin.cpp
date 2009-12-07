@@ -19,17 +19,20 @@
 
 #include <ZLInputStream.h>
 #include <ZLLanguageDetector.h>
+#include <ZLImage.h>
 
 #include "FormatPlugin.h"
 
-void FormatPlugin::detectEncodingAndLanguage(DBBook &book, ZLInputStream &stream) {
+#include "../library/Book.h"
+
+void FormatPlugin::detectEncodingAndLanguage(Book &book, ZLInputStream &stream) {
 	std::string language = book.language();
 	std::string encoding = book.encoding();
 	if (!encoding.empty() && !language.empty()) {
 		return;
 	}
 
-	PluginCollection &collection = PluginCollection::instance();
+	PluginCollection &collection = PluginCollection::Instance();
 	if (language.empty()) {
 		language = collection.DefaultLanguageOption.value();
 	}
@@ -58,13 +61,13 @@ void FormatPlugin::detectEncodingAndLanguage(DBBook &book, ZLInputStream &stream
 	book.setLanguage(language);
 }
 
-void FormatPlugin::detectLanguage(DBBook &book, ZLInputStream &stream) {
+void FormatPlugin::detectLanguage(Book &book, ZLInputStream &stream) {
 	std::string language = book.language();
 	if (!language.empty()) {
 		return;
 	}
 
-	PluginCollection &collection = PluginCollection::instance();
+	PluginCollection &collection = PluginCollection::Instance();
 	if (language.empty()) {
 		language = collection.DefaultLanguageOption.value();
 	}
@@ -88,4 +91,8 @@ void FormatPlugin::detectLanguage(DBBook &book, ZLInputStream &stream) {
 const std::string &FormatPlugin::tryOpen(const std::string&) const {
 	static const std::string EMPTY = "";
 	return EMPTY;
+}
+
+shared_ptr<ZLImage> FormatPlugin::coverImage(const Book &book) const {
+	return 0;
 }

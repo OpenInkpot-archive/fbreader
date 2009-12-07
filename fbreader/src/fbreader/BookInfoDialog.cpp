@@ -18,7 +18,6 @@
  */
 
 #include <algorithm>
-//#include <iostream>
 
 #include <ZLDialogManager.h>
 #include <ZLOptionsDialog.h>
@@ -33,19 +32,19 @@
 
 #include "BookInfoDialog.h"
 
+#include "../library/Library.h"
 #include "../encodingOption/EncodingOptionEntry.h"
+#include "../library/Book.h"
+#include "../library/Tag.h"
+#include "../library/Author.h"
 
-#include "../database/booksdb/BooksDBUtil.h"
-
-
-static const unsigned AUTHOR_ENTRIES_POOL_SIZE = 64;
-static const unsigned TAG_ENTRIES_POOL_SIZE = 64;
-
+static const size_t AUTHOR_ENTRIES_POOL_SIZE = 64;
+static const size_t TAG_ENTRIES_POOL_SIZE = 64;
 
 class AuthorDisplayNameEntry : public ZLComboOptionEntry {
 
 public:
-	AuthorDisplayNameEntry(BookInfoDialog &dialog, shared_ptr<DBAuthor> initialAuthor, bool &visible);
+	AuthorDisplayNameEntry(BookInfoDialog &dialog, shared_ptr<Author> initialAuthor, bool &visible);
 
 	const std::string &initialValue() const;
 	const std::vector<std::string> &values() const;
@@ -61,7 +60,7 @@ private:
 private:
 	BookInfoDialog &myInfoDialog;
 	mutable std::vector<std::string> myValues;
-	shared_ptr<DBAuthor> myCurrentAuthor;
+	shared_ptr<Author> myCurrentAuthor;
 
 	std::string myInitialValue;
 	bool myEmpty;
@@ -91,14 +90,14 @@ private:
 };
 
 
-class BookNumberEntry : public ZLSpinOptionEntry {
+class BookIndexEntry : public ZLSpinOptionEntry {
 
 public:
 	static const int MIN_NUMBER;
 	static const int MAX_NUMBER;
 	
 public:
-	BookNumberEntry(BookInfoDialog &dialog);
+	BookIndexEntry(BookInfoDialog &dialog);
 
 	int initialValue() const;
 	int minValue() const;
@@ -113,7 +112,7 @@ private:
 
 
 
-AuthorDisplayNameEntry::AuthorDisplayNameEntry(BookInfoDialog &dialog, shared_ptr<DBAuthor> initialAuthor, bool &visible) : 
+AuthorDisplayNameEntry::AuthorDisplayNameEntry(BookInfoDialog &dialog, shared_ptr<Author> initialAuthor, bool &visible) : 
 	ZLComboOptionEntry(true), myInfoDialog(dialog), myCurrentAuthor(initialAuthor) {
 
 	if (myCurrentAuthor.isNull()) {
@@ -137,8 +136,11 @@ const std::vector<std::string> &AuthorDisplayNameEntry::values() const {
 	if (myValues.empty()) {
 		const std::string &initial = initialValue();
 		bool addInitial = true;
-		const std::vector<shared_ptr<DBAuthor> > &authors = myInfoDialog.myCollection.authors();
-		for (std::vector<shared_ptr<DBAuthor> >::const_iterator it = authors.begin(); it != authors.end(); ++it) {
+		const AuthorList &authors = Library::Instance().authors();
+		for (AuthorList::const_iterator it = authors.begin(); it != authors.end(); ++it) {
+			if (it->isNull()) {
+				continue;
+			}
 			const std::string name = (*it)->name();
 			if (addInitial && (name == initial)) {
 				addInitial = false;
@@ -161,9 +163,7 @@ void AuthorDisplayNameEntry::onAccept(const std::string &value) {
 		//myCurrentAuthor = myCurrentAuthor;
 		return;
 	}
-	std::string authorName = value;
-	ZLStringUtil::stripWhiteSpaces(authorName);
-	myCurrentAuthor = DBAuthor::create(authorName);
+	myCurrentAuthor = Author::getAuthor(value);
 }
 
 
@@ -176,7 +176,7 @@ void AuthorDisplayNameEntry::onValueEdited(const std::string &value) {
 }
 
 void AuthorDisplayNameEntry::onValueSelected(int index) {
-	const std::vector<shared_ptr<DBAuthor> > &authors = myInfoDialog.myCollection.authors();
+	const AuthorList &authors = Library::Instance().authors();
 	myCurrentAuthor = (((size_t)index) < authors.size()) ? authors[index] : 0;
 	myInfoDialog.mySeriesTitleEntry->resetView();
 	onValueChanged(myValues[index]);
@@ -189,14 +189,14 @@ void AuthorDisplayNameEntry::onValueChanged(const std::string &value) {
 
 	myEmpty = value.empty();
 	if (myEmpty) {
-		for (unsigned i = 0; i < myInfoDialog.myAuthorEntries.size(); ++i) {
+		for (size_t i = 0; i < myInfoDialog.myAuthorEntries.size(); ++i) {
 			AuthorDisplayNameEntry &entry = *myInfoDialog.myAuthorEntries[i];
 			if (entry.myEmpty && entry.isVisible() && this != &entry) {
 				entry.setVisible(false);
 			}
 		}
 	} else {
-		unsigned i, lastvisible = (unsigned) -1;
+		size_t i, lastvisible = (size_t) -1;
 		for (i = 0; i < myInfoDialog.myAuthorEntries.size(); ++i) {
 			AuthorDisplayNameEntry &entry = *myInfoDialog.myAuthorEntries[i];
 			if (entry.isVisible()) {
@@ -220,11 +220,12 @@ void AuthorDisplayNameEntry::onValueChanged(const std::string &value) {
 
 
 SeriesTitleEntry::SeriesTitleEntry(BookInfoDialog &dialog) : ZLComboOptionEntry(true), myInfoDialog(dialog) {
-	const std::vector<shared_ptr<DBAuthor> > &authors = myInfoDialog.myBook->authors();
+	const AuthorList &authors = myInfoDialog.myBook->authors();
 	myOriginalValuesSet.insert(initialValue());
 	myOriginalValuesSet.insert("");
-	for (std::vector<shared_ptr<DBAuthor> >::const_iterator it = authors.begin(); it != authors.end(); ++it) {
-		BooksDB::instance().collectSeriesNames(**it, myOriginalValuesSet);
+	const Library &library = Library::Instance();
+	for (AuthorList::const_iterator it = authors.begin(); it != authors.end(); ++it) {
+		library.collectSeriesNames(*it, myOriginalValuesSet);
 	}
 }
 
@@ -235,11 +236,12 @@ const std::string &SeriesTitleEntry::initialValue() const {
 const std::vector<std::string> &SeriesTitleEntry::values() const {
 	std::set<std::string> valuesSet(myOriginalValuesSet);
 
-	const std::vector<shared_ptr<DBAuthor> > &authors = myInfoDialog.myBook->authors();
-	for (std::vector<AuthorDisplayNameEntry *>::const_iterator it = myInfoDialog.myAuthorEntries.begin(); it != myInfoDialog.myAuthorEntries.end(); ++it) {
-		shared_ptr<DBAuthor> currentAuthor = (*it)->myCurrentAuthor;
+	const Library &library = Library::Instance();
+	const AuthorList &authors = myInfoDialog.myBook->authors();
+	for (std::vector<AuthorDisplayNameEntry*>::const_iterator it = myInfoDialog.myAuthorEntries.begin(); it != myInfoDialog.myAuthorEntries.end(); ++it) {
+		shared_ptr<Author> currentAuthor = (*it)->myCurrentAuthor;
 		if (!currentAuthor.isNull() && std::find(authors.begin(), authors.end(), currentAuthor) == authors.end()) {
-			BooksDB::instance().collectSeriesNames(*currentAuthor, valuesSet);
+			library.collectSeriesNames(currentAuthor, valuesSet);
 		}
 	}
 
@@ -256,7 +258,7 @@ void SeriesTitleEntry::onAccept(const std::string &value) {
 }
 
 void SeriesTitleEntry::onValueSelected(int index) {
-	myInfoDialog.myBookNumberEntry->setVisible(index != 0);
+	myInfoDialog.myBookIndexEntry->setVisible(index != 0);
 }
 
 bool SeriesTitleEntry::useOnValueEdited() const {
@@ -264,41 +266,35 @@ bool SeriesTitleEntry::useOnValueEdited() const {
 }
 
 void SeriesTitleEntry::onValueEdited(const std::string &value) {
-	myInfoDialog.myBookNumberEntry->setVisible(!value.empty());
+	myInfoDialog.myBookIndexEntry->setVisible(!value.empty());
 }
 
 
-const int BookNumberEntry::MIN_NUMBER = 0;
-const int BookNumberEntry::MAX_NUMBER = 100;
+const int BookIndexEntry::MIN_NUMBER = 0;
+const int BookIndexEntry::MAX_NUMBER = 100;
 
-BookNumberEntry::BookNumberEntry(BookInfoDialog &dialog) : myInfoDialog(dialog) {
+BookIndexEntry::BookIndexEntry(BookInfoDialog &dialog) : myInfoDialog(dialog) {
 }
 
-int BookNumberEntry::initialValue() const {
-	return myInfoDialog.myBook->numberInSeries();
+int BookIndexEntry::initialValue() const {
+	return myInfoDialog.myBook->indexInSeries();
 }
 
-int BookNumberEntry::minValue() const {
+int BookIndexEntry::minValue() const {
 	return MIN_NUMBER;
 }
 
-int BookNumberEntry::maxValue() const {
+int BookIndexEntry::maxValue() const {
 	return MAX_NUMBER;
 }
 
-int BookNumberEntry::step() const {
+int BookIndexEntry::step() const {
 	return 1;
 }
 
-void BookNumberEntry::onAccept(int value) {
-	myInfoDialog.myBook->setNumberInSeries(value);
+void BookIndexEntry::onAccept(int value) {
+	myInfoDialog.myBook->setIndexInSeries(value);
 }
-
-
-
-
-
-
 
 class BookTitleEntry : public ZLStringOptionEntry {
 
@@ -415,7 +411,7 @@ const std::string &BookTagEntry::initialValue() const {
 const std::vector<std::string> &BookTagEntry::values() const {
 	if (myValues.empty()) {
 		myValues.push_back("");
-		DBTag::collectTagNames(myValues);
+		Tag::collectTagNames(myValues);
 	}
 	return myValues;
 }
@@ -445,14 +441,14 @@ void BookTagEntry::onValueChanged(const std::string &value) {
 
 	myEmpty = value.empty();
 	if (myEmpty) {
-		for (unsigned i = 0; i < myInfoDialog.myTagEntries.size(); ++i) {
+		for (size_t i = 0; i < myInfoDialog.myTagEntries.size(); ++i) {
 			BookTagEntry &entry = *myInfoDialog.myTagEntries[i];
 			if (entry.myEmpty && entry.isVisible() && this != &entry) {
 				entry.setVisible(false);
 			}
 		}
 	} else {
-		unsigned i, lastvisible = (unsigned) -1;
+		size_t i, lastvisible = (size_t) -1;
 		for (i = 0; i < myInfoDialog.myTagEntries.size(); ++i) {
 			BookTagEntry &entry = *myInfoDialog.myTagEntries[i];
 			if (entry.isVisible()) {
@@ -471,11 +467,6 @@ void BookTagEntry::onValueChanged(const std::string &value) {
 	}
 }
 
-
-
-
-
-
 class BookInfoApplyAction : public ZLRunnable {
 
 public:
@@ -489,44 +480,36 @@ private:
 BookInfoApplyAction::BookInfoApplyAction(BookInfoDialog &dialog) : myInfoDialog(dialog) {}
 
 void BookInfoApplyAction::run() {
-	std::vector<shared_ptr<DBAuthor> > &authors = myInfoDialog.myBook->authors();
-	authors.clear();
-	for (unsigned i = 0; i < myInfoDialog.myAuthorEntries.size(); ++i) {
-		shared_ptr<DBAuthor> author = myInfoDialog.myAuthorEntries[i]->myCurrentAuthor;
-		if (!author.isNull() 
-			&& std::find_if(authors.begin(), authors.end(), DBAuthorPredicate(author)) == authors.end()) {
-			authors.push_back(author);
-		}
-	}
-	if (authors.empty()) {
-		authors.push_back( new DBAuthor() );
-	}
+	Book &book = *myInfoDialog.myBook;
 
-	myInfoDialog.myBook->removeAllTags();
-	for (unsigned i = 0; i < myInfoDialog.myNewTags.size(); ++i) {
-		const std::string &tag = myInfoDialog.myNewTags[i];
-		shared_ptr<DBTag> ptr = DBTag::getSubTag(tag);
-		if (!ptr.isNull()) {
-			myInfoDialog.myBook->addTag(ptr);
+	AuthorList authors;
+	for (size_t i = 0; i < myInfoDialog.myAuthorEntries.size(); ++i) {
+		shared_ptr<Author> a = myInfoDialog.myAuthorEntries[i]->myCurrentAuthor;
+		if (!a.isNull() &&
+				std::find(authors.begin(), authors.end(), a) == authors.end()) {
+			authors.push_back(a);
 		}
 	}
 
-	BooksDB::instance().saveBook(myInfoDialog.myBook);
+	book.removeAllAuthors();
+	for (AuthorList::const_iterator it = authors.begin(); it != authors.end(); ++it) {
+		book.addAuthor(*it);
+	}
+
+	book.removeAllTags();
+	for (size_t i = 0; i < myInfoDialog.myNewTags.size(); ++i) {
+		book.addTag(myInfoDialog.myNewTags[i]);
+	}
+
+	Library::Instance().updateBook(myInfoDialog.myBook);
 }
 
-
-
-
-
-
-BookInfoDialog::BookInfoDialog(const BookCollection &collection, shared_ptr<DBBook> book) : 
-		myCollection(collection), myBook(book) {
-
-	myDialog = ZLDialogManager::instance().createOptionsDialog(ZLResourceKey("InfoDialog"), new BookInfoApplyAction(*this));
+BookInfoDialog::BookInfoDialog(shared_ptr<Book> book) : myBook(book) {
+	myDialog = ZLDialogManager::Instance().createOptionsDialog(ZLResourceKey("InfoDialog"), new BookInfoApplyAction(*this));
 
 	ZLDialogContent &commonTab = myDialog->createTab(ZLResourceKey("Common"));
 	commonTab.addOption(ZLResourceKey("file"), 
-		new ZLStringInfoEntry(ZLFile::fileNameToUtf8(ZLFile( book->fileName() ).path()))
+		new ZLStringInfoEntry(ZLFile::fileNameToUtf8(ZLFile(book->filePath()).path()))
 	);
 	commonTab.addOption(ZLResourceKey("title"), new BookTitleEntry(*this));
 
@@ -538,7 +521,7 @@ BookInfoDialog::BookInfoDialog(const BookCollection &collection, shared_ptr<DBBo
 	languageCodes.push_back("de-traditional");
 	myLanguageEntry = new BookLanguageEntry(*this, languageCodes);
 	mySeriesTitleEntry = new SeriesTitleEntry(*this);
-	myBookNumberEntry = new BookNumberEntry(*this);
+	myBookIndexEntry = new BookIndexEntry(*this);
 
 	commonTab.addOption(ZLResourceKey("language"), myLanguageEntry);
 	if (myEncodingSetEntry != 0) {
@@ -550,7 +533,7 @@ BookInfoDialog::BookInfoDialog(const BookCollection &collection, shared_ptr<DBBo
 
 	ZLDialogContent &seriesTab = myDialog->createTab(ZLResourceKey("Series"));
 	seriesTab.addOption(ZLResourceKey("seriesTitle"), mySeriesTitleEntry);
-	seriesTab.addOption(ZLResourceKey("bookNumber"), myBookNumberEntry);
+	seriesTab.addOption(ZLResourceKey("bookIndex"), myBookIndexEntry);
 
 	mySeriesTitleEntry->onValueEdited(mySeriesTitleEntry->initialValue());
 	/*
@@ -565,18 +548,18 @@ BookInfoDialog::BookInfoDialog(const BookCollection &collection, shared_ptr<DBBo
 
 	initTagEntries();
 
-	FormatPlugin *plugin = PluginCollection::instance().plugin(ZLFile( book->fileName() ), false);
-	if (plugin != 0) {
-		myFormatInfoPage = plugin->createInfoPage(*myDialog, book->fileName());
+	shared_ptr<FormatPlugin> plugin = PluginCollection::Instance().plugin(*book);
+	if (!plugin.isNull()) {
+		myFormatInfoPage = plugin->createInfoPage(*myDialog, book->filePath());
 	}
 }
 
 void BookInfoDialog::initTagEntries() {
 	bool visible = true;
-	const std::vector<shared_ptr<DBTag> > &tags = myBook->tags();
+	const TagList &tags = myBook->tags();
 	myTagsDone = false;
 	myTagsTab = &myDialog->createTab(ZLResourceKey("Tags"));
-	for (unsigned i = 0; i < TAG_ENTRIES_POOL_SIZE; ++i) {
+	for (size_t i = 0; i < TAG_ENTRIES_POOL_SIZE; ++i) {
 		std::string tag = (i < tags.size()) ? tags[i]->fullName() : "";
 		BookTagEntry *entry = new BookTagEntry(*this, tag, visible);
 		myTagEntries.push_back(entry);
@@ -587,11 +570,11 @@ void BookInfoDialog::initTagEntries() {
 
 void BookInfoDialog::initAuthorEntries() {
 	bool visible = true;
-	const std::vector<shared_ptr<DBAuthor> > &authors = myBook->authors();
+	const AuthorList &authors = myBook->authors();
 	myAuthorsDone = false;
 	myAuthorsTab = &myDialog->createTab(ZLResourceKey("Authors"));
-	for (unsigned i = 0; i < AUTHOR_ENTRIES_POOL_SIZE; ++i) {
-		shared_ptr<DBAuthor> author = (i < authors.size()) ? authors[i] : 0;
+	for (size_t i = 0; i < AUTHOR_ENTRIES_POOL_SIZE; ++i) {
+		shared_ptr<Author> author = (i < authors.size()) ? authors[i] : 0;
 		AuthorDisplayNameEntry *entry = new AuthorDisplayNameEntry(*this, author, visible);
 		myAuthorEntries.push_back(entry);
 		myAuthorsTab->addOption(ZLResourceKey("authorDisplayName"), entry);

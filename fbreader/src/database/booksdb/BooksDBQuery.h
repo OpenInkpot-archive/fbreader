@@ -17,7 +17,6 @@
  * 02110-1301, USA.
  */
 
-
 #ifndef __BOOKSDBQUERY_H__
 #define __BOOKSDBQUERY_H__
 
@@ -40,7 +39,6 @@ public:
 	static const std::string LOAD_BOOK;
 	static const std::string LOAD_SERIES;
 	static const std::string LOAD_AUTHORS;
-	static const std::string LOAD_TAGS;
 	
 	static const std::string ADD_BOOKTAG;
 	static const std::string DELETE_BOOKTAG;
@@ -78,8 +76,6 @@ public:
 	static const std::string DELETE_FILE_ENTRIES;
 	static const std::string LOAD_FILE_ENTRY_IDS;
 
-	static const std::string FIND_PARENT_TAG;
-	
 	static const std::string FIND_BOOK_ID;
 
 	static const std::string LOAD_RECENT_BOOKS;
@@ -87,10 +83,6 @@ public:
 	static const std::string INSERT_RECENT_BOOKS;
 
 	static const std::string FIND_FILE_NAME;
-
-	static const std::string LOAD_SERIES_NAMES;
-
-	static const std::string LOAD_AUTHOR_NAMES;
 
 	static const std::string LOAD_BOOKS;
 
@@ -116,7 +108,7 @@ public:
 	static const std::string DELETE_BOOK_LIST;
 	static const std::string CHECK_BOOK_LIST;
 
-private: // disable creation instances
+private: // disable creation Instances
 	BooksDBQuery();
 };
 

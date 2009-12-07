@@ -17,7 +17,6 @@
  * 02110-1301, USA.
  */
 
-
 #ifndef __DBDATAREADER_H__
 #define __DBDATAREADER_H__
 
@@ -34,27 +33,26 @@ public: // to implement:
 	virtual bool reset() = 0;
 	virtual void close() = 0;
 
-	virtual unsigned columnsNumber() const = 0;
+	virtual size_t columnsNumber() const = 0;
 	
-	virtual DBValue::ValueType type(unsigned column) const = 0;
-	virtual shared_ptr<DBValue> value(unsigned column) const = 0;
+	virtual DBValue::ValueType type(size_t column) const = 0;
+	virtual shared_ptr<DBValue> value(size_t column) const = 0;
 
-	virtual int intValue(unsigned column) const = 0;
-	virtual double realValue(unsigned column) const = 0;
-	virtual std::string textValue(unsigned column) const = 0;
+	virtual int intValue(size_t column) const = 0;
+	virtual double realValue(size_t column) const = 0;
+	virtual std::string textValue(size_t column) const = 0;
 
 public:
-	bool isDBNull(unsigned column) const;
-	bool isInt(unsigned column) const;
-	bool isReal(unsigned column) const;
-	bool isText(unsigned column) const;
+	bool isDBNull(size_t column) const;
+	bool isInt(size_t column) const;
+	bool isReal(size_t column) const;
+	bool isText(size_t column) const;
 };
 
-
-inline bool DBDataReader::isDBNull(unsigned column) const { return type(column) == DBValue::DBNULL; }
-inline bool DBDataReader::isInt(unsigned column) const { return type(column) == DBValue::DBINT; }
-inline bool DBDataReader::isReal(unsigned column) const { return type(column) == DBValue::DBREAL; }
-inline bool DBDataReader::isText(unsigned column) const { return type(column) == DBValue::DBTEXT; }
+inline bool DBDataReader::isDBNull(size_t column) const { return type(column) == DBValue::DBNULL; }
+inline bool DBDataReader::isInt(size_t column) const { return type(column) == DBValue::DBINT; }
+inline bool DBDataReader::isReal(size_t column) const { return type(column) == DBValue::DBREAL; }
+inline bool DBDataReader::isText(size_t column) const { return type(column) == DBValue::DBTEXT; }
 
 #endif /* __DBDATAREADER_H__ */
 
