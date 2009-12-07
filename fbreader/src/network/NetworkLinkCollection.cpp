@@ -32,6 +32,9 @@
 
 #include "../database/booksdb/BooksDB.h"
 
+#include "feedbooks_atom/FeedBooksAtomLink.h"
+#include "litres/LitResLink.h"
+
 NetworkLinkCollection *NetworkLinkCollection::ourInstance = 0;
 
 NetworkLinkCollection &NetworkLinkCollection::instance() {
@@ -43,8 +46,10 @@ NetworkLinkCollection &NetworkLinkCollection::instance() {
 
 NetworkLinkCollection::NetworkLinkCollection() :
 	DirectoryOption(ZLCategoryKey::NETWORK, "Options", "DownloadDirectory", "") {
-	myLinks.push_back(new FeedBooksLink());
+	//myLinks.push_back(new FeedBooksLink());
 	myLinks.push_back(new FBReaderOrgLink());
+	myLinks.push_back(new FeedBooksAtomLink());
+	//myLinks.push_back(new LitResLink());
 }
 
 NetworkLinkCollection::~NetworkLinkCollection() {
@@ -104,20 +109,42 @@ std::string NetworkLinkCollection::downloadBook(const std::string &url, std::str
 std::string NetworkLinkCollection::simpleSearch(NetworkBookList &books, const std::string &pattern) {
 	std::vector<shared_ptr<ZLNetworkData> > dataList;
 
-	std::vector<NetworkBookList> bookLists(myLinks.size());
+	std::vector<SearchResult> searchResults(myLinks.size());
+
 	int count = 0;
 
 	for (LinkVector::const_iterator it = myLinks.begin(); it != myLinks.end(); ++it) {
 		NetworkLink &link = **it;
+		SearchResult &searchResult = searchResults[count++];
 		if (link.OnOption.value()) {
-			dataList.push_back(link.simpleSearchData(bookLists[count++], pattern));
+			shared_ptr<ZLNetworkData> data = link.simpleSearchData(searchResult, pattern);
+			if (!data.isNull()) {
+				dataList.push_back(data);
+			}
 		}
 	}
 
-	std::string result = ZLNetworkManager::instance().perform(dataList);
+	std::string result;
+	while (result.empty() && !dataList.empty()) {
+		result = ZLNetworkManager::instance().perform(dataList);
+		
+		for (std::vector<SearchResult>::const_iterator jt = searchResults.begin(); jt != searchResults.end(); ++jt) {
+			books.insert(books.end(), jt->Books.begin(), jt->Books.end());
+		}
 
-	for (std::vector<NetworkBookList>::const_iterator jt = bookLists.begin(); jt != bookLists.end(); ++jt) {
-		books.insert(books.end(), jt->begin(), jt->end());
+		count = 0;
+		dataList.clear();
+
+		for (LinkVector::const_iterator it = myLinks.begin(); it != myLinks.end(); ++it) {
+			NetworkLink &link = **it;
+			SearchResult &searchResult = searchResults[count++];
+			if (link.OnOption.value()) {
+				shared_ptr<ZLNetworkData> data = link.resume(searchResult);
+				if (!data.isNull()) {
+					dataList.push_back(data);
+				}
+			}
+		}
 	}
 
 	return result;
@@ -126,20 +153,41 @@ std::string NetworkLinkCollection::simpleSearch(NetworkBookList &books, const st
 std::string NetworkLinkCollection::advancedSearch(NetworkBookList &books, const std::string &title, const std::string &author, const std::string &series, const std::string &tag, const std::string &annotation) {
 	std::vector<shared_ptr<ZLNetworkData> > dataList;
 
-	std::vector<NetworkBookList> bookLists(myLinks.size());
+	std::vector<SearchResult> searchResults(myLinks.size());
 	int count = 0;
 
 	for (LinkVector::const_iterator it = myLinks.begin(); it != myLinks.end(); ++it) {
 		NetworkLink &link = **it;
+		SearchResult &searchResult = searchResults[count++];
 		if (link.OnOption.value()) {
-			dataList.push_back(link.advancedSearchData(bookLists[count++], title, author, series, tag, annotation));
+			shared_ptr<ZLNetworkData> data = link.advancedSearchData(searchResult, title, author, series, tag, annotation);
+			if (!data.isNull()) {
+				dataList.push_back(data);
+			}
 		}
 	}
 
-	std::string result = ZLNetworkManager::instance().perform(dataList);
+	std::string result;
+	while (result.empty() && !dataList.empty()) {
+		result = ZLNetworkManager::instance().perform(dataList);
 
-	for (std::vector<NetworkBookList>::const_iterator jt = bookLists.begin(); jt != bookLists.end(); ++jt) {
-		books.insert(books.end(), jt->begin(), jt->end());
+		for (std::vector<SearchResult>::const_iterator jt = searchResults.begin(); jt != searchResults.end(); ++jt) {
+			books.insert(books.end(), jt->Books.begin(), jt->Books.end());
+		}
+
+		count = 0;
+		dataList.clear();
+
+		for (LinkVector::const_iterator it = myLinks.begin(); it != myLinks.end(); ++it) {
+			NetworkLink &link = **it;
+			SearchResult &searchResult = searchResults[count++];
+			if (link.OnOption.value()) {
+				shared_ptr<ZLNetworkData> data = link.resume(searchResult);
+				if (!data.isNull()) {
+					dataList.push_back(data);
+				}
+			}
+		}
 	}
 
 	return result;

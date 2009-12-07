@@ -471,6 +471,9 @@ bool ZLTextView::onStylusClick(int x, int y, int count) {
 		} else {
 			myDoubleClickInfo.Count = 0;
 		}
+	} else {
+		mySelectionModel.clear();
+		application().refreshWindow();
 	}
 
 	return true;

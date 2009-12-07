@@ -26,7 +26,7 @@
 #include <shared_ptr.h>
 #include <ZLOptions.h>
 
-#include "NetworkBookInfo.h"
+#include "SearchResult.h"
 
 class ZLNetworkData;
 
@@ -43,8 +43,9 @@ public:
 	ZLBooleanOption OnOption;
 
 public:
-	virtual shared_ptr<ZLNetworkData> simpleSearchData(NetworkBookList &books, const std::string &pattern) = 0;
-	virtual shared_ptr<ZLNetworkData> advancedSearchData(NetworkBookList &books, const std::string &title, const std::string &author, const std::string &series, const std::string &tag, const std::string &annotation) = 0;
+	virtual shared_ptr<ZLNetworkData> simpleSearchData(SearchResult &result, const std::string &pattern) = 0;
+	virtual shared_ptr<ZLNetworkData> advancedSearchData(SearchResult &result, const std::string &title, const std::string &author, const std::string &series, const std::string &tag, const std::string &annotation) = 0;
+	virtual shared_ptr<ZLNetworkData> resume(SearchResult &result);
 };
 
 class NetworkLinkCollection {

@@ -141,7 +141,10 @@ void NetLibraryView::rebuildModel() {
 
 	std::map<NetworkBookInfo::AuthorData,NetworkBookList> bookMap;
 	for (NetworkBookList::const_iterator it = myBookList.begin(); it != myBookList.end(); ++it) {
-		bookMap[(*it)->Author].push_back(*it);
+		shared_ptr<NetworkBookInfo> bookPtr = *it;
+		for (std::vector<NetworkBookInfo::AuthorData>::const_iterator jt = bookPtr->Authors.begin(); jt != bookPtr->Authors.end(); ++jt) {
+			bookMap[*jt].push_back(bookPtr);
+		}
 	}
 
 	for (std::map<NetworkBookInfo::AuthorData,NetworkBookList>::iterator jt = bookMap.begin(); jt != bookMap.end(); ++jt) {
@@ -282,8 +285,15 @@ bool NetLibraryView::_onStylusPress(int x, int y) {
 		} else {
 			shared_ptr<DBBook> downloaderBook = BooksDBUtil::getBook(downloader.fileName());
 			downloaderBook->authors().clear();
-			shared_ptr<DBAuthor> downloaderAuthors = DBAuthor::create(book->Author.DisplayName, book->Author.SortKey);
-			downloaderBook->authors().push_back( (downloaderAuthors.isNull()) ? (new DBAuthor()) : downloaderAuthors );
+			for (std::vector<NetworkBookInfo::AuthorData>::const_iterator it = book->Authors.begin(); it != book->Authors.end(); ++it) {
+				shared_ptr<DBAuthor> author = DBAuthor::create(it->DisplayName, it->SortKey);
+				if (!author.isNull() && !author->isDefault()) {
+					downloaderBook->authors().push_back(author);
+				}
+			}
+			if (downloaderBook->authors().empty()) {
+				downloaderBook->authors().push_back(new DBAuthor());
+			}
 			downloaderBook->setTitle(book->Title);
 			downloaderBook->setLanguage(book->Language);
 			for (std::vector<std::string>::const_iterator it = book->Tags.begin(); it != book->Tags.end(); ++it) {

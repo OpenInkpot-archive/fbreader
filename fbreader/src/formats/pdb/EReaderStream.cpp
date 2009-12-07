@@ -257,6 +257,7 @@ bool EReaderStream::addImageInfo(const unsigned short recordIndex) {
 
 	myBase->read(buffer, bufferLength);
 	std::string header(buffer, bufferLength);
+	delete[] buffer;
 	
 	image.Offset = currentOffset + header.find("\x89PNG"); //TODO treat situation when there isn't PNG in first 128 bytes
 	image.Size = nextOffset - image.Offset;

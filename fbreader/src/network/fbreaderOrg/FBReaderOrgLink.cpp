@@ -24,15 +24,15 @@
 #include "FBReaderOrgDataParser.h"
 #include "../NetworkBookInfo.h"
 
-FBReaderOrgLink::FBReaderOrgLink() : NetworkLink("LitRes.Ru", "litres.ru") {
+FBReaderOrgLink::FBReaderOrgLink() : NetworkLink("LitRes.Ru - old", "litres.ru") {
 }
 
 static const std::string URL_PREFIX = "http://www.fbreader.org/library/";
 
-shared_ptr<ZLNetworkData> FBReaderOrgLink::simpleSearchData(NetworkBookList &books, const std::string &pattern) {
+shared_ptr<ZLNetworkData> FBReaderOrgLink::simpleSearchData(SearchResult &result, const std::string &pattern) {
 	return new ZLNetworkXMLParserData(
 		URL_PREFIX + "simple_query.php?type=xml&library=1&pattern=" + ZLNetworkUtil::htmlEncode(pattern),
-		new FBReaderOrgDataParser(books)
+		new FBReaderOrgDataParser(result.Books)
 	);
 }
 
@@ -42,7 +42,7 @@ void FBReaderOrgLink::addSubPattern(std::string &url, const std::string &name, c
 	}
 }
 
-shared_ptr<ZLNetworkData> FBReaderOrgLink::advancedSearchData(NetworkBookList &books, const std::string &title, const std::string &author, const std::string &series, const std::string &tag, const std::string &annotation) {
+shared_ptr<ZLNetworkData> FBReaderOrgLink::advancedSearchData(SearchResult &result, const std::string &title, const std::string &author, const std::string &series, const std::string &tag, const std::string &annotation) {
 	std::string request = URL_PREFIX + "advanced_query.php?type=xml&library=1";
 	addSubPattern(request, "title", title);
 	addSubPattern(request, "author", author);
@@ -50,5 +50,5 @@ shared_ptr<ZLNetworkData> FBReaderOrgLink::advancedSearchData(NetworkBookList &b
 	addSubPattern(request, "tag", tag);
 	addSubPattern(request, "annotation", annotation);
 
-	return new ZLNetworkXMLParserData(request, new FBReaderOrgDataParser(books));
+	return new ZLNetworkXMLParserData(request, new FBReaderOrgDataParser(result.Books));
 }

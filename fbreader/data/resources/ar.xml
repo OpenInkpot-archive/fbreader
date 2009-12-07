@@ -68,6 +68,8 @@
 			<node name="go" value="ا&amp;ذهب" />
 			<node name="thisOnly" value="هذا فقط" />
 			<node name="withSubtags" value="مع الوسوم الثانوية" />
+			<node name="removeLink" value="Remove Link" toBeTranslated="true" />
+			<node name="removeFile" value="Remove File" toBeTranslated="true" />
 		</node>
 		<node name="OptionsDialog">
 			<node name="title" value="إف.بي.ريدر - الخيارات" />
@@ -300,6 +302,7 @@
 		</node>
 		<node name="addFileDialog">
 			<node name="title" value="إف.بي.ريدر - أضف كتابا للمكتبة" />
+			<node name="addBookQuestion" value="Add Book&#10;&#8220;%s&#8221;&#10;to the Library?" toBeTranslated="true" />
 		</node>
 		<node name="textSearchDialog">
 			<node name="title" value="البحث عن النص" />
@@ -333,6 +336,8 @@
 		<node name="removeBookBox">
 			<node name="title" value="احذف الكتاب" />
 			<node name="message" value="أأحذف الكتاب &#10;“%s”&#10; من المكتبة؟" />
+			<node name="deleteFile" value="Are you sure you want to&#10;completely remove file&#10;&#8220;%s&#8221;&#10;from the disk?" toBeTranslated="true" />
+			<node name="deleteMode" value="Remove Book&#10;&#8220;%s&#8221;&#10;from the Library?&#10;You can remove file from disk too." toBeTranslated="true" />
 		</node>
 		<node name="removeTagBox">
 			<node name="title" value="احذف الوسم" />

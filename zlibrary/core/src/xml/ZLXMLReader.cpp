@@ -84,7 +84,7 @@ bool ZLXMLReader::readDocument(shared_ptr<ZLInputStream> stream) {
 	size_t length;
 	do {
 		length = stream->read(myParserBuffer, BUFFER_SIZE);
-		if (!readFromBuffer(myParserBuffer, length)) {
+		if (!myInternalReader->parseBuffer(myParserBuffer, length)) {
 			break;
 		}
 	} while ((length == BUFFER_SIZE) && !myInterrupted);
@@ -106,7 +106,7 @@ void ZLXMLReader::shutdown() {
 	myNamespaces.clear();
 }
 
-bool ZLXMLReader::readFromBuffer(const char *data, int len) {
+bool ZLXMLReader::readFromBuffer(const char *data, size_t len) {
 	return myInternalReader->parseBuffer(data, len);
 }
 

@@ -43,8 +43,7 @@ struct NetworkBookInfo {
 
 		bool operator < (const AuthorData &data) const;
 	};
-	AuthorData Author;
-	std::string Identifier;
+	std::vector<AuthorData> Authors;
 	std::string Language;
 	std::vector<std::string> Tags;
 	std::string Cover;
@@ -55,6 +54,9 @@ struct NetworkBookInfo {
 
 	NetworkBookInfo(const std::string &id);
 	std::string fileName(URLType format) const;
+	
+	std::string authorName() const;
+	std::string authorSortKey() const;
 
 	struct Comparator {
 		bool operator () (const shared_ptr<NetworkBookInfo> &first, const shared_ptr<NetworkBookInfo> &second);

@@ -201,3 +201,13 @@ ZLUnicodeUtil::Ucs2String ZLWin32FSManager::longFilePath(const std::string &path
 	::createNTWCHARString(lfp, "\\\\?\\" + path);
 	return lfp;
 }
+
+bool ZLWin32FSManager::canRemoveFile(const std::string &path) const {
+	ZLUnicodeUtil::Ucs2String wPath = longFilePath(path);
+	WIN32_FILE_ATTRIBUTE_DATA data;
+	if (!GetFileAttributesExW(::wchar(wPath), GetFileExInfoStandard, &data)) {
+		return false;
+	}
+	return (data.dwFileAttributes & FILE_ATTRIBUTE_READONLY) == 0;
+}
+

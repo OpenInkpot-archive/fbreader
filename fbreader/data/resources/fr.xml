@@ -69,6 +69,8 @@
 			<node name="go" value="O&amp;k" />
 			<node name="thisOnly" value="Seulement ceci" />
 			<node name="withSubtags" value="Sous-tags compris" />
+			<node name="removeLink" value="Remove Link" toBeTranslated="true" />
+			<node name="removeFile" value="Remove File" toBeTranslated="true" />
 		</node>
 		<node name="OptionsDialog">
 			<node name="title" value="FBReader - Options" />
@@ -301,6 +303,7 @@
 		</node>
 		<node name="addFileDialog">
 			<node name="title" value="FBReader - Ajouter un livre à la bibliothèque" />
+			<node name="addBookQuestion" value="Add Book&#10;&#8220;%s&#8221;&#10;to the Library?" toBeTranslated="true" />
 		</node>
 		<node name="textSearchDialog">
 			<node name="title" value="Rechercher" />
@@ -334,6 +337,8 @@
 		<node name="removeBookBox">
 			<node name="title" value="Enlever un livre" />
 			<node name="message" value="Enlever le livre&#10;&quot;%s&quot;&#10;de la bibliothèque ?" />
+			<node name="deleteFile" value="Are you sure you want to&#10;completely remove file&#10;&#8220;%s&#8221;&#10;from the disk?" toBeTranslated="true" />
+			<node name="deleteMode" value="Remove Book&#10;&#8220;%s&#8221;&#10;from the Library?&#10;You can remove file from disk too." toBeTranslated="true" />
 		</node>
 		<node name="removeTagBox">
 			<node name="title" value="Enlever un tag" />

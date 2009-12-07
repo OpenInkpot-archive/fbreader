@@ -84,13 +84,15 @@ void FBReaderOrgDataParser::endElementHandler(const char *tag) {
 			} else if (DESCRIPTION_DC_TAG == dcTag) {
 				myCurrentBook->Annotation = myBuffer;
 			} else if (AUTHOR_DC_TAG == dcTag) {
-				myCurrentBook->Author.DisplayName = myBuffer;
+				NetworkBookInfo::AuthorData authorData;
+				authorData.DisplayName = myBuffer;
 				int index = myBuffer.rfind(' ');
 				if (index >= 0) {
-					myCurrentBook->Author.SortKey = myBuffer.substr(index + 1);
+					authorData.SortKey = myBuffer.substr(index + 1);
 				} else {
-					myCurrentBook->Author.SortKey = myBuffer;
+					authorData.SortKey = myBuffer;
 				}
+				myCurrentBook->Authors.push_back(authorData);
 			} else if (DATE_DC_TAG == dcTag) {
 				myCurrentBook->Date = myBuffer;
 			}

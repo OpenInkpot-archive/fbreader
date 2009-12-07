@@ -74,6 +74,8 @@ private:
 		const bool showIncludeSubtagsEntry, const bool hasBooks);
 
 	void editAuthorInfo(shared_ptr<DBAuthor> author);
+	
+	bool removeBookDialog(shared_ptr<DBBook> book, bool &removeFile) const;
 
 private:
 	BookCollection myCollection;

@@ -35,17 +35,17 @@ static void addSubPattern(std::string &url, const std::string &name, const std::
 	}
 }
 
-FeedBooksLink::FeedBooksLink() : NetworkLink("FeedBooks.Com", "feedbooks.com") {
+FeedBooksLink::FeedBooksLink() : NetworkLink("FeedBooks.Com - old xml", "feedbooks.com") {
 }
 
-shared_ptr<ZLNetworkData> FeedBooksLink::simpleSearchData(NetworkBookList &books, const std::string &pattern) {
+shared_ptr<ZLNetworkData> FeedBooksLink::simpleSearchData(SearchResult &result, const std::string &pattern) {
 	return new ZLNetworkXMLParserData(
 		"http://feedbooks.com/books/search.xml?query=" + ZLNetworkUtil::htmlEncode(pattern),
-		new FeedBooksDataParser(books)
+		new FeedBooksDataParser(result.Books)
 	);
 }
 
-shared_ptr<ZLNetworkData> FeedBooksLink::advancedSearchData(NetworkBookList &books, const std::string &title, const std::string &author, const std::string &series, const std::string &tag, const std::string &annotation) {
+shared_ptr<ZLNetworkData> FeedBooksLink::advancedSearchData(SearchResult &result, const std::string &title, const std::string &author, const std::string &series, const std::string &tag, const std::string &annotation) {
 	std::string request = URL_PREFIX + "advanced_query.php?type=xml&library=2";
 	addSubPattern(request, "title", title);
 	addSubPattern(request, "author", author);
@@ -53,5 +53,5 @@ shared_ptr<ZLNetworkData> FeedBooksLink::advancedSearchData(NetworkBookList &boo
 	addSubPattern(request, "tag", tag);
 	addSubPattern(request, "annotation", annotation);
 
-	return new ZLNetworkXMLParserData(request, new FBReaderOrgDataParser(books));
+	return new ZLNetworkXMLParserData(request, new FBReaderOrgDataParser(result.Books));
 }

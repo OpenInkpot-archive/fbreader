@@ -30,3 +30,8 @@ NetworkLink::NetworkLink(const std::string &siteName, const std::string &optionN
 
 NetworkLink::~NetworkLink() {
 }
+
+shared_ptr<ZLNetworkData> NetworkLink::resume(SearchResult &result) {
+	result.clear();
+	return 0;
+}

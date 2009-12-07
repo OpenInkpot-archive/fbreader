@@ -24,16 +24,20 @@
 
 #include "ZLNetworkData.h"
 
-class ZLXMLReader;
+class ZLXMLAbstractReader;
 
 class ZLNetworkXMLParserData : public ZLNetworkData {
 
 public:
-	ZLNetworkXMLParserData(const std::string &url, shared_ptr<ZLXMLReader> reader);
+	ZLNetworkXMLParserData(const std::string &url, shared_ptr<ZLXMLAbstractReader> reader);
 	~ZLNetworkXMLParserData();
 
+	size_t parseHeader(void *ptr, size_t size, size_t nmemb);
+	size_t parseData(void *ptr, size_t size, size_t nmemb);
+
 private:
-	shared_ptr<ZLXMLReader> myReader;
+	shared_ptr<ZLXMLAbstractReader> myReader;
+	std::string myEncoding;
 };
 
 #endif /* __ZLNETWORKXMLPARSERDATA_H__ */

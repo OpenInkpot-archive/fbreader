@@ -63,6 +63,7 @@ public:
 	bool isArchive() const;
 
 	bool remove() const;
+	bool canRemove() const;
 
 	const std::string &path() const;
 	const std::string &name(bool hideExtension) const;

@@ -19,6 +19,7 @@
 
 #include <algorithm>
 
+#include <ZLStringUtil.h>
 #include <ZLDialogManager.h>
 #include <ZLDialog.h>
 #include <ZLOptionsDialog.h>
@@ -32,6 +33,7 @@
 #include "BookTextView.h"
 #include "ContentsView.h"
 #include "FBFileHandler.h"
+#include "CollectionView.h"
 
 #include "../bookmodel/BookModel.h"
 #include "../optionsDialog/OptionsDialog.h"
@@ -91,12 +93,27 @@ AddBookAction::AddBookAction(FBReader &fbreader, int visibleInModes) : ModeDepen
 }
 
 void AddBookAction::run() {
+	const ZLResourceKey dialogKey("addFileDialog");
+	const ZLResource &msgResource = ZLResource::resource("dialog")[dialogKey];
 	FBFileHandler handler;
-	if (ZLDialogManager::instance().selectionDialog(ZLResourceKey("addFileDialog"), handler)) {
+	if (ZLDialogManager::instance().selectionDialog(dialogKey, handler)) {
 		shared_ptr<DBBook> book = handler.description();
-		if (!book.isNull() && fbreader().runBookInfoDialog(book)) {
-			fbreader().openBook(book);
-			fbreader().setMode(FBReader::BOOK_TEXT_MODE);
+		if (!book.isNull()) {
+			if (fbreader().runBookInfoDialog(book)) {
+				fbreader().openBook(book);
+				fbreader().setMode(FBReader::BOOK_TEXT_MODE);
+			} else {
+				const std::string message = ZLStringUtil::printf(msgResource["addBookQuestion"].value(), book->title());
+				if (ZLDialogManager::instance().questionBox(dialogKey, message,
+					ZLDialogManager::YES_BUTTON, ZLDialogManager::NO_BUTTON) == 0) {
+					if (fbreader().mode() == FBReader::BOOK_COLLECTION_MODE) {
+						fbreader().collectionView().synchronizeModel();
+					}
+				} else {
+					BooksDB::instance().deleteFromBookList(*book);
+				}
+			}
+			fbreader().refreshWindow();
 		}
 	}
 }
@@ -153,6 +170,7 @@ void ShowBookInfoAction::run() {
 	shared_ptr<DBBook> book = fbreader().myModel->book();
 	if (fbreader().runBookInfoDialog(book)) {
 		fbreader().openBook(book);
+		fbreader().refreshWindow();
 	}
 }
 

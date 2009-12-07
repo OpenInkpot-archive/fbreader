@@ -444,9 +444,15 @@ void W32LineEditor::init(HWND parent, W32ControlCollection *collection) {
 }
 
 void W32LineEditor::setEditable(bool editable) {
+	if (editable) {
+		myStyle &= ~ES_READONLY;
+	} else {
+		myStyle |= ES_READONLY;
+	}
 	if (myWindow != 0) {
 		// TODO: check
-		PostMessage(myWindow, EM_SETREADONLY, !editable, 0);
+		//PostMessage(myWindow, EM_SETREADONLY, !editable, 0);
+		SendMessage(myWindow, EM_SETREADONLY, (editable ? FALSE : TRUE), 0);
 	}
 }
 
@@ -533,9 +539,15 @@ void W32KeyNameEditor::init(HWND parent, W32ControlCollection *collection) {
 }
 
 void W32KeyNameEditor::setEditable(bool editable) {
+	if (editable) {
+		myStyle &= ~ES_READONLY;
+	} else {
+		myStyle |= ES_READONLY;
+	}
 	if (myWindow != 0) {
 		// TODO: check
-		PostMessage(myWindow, EM_SETREADONLY, !editable, 0);
+		//PostMessage(myWindow, EM_SETREADONLY, !editable, 0);
+		SendMessage(myWindow, EM_SETREADONLY, (editable ? FALSE : TRUE), 0);
 	}
 }
 

@@ -26,10 +26,12 @@
 
 #include <shared_ptr.h>
 
+#include "ZLXMLAbstractReader.h"
+
 class ZLInputStream;
 class ZLXMLReaderInternal;
 
-class ZLXMLReader {
+class ZLXMLReader : public ZLXMLAbstractReader {
 
 public:
   static const char *attributeValue(const char **xmlattributes, const char *name);
@@ -46,7 +48,7 @@ public:
 
 	void initialize(const char *encoding = 0);
 	void shutdown();
-	bool readFromBuffer(const char *data, int len);
+	bool readFromBuffer(const char *data, size_t len);
 
 protected:
 	virtual void startElementHandler(const char *tag, const char **attributes);

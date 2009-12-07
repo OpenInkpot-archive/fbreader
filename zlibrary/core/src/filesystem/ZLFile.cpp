@@ -235,3 +235,8 @@ bool ZLFile::isDirectory() const {
 	}
 	return myInfo.IsDirectory;
 }
+
+bool ZLFile::canRemove() const {
+	return ZLFSManager::instance().canRemoveFile(path());
+}
+

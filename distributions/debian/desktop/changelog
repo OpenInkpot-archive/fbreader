@@ -1,3 +1,15 @@
+fbreader (0.11.1-1) stable; urgency=low
+
+  * new upstream version
+
+ -- Nikolay Pultsin <geometer@fbreader.org>  Tue, 13 Oct 2009 23:38:00 +0400
+
+fbreader (0.11.0-2) stable; urgency=low
+
+  * fixed package dependencies in debian files
+
+ -- Nikolay Pultsin <geometer@fbreader.org>  Sat, 26 Sep 2009 11:23:00 +0400
+
 fbreader (0.11.0-1) stable; urgency=low
 
   * new upstream version

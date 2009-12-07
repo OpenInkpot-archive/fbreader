@@ -17,11 +17,14 @@
  * 02110-1301, USA.
  */
 
+#include <iostream>
 #include <ZLibrary.h>
 #include <ZLFileImage.h>
 
 #include "CollectionView.h"
 #include "CollectionModel.h"
+
+#include "../database/booksdb/BooksDBUtil.h"
 
 
 class TagComparator {
@@ -265,6 +268,8 @@ void CollectionModel::addBooksTree(const Books &books, ZLTextTreeParagraph *root
 			insertImage(BookInfoImageId);
 			if (myCollection.isBookExternal(book)) {
 				insertImage(RemoveBookImageId);
+			} else if (BooksDBUtil::canRemoveFile(book->fileName())) {
+				insertImage(RemoveBookImageId); // TODO: replace with other color???				
 			}
 			myParagraphToBook[bookParagraph] = book;
 			myBookToParagraph[book->fileName()].push_back(paragraphsNumber() - 1);
@@ -308,7 +313,7 @@ void CollectionModel::removeBook(shared_ptr<DBBook> book) {
 		}
 
 		if (count > index) {
-			count = index;
+			count = index + 1;
 		}
 
 		for (std::map<std::string, std::vector<int> >::iterator jt = myBookToParagraph.begin(); jt != myBookToParagraph.end(); ++jt) {
@@ -324,6 +329,11 @@ void CollectionModel::removeBook(shared_ptr<DBBook> book) {
 			removeParagraph(index--);
 		}
 	}
+	std::cerr << "paragraphsNumber() == " << paragraphsNumber() << std::endl;
+	if (paragraphsNumber() == 0) {
+		createParagraph();
+		insertText(LIBRARY_ENTRY, ZLResource::resource("library")["noBooks"].value());
+	}
 }
 
 bool CollectionModel::empty() const {
@@ -337,4 +347,3 @@ shared_ptr<DBAuthor> CollectionModel::authorByParagraphIndex(int num) {
 	std::map<ZLTextParagraph*, shared_ptr<DBAuthor> >::iterator it = myParagraphToAuthor.find((*this)[num]);
 	return (it != myParagraphToAuthor.end()) ? it->second : 0;
 }
-

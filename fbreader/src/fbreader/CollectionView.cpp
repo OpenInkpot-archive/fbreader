@@ -17,8 +17,10 @@
  * 02110-1301, USA.
  */
 
+#include <iostream>
 #include <ZLOptionsDialog.h>
 #include <ZLStringUtil.h>
+#include <ZLFile.h>
 
 #include "CollectionView.h"
 #include "CollectionModel.h"
@@ -28,6 +30,7 @@
 #include "AuthorInfoDialog.h"
 
 #include "../database/booksdb/BooksDB.h"
+#include "../database/booksdb/BooksDBUtil.h"
 
 class RebuildCollectionRunnable : public ZLRunnable {
 
@@ -201,6 +204,45 @@ void CollectionView::editBookInfo(shared_ptr<DBBook> book) {
 	}
 }
 
+bool CollectionView::removeBookDialog(shared_ptr<DBBook> book, bool &removeFile) const {
+	bool canRemoveFile = BooksDBUtil::canRemoveFile(book->fileName());
+	bool canRemoveLink = myCollection.isBookExternal(book);
+
+	if (!canRemoveFile && !canRemoveLink) {
+		return false;
+	}
+
+	ZLResourceKey boxKey("removeBookBox");
+	const ZLResource &msgResource = ZLResource::resource("dialog")[boxKey];
+
+	if (!canRemoveLink) {
+		const std::string message = ZLStringUtil::printf(msgResource["deleteFile"].value(), book->title());
+		if (ZLDialogManager::instance().questionBox(boxKey, message, ZLDialogManager::YES_BUTTON, ZLDialogManager::NO_BUTTON) == 0) {
+			removeFile = true;
+			return true;
+		}
+		return false;
+	} else if (!canRemoveFile) {
+		const std::string message = ZLStringUtil::printf(ZLDialogManager::dialogMessage(boxKey), book->title());
+		if (ZLDialogManager::instance().questionBox(boxKey, message, ZLDialogManager::YES_BUTTON, ZLDialogManager::NO_BUTTON) == 0) {
+			removeFile = false;
+			return true;
+		}
+		return false;
+	}
+
+	ZLResourceKey removeFileKey("removeFile");
+	ZLResourceKey removeLinkKey("removeLink");
+
+	const std::string message = ZLStringUtil::printf(msgResource["deleteMode"].value(), book->title());
+	int res = ZLDialogManager::instance().questionBox(boxKey, message, removeLinkKey, removeFileKey, ZLDialogManager::CANCEL_BUTTON);
+	if (res != 2) {
+		removeFile = (res == 1);
+		return true;
+	}
+	return false;
+}
+
 void CollectionView::removeBook(shared_ptr<DBBook> book) {
 	if (book.isNull()) {
 		return;
@@ -211,16 +253,19 @@ void CollectionView::removeBook(shared_ptr<DBBook> book) {
 	}
 
 	CollectionModel &cModel = collectionModel();
-
-	ZLResourceKey boxKey("removeBookBox");
-	const std::string message =
-		ZLStringUtil::printf(ZLDialogManager::dialogMessage(boxKey), book->title());
-	if (ZLDialogManager::instance().questionBox(boxKey, message,
-		ZLDialogManager::YES_BUTTON, ZLDialogManager::NO_BUTTON) == 0) {
+	
+	bool removeFromDisk;
+	if (removeBookDialog(book, removeFromDisk)) {
 		cModel.removeAllMarks();
 		BooksDB::instance().deleteFromBookList(*book);
-		
 		cModel.removeBook(book);
+		if (removeFromDisk) {
+			ZLFile physFile(ZLFile(book->fileName()).physicalFilePath());
+			if (!physFile.remove()) {
+				// TODO: tell user about failure
+				std::cerr << "UNABLE TO DELETE " << physFile.path() << std::endl;
+			}
+		}
 		if (cModel.paragraphsNumber() == 0) {
 			setStartCursor(0);
 		} else {
@@ -236,7 +281,7 @@ void CollectionView::removeBook(shared_ptr<DBBook> book) {
 		rebuildPaintInfo(true);
 		selectBook(mySelectedBook);
 		application().refreshWindow();
-		myCollection.rebuild(false);
+		myCollection.rebuild(removeFromDisk);
 	}
 }
 

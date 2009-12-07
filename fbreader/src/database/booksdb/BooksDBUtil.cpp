@@ -148,3 +148,24 @@ void BooksDBUtil::resetZipInfo(const ZLFile &zipFile) {
 	}
 }
 
+bool BooksDBUtil::canRemoveFile(const std::string &fileName) {
+	ZLFile bookFile(fileName);
+	std::string physicalPath = bookFile.physicalFilePath();
+	if (fileName != physicalPath) {
+		ZLFile zipFile(physicalPath);
+		shared_ptr<ZLDir> zipDir = zipFile.directory();
+		if (zipDir.isNull()) {
+			return false;
+		}
+		std::vector<std::string> entries;
+		zipDir->collectFiles(entries, false); // TODO: replace with BooksDB call???
+		if (entries.size() != 1) {
+			return false;
+		}
+		if (zipDir->itemPath(entries[0]) != fileName) {
+			return false;
+		}
+	}
+	return ZLFile(physicalPath).canRemove();
+}
+

@@ -78,19 +78,21 @@ void FeedBooksDataParser::endElementHandler(const char *tag) {
 				myCurrentBook->Annotation = myBuffer;
 			} else if (AUTHOR_DC_TAG == dcTag) {
 				int index = myBuffer.find(',');
+				NetworkBookInfo::AuthorData authorData;
 				if (index >= 0) {
 					std::string before = myBuffer.substr(0, index);
 					std::string after = myBuffer.substr(index + 1);
 					ZLStringUtil::stripWhiteSpaces(before);
 					ZLStringUtil::stripWhiteSpaces(after);
-					myCurrentBook->Author.SortKey = before;
-					myCurrentBook->Author.DisplayName = after + ' ' + before;
+					authorData.SortKey = before;
+					authorData.DisplayName = after + ' ' + before;
 				} else {
 					ZLStringUtil::stripWhiteSpaces(myBuffer);
 					index = myBuffer.rfind(' ');
-					myCurrentBook->Author.SortKey = myBuffer.substr(index + 1);
-					myCurrentBook->Author.DisplayName = myBuffer;
+					authorData.SortKey = myBuffer.substr(index + 1);
+					authorData.DisplayName = myBuffer;
 				}
+				myCurrentBook->Authors.push_back(authorData);
 			} else if (LANGUAGE_DC_TAG == dcTag) {
 				myCurrentBook->Language = myBuffer;
 			} else if (DATE_DC_TAG == dcTag) {

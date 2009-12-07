@@ -23,7 +23,7 @@ NetworkBookInfo::NetworkBookInfo(const std::string &id) : Id(id) {
 }
 
 std::string NetworkBookInfo::fileName(URLType format) const {
-	std::string fName = Author.DisplayName + "_" + Title + "_(" + Language + ").";
+	std::string fName = authorName() + "_" + Title + "_(" + Language + ").";
 	switch (format) {
 		case LINK_HTTP:
 			break;
@@ -76,3 +76,23 @@ bool NetworkBookInfo::Comparator::operator () (const shared_ptr<NetworkBookInfo>
 	}
 	return secondBookHasSeries;
 }
+
+std::string NetworkBookInfo::authorName() const {
+	if (Authors.empty()) {
+		return "";
+	}
+	std::string name(Authors[0].DisplayName);
+	for (unsigned i = 1;  i < Authors.size(); ++i) {
+		name.append(", ");
+		name.append(Authors[i].DisplayName);
+	}
+	return name;
+}
+
+std::string NetworkBookInfo::authorSortKey() const {
+	if (Authors.empty()) {
+		return "";
+	}
+	return Authors[0].SortKey;
+}
+

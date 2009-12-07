@@ -57,6 +57,8 @@ public:
 
 	static void updateAuthor(shared_ptr<DBBook> book, shared_ptr<DBAuthor> from, shared_ptr<DBAuthor> to);
 
+	static bool canRemoveFile(const std::string &fileName);
+
 private:
 	static shared_ptr<DBBook> loadFromDB(const std::string &fileName);
 };
