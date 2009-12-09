@@ -189,7 +189,7 @@ FBReader::FBReader(const std::string &bookToOpen) :
 	addAction(ActionCode::FONT_SIZE_DIALOG, new FontSizeDialog());
 
 	myOpenFileHandler = new OpenFileHandler();
-	ZLCommunicationManager::instance().registerHandler("openFile", myOpenFileHandler);
+	//ZLCommunicationManager::Instance().registerHandler("openFile", myOpenFileHandler);
 }
 
 FBReader::~FBReader() {
@@ -233,7 +233,7 @@ void FBReader::initWindow() {
 	// the page will be rendered when the window becomes unobscured
 	//refreshWindow();
 
-//	ZLTimeManager::Instance().addTask(new TimeUpdater(), 1000);
+	//ZLTimeManager::Instance().addTask(new TimeUpdater(), 1000);
 }
 
 bool FBReader::createBook(const std::string& fileName, shared_ptr<Book> &book) {

@@ -30,7 +30,7 @@
 bool link_not_terminated;
 
 void ZLTextView::paint() {
-	FBReader& fbreader = (FBReader&)application();
+	FBReader& fbreader = FBReader::Instance();
 	if (fbreader.mode() == FBReader::BOOK_TEXT_MODE)
 		fbreader.pageFootnotes.erase(fbreader.pageFootnotes.begin(), fbreader.pageFootnotes.end());
 
@@ -165,7 +165,7 @@ void ZLTextView::drawSelectionRectangle(int left, int top, int right, int bottom
 }
 
 void ZLTextView::drawTextLine(const ZLTextLineInfo &info, int y, size_t from, size_t to) {
-	FBReader &fbreader = (FBReader&)application();
+	FBReader &fbreader = FBReader::Instance();
 	const ZLTextParagraphCursor &paragraph = info.RealStart.paragraphCursor();
 
 	const ZLTextElementIterator fromIt = myTextElementMap.begin() + from;

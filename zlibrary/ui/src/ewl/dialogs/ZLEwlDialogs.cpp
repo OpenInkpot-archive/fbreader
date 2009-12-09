@@ -39,16 +39,20 @@
 #include "../util/ZLEwlUtil.h"
 #include "../../../../../fbreader/src/fbreader/FBReader.h"
 #include "../../../../../fbreader/src/fbreader/FBReaderActions.h"
-#include "../../../../../zlibrary/text/src/view/ZLTextStyle.h"
 #include "../../../../../fbreader/src/fbreader/FBView.h"
 #include "../../../../../fbreader/src/bookmodel/BookModel.h"
 #include "../../../../../fbreader/src/fbreader/BookTextView.h"
 #include "../../../../../fbreader/src/formats/FormatPlugin.h"
-#include "../../../../../fbreader/src/description/BookDescriptionUtil.h"
-#include "../../../../../fbreader/src/description/BookDescriptionUtil.h"
 #include "../../../../../zlibrary/core/src/encoding/ZLEncodingConverter.h"
 #include "../../../../../fbreader/src/formats/txt/TxtPlugin.h"
 #include "../../../../../fbreader/src/formats/txt/PlainTextFormat.h"
+#include "../../../../../fbreader/src/library/Book.h"
+#include "../../../../../fbreader/src/library/Author.h"
+#include "../../../../../fbreader/src/options/FBTextStyle.h"
+#include "../../../../../fbreader/src/options/FBOptions.h"
+#include "../../../../../zlibrary/text/src/style/ZLTextStyleCollection.h"
+#include "../../../../../fbreader/src/database/booksdb/BooksDBUtil.h"
+#include "../../../../../fbreader/src/fbreader/ReadingState.h"
 
 extern bool emergency_exit;
 
@@ -69,63 +73,63 @@ class GettextInitializer {
 GettextInitializer locale_init_hack;
 
 static struct _action {
-	char *actionId;
-	char *actionName;
+	const char *actionId;
+	const char *actionName;
 } actions[] = {
-	"none",					_("None"),
-	"addBookmark",			_("Add Bookmark"),
-	"showBookmarks",		_("Show Bookmarks"),
-	"hyperlinkNavStart",	_("Hyperlinks mode"),
-	"showFootnotes",		_("Show Footnotes"),
-	"gotoPageNumber",		_("Go To Page"),
-	"toc",					_("Show Table of Contents"),
-	"gotoHome",				_("Go to Home"),
-	"gotoSectionStart",		_("Go to Start of Section"),
-	"gotoSectionEnd",		_("Go to End of Section"),
-	"nextTOCSection",		_("Go to Next TOC Section"),
-	"previousTOCSection",	_("Go to Previous TOC Section"),
-	"largeScrollForward",	_("Large Scroll Forward"),
-	"largeScrollBackward",	_("Large Scroll Backward"),
-	"undo",					_("Undo"),
-	"redo",					_("Redo"),
-	"search",				_("Search"),
-	"increaseFont",			_("Increase Font Size"),
-	"decreaseFont",			_("Decrease Font Size"),
-    "toggleBold",           _("Toggle Bold Font"),
-	"toggleIndicator",		_("Toggle Position Indicator"),
-//	"preferences",			_("Show Options Dialog"),
-//	"bookInfo",				_("Show Book Info Dialog"),
-//	"cancel",				_("Cancel"),
-//	"quit",					_("Quit"),
-	NULL,					NULL
+	{ "none",					_("None") },
+	{ "addBookmark",			_("Add Bookmark") },
+	{ "showBookmarks",		_("Show Bookmarks") },
+	{ "hyperlinkNavStart",	_("Hyperlinks mode") },
+	{ "showFootnotes",		_("Show Footnotes") },
+	{ "gotoPageNumber",		_("Go To Page") },
+	{ "toc",					_("Show Table of Contents") },
+	{ "gotoHome",				_("Go to Home") },
+	{ "gotoSectionStart",		_("Go to Start of Section") },
+	{ "gotoSectionEnd",		_("Go to End of Section") },
+	{ "nextTOCSection",		_("Go to Next TOC Section") },
+	{ "previousTOCSection",	_("Go to Previous TOC Section") },
+	{ "largeScrollForward",	_("Large Scroll Forward") },
+	{ "largeScrollBackward",	_("Large Scroll Backward") },
+	{ "undo",					_("Undo") },
+	{ "redo",					_("Redo") },
+	{ "search",				_("Search") },
+	{ "increaseFont",			_("Increase Font Size") },
+	{ "decreaseFont",			_("Decrease Font Size") },
+    { "toggleBold",           _("Toggle Bold Font") },
+	{ "toggleIndicator",		_("Toggle Position Indicator") },
+//	{ "preferences",			_("Show Options Dialog") },
+//	{ "bookInfo",				_("Show Book Info Dialog") },
+//	{ "cancel",				_("Cancel") },
+//	{ "quit",					_("Quit") },
+	{ NULL,					NULL }
 };
 
 static struct _language {
-	char *langId;
-	char *langName;
+	const char *langId;
+	const char *langName;
 } languages[] = {
-	"ar", _("Arabic"),
-	"cs", _("Czech"),
-	"de", _("German"),
-	"de-traditional", _("German (traditional orthography)"),
-	"el", _("Greek"),
-	"en", _("English"),
-	"eo", _("Esperanto"),
-	"es", _("Spanish"),
-	"fi", _("Finnish"),
-	"fr", _("French"),
-	"he", _("Hebrew"),
-	"id", _("Indonesian"),
-	"it", _("Italian"),
-	"no", _("Norwegian"),
-	"pt", _("Portuguese"),
-	"ru", _("Russian"),
-	"sv", _("Swedish"),
-	"tr", _("Turkish"),
-	"uk", _("Ukrainian"),
-	"zh", _("Chinese"),
-	"other", _("Other"),
-	NULL, NULL
+	{ "ar", _("Arabic") },
+	{ "cs", _("Czech") },
+	{ "de", _("German") },
+	{ "de-traditional", _("German (traditional orthography)") },
+	{ "el", _("Greek") },
+	{ "en", _("English") },
+	{ "eo", _("Esperanto") },
+	{ "es", _("Spanish") },
+	{ "fi", _("Finnish") },
+	{ "fr", _("French") },
+	{ "he", _("Hebrew") },
+	{ "id", _("Indonesian") },
+	{ "it", _("Italian") },
+	{ "no", _("Norwegian") },
+	{ "pt", _("Portuguese") },
+	{ "ru", _("Russian") },
+	{ "sv", _("Swedish") },
+	{ "tr", _("Turkish") },
+	{ "uk", _("Ukrainian") },
+	{ "zh", _("Chinese") },
+	{ "other", _("Other") },
+	{ NULL, NULL }
 };
 
 static char *alignments[] = { _("undefined"), _("left"), _("right"), _("center"), _("justify") };
@@ -139,8 +143,6 @@ cb_vlist *vlist;
 
 FBReader *myFbreader;
 ZLPaintContext *myContext;
-BookInfo *myBookInfo;
-BookDescriptionPtr description;
 
 static void (*next_gui)(FBReader &);
 
@@ -187,7 +189,6 @@ int toc_handler(int idx, bool is_alt)
 	list->items.clear();
 
 	cb_list_item item;
-	int cnt = 0;
 	if(selEntry != cm.myRoot) {
 		item.text = "..";
 		list->items.push_back(item);
@@ -197,7 +198,7 @@ int toc_handler(int idx, bool is_alt)
 
 	short len;
 	char *p;
-	for(int i = 0; i < toc_list.size(); i++) {
+	for(unsigned i = 0; i < toc_list.size(); i++) {
 		p = toc_list.at(i)->myFirstEntryAddress;
 
 		len = 0;
@@ -296,7 +297,7 @@ void ZLEwlBMKDialog(FBReader &f)
 	list->alt_text = _("Delete");
 	list->item_handler = bookmarks_handler;
 
-	std::vector<std::pair<std::pair<int, int>, std::pair<int, std::string> > > bookmarks
+	std::vector<std::pair<ReadingState, std::pair<int, std::string> > > bookmarks
 		= myFbreader->bookTextView().getBookmarks();
 
 	for(int i = 0; i < bookmarks.size(); i++) {
@@ -430,7 +431,7 @@ void refresh_view()
 	//fprintf(stderr, "refresh\n");
 
 	if(reopen_file)
-		myFbreader->openFile(myFbreader->myModel->fileName());
+		myFbreader->openFile(myFbreader->myModel->book()->filePath());
 
 	reopen_file = false;
 
@@ -441,7 +442,7 @@ void refresh_view()
 void settings_close_handler()
 {
 	if(reopen_file)
-		myFbreader->openFile(myFbreader->myModel->fileName());
+		myFbreader->openFile(myFbreader->myModel->book()->filePath());
 
 	reopen_file = false;
 
@@ -463,7 +464,9 @@ void ZLBooleanOption_handler(int idx, bool is_alt)
 
 void font_family_handler(int idx, bool is_alt)
 {
-	ZLStringOption &option = ZLTextStyleCollection::instance().baseStyle().FontFamilyOption;
+	FBTextStyle &baseStyle = FBTextStyle::Instance();
+
+	ZLStringOption &option = baseStyle.FontFamilyOption;
 	option.setValue(myContext->fontFamilies().at(idx));
 	
 	cb_item_value &iv = olists.back()->items.at(vlist->parent_item_idx).current_value;
@@ -475,7 +478,9 @@ void font_family_handler(int idx, bool is_alt)
 
 void line_spacing_handler(int idx, bool is_alt)
 {
-	ZLIntegerOption &option = ZLTextStyleCollection::instance().baseStyle().LineSpacePercentOption;
+	FBTextStyle &baseStyle = FBTextStyle::Instance();
+
+	ZLIntegerOption &option = baseStyle.LineSpacePercentOption;
 	option.setValue(idx * 10 + 50);
 
 	cb_item_value &iv = olists.back()->items.at(vlist->parent_item_idx).current_value;
@@ -491,7 +496,9 @@ void line_spacing_handler(int idx, bool is_alt)
 
 void font_size_handler(int idx, bool is_alt)
 {
-	ZLIntegerRangeOption &option = ZLTextStyleCollection::instance().baseStyle().FontSizeOption;
+	FBTextStyle &baseStyle = FBTextStyle::Instance();
+
+	ZLIntegerRangeOption &option = baseStyle.FontSizeOption;
 	option.setValue(FONT_SIZE(idx));
 
 	cb_item_value &iv = olists.back()->items.at(vlist->parent_item_idx).current_value;
@@ -564,7 +571,9 @@ void indicator_font_size_handler(int idx, bool is_alt)
 
 void alignment_handler(int idx, bool is_alt)
 {
-	ZLIntegerOption &option = ZLTextStyleCollection::instance().baseStyle().AlignmentOption;
+	FBTextStyle &baseStyle = FBTextStyle::Instance();
+
+	ZLIntegerOption &option = baseStyle.AlignmentOption;
 	option.setValue(idx+1);
 
 	cb_item_value &iv = olists.back()->items.at(vlist->parent_item_idx).current_value;
@@ -577,7 +586,7 @@ void alignment_handler(int idx, bool is_alt)
 
 void margins_val_handler(int idx, bool is_alt)
 {
-	FBMargins &margins = FBView::margins();
+	FBOptions &margins = FBOptions::Instance();
 	ZLIntegerRangeOption *option;
 
 	switch(vlist->parent_item_idx) {
@@ -638,7 +647,7 @@ void margins_handler(int idx, bool is_alt)
 
 void first_line_indent_handler(int idx, bool is_alt)
 {
-	ZLIntegerRangeOption &option = ((ZLTextFullStyleDecoration*)ZLTextStyleCollection::instance().decoration(/*REGULAR*/0))->FirstLineIndentDeltaOption;
+	ZLIntegerRangeOption &option = ((ZLTextFullStyleDecoration*)ZLTextStyleCollection::Instance().decoration(/*REGULAR*/0))->FirstLineIndentDeltaOption;
 	option.setValue(idx * 5);
 
 	cb_item_value &iv = olists.back()->items.at(vlist->parent_item_idx).current_value;
@@ -696,7 +705,7 @@ void format_style_handler(int idx, bool is_alt)
 
 		cb_olist_item i;
 
-		FBMargins &margins = FBView::margins();
+		FBOptions &margins = FBOptions::Instance();
 
 		ADD_OPTION_INT(_("Left Margin"), margins.LeftMarginOption.value());
 		ADD_OPTION_INT(_("Right Margin"), margins.RightMarginOption.value());
@@ -758,7 +767,7 @@ void default_language_handler(int idx, bool is_alt)
 {
 	int lsize = sizeof(languages) / sizeof(struct _language);
 
-	ZLStringOption &option = PluginCollection::instance().DefaultLanguageOption;
+	ZLStringOption &option = PluginCollection::Instance().DefaultLanguageOption;
 	if(idx < lsize-1) {
 		option.setValue(languages[idx].langId);
 
@@ -772,7 +781,7 @@ void default_language_handler(int idx, bool is_alt)
 
 void default_encoding_set_handler(int idx, bool is_alt)
 {
-	const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::instance().sets();
+	const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::Instance().sets();
 	if(idx > sets.size())
 		return;
 
@@ -780,7 +789,7 @@ void default_encoding_set_handler(int idx, bool is_alt)
 	iv1.text = iv1.sval = sets.at(idx)->name();
 	cb_lcb_invalidate(vlist->parent_item_idx);
 
-	PluginCollection::instance().DefaultEncodingOption.setValue(sets.at(idx)->infos().at(0)->name());
+	PluginCollection::Instance().DefaultEncodingOption.setValue(sets.at(idx)->infos().at(0)->name());
 
 	cb_item_value &iv2 = olists.back()->items.at(vlist->parent_item_idx + 1).current_value;
 	iv2.text = iv2.sval = sets.at(idx)->infos().at(0)->name();
@@ -794,12 +803,12 @@ void default_encoding_handler(int idx, bool is_alt)
 	const std::vector<ZLEncodingConverterInfoPtr> *pinfos = NULL;
 
 	bool found = false;
-	const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::instance().sets();
+	const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::Instance().sets();
 	for (std::vector<shared_ptr<ZLEncodingSet> >::const_iterator it = sets.begin(); !found && (it != sets.end()); ++it) {
 		pinfos = &(*it)->infos();
 
 		for (std::vector<ZLEncodingConverterInfoPtr>::const_iterator jt = pinfos->begin(); !found && (jt != pinfos->end()); ++jt)
-			if ((*jt)->name() == PluginCollection::instance().DefaultEncodingOption.value())
+			if ((*jt)->name() == PluginCollection::Instance().DefaultEncodingOption.value())
 				found = true;
 	}
 
@@ -807,7 +816,7 @@ void default_encoding_handler(int idx, bool is_alt)
 		return;
 
 	std::string newenc = (*pinfos).at(idx)->name();
-	PluginCollection::instance().DefaultEncodingOption.setValue(newenc);
+	PluginCollection::Instance().DefaultEncodingOption.setValue(newenc);
 
 	cb_item_value &iv = olists.back()->items.at(vlist->parent_item_idx).current_value;
 	iv.text = iv.sval = newenc;
@@ -826,7 +835,7 @@ void language_handler(int idx, bool is_alt)
 		
 		cb_rcb_new();
 	} else if(2 == idx) {
-		const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::instance().sets();
+		const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::Instance().sets();
 		INIT_VLIST(_("Default Encoding Set"), default_encoding_set_handler);
 
 		for(unsigned int i = 0; i < sets.size(); i++)
@@ -839,12 +848,12 @@ void language_handler(int idx, bool is_alt)
 		const std::vector<ZLEncodingConverterInfoPtr> *pinfos = NULL;
 
 		bool found = false;
-		const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::instance().sets();
+		const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::Instance().sets();
 		for (std::vector<shared_ptr<ZLEncodingSet> >::const_iterator it = sets.begin(); !found && (it != sets.end()); ++it) {
 			pinfos = &(*it)->infos();
 
 			for (std::vector<ZLEncodingConverterInfoPtr>::const_iterator jt = pinfos->begin(); !found && (jt != pinfos->end()); ++jt)
-				if ((*jt)->name() == PluginCollection::instance().DefaultEncodingOption.value())
+				if ((*jt)->name() == PluginCollection::Instance().DefaultEncodingOption.value())
 					found = true;
 		}
 
@@ -859,17 +868,15 @@ void language_handler(int idx, bool is_alt)
 
 void book_encoding_set_handler(int idx, bool is_alt)
 {
-	const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::instance().sets();
+	const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::Instance().sets();
 	if(idx > sets.size())
 		return;
 
 	std::string newenc = sets.at(idx)->infos().at(0)->name();
 
-	BookDescriptionPtr description = new BookDescription(myFbreader->myModel->fileName());
-	description->myEncoding = newenc;
-	BookDescriptionUtil::saveInfo(ZLFile(myFbreader->myModel->fileName()));
-
-	myBookInfo->EncodingOption.setValue(newenc);
+	shared_ptr<Book> book = myFbreader->myModel->book();
+	book->setEncoding(newenc);
+	BooksDBUtil::saveInfo(ZLFile(myFbreader->myModel->book()->filePath()));
 
 	cb_item_value &iv = olists.back()->items.at(vlist->parent_item_idx).current_value;
 	iv.text = iv.sval = sets.at(idx)->name();
@@ -885,15 +892,16 @@ void book_encoding_set_handler(int idx, bool is_alt)
 
 void book_encoding_handler(int idx, bool is_alt)
 {
+	shared_ptr<Book> book = myFbreader->myModel->book();
 	const std::vector<ZLEncodingConverterInfoPtr> *pinfos = NULL;
 
 	bool found = false;
-	const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::instance().sets();
+	const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::Instance().sets();
 	for (std::vector<shared_ptr<ZLEncodingSet> >::const_iterator it = sets.begin(); !found && (it != sets.end()); ++it) {
 		pinfos = &(*it)->infos();
 
 		for (std::vector<ZLEncodingConverterInfoPtr>::const_iterator jt = pinfos->begin(); !found && (jt != pinfos->end()); ++jt)
-			if ((*jt)->name() == myBookInfo->EncodingOption.value())
+			if ((*jt)->name() == book->encoding());
 				found = true;
 	}
 
@@ -902,11 +910,8 @@ void book_encoding_handler(int idx, bool is_alt)
 
 	std::string newenc = (*pinfos).at(idx)->name();
 
-	BookDescriptionPtr description = new BookDescription(myFbreader->myModel->fileName());
-	description->myEncoding = newenc;
-	BookDescriptionUtil::saveInfo(ZLFile(myFbreader->myModel->fileName()));
-
-	myBookInfo->EncodingOption.setValue(newenc);
+	book->setEncoding(newenc);
+	BooksDBUtil::saveInfo(ZLFile(myFbreader->myModel->book()->filePath()));
 
 	cb_item_value &iv = olists.back()->items.at(vlist->parent_item_idx).current_value;
 	iv.text = iv.sval = newenc;
@@ -918,15 +923,13 @@ void book_encoding_handler(int idx, bool is_alt)
 
 void book_language_handler(int idx, bool is_alt)
 {
+	shared_ptr<Book> book = myFbreader->myModel->book();
+
 	int lsize = sizeof(languages) / sizeof(struct _language);
 
-	BookDescriptionPtr description = new BookDescription(myFbreader->myModel->fileName());
-	description->myLanguage = languages[idx].langId;
+	book->setLanguage(languages[idx].langId);
 
-	BookDescriptionUtil::saveInfo(ZLFile(myFbreader->myModel->fileName()));
-
-	// set encoding
-	myBookInfo->LanguageOption.setValue(description->myLanguage);
+	BooksDBUtil::saveInfo(ZLFile(myFbreader->myModel->book()->filePath()));
 
 	cb_item_value &iv = olists.back()->items.at(vlist->parent_item_idx).current_value;
 	iv.text = iv.sval = languages[idx].langName; //(description->myLanguage);
@@ -938,14 +941,15 @@ void book_language_handler(int idx, bool is_alt)
 
 void book_para_break_handler(int idx, bool is_alt)
 {
-	FormatPlugin *plugin = PluginCollection::instance().plugin(ZLFile(myFbreader->myModel->fileName()), false);
+	std::string fileName = myFbreader->myModel->book()->filePath();
+	FormatPlugin *plugin = &*PluginCollection::Instance().plugin(ZLFile(fileName), false);
 	if (plugin != 0) {
 		TxtPlugin *test = dynamic_cast<TxtPlugin*>(plugin);
 		if(test != NULL) {
-			PlainTextFormat myFormat(myFbreader->myModel->fileName());
+			PlainTextFormat myFormat(fileName);
 			if (!myFormat.initialized()) {
 				PlainTextFormatDetector detector;
-				shared_ptr<ZLInputStream> stream = ZLFile(myFbreader->myModel->fileName()).inputStream();
+				shared_ptr<ZLInputStream> stream = ZLFile(fileName).inputStream();
 				if (!stream.isNull()) {
 					detector.detect(*stream, myFormat);
 				}
@@ -982,6 +986,8 @@ void book_para_break_handler(int idx, bool is_alt)
 
 void book_settings_handler(int idx, bool is_alt)
 {
+	shared_ptr<Book> book = myFbreader->myModel->book();
+
 	if(0 == idx) {
 		INIT_VLIST(_("Book Language"), book_language_handler);
 
@@ -991,9 +997,9 @@ void book_settings_handler(int idx, bool is_alt)
 		cb_rcb_new();
 	} 
 
-	if((myBookInfo->EncodingOption.value() != "auto") && ((1 == idx) || (2 == idx))) {
+	if((book->encoding() != "auto") && ((1 == idx) || (2 == idx))) {
 		if(1 == idx) {
-			const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::instance().sets();
+			const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::Instance().sets();
 			INIT_VLIST(_("Default Encoding Set"), book_encoding_set_handler);
 
 			for(unsigned int i = 0; i < sets.size(); i++)
@@ -1006,12 +1012,12 @@ void book_settings_handler(int idx, bool is_alt)
 			const std::vector<ZLEncodingConverterInfoPtr> *pinfos = NULL;
 
 			bool found = false;
-			const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::instance().sets();
+			const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::Instance().sets();
 			for (std::vector<shared_ptr<ZLEncodingSet> >::const_iterator it = sets.begin(); !found && (it != sets.end()); ++it) {
 				pinfos = &(*it)->infos();
 
 				for (std::vector<ZLEncodingConverterInfoPtr>::const_iterator jt = pinfos->begin(); !found && (jt != pinfos->end()); ++jt)
-					if ((*jt)->name() == myBookInfo->EncodingOption.value())
+					if ((*jt)->name() == book->encoding())
 						found = true;
 			}
 
@@ -1024,8 +1030,8 @@ void book_settings_handler(int idx, bool is_alt)
 		}
 	}
 
-	if(((myBookInfo->EncodingOption.value() != "auto") && (3 == idx)) ||
-		((myBookInfo->EncodingOption.value() == "auto") && (2 == idx))) {
+	if(((book->encoding() != "auto") && (3 == idx)) ||
+		((book->encoding() == "auto") && (2 == idx))) {
 
 		INIT_VLIST(_("Break Paragraph At"), book_para_break_handler);
 
@@ -1068,6 +1074,7 @@ void keys_handler(int idx, bool is_alt)
 
 void options_dialog_handler(int idx, bool is_alt)
 {
+	shared_ptr<Book> book = myFbreader->myModel->book();
 //	fprintf(stderr, "options_dialog_handler: %d\n", idx);
 
 	cb_olist *current_olist = olists.back();
@@ -1075,9 +1082,9 @@ void options_dialog_handler(int idx, bool is_alt)
 	if(0 == idx) {
 		myContext = &(*myFbreader->context());
 
-		ZLTextBaseStyle &bs = ZLTextStyleCollection::instance().baseStyle();
+		FBTextStyle &baseStyle = FBTextStyle::Instance();
 
-		ZLTextStyleCollection &collection = ZLTextStyleCollection::instance();
+		ZLTextStyleCollection &collection = ZLTextStyleCollection::Instance();
 		ZLTextFullStyleDecoration *decoration = (ZLTextFullStyleDecoration*)collection.decoration(/*REGULAR*/0);
 
 		cb_olist *options = new cb_olist;
@@ -1091,14 +1098,14 @@ void options_dialog_handler(int idx, bool is_alt)
 
 		cb_olist_item i;
 
-		ADD_OPTION_STRING(	_("Font Family"), bs.FontFamilyOption.value());
-		ADD_OPTION_INT_F(	_("Font Size"), bs.FontSizeOption.value(), _("%dpt"));
-		ADD_OPTION_BOOL_H(	_("Bold"), bs.BoldOption.value(), ZLBooleanOption_handler, &bs.BoldOption);
-		ADD_OPTION_INT_F(	_("Line Spacing"), bs.LineSpacePercentOption.value(), _("%d%%"));
-		ADD_OPTION_INT_T(	_("Alignment"), bs.AlignmentOption.value(), alignments[bs.AlignmentOption.value()]);
+		ADD_OPTION_STRING(	_("Font Family"), baseStyle.FontFamilyOption.value());
+		ADD_OPTION_INT_F(	_("Font Size"), baseStyle.FontSizeOption.value(), _("%dpt"));
+		ADD_OPTION_BOOL_H(	_("Bold"), baseStyle.BoldOption.value(), ZLBooleanOption_handler, &baseStyle.BoldOption);
+		ADD_OPTION_INT_F(	_("Line Spacing"), baseStyle.LineSpacePercentOption.value(), _("%d%%"));
+		ADD_OPTION_INT_T(	_("Alignment"), baseStyle.AlignmentOption.value(), alignments[baseStyle.AlignmentOption.value()]);
 		ADD_OPTION_STRING(	_("Margins"), "");
 		ADD_OPTION_INT(		_("First Line Indent"), decoration->FirstLineIndentDeltaOption.value());
-		ADD_OPTION_BOOL_H(	_("Auto Hyphenations"), bs.AutoHyphenationOption.value(), ZLBooleanOption_handler, &bs.AutoHyphenationOption);
+		//ADD_OPTION_BOOL_H(	_("Auto Hyphenations"), baseStyle.AutoHyphenationOption.value(), ZLBooleanOption_handler, &baseStyle.AutoHyphenationOption);
 
 		cb_lcb_redraw();
 	} else if(1 == idx) {
@@ -1135,14 +1142,14 @@ void options_dialog_handler(int idx, bool is_alt)
 		options->item_handler = language_handler;
 		options->destroy_handler = NULL;
 
-		PluginCollection &pc = PluginCollection::instance();
+		PluginCollection &pc = PluginCollection::Instance();
 
 		cb_olist_item i;
 
 
 		ADD_OPTION_BOOL_H(_("Detect Language and Encoding"), pc.LanguageAutoDetectOption.value(), ZLBooleanOption_handler, &pc.DefaultLanguageOption);
 
-		char *l;
+		const char *l;
 		for(unsigned int i = 0; i < sizeof(languages) / sizeof(struct _language) && languages[i].langId; i++) {
 			l = languages[i].langName;
 			if(!pc.DefaultLanguageOption.value().compare(languages[i].langId))
@@ -1152,7 +1159,7 @@ void options_dialog_handler(int idx, bool is_alt)
 		ADD_OPTION_STRING(_("Default Language"), l);
 
 		bool found = false;
-		const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::instance().sets();
+		const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::Instance().sets();
 		for (std::vector<shared_ptr<ZLEncodingSet> >::const_iterator it = sets.begin(); !found && (it != sets.end()); ++it) {
 			const std::vector<ZLEncodingConverterInfoPtr> &infos = (*it)->infos();
 
@@ -1166,12 +1173,12 @@ void options_dialog_handler(int idx, bool is_alt)
 				}
 			}
 		}
-		ADD_OPTION_BOOL_H(_("iso-8859-1 -> win-1251"), ZLEncodingCollection::useWindows1252HackOption().value(), ZLBooleanOption_handler, &ZLEncodingCollection::useWindows1252HackOption());
+		//ADD_OPTION_BOOL_H(_("iso-8859-1 -> win-1251"), ZLEncodingCollection::useWindows1252HackOption().value(), ZLBooleanOption_handler, &ZLEncodingCollection::useWindows1252HackOption());
 
 		cb_lcb_redraw();
 	} else if(3 == idx) {
-		const std::string &fileName = myFbreader->myModel->fileName();
-		myBookInfo = new BookInfo(fileName);
+		shared_ptr<Book> book = myFbreader->myModel->book();
+		const std::string &fileName = book->filePath();
 
 		cb_olist *options = new cb_olist;
 		olists.push_back(options);
@@ -1184,25 +1191,25 @@ void options_dialog_handler(int idx, bool is_alt)
 
 		cb_olist_item i;
 
-		char *l;
+		const char *l;
 		for(unsigned int j = 0; j < sizeof(languages) / sizeof(struct _language) && languages[j].langId; j++) {
 			l = languages[j].langName;
-			if(!myBookInfo->LanguageOption.value().compare(languages[j].langId))
+			if(!book->language().compare(languages[j].langId))
 				break;
 		}
 
 		ADD_OPTION_STRING(_("Language"), l);
 
-		if(myBookInfo->EncodingOption.value() == "auto") {
-			ADD_OPTION_STRING(_("Encoding"), myBookInfo->EncodingOption.value().c_str());
+		if(book->encoding() == "auto") {
+			ADD_OPTION_STRING(_("Encoding"), book->encoding().c_str());
 		} else {
 			bool found = false;
-			const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::instance().sets();
+			const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::Instance().sets();
 			for (std::vector<shared_ptr<ZLEncodingSet> >::const_iterator it = sets.begin(); !found && (it != sets.end()); ++it) {
 				const std::vector<ZLEncodingConverterInfoPtr> &infos = (*it)->infos();
 
 				for (std::vector<ZLEncodingConverterInfoPtr>::const_iterator jt = infos.begin(); !found && (jt != infos.end()); ++jt) {
-					if ((*jt)->name() == myBookInfo->EncodingOption.value()) {
+					if ((*jt)->name() == book->encoding()) {
 						ADD_OPTION_STRING(_("Encoding Set"), (*it)->name().c_str());
 						ADD_OPTION_STRING(_("Encoding"), (*jt)->name().c_str());
 
@@ -1213,7 +1220,7 @@ void options_dialog_handler(int idx, bool is_alt)
 			}
 		}
 
-		FormatPlugin *plugin = PluginCollection::instance().plugin(ZLFile(fileName), false);
+		FormatPlugin *plugin = &*PluginCollection::Instance().plugin(ZLFile(fileName), false);
 		if (plugin != 0) {
 			TxtPlugin *test = dynamic_cast<TxtPlugin*>(plugin);
 			if(test != NULL) {
@@ -1309,8 +1316,8 @@ void ZLEwlBookInfo(FBReader &f)
 	list->alt_text = "";
 	list->item_handler = NULL;
 
-	const std::string &fileName = f.myModel->fileName();
-	myBookInfo = new BookInfo(fileName);
+	shared_ptr<Book> book = f.myModel->book();
+	const std::string &fileName = book->filePath();
 
 #define list_add_tv(__t1__, __t2__) \
 	{ \
@@ -1322,13 +1329,21 @@ void ZLEwlBookInfo(FBReader &f)
 
 	list_add_tv(_("File: "), ZLFile::fileNameToUtf8(ZLFile(fileName).name(false)));
 	//list_add_tv(_("Full path: "), ZLFile::fileNameToUtf8(ZLFile(fileName).path()));
-	list_add_tv(_("Title: "), myBookInfo->TitleOption.value());
-	list_add_tv(_("Author: "), myBookInfo->AuthorDisplayNameOption.value());
+	list_add_tv(_("Title: "), book->title());
 
-	if(!myBookInfo->SeriesNameOption.value().empty()) {
-		list_add_tv(_("Series: "), myBookInfo->SeriesNameOption.value());
+	std::string authors;
+	for(int j = 0; j < book->authors().size(); j++) {
+		if(!authors.empty())
+			authors += ", ";
+
+		authors += book->authors().at(j)->name();
+	}
+	list_add_tv(_("Author: "), authors);
+
+	if(!book->seriesName().empty()) {
+		list_add_tv(_("Series: "), book->seriesName());
 		stringstream s;
-		s << myBookInfo->NumberInSeriesOption.value();
+		s << book->indexInSeries();
 		list_add_tv(_("Book number: "), s.str());
 	}
 
@@ -1425,7 +1440,7 @@ void ZLEwlHelpDialog(FBReader &f)
 /*
 int font_size_dialog_handler(int idx, bool is_alt)
 {
-	ZLIntegerRangeOption &option = ZLTextStyleCollection::instance().baseStyle().FontSizeOption;
+	ZLIntegerRangeOption &option = ZLTextStyleCollection::Instance().baseStyle().FontSizeOption;
 	option.setValue(FONT_SIZE(idx));
 
 	do_refresh = 2;
@@ -1455,7 +1470,7 @@ void _ZLEwlFontSizeDialog(FBReader &f)
 		list->items.push_back(item);
 	}
 
-	ZLIntegerRangeOption &option = ZLTextStyleCollection::instance().baseStyle().FontSizeOption;
+	ZLIntegerRangeOption &option = ZLTextStyleCollection::Instance().baseStyle().FontSizeOption;
 
 	cb_fcb_new(list, option.value() - FONT_SIZE(0));
 
@@ -1469,7 +1484,8 @@ void _ZLEwlFontSizeDialog(FBReader &f)
 
 void font_size_dialog_handler(int idx, bool is_alt)
 {
-	ZLIntegerRangeOption &option = ZLTextStyleCollection::instance().baseStyle().FontSizeOption;
+	FBTextStyle &baseStyle = FBTextStyle::Instance();
+	ZLIntegerRangeOption &option = baseStyle.FontSizeOption;
 	option.setValue(FONT_SIZE(idx));
 
 	do_refresh = 2;
@@ -1498,7 +1514,8 @@ void ZLEwlFontSizeDialog(FBReader &f)
 		ADD_SUBMENU_ITEM(s.str());
 	}
 
-	ZLIntegerRangeOption &option = ZLTextStyleCollection::instance().baseStyle().FontSizeOption;
+	FBTextStyle &baseStyle = FBTextStyle::Instance();
+	ZLIntegerRangeOption &option = baseStyle.FontSizeOption;
 
 	cb_lcb_new(option.value() - FONT_SIZE(0));
 }

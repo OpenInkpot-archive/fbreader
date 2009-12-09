@@ -45,6 +45,7 @@ public:
 	void errorBox(const ZLResourceKey &key, const std::string &message) const;
 	int questionBox(const ZLResourceKey &key, const std::string &message, const ZLResourceKey &button0, const ZLResourceKey &button1, const ZLResourceKey &button2) const;
 	bool selectionDialog(const ZLResourceKey &key, ZLTreeHandler &handler) const;
+	shared_ptr<ZLProgressDialog> createProgressDialog(const ZLResourceKey &key) const;
 	void wait(const ZLResourceKey &key, ZLRunnable &runnable) const;
 
 	bool isClipboardSupported(ClipboardType type) const;

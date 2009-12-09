@@ -53,6 +53,7 @@ ZLNetworkDownloadData::ZLNetworkDownloadData(const std::string &url, const std::
 }
 
 bool ZLNetworkDownloadData::doBefore() {
+	/*
 	if (myOutputStream.isNull()) {
 		myOutputStream = ZLFile(myFileName).outputStream();
 	}
@@ -67,6 +68,7 @@ bool ZLNetworkDownloadData::doBefore() {
 		curl_easy_setopt(h, CURLOPT_WRITEFUNCTION, writeToStream);
 		curl_easy_setopt(h, CURLOPT_WRITEDATA, this);
 	}
+	*/
 	return true;
 }
 

@@ -111,7 +111,7 @@ private:
 	unsigned int myCurrentBookmarkSize;
 public:
 	unsigned int getBookmarksSize();
-	std::vector<std::pair<std::pair<int, int>, std::pair<int, std::string> > > getBookmarks();
+	std::vector<std::pair<BookTextView::Position, std::pair<int, std::string> > > getBookmarks();
 	void addBookmark();
 	void removeBookmark(unsigned int idx);
 	void gotoBookmark(unsigned int idx);

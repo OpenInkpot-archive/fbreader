@@ -10,6 +10,7 @@
 
 #TARGET_ARCH = maemo
 #UI_TYPE = maemo2
+#UI_TYPE = maemo3
 #UI_TYPE = maemo4
 #UI_TYPE = maemo5
 
@@ -48,9 +49,7 @@ UI_TYPE = ewl
 #TARGET_ARCH = palm
 #UI_TYPE = palm
 
-#TARGET_ARCH = macosx
-#UI_TYPE = cocoa
-
 TARGET_STATUS = release
 #TARGET_STATUS = debug
+#ZLSHARED = no
 #TARGET_STATUS = profile

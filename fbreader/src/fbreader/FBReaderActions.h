@@ -373,35 +373,30 @@ public:
 class ShowFootnotes : public ZLApplication::Action {
 
 public:
-	ShowFootnotes();
 	void run();
 };
 
 class HyperlinkNavStart : public ZLApplication::Action {
 
 public:
-	HyperlinkNavStart();
 	void run();
 };
 
 class BookmarkAdd : public ZLApplication::Action {
 
 public:
-	BookmarkAdd();
 	void run();
 };
 
 class BookmarksShow : public ZLApplication::Action {
 
 public:
-	BookmarksShow();
 	void run();
 };
 
 class Help : public ZLApplication::Action {
 
 public:
-	Help();
 	void run();
 };
 

@@ -24,6 +24,11 @@
 #include "FBReader.h"
 #include "ScrollingAction.h"
 
+#include "FBReaderActions.h"
+#include "ContentsView.h"
+#include "BookTextView.h"
+#include "../bookmodel/BookModel.h"
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -171,7 +176,6 @@ void ScrollingAction::run() {
 				close(x);
 			}
 		}
-	}
 	} else if (view->typeId() == ZLBlockTreeView::TYPE_ID) {
 		((ZLBlockTreeView&)*view).scroll(myMode, !myForward);
 	}

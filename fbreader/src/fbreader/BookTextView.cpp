@@ -116,7 +116,7 @@ void BookTextView::setModel(shared_ptr<ZLTextModel> model, const std::string &la
 
 	myBookmarks.clear();
 	myCurrentBookmarkSize = 0;
-	myCurrentBookmarkSize = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, fileName, BMK_SIZE, 0).value();
+	myCurrentBookmarkSize = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, BMK_SIZE, 0).value();
 	for(int i = 0; i < myCurrentBookmarkSize; i++) {
 		std::string bufferParagraph = BMK_PARAGRAPH_PREFIX;
 		std::string bufferWord = BMK_WORD_PREFIX;
@@ -125,10 +125,10 @@ void BookTextView::setModel(shared_ptr<ZLTextModel> model, const std::string &la
 		ZLStringUtil::appendNumber(bufferWord, i);
 		ZLStringUtil::appendNumber(bufferPage, i);
 		Position pos;
-		pos.first = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, fileName, bufferParagraph, -1).value();
-		pos.second = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, fileName, bufferWord, -1).value();
-		int page = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, fileName, bufferPage, -1).value();
-		myBookmarks.push_back(make_pair(pos, page));
+		pos.Paragraph = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, bufferParagraph, -1).value();
+		pos.Word = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, bufferWord, -1).value();
+		int page = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, bufferPage, -1).value();
+		myBookmarks.push_back(std::make_pair(pos, page));
 	}
 
 	BooksDB::Instance().loadBookStateStack(*book, myPositionStack);
@@ -168,16 +168,7 @@ void BookTextView::saveState() {
 		ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, CHAR_OPTION_NAME, 0).setValue(cursor.charIndex());
 		ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, POSITION_IN_BUFFER, 0).setValue(myCurrentPointInStack);
 		ZLBooleanOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, STATE_VALID, false).setValue(true);
-		ZLIntegerOption(ZLCategoryKey::STATE, myFileName, POSITION_OPTION_NAME, 0).setValue(positionIndicator()->textPosition());
-
-		for (unsigned int i = 0; i < myPositionStack.size(); ++i) {
-			std::string bufferParagraph = BUFFER_PARAGRAPH_PREFIX;
-			std::string bufferWord = BUFFER_WORD_PREFIX;
-			ZLStringUtil::appendNumber(bufferParagraph, i);
-			ZLStringUtil::appendNumber(bufferWord, i);
-			ZLIntegerOption(ZLCategoryKey::STATE, myFileName, bufferParagraph, -1).setValue(myPositionStack[i].first);
-			ZLIntegerOption(ZLCategoryKey::STATE, myFileName, bufferWord, -1).setValue(myPositionStack[i].second);
-		}
+		ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, POSITION_OPTION_NAME, 0).setValue(positionIndicator()->textPosition());
 
 		if (myStackChanged) {
 			BooksDB::Instance().saveBookStateStack(*myBook, myPositionStack);
@@ -188,7 +179,7 @@ void BookTextView::saveState() {
 }
 
 void BookTextView::saveBookmarks() {
-	ZLIntegerOption(ZLCategoryKey::BOOKMARKS, myFileName, BMK_SIZE, 0).setValue(myBookmarks.size());
+	ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, BMK_SIZE, 0).setValue(myBookmarks.size());
 	for (unsigned int i = 0; i < myBookmarks.size(); ++i) {
 		std::string bufferParagraph = BMK_PARAGRAPH_PREFIX;
 		std::string bufferWord = BMK_WORD_PREFIX;
@@ -196,9 +187,9 @@ void BookTextView::saveBookmarks() {
 		ZLStringUtil::appendNumber(bufferParagraph, i);
 		ZLStringUtil::appendNumber(bufferWord, i);
 		ZLStringUtil::appendNumber(bufferPage, i);
-		ZLIntegerOption(ZLCategoryKey::BOOKMARKS, myFileName, bufferParagraph, -1).setValue(myBookmarks[i].first.first);
-		ZLIntegerOption(ZLCategoryKey::BOOKMARKS, myFileName, bufferWord, -1).setValue(myBookmarks[i].first.second);
-		ZLIntegerOption(ZLCategoryKey::BOOKMARKS, myFileName, bufferPage, -1).setValue(myBookmarks[i].second);
+		ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, bufferParagraph, -1).setValue(myBookmarks[i].first.Paragraph);
+		ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, bufferWord, -1).setValue(myBookmarks[i].first.Word);
+		ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, bufferPage, -1).setValue(myBookmarks[i].second);
 	}
 }
 
@@ -206,22 +197,22 @@ void BookTextView::addBookmark() {
 	const ZLTextWordCursor &cursor = startCursor();
 	const ZLTextParagraphCursor &paragraph = cursor.paragraphCursor();
 
-	myBookmarks.push_back(make_pair(Position(cursor.paragraphCursor().index(), cursor.elementIndex()), positionIndicator()->currentPage()));
+	myBookmarks.push_back(std::make_pair(Position(cursor.paragraphCursor().index(), cursor.elementIndex(), 0), positionIndicator()->currentPage()));
 }
 
 void BookTextView::gotoBookmark(unsigned int idx) {
 	if(idx < myBookmarks.size()) {
-		gotoPosition(myBookmarks.at(idx).first.first, myBookmarks.at(idx).first.second, 0);
+		gotoPosition(myBookmarks.at(idx).first.Paragraph, myBookmarks.at(idx).first.Word, 0);
 	}
 }
 
-std::vector<std::pair<std::pair<int, int>, std::pair<int, std::string> > > BookTextView::getBookmarks() {
+std::vector<std::pair<BookTextView::Position, std::pair<int, std::string> > > BookTextView::getBookmarks() {
 	BookmarkTextVector ret;
 
 	for(int i = 0; i < myBookmarks.size(); i++) {
 		ZLTextWordCursor pos = startCursor();
-		pos.moveToParagraph(myBookmarks.at(i).first.first);
-		pos.moveTo(myBookmarks.at(i).first.second, 0);
+		pos.moveToParagraph(myBookmarks.at(i).first.Paragraph);
+		pos.moveTo(myBookmarks.at(i).first.Word, 0);
 
 		if (pos.isEndOfParagraph())
 			pos.nextParagraph();

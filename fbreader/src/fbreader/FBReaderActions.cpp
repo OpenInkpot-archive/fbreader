@@ -48,6 +48,11 @@
 #include "../database/booksdb/BooksDB.h"
 #include "../library/Book.h"
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+
 ModeDependentAction::ModeDependentAction(int visibleInModes) : myVisibleInModes(visibleInModes) {
 }
 
@@ -251,6 +256,12 @@ void OpenPreviousBookAction::run() {
 }
 
 void CancelAction::run() {
+#ifndef FBIO_WAITFORVSYNC
+#define FBIO_WAITFORVSYNC       _IOW('F', 0x20, uint32_t)
+#endif
+#define EINK_APOLLOFB_IOCTL_SET_AUTOREDRAW _IOW('F', 0x21, unsigned int)
+#define EINK_APOLLOFB_IOCTL_FORCE_REDRAW _IO('F', 0x22)
+#define EINK_APOLLOFB_IOCTL_SHOW_PREVIOUS _IO('F', 0x23)
 	FBReader &fbreader = FBReader::Instance();
 	if(fbreader.mode() != FBReader::BOOK_TEXT_MODE)
 		fbreader.restorePreviousMode();
@@ -412,8 +423,10 @@ void GotoPageNumber::run() {
 	FBReader &fbreader = FBReader::Instance();
 	ZLEwlGotoPageDialog(fbreader);
 
+	/*
 	fbreader.bookTextView().gotoPage(std::max(1, std::min(pageIndex, pageNumber)));
 	fbreader.refreshWindow();
+	*/
 }
 
 bool SelectionAction::isVisible() const {
@@ -516,7 +529,7 @@ bool BoldToggle::isEnabled() const {
 void BoldToggle::run() {
 	FBReader &fbreader = FBReader::Instance();
 
-	ZLBooleanOption *option = &ZLTextStyleCollection::instance().baseStyle().BoldOption;
+	ZLBooleanOption *option = &FBTextStyle::Instance().BoldOption;
 	option->setValue(option->value() ? false : true);
 	fbreader.clearTextCaches();
 	fbreader.refreshWindow();

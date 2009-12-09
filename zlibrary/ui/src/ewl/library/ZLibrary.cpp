@@ -43,6 +43,8 @@
 #include "../../../../../fbreader/src/fbreader/FBReader.h"
 #include "../../../../../fbreader/src/bookmodel/BookModel.h"
 #include "../../../../../fbreader/src/fbreader/BookTextView.h"
+#include "../../../../../fbreader/src/library/Book.h"
+#include "../../../../../fbreader/src/library/Author.h"
 
 extern "C" {
 #include <xcb/xcb_atom.h>
@@ -200,7 +202,7 @@ void ZLEwlLibraryImplementation::init(int &argc, char **&argv) {
 	ZLEwlDialogManager::createInstance();
 	ZLUnixCommunicationManager::createInstance();
 	ZLEwlImageManager::createInstance();
-	ZLEncodingCollection::instance().registerProvider(new IConvEncodingConverterProvider());
+	ZLEncodingCollection::Instance().registerProvider(new IConvEncodingConverterProvider());
 
 	//ZLKeyUtil::setKeyNamesFileName("keynames-xcb.xml");
 }
@@ -215,40 +217,40 @@ static char *jog_keys[] = { "Prior", "Next", "Next", "Prior", "Next", "Prior", "
 
 struct _key {
 	int keynum;
-	char *keyname;
+	const char *keyname;
 	char **rotkeys;
 };
 
 static struct _key _keys[] = {
-	9, "Escape", NULL,
-	10, "1", NULL,
-	11, "2", NULL,
-	12, "3", NULL,
-	13, "4", NULL,
-	14, "5", NULL,
-	15, "6", NULL,
-	16, "7", NULL,
-	17, "8", NULL,
-	18, "9", NULL,
-	19, "0", NULL,
-	36, "Return", NULL,
-	64, "Alt_L", NULL,
-	65, " ", NULL,
-	82, "-", NULL,
-	86, "+", NULL,
-	119, "Delete", NULL,
-	111, "Up", &cursor_keys[0],
-	112, "Prior", &jog_keys[0],
-	113, "Left", &cursor_keys[3],
-	114, "Right", &cursor_keys[1],
-	116, "Down", &cursor_keys[2],
-	117, "Next", &jog_keys[4],
-	124, "XF86PowerOff", NULL,
-	147, "Menu", NULL,
-//	161, "XF86RotateWindows", NULL,
-	172, "XF86AudioPlay", NULL,
-	225, "XF86Search", NULL,
-	0, NULL, NULL,
+	{ 9, "Escape", NULL },
+	{ 10, "1", NULL },
+	{ 11, "2", NULL },
+	{ 12, "3", NULL },
+	{ 13, "4", NULL },
+	{ 14, "5", NULL },
+	{ 15, "6", NULL },
+	{ 16, "7", NULL },
+	{ 17, "8", NULL },
+	{ 18, "9", NULL },
+	{ 19, "0", NULL },
+	{ 36, "Return", NULL },
+	{ 64, "Alt_L", NULL },
+	{ 65, " ", NULL },
+	{ 82, "-", NULL },
+	{ 86, "+", NULL },
+	{ 119, "Delete", NULL },
+	{ 111, "Up", &cursor_keys[0] },
+	{ 112, "Prior", &jog_keys[0] },
+	{ 113, "Left", &cursor_keys[3] },
+	{ 114, "Right", &cursor_keys[1] },
+	{ 116, "Down", &cursor_keys[2] },
+	{ 117, "Next", &jog_keys[4] },
+	{ 124, "XF86PowerOff", NULL },
+	{ 147, "Menu", NULL },
+//	{ 161, "XF86RotateWindows", NULL },
+	{ 172, "XF86AudioPlay", NULL },
+	{ 225, "XF86Search", NULL },
+	{ 0, NULL, NULL }
 };
 
 bool _fbreader_closed;
@@ -442,15 +444,15 @@ void sigusr1_handler(int)
 		return;
 
 	FBReader *f = (FBReader*)myapplication;
-	if(!f->myModel->fileName().compare(filename))
+	if(!f->myModel->book()->filePath().compare(filename))
 		return;
 
-	BookDescriptionPtr description;
-	f->createDescription(filename, description);
-	if (!description.isNull()) {
+	shared_ptr<Book> book;
+	f->createBook(filename, book);
+	if (!book.isNull()) {
 		cover_image_file = "";
 
-		f->openBook(description);
+		f->openBook(book);
 		f->refreshWindow();
 		set_properties();
 	}
@@ -495,12 +497,13 @@ static void init_properties()
 
 void set_properties()
 {
+	return;
 	if(!(window && connection))
 		return;
 
 	FBReader *f = (FBReader*)myapplication;
-	std::string fileName = f->myModel->fileName();
-	BookInfo *myBookInfo = new BookInfo(fileName);
+	shared_ptr<Book> book = f->myModel->book();
+	std::string fileName = book->filePath();
 
 #define set_prop_str(__i__, __prop__) \
 	xcb_change_property(connection, \
@@ -525,12 +528,20 @@ void set_properties()
 			(unsigned char*)&i); \
 	}
 
-	set_prop_str(1, myBookInfo->AuthorDisplayNameOption.value().c_str());
-	set_prop_str(2, myBookInfo->TitleOption.value().c_str());
+	std::string authors;
+	for(int j = 0; j < book->authors().size(); j++) {
+		if(!authors.empty())
+			authors += ", ";
+
+		authors += book->authors().at(j)->name();
+	}
+
+	set_prop_str(1, authors.c_str());
+	set_prop_str(2, book->title().c_str());
 	set_prop_str(3, ZLFile::fileNameToUtf8(ZLFile(fileName).name(false)).c_str());
 	set_prop_str(4, ZLFile::fileNameToUtf8(ZLFile(fileName).path()).c_str());
-	set_prop_str(5, myBookInfo->SeriesNameOption.value().c_str());
-	set_prop_int(6, myBookInfo->NumberInSeriesOption.value());
+	set_prop_str(5, book->seriesName().c_str());
+	set_prop_int(6, book->indexInSeries());
 /*	set_prop_int(9, f->bookTextView().positionIndicator()->textPosition());
 	set_prop_int(10, f->bookTextView().positionIndicator()->currentPage());
 	set_prop_int(11, f->bookTextView().positionIndicator()->pagesCount());
@@ -573,8 +584,6 @@ void set_properties()
 			cover_image_file.c_str());
 
 	xcb_flush(connection);
-
-	free(myBookInfo);
 }
 
 void delete_properties()
@@ -588,6 +597,7 @@ void delete_properties()
 
 void update_position_property()
 {
+	return;
 	if(!atoms[9].atom)
 		return;
 
@@ -600,7 +610,7 @@ void update_position_property()
 void ZLEwlLibraryImplementation::run(ZLApplication *application) {
 	struct sigaction act;
 
-	ZLDialogManager::instance().createApplicationWindow(application);
+	ZLDialogManager::Instance().createApplicationWindow(application);
 
 	myapplication = application;
 	application->initWindow();
