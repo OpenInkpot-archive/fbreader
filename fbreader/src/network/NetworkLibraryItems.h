@@ -27,7 +27,6 @@
 #include <shared_ptr.h>
 
 class NetworkAuthenticationManager;
-class NetworkSubCatalogLoader;
 class NetworkLink;
 
 class NetworkLibraryItem {
@@ -42,23 +41,21 @@ public:
 	virtual const std::string &typeId() const = 0;
 
 	const std::string &title() const;
-	const std::string &cover() const;
+	const std::string &coverURL() const;
 
-	std::string &title();
-	std::string &cover();
+	void setTitle(const std::string &title);
+	void setCoverURL(const std::string &coverURL);
 
 private:
 	std::string myTitle;
-	std::string myCover;
+	std::string myCoverURL;
 
 private: // disable copying
 	const NetworkLibraryItem &operator = (const NetworkLibraryItem &);
 };
 
 inline const std::string &NetworkLibraryItem::title() const { return myTitle; }
-inline const std::string &NetworkLibraryItem::cover() const { return myCover; }
-inline std::string &NetworkLibraryItem::title() { return myTitle; }
-inline std::string &NetworkLibraryItem::cover() { return myCover; }
+inline const std::string &NetworkLibraryItem::coverURL() const { return myCoverURL; }
 
 typedef std::vector<shared_ptr<NetworkLibraryItem> > NetworkLibraryItemList;
 
@@ -77,7 +74,6 @@ public:
 		const std::string &title,
 		const std::string &summary,
 		const std::string &coverURL,
-		shared_ptr<NetworkSubCatalogLoader> subCatalogLoader,
 		bool dependsOnAccount = false
 	);
 
@@ -88,7 +84,8 @@ public:
 	const std::string &htmlURL() const;
 	const std::string &summary() const;
 
-	std::string loadSubCatalog(NetworkLibraryItemList &children); // returns error message
+	// returns error message
+	virtual std::string loadChildren(NetworkLibraryItemList &children) = 0;
 
 	bool dependsOnAccount() const;
 
@@ -97,7 +94,6 @@ private:
 	const std::string myURL;
 	const std::string myHtmlURL;
 	const std::string mySummary;
-	shared_ptr<NetworkSubCatalogLoader> mySubCatalogLoader;
 	const bool myDependsOnAccount;
 
 private: // disable copying
@@ -149,14 +145,17 @@ public:
 
 	const std::string &language() const;
 	const std::string &date() const;
-	const std::string &series() const;
+	const std::string &seriesTitle() const;
+	int indexInSeries() const;
 	const std::string &price() const;
 	const std::string &annotation() const;
-	std::string &language();
-	std::string &date();
-	std::string &series();
-	std::string &price();
+
+	void setLanguage(const std::string &language);
+	void setDate(const std::string &date);
+	void setPrice(const std::string &price);
 	std::string &annotation();
+	void setAnnotation(const std::string &annotation);
+	void setSeries(const std::string &name, int index);
 
 	const std::map<URLType, std::string> &urlByType() const;
 	const std::vector<AuthorData> &authors() const;
@@ -177,7 +176,8 @@ private:
 	const std::string myId;
 	std::string myLanguage;
 	std::string myDate;
-	std::string mySeries;
+	std::string mySeriesTitle;
+	int myIndexInSeries;
 	std::string myPrice; // number with curency code (see http://en.wikipedia.org/wiki/List_of_circulating_currencies for example)
 	std::string myAnnotation;
 
@@ -196,13 +196,10 @@ inline void NetworkLibraryBookItem::setIndex(unsigned int index) { myIndex = ind
 
 inline const std::string &NetworkLibraryBookItem::language() const { return myLanguage; }
 inline const std::string &NetworkLibraryBookItem::date() const { return myDate; }
-inline const std::string &NetworkLibraryBookItem::series() const { return mySeries; }
+inline const std::string &NetworkLibraryBookItem::seriesTitle() const { return mySeriesTitle; }
+inline int NetworkLibraryBookItem::indexInSeries() const { return myIndexInSeries; }
 inline const std::string &NetworkLibraryBookItem::price() const { return myPrice; }
 inline const std::string &NetworkLibraryBookItem::annotation() const { return myAnnotation; }
-inline std::string &NetworkLibraryBookItem::language() { return myLanguage; }
-inline std::string &NetworkLibraryBookItem::date() { return myDate; }
-inline std::string &NetworkLibraryBookItem::series() { return mySeries; }
-inline std::string &NetworkLibraryBookItem::price() { return myPrice; }
 inline std::string &NetworkLibraryBookItem::annotation() { return myAnnotation; }
 inline const std::map<NetworkLibraryBookItem::URLType, std::string> &NetworkLibraryBookItem::urlByType() const { return myURLByType; }
 inline const std::vector<NetworkLibraryBookItem::AuthorData> &NetworkLibraryBookItem::authors() const { return myAuthors; }
@@ -210,14 +207,5 @@ inline const std::vector<std::string> &NetworkLibraryBookItem::tags() const { re
 inline std::map<NetworkLibraryBookItem::URLType, std::string> &NetworkLibraryBookItem::urlByType() { return myURLByType; }
 inline std::vector<NetworkLibraryBookItem::AuthorData> &NetworkLibraryBookItem::authors() { return myAuthors; }
 inline std::vector<std::string> &NetworkLibraryBookItem::tags() { return myTags; }
-
-class NetworkSubCatalogLoader {
-
-public:
-	virtual ~NetworkSubCatalogLoader();
-
-public:
-	virtual std::string load(NetworkLibraryCatalogItem &item, NetworkLibraryItemList &children) = 0; // returns error message
-};
 
 #endif /* __NETWORKLIBRARYITEMS_H__ */

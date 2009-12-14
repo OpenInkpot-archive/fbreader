@@ -22,6 +22,8 @@
 
 #include <string>
 #include <vector>
+#include <set>
+
 
 class UserList {
 
@@ -31,9 +33,11 @@ public:
 
 	const std::vector<std::string> &users() const;
 	void addUser(const std::string &user);
+	void saveUser(const std::string &user);
 
 private:
 	std::vector<std::string> myUserNames;
+	std::set<std::string> mySavedNames;
 };
 
 #endif /* __USERLIST_H__ */

@@ -10,22 +10,26 @@
 
 #TARGET_ARCH = maemo
 #UI_TYPE = maemo2
+#UI_TYPE = maemo3
 #UI_TYPE = maemo4
 #UI_TYPE = maemo5
 
 #TARGET_ARCH = ebr
 #UI_TYPE = nanoX
 
-#TARGET_ARCH = desktop
+#TARGET_ARCH = iliad
 #UI_TYPE = gtk
+
+TARGET_ARCH = desktop
+UI_TYPE = gtk
 #UI_TYPE = qt
 #UI_TYPE = qt4
 
 #TARGET_ARCH = pepperpad3
 #UI_TYPE = gtk
 
-TARGET_ARCH = win32
-UI_TYPE = win32
+#TARGET_ARCH = win32
+#UI_TYPE = win32
 
 #TARGET_ARCH = pocketpc
 #UI_TYPE = win32
@@ -47,9 +51,7 @@ UI_TYPE = win32
 #TARGET_ARCH = palm
 #UI_TYPE = palm
 
-#TARGET_ARCH = macosx
-#UI_TYPE = cocoa
-
 TARGET_STATUS = release
 #TARGET_STATUS = debug
+#ZLSHARED = no
 #TARGET_STATUS = profile

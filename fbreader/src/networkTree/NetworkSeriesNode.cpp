@@ -29,7 +29,7 @@ const std::string &NetworkSeriesNode::typeId() const {
 	return TYPE_ID;
 }
 
-NetworkSeriesNode::NetworkSeriesNode(NetworkAuthorNode *parent, const std::string &series) : FBReaderNode(parent), mySeries(series) {
+NetworkSeriesNode::NetworkSeriesNode(NetworkContainerNode *parent, const std::string &seriesTitle) : NetworkContainerNode(parent), mySeriesTitle(seriesTitle) {
 }
 
 void NetworkSeriesNode::paint(ZLPaintContext &context, int vOffset) {
@@ -39,7 +39,7 @@ void NetworkSeriesNode::paint(ZLPaintContext &context, int vOffset) {
 	removeAllHyperlinks();
 
 	((NetworkView&)view()).drawCoverLater(this, vOffset);
-	drawTitle(context, vOffset, mySeries);
+	drawTitle(context, vOffset, mySeriesTitle);
 
 	int left = 0;
 	drawHyperlink(
@@ -60,6 +60,6 @@ shared_ptr<ZLImage> NetworkSeriesNode::extractCoverImage() const {
 	return defaultCoverImage("booktree-book.png");
 }
 
-const std::string &NetworkSeriesNode::series() {
-	return mySeries;
+const std::string &NetworkSeriesNode::seriesTitle() {
+	return mySeriesTitle;
 }

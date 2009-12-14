@@ -30,18 +30,18 @@ class NetworkAuthenticationManager;
 class AuthenticationDialog {
 
 private:
-	AuthenticationDialog(NetworkAuthenticationManager &mgr, const std::string &errorMessage, std::string &password);
+	AuthenticationDialog(NetworkAuthenticationManager &mgr, UserList &userList, const std::string &errorMessage, std::string &password);
 
 	ZLDialog &dialog();
 
-	static bool runDialog(NetworkAuthenticationManager &mgr, const std::string &errorMessage, std::string &password);
+	static bool runDialog(NetworkAuthenticationManager &mgr, UserList &userList, const std::string &errorMessage, std::string &password);
 
 public:
 	static bool run(NetworkAuthenticationManager &mgr);
 
 private:
 	shared_ptr<ZLDialog> myDialog;
-	UserList myUserList;
+	UserList &myUserList;
 };
 
 inline ZLDialog &AuthenticationDialog::dialog() { return *myDialog; }

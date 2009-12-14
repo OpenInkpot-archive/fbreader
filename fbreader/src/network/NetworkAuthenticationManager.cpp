@@ -71,3 +71,19 @@ std::string NetworkAuthenticationManager::currentAccount() {
 bool NetworkAuthenticationManager::skipIPSupported() {
 	return false;
 }
+
+bool NetworkAuthenticationManager::registrationSupported() {
+	return false;
+}
+
+std::string NetworkAuthenticationManager::registerUser(const std::string &, const std::string &, const std::string &) {
+	return NetworkErrors::errorMessage(NetworkErrors::ERROR_UNSUPPORTED_OPERATION);
+}
+
+bool NetworkAuthenticationManager::passwordRecoverySupported() {
+	return false;
+}
+
+std::string NetworkAuthenticationManager::recoverPassword(const std::string &) {
+	return NetworkErrors::errorMessage(NetworkErrors::ERROR_UNSUPPORTED_OPERATION);
+}

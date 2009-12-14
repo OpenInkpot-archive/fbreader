@@ -35,11 +35,13 @@
 		<node name="libraryItemRootNode">
 			<node name="expandTree" value="Open catalog"/>
 			<node name="collapseTree" value="Close catalog"/>
-			<node name="login" value="Login"/>
-			<node name="logout" value="Logout (%s)"/>
+			<node name="login" value="Sign in"/>
+			<node name="logout" value="Sign out (%s)"/>
 			<node name="reload" value="Reload"/>
 			<node name="dontShow" value="Don&apos;t show this catalog"/>
 			<node name="refillAccount" value="Refill account (currently: %s)"/>
+			<node name="register" value="Sign up"/>
+			<node name="passwordRecovery" value="Recover password"/>
 		</node>
 		<node name="searchResultNode">
 			<node name="title" value="Search results"/>
@@ -181,23 +183,10 @@
 					<node name="navigation" value="Enable Navigation" />
 				</node>
 				<node name="Scrolling" value="Scrolling">
-					<node name="optionsFor" value="Options for">
-						<node name="page" value="Page Scrollings" />
-						<node name="line" value="Line Scrollings" />
-						<node name="mouse" value="Mouse Scrollings" />
-						<node name="tap" value="Tap Scrollings" />
-					</node>
-					<node name="delay" value="Delay between Scrollings, msecs" />
-					<node name="mode" value="Scrolling Mode">
-						<node name="noOverlapping" value="No Overlapping" />
-						<node name="keepLines" value="Keep Lines" />
-						<node name="scrollLines" value="Scroll Lines" />
-						<node name="scrollPercentage" value="Scroll Percentage" />
-						<node name="disable" value="Disable" />
-					</node>
-					<node name="linesToKeep" value="Lines to Keep" />
-					<node name="linesToScroll" value="Lines to Scroll" />
-					<node name="percentToScroll" value="Percent to Scroll" />
+					<node name="keyScrollDelay" value="Delay between Key Scrollings, msecs" />
+					<node name="keyLinesToScroll" value="Lines to Scroll per Line Scrolling" />
+					<node name="keyLinesToKeep" value="Lines to Keep per Page Scrolling" />
+					<node name="enableTapScrolling" value="Enable Tap Scrolling" />
 					<node name="fingerOnly" value="Scroll on Finger Tap Only" />
 				</node>
 				<node name="Selection" value="Selection">
@@ -270,36 +259,36 @@
 					<node name="orientation" value="Orientation" />
 					<node name="action">
 						<node name="none" value="None" />
-						<node name="showLibrary" value="Show Library" />
-						<node name="showNetLibrary" value="Show Network Library" />
-						<node name="showRecent" value="Show Recent Books" />
-						<node name="previousBook" value="Open Previous Book" />
-						<node name="toc" value="Show Table of Contents" />
-						<node name="gotoHome" value="Go to Home" />
-						<node name="gotoSectionStart" value="Go to Start of Section" />
-						<node name="gotoSectionEnd" value="Go to End of Section" />
-						<node name="nextTOCSection" value="Go to Next TOC Section" />
-						<node name="previousTOCSection" value="Go to Previous TOC Section" />
-						<node name="largeScrollForward" value="Large Scroll Forward" />
-						<node name="largeScrollBackward" value="Large Scroll Backward" />
-						<node name="smallScrollForward" value="Small Scroll Forward" />
-						<node name="smallScrollBackward" value="Small Scroll Backward" />
+						<node name="showLibrary" value="Show library" />
+						<node name="showNetLibrary" value="Show network library" />
+						<node name="showRecent" value="Show recent books" />
+						<node name="previousBook" value="Open previous book" />
+						<node name="toc" value="Show table of contents" />
+						<node name="gotoHome" value="Go to home" />
+						<node name="gotoSectionStart" value="Go to start of section" />
+						<node name="gotoSectionEnd" value="Go to end of section" />
+						<node name="nextTOCSection" value="Go to next TOC section" />
+						<node name="previousTOCSection" value="Go to previous TOC section" />
+						<node name="pageForward" value="Scroll page forward" />
+						<node name="pageBackward" value="Scroll page backward" />
+						<node name="lineForward" value="Scroll line forward" />
+						<node name="lineBackward" value="Scroll line backward" />
 						<node name="undo" value="Undo" />
 						<node name="redo" value="Redo" />
-						<node name="copyToClipboard" value="Copy Selected Text to Clipboard" />
-						<node name="openInDictionary" value="Open Selected Text in Dictionary" />
-						<node name="clearSelection" value="Clear Selection" />
+						<node name="copyToClipboard" value="Copy selected text to clipboard" />
+						<node name="openInDictionary" value="Open selected text in dictionary" />
+						<node name="clearSelection" value="Clear selection" />
 						<node name="search" value="Search" />
-						<node name="findPrevious" value="Find Previous" />
-						<node name="findNext" value="Find Next" />
-						<node name="increaseFont" value="Increase Font Size" />
-						<node name="decreaseFont" value="Decrease Font Size" />
-						<node name="toggleIndicator" value="Toggle Position Indicator" />
-						<node name="toggleFullscreen" value="Toggle Fullscreen Mode" />
-						<node name="rotate" value="Rotate Screen" />
-						<node name="preferences" value="Show Options Dialog" />
-						<node name="bookInfo" value="Show Book Info Dialog" />
-						<node name="addBook" value="Add Book" />
+						<node name="findPrevious" value="Find previous" />
+						<node name="findNext" value="Find next" />
+						<node name="increaseFont" value="Increase font size" />
+						<node name="decreaseFont" value="Decrease font size" />
+						<node name="toggleIndicator" value="Toggle position indicator" />
+						<node name="toggleFullscreen" value="Toggle fullscreen mode" />
+						<node name="rotate" value="Rotate screen" />
+						<node name="preferences" value="Show options dialog" />
+						<node name="bookInfo" value="Show book info dialog" />
+						<node name="addBook" value="Add book" />
 						<node name="cancel" value="Cancel" />
 						<node name="quit" value="Quit" />
 					</node>
@@ -368,6 +357,9 @@
 			<node name="name" value="Author Name" />
 			<node name="sortKey" value="Author Sort Key" />
 		</node>
+		<node name="addFileDialog">
+			<node name="title" value="FBReader - Add Book to the Library" />
+		</node>
 		<node name="textSearchDialog">
 			<node name="title" value="Text Search" />
 			<node name="text" value="" />
@@ -419,14 +411,6 @@
 			<node name="title" value="Error" />
 			<node name="message" value="Help file not found, sorry" />
 		</node>
-		<node name="tagMustBeNonEmpty">
-			<node name="title" value="Error" />
-			<node name="message" value="Tag name must be a non-empty string" />
-		</node>
-		<node name="tagMustNotContainComma">
-			<node name="title" value="Error" />
-			<node name="message" value="Tag name must not contain a &#8220;,&#8221; symbol" />
-		</node>
 		<node name="networkError">
 			<node name="emptyLibrariesList" value="Empty libraries list" />
 			<node name="authenticationFailed" value="Authentication failed" />
@@ -437,6 +421,13 @@
 			<node name="bookNotPurchased" value="Book was not purchased" />
 			<node name="downloadLimitExceeded" value="Download limit exceeded" />
 			<node name="unsupportedOperation" value="Unsupported operation" />
+			<node name="loginAlreadyTaken" value="Username is already in use" />
+			<node name="loginNotSpecified" value="Please, enter a username" />
+			<node name="passwordNotSpecified" value="Please, enter a non-empty password" />
+			<node name="emailNotSpecified" value="Please, enter an e-mail address" />
+			<node name="invalidEMail" value="Invalid e-mail address" />
+			<node name="tooManyRegistrations" value="Too many registrations from your IP;&#10;try again in a few minutes" />
+			<node name="noUserEmail" value="No user was registered&#10;with specified e-mail address" />
 		</node>
 		<node name="downloadError">
 			<node name="title" value="Error while downloading" />
@@ -453,6 +444,8 @@
 			<node name="purchaseBook" value="Purchase book. Please, wait..." />
 			<node name="initializeAuthenticationManager" value="Downloading account information. Please, wait..." />
 			<node name="loadSubCatalog" value="Loading catalog. Please, wait..." />
+			<node name="registerUser" value="Registering new account. Please, wait..." />
+			<node name="passwordRecovery" value="Recovering password. Please, wait..." />
 		</node>
 		<node name="purchaseConfirmBox">
 			<node name="title" value="Purchase book" />
@@ -460,10 +453,10 @@
 		</node>
 		<node name="AuthenticationDialog">
 			<node name="title" value="Authentication" />
-			<node name="login" value="Login" />
+			<node name="login" value="Username" />
 			<node name="password" value="Password" />
 			<node name="skipIP" value="Don't bound to ip-address" />
-			<node name="loginIsEmpty" value="Login must not be empty" />
+			<node name="loginIsEmpty" value="Username should be non-empty" />
 		</node>
 		<node name="emptyCatalogBox">
 			<node name="title" value="Information" />
@@ -476,6 +469,22 @@
 		<node name="deleteLocalCopyBox">
 			<node name="title" value="Delete Book" />
 			<node name="message" value="Are you sure&#10;you want to remove&#10;&#8220;%s&#8221; book&#10;from the disk?" />
+		</node>
+		<node name="RegisterUserDialog">
+			<node name="title" value="Register User" />
+			<node name="login" value="Username" />
+			<node name="password" value="Password" />
+			<node name="confirmPassword" value="Password confirmation" />
+			<node name="email" value="E-mail" tooltip="E-mail is used to recover your password&#10;in case of loss.&#10;If you have not specified an e-mail&#10;you can't recover your password." />
+			<node name="differentPasswords" value="Password and password confirmation must be the same." />
+		</node>
+		<node name="PasswordRecoveryDialog">
+			<node name="title" value="Password Recovery" />
+			<node name="email" value="E-mail" />
+		</node>
+		<node name="recoverySuccessfulBox">
+			<node name="title" value="Password Recovery" />
+			<node name="message" value="A message with further instructions&#10;has been sent to&#10;%s" />
 		</node>
 	</node>
 	<node name="style">

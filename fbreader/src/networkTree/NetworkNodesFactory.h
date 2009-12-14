@@ -29,7 +29,7 @@ class NetworkBookCollection;
 class FBReaderNode;
 class NetworkCatalogNode;
 class SearchResultNode;
-class NetworkAuthorNode;
+class NetworkContainerNode;
 
 
 class NetworkNodesFactory {
@@ -39,11 +39,8 @@ private:
 
 public:
 	static FBReaderNode *createNetworkNode(NetworkCatalogNode *parent, shared_ptr<NetworkLibraryItem> item, size_t atPosition = -1);
-
 	static void createSubnodes(SearchResultNode *parent, NetworkBookCollection &books);
-
-private:
-	static void fillAuthorNode(NetworkAuthorNode *authorNode, const NetworkLibraryItemList &books);
+	static void fillAuthorNode(NetworkContainerNode *parent, const NetworkLibraryItemList &books);
 };
 
 #endif /* __NETWORKNODESFACTORY_H__ */

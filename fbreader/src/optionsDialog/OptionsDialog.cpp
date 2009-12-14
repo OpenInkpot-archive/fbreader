@@ -26,6 +26,7 @@
 #include <optionEntries/ZLColorOptionBuilder.h>
 #include <optionEntries/ZLLanguageOptionEntry.h>
 #include <optionEntries/ZLSimpleOptionEntry.h>
+#include <optionEntries/ZLToggleBooleanOptionEntry.h>
 
 #include <ZLTextView.h>
 #include <ZLTextStyle.h>
@@ -34,7 +35,6 @@
 
 #include "OptionsDialog.h"
 #include "FormatOptionsPage.h"
-#include "ScrollingOptionsPage.h"
 #include "StyleOptionsPage.h"
 #include "KeyBindingsPage.h"
 #include "ConfigPage.h"
@@ -172,7 +172,26 @@ OptionsDialog::OptionsDialog() {
 	encodingTab.addOption(ZLResourceKey("defaultEncodingSet"), encodingSetEntry);
 	encodingTab.addOption(ZLResourceKey("defaultEncoding"), encodingEntry);
 
-	myScrollingPage = new ScrollingOptionsPage(myDialog->createTab(ZLResourceKey("Scrolling")));
+	ZLDialogContent &scrollingTab = myDialog->createTab(ZLResourceKey("Scrolling"));
+	scrollingTab.addOption(ZLResourceKey("keyLinesToScroll"), new ZLSimpleSpinOptionEntry(fbreader.LinesToScrollOption, 1));
+	scrollingTab.addOption(ZLResourceKey("keyLinesToKeep"), new ZLSimpleSpinOptionEntry(fbreader.LinesToKeepOption, 1));
+	scrollingTab.addOption(ZLResourceKey("keyScrollDelay"), new ZLSimpleSpinOptionEntry(fbreader.KeyScrollingDelayOption, 50));
+	const bool hasTouchScreen = 
+		ZLBooleanOption(ZLCategoryKey::EMPTY, ZLOption::PLATFORM_GROUP, ZLOption::TOUCHSCREEN_PRESENTED, false).value();
+	if (hasTouchScreen) {
+		ZLToggleBooleanOptionEntry *enableTapScrollingEntry =
+			new ZLToggleBooleanOptionEntry(fbreader.EnableTapScrollingOption);
+		scrollingTab.addOption(ZLResourceKey("enableTapScrolling"), enableTapScrollingEntry);
+		const bool isFingerTapDetectionSupported = 
+			ZLBooleanOption(ZLCategoryKey::EMPTY, ZLOption::PLATFORM_GROUP, ZLOption::FINGER_TAP_DETECTABLE, false).value();
+		if (isFingerTapDetectionSupported) {
+			ZLOptionEntry *fingerOnlyEntry =
+				new ZLSimpleBooleanOptionEntry(fbreader.TapScrollingOnFingerOnlyOption);
+			scrollingTab.addOption(ZLResourceKey("fingerOnly"), fingerOnlyEntry);
+			enableTapScrollingEntry->addDependentEntry(fingerOnlyEntry);
+			enableTapScrollingEntry->onStateChanged(enableTapScrollingEntry->initialState());
+		}
+	}
 
 	ZLDialogContent &selectionTab = myDialog->createTab(ZLResourceKey("Selection"));
 	selectionTab.addOption(ZLResourceKey("enableSelection"), FBView::selectionOption());

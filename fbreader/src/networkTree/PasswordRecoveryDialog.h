@@ -17,24 +17,30 @@
  * 02110-1301, USA.
  */
 
-#include <ZLInputStream.h>
+#ifndef __PASSWORDRECOVERYDIALOG_H__
+#define __PASSWORDRECOVERYDIALOG_H__
 
-#include "DummyDescriptionReader.h"
+#include <string>
 
-DummyDescriptionReader::DummyDescriptionReader(Book &book) : myBook(book) {
-}
+class ZLDialog;
+class NetworkAuthenticationManager;
 
-/*
-void DummyDescriptionReader::characterDataHandler(const char *text, size_t len) {
-}
+class PasswordRecoveryDialog {
 
-void DummyDescriptionReader::startElementHandler(int tag, const char **) {
-}
+private:
+	PasswordRecoveryDialog(std::string &email, const std::string &errorMessage);
 
-void DummyDescriptionReader::endElementHandler(int tag) {
-}
-*/
+	ZLDialog &dialog();
 
-bool DummyDescriptionReader::readMetaInfo(shared_ptr<ZLInputStream> stream) {
-	return false;
-}
+	static bool runDialog(std::string &email, std::string &errorMessage);
+
+public:
+	static bool run(NetworkAuthenticationManager &mgr);
+
+private:
+	shared_ptr<ZLDialog> myDialog;
+};
+
+inline ZLDialog &PasswordRecoveryDialog::dialog() { return *myDialog; }
+
+#endif /* __PASSWORDRECOVERYDIALOG_H__ */

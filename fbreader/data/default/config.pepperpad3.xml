@@ -4,11 +4,8 @@
 		<option name="Base:fontFamily" value="Georgia"/>
 		<option name="Base:fontSize" value="16"/>
 	</group>
-  <group name="SmallScrolling">
-    <option name="ScrollingDelay" value="0"/>
-  </group>
-  <group name="LargeScrolling">
-    <option name="ScrollingDelay" value="0"/>
+  <group name="Scrollings">
+    <option name="Delay" value="0"/>
   </group>
   <group name="TapScrolling">
     <option name="Enabled" value="false"/>

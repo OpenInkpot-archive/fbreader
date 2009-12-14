@@ -104,10 +104,10 @@ MultiKeyOptionEntry::MultiKeyOptionEntry(const ZLResource &resource) :
 	addAction(ZLApplication::NoAction);
 
 	// switch view
-	addAction(ActionCode::SHOW_COLLECTION);
-	addAction(ActionCode::SHOW_NET_LIBRARY);
+	addAction(ActionCode::SHOW_LIBRARY);
+	addAction(ActionCode::SHOW_NETWORK_LIBRARY);
 	addAction(ActionCode::OPEN_PREVIOUS_BOOK);
-	addAction(ActionCode::SHOW_CONTENTS);
+	addAction(ActionCode::SHOW_TOC);
 
 	// navigation
 	addAction(ActionCode::SCROLL_TO_HOME);
@@ -140,8 +140,8 @@ MultiKeyOptionEntry::MultiKeyOptionEntry(const ZLResource &resource) :
 	addAction(ActionCode::ROTATE_SCREEN);
 
 	// dialogs
-	addAction(ActionCode::SHOW_OPTIONS);
-	addAction(ActionCode::SHOW_BOOK_INFO);
+	addAction(ActionCode::SHOW_OPTIONS_DIALOG);
+	addAction(ActionCode::SHOW_BOOK_INFO_DIALOG);
 	addAction(ActionCode::ADD_BOOK);
 
 	// quit

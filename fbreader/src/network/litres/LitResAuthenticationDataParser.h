@@ -30,25 +30,20 @@ class LitResAuthenticationDataParser : public ZLXMLReader {
 public:
 	LitResAuthenticationDataParser();
 
-	const std::string &error() const;
-	void reset();
-
 private:
 	void startElementHandler(const char *tag, const char **attributes);
 
 protected:
-	void setErrorMessage(const std::string &msg);
+	void setErrorCode(const std::string &msg);
 	std::map<std::string, std::string> &attributes();
 
 	virtual void processTag(const std::string &tag) = 0;
 
 private:
 	std::map<std::string, std::string> myAttributes;
-	std::string myErrorMsg;
 };
 
-inline const std::string &LitResAuthenticationDataParser::error() const { return myErrorMsg; }
-inline void LitResAuthenticationDataParser::setErrorMessage(const std::string &msg) { myErrorMsg = NetworkErrors::errorMessage(msg); } 
+inline void LitResAuthenticationDataParser::setErrorCode(const std::string &msg) { setErrorMessage(NetworkErrors::errorMessage(msg)); }
 inline std::map<std::string, std::string> &LitResAuthenticationDataParser::attributes() { return myAttributes; }
 
 
@@ -81,7 +76,7 @@ private:
 };
 
 
-class LitResDownloadErrorDataParser : public LitResAuthenticationDataParser {
+/*class LitResDownloadErrorDataParser : public LitResAuthenticationDataParser {
 
 public:
 	LitResDownloadErrorDataParser();
@@ -89,6 +84,24 @@ public:
 private:
 	void processTag(const std::string &tag);
 
+};*/
+
+class LitResRegisterUserDataParser : public LitResAuthenticationDataParser {
+
+public:
+	LitResRegisterUserDataParser(std::string &sid);
+
+private:
+	void processTag(const std::string &tag);
+
+private:
+	std::string &mySid;
+};
+
+class LitResPasswordRecoveryDataParser : public LitResAuthenticationDataParser {
+
+private:
+	void processTag(const std::string &tag);
 };
 
 #endif /* __LITRESAUTHENTICATIONDATAPARSER_H__ */

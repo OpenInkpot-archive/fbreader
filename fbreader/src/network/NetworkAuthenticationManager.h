@@ -66,6 +66,14 @@ public: // Account specific methods (can be called only if authorised!!!)
 
 	virtual const std::string &certificate() = 0;
 
+public: // new User Registration
+	virtual bool registrationSupported();
+	virtual std::string registerUser(const std::string &login, const std::string &password, const std::string &email);
+
+public: // Password Recovery
+	virtual bool passwordRecoverySupported();
+	virtual std::string recoverPassword(const std::string &email);
+
 private: // disable copying
 	NetworkAuthenticationManager(const NetworkAuthenticationManager &);
 	const NetworkAuthenticationManager &operator = (const NetworkAuthenticationManager &);

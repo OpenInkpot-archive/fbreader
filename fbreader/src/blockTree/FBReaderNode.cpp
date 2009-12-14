@@ -65,7 +65,7 @@ void FBReaderNode::drawCover(ZLPaintContext &context, int vOffset) {
 	}
 
 	const FBTextStyle &style = FBTextStyle::Instance();
-	const int unit = context.fontSizeToPixels(style.fontSize());
+	const int unit = unitSize(context, style);
 	const int h = unit * 9 / 2, w = h * 3 / 4;
 	vOffset += unit / 2;
 	const int hOffset = level() * unit * 3 - unit * 2;
@@ -91,7 +91,7 @@ void FBReaderNode::drawCover(ZLPaintContext &context, int vOffset) {
 
 void FBReaderNode::drawTitle(ZLPaintContext &context, int vOffset, const std::string &text, bool highlighted) {
 	const FBTextStyle &style = FBTextStyle::Instance();
-	const int unit = context.fontSizeToPixels(style.fontSize());
+	const int unit = unitSize(context, style);
 	const int hOffset = level() * unit * 3 + unit * 2;
 
 	context.setColor(highlighted ?
@@ -104,7 +104,7 @@ void FBReaderNode::drawTitle(ZLPaintContext &context, int vOffset, const std::st
 
 void FBReaderNode::drawSummary(ZLPaintContext &context, int vOffset, const std::string &text, bool highlighted) {
 	const FBTextStyle &style = FBTextStyle::Instance();
-	const int unit = context.fontSizeToPixels(style.fontSize());
+	const int unit = unitSize(context, style);
 	const int hOffset = level() * unit * 3 + unit * 2;
 
 	context.setColor(highlighted ?
@@ -115,24 +115,39 @@ void FBReaderNode::drawSummary(ZLPaintContext &context, int vOffset, const std::
 	context.drawString(hOffset, vOffset + 13 * unit / 4, text.data(), text.size(), false);
 }
 
-void FBReaderNode::drawHyperlink(ZLPaintContext &context, int &hOffset, int &vOffset, const std::string &text, shared_ptr<ZLRunnable> action) {
+void FBReaderNode::internalDrawHyperlink(ZLPaintContext &context, int &hOffset, int &vOffset, const std::string &text, shared_ptr<ZLRunnable> action, bool aux) {
 	if (action.isNull()) {
 		return;
 	}
 
+	// aux makes font size and hOffset to be 70% of their normal sizes
+
 	const FBTextStyle &style = FBTextStyle::Instance();
-	const int unit = context.fontSizeToPixels(style.fontSize());
-	const int h = unit * 9 / 2;
+	const int unit = unitSize(context, style);
+	const int h = aux ? (unit * 11 / 2) : (unit * 9 / 2);
 	const int left = hOffset + level() * unit * 3 + unit * 2;
 
 	context.setColor(FBOptions::Instance().colorOption("internal").value());
-	context.setFont(style.fontFamily(), style.fontSize() * 2 / 3, style.bold(), style.italic());
+	context.setFont(
+		style.fontFamily(), 
+		aux ? (7 * style.fontSize() / 15) : (style.fontSize() * 2 / 3), 
+		style.bold(), 
+		style.italic()
+	);
 
 	const int stringW = context.stringWidth(text.data(), text.size(), false);
 	const int stringH = context.stringHeight();
 	context.drawString(left, vOffset + h, text.data(), text.size(), false);
 	addHyperlink(left, h - stringH, left + stringW, h, action);
 	hOffset += stringW + 4 * context.spaceWidth();
+}
+
+void FBReaderNode::drawHyperlink(ZLPaintContext &context, int &hOffset, int &vOffset, const std::string &text, shared_ptr<ZLRunnable> action) {
+	internalDrawHyperlink(context, hOffset, vOffset, text, action, false);
+}
+
+void FBReaderNode::drawAuxHyperlink(ZLPaintContext &context, int &hOffset, int &vOffset, const std::string &text, shared_ptr<ZLRunnable> action) {
+	internalDrawHyperlink(context, hOffset, vOffset, text, action, true);
 }
 
 FBReaderNode::ExpandTreeAction::ExpandTreeAction(FBReaderNode &node) : myNode(node) {
@@ -176,6 +191,17 @@ shared_ptr<ZLImage> FBReaderNode::defaultCoverImage(const std::string &id) {
 	return cover;
 }
 
+bool FBReaderNode::hasAuxHyperlink() const {
+	return false;
+}
+
 int FBReaderNode::height(ZLPaintContext &context) const {
-	return context.fontSizeToPixels(FBTextStyle::Instance().fontSize()) * 11 / 2;
+	return
+		unitSize(context, FBTextStyle::Instance()) *
+			(hasAuxHyperlink() ? 13 : 11) / 2;
+}
+
+int FBReaderNode::unitSize(ZLPaintContext &context, const FBTextStyle &style) const {
+	context.setFont(style.fontFamily(), style.fontSize(), style.bold(), style.italic());
+	return (context.stringHeight() * 2 + 2) / 3;
 }

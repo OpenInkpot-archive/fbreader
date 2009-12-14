@@ -40,6 +40,8 @@
 			<node name="reload" value="Обновить" />
 			<node name="dontShow" value="Скрыть этот каталог" />
 			<node name="refillAccount" value="Пополнить счёт (текущий счёт: %s)" />
+			<node name="register" value="Зарегистрироваться" />
+			<node name="passwordRecovery" value="Забыли пароль?" />
 		</node>
 		<node name="searchResultNode">
 			<node name="title" value="Результаты поиска" />
@@ -55,8 +57,8 @@
 			<node name="collapseTree" value="Скрыть книги" />
 		</node>
 		<node name="bookNode">
-			<node name="read" value="Читать локальную копию"/>
-			<node name="delete" value="Удалить локальную копию"/>
+			<node name="read" value="Читать локальную копию" />
+			<node name="delete" value="Удалить локальную копию" />
 			<node name="download" value="Скачать" />
 			<node name="readDemo" value="Читать фрагмент" />
 			<node name="downloadDemo" value="Скачать фрагмент" />
@@ -181,23 +183,10 @@
 					<node name="navigation" value="Реагировать на нажатия" />
 				</node>
 				<node name="Scrolling" value="Перелистывание">
-					<node name="optionsFor" value="Настройки перелистывания">
-						<node name="page" value="по странице" />
-						<node name="line" value="по строке" />
-						<node name="mouse" value="колесом мышки" />
-						<node name="tap" value="нажатием на экран" />
-					</node>
-					<node name="delay" value="Задержка, миллисекунды" />
-					<node name="mode" value="Перелистывание">
-						<node name="noOverlapping" value="без перекрытия" />
-						<node name="keepLines" value="перекрывает несколько строк" />
-						<node name="scrollLines" value="сдвигает несколько строк" />
-						<node name="scrollPercentage" value="сдвигает часть текста" />
-						<node name="disable" value="выключено" />
-					</node>
-					<node name="linesToKeep" value="Сколько строк перекрывать" />
-					<node name="linesToScroll" value="Сколько строк сдвигать" />
-					<node name="percentToScroll" value="Сколько процентов сдвигать" />
+					<node name="keyScrollDelay" value="Задержка между листаниями клавишами" />
+					<node name="keyLinesToScroll" value="Сколько строк пролистывать за 1 раз" />
+					<node name="keyLinesToKeep" value="Сколько строк оставлять с предыдущей страницы" />
+					<node name="enableTapScrolling" value="Включить прокрутку нажатием на экран" />
 					<node name="fingerOnly" value="Только при нажатии пальцем" />
 				</node>
 				<node name="Selection" value="Пометка">
@@ -280,10 +269,10 @@
 						<node name="gotoSectionEnd" value="Перейти в конец раздела" />
 						<node name="nextTOCSection" value="Перейти к следующей главе" />
 						<node name="previousTOCSection" value="Перейти к предыдущей главе" />
-						<node name="largeScrollForward" value="Прокрутить вперед (на большое расстояние)" />
-						<node name="largeScrollBackward" value="Прокрутить назад (на большое расстояние)" />
-						<node name="smallScrollForward" value="Прокрутить вперед (на небольшое расстояние)" />
-						<node name="smallScrollBackward" value="Прокрутить назад (на небольшое расстояние)" />
+						<node name="pageForward" value="Пролистнуть страницу вперед" />
+						<node name="pageBackward" value="Пролистнуть страницу назад" />
+						<node name="lineForward" value="Пролистнуть строку вперед" />
+						<node name="lineBackward" value="Пролистнуть строку назад" />
 						<node name="undo" value="Отменить переход" />
 						<node name="redo" value="Повторить переход" />
 						<node name="copyToClipboard" value="Скопировать помеченный текст в буфер" />
@@ -368,6 +357,9 @@
 			<node name="name" value="Имя" />
 			<node name="sortKey" value="Сортировать по" />
 		</node>
+		<node name="addFileDialog">
+			<node name="title" value="FBReader - Добавление книги в библиотеку" />
+		</node>
 		<node name="textSearchDialog">
 			<node name="title" value="Поиск по тексту" />
 			<node name="text" value="" />
@@ -419,14 +411,6 @@
 			<node name="title" value="Ошибка" />
 			<node name="message" value="Извините, нет файла с информацией" />
 		</node>
-		<node name="tagMustBeNonEmpty">
-			<node name="title" value="Ошибка" />
-			<node name="message" value="Название категории не может быть пустым" />
-		</node>
-		<node name="tagMustNotContainComma">
-			<node name="title" value="Ошибка" />
-			<node name="message" value="В названии категории не может быть запятой" />
-		</node>
 		<node name="networkError">
 			<node name="emptyLibrariesList" value="Не указаны библиотеки для поиска" />
 			<node name="authenticationFailed" value="Ошибка авторизации" />
@@ -437,6 +421,13 @@
 			<node name="bookNotPurchased" value="Книга не была куплена" />
 			<node name="downloadLimitExceeded" value="Исчерпан лимит загрузок" />
 			<node name="unsupportedOperation" value="Неподдерживаемая операция" />
+			<node name="loginAlreadyTaken" value="Это имя пользователя занято" />
+			<node name="loginNotSpecified" value="Введите имя пользователя" />
+			<node name="passwordNotSpecified" value="Введите пароль" />
+			<node name="emailNotSpecified" value="Введите почтовый адрес" />
+			<node name="invalidEMail" value="Некорректный почтовый адрес" />
+			<node name="tooManyRegistrations" value="Слишком много регистраций с вашего IP;&#10;попробуйте еще раз через пару минут" />
+			<node name="noUserEmail" value="Нет пользователя с таким адресом" />
 		</node>
 		<node name="downloadError">
 			<node name="title" value="Ошибка при загрузке" />
@@ -453,6 +444,8 @@
 			<node name="purchaseBook" value="Идет покупка книги. Подождите, пожалуйста..." />
 			<node name="initializeAuthenticationManager" value="Загрузка пользовательской информации. Подождите, пожалуйста..." />
 			<node name="loadSubCatalog" value="Загрузка каталога. Подождите, пожалуйста..." />
+			<node name="registerUser" value="Регистрируем пользователя. Подождите, пожалуйста..." />
+			<node name="passwordRecovery" value="Просим восстановить пароль. Подождите, пожалуйста..." />
 		</node>
 		<node name="purchaseConfirmBox">
 			<node name="title" value="Покупка книги" />
@@ -460,10 +453,10 @@
 		</node>
 		<node name="AuthenticationDialog">
 			<node name="title" value="Авторизация" />
-			<node name="login" value="Логин" />
+			<node name="login" value="Имя пользователя" />
 			<node name="password" value="Пароль" />
 			<node name="skipIP" value="Не привязываться к ip-адресу" />
-			<node name="loginIsEmpty" value="Логин не должен быть пустым" />
+			<node name="loginIsEmpty" value="Имя пользователя не может быть пустым" />
 		</node>
 		<node name="emptyCatalogBox">
 			<node name="title" value="Информация" />
@@ -471,11 +464,27 @@
 		</node>
 		<node name="dontShowConfirmBox">
 			<node name="title" value="Отключение каталога" />
-			<node name="message" value="Вы уверены, что хотите отключить&#10;каталог «%s»?&#10;&#10;Вы сможете включить его в будущем&#10;на вкладке «Поиск в сети» в диалоге «Настройки»." />
+			<node name="message" value="Вы уверены, что хотите отключить&#10;каталог «%s»?&#10;&#10;Вы сможете включить его обратно&#10;на вкладке «Поиск в сети» в диалоге «Настройки»." />
 		</node>
 		<node name="deleteLocalCopyBox">
 			<node name="title" value="Удалить книгу" />
-			<node name="message" value="Вы уверены, что хотите&#10;удалить с диска книгу&#10;&#8220;%s&#8221;?" />
+			<node name="message" value="Вы уверены, что хотите&#10;удалить с диска книгу&#10;«%s»?" />
+		</node>
+		<node name="RegisterUserDialog">
+			<node name="title" value="Регистрация нового пользователя" />
+			<node name="login" value="Имя пользователя" />
+			<node name="password" value="Пароль" />
+			<node name="confirmPassword" value="Еще раз пароль" />
+			<node name="email" value="E-mail" />
+			<node name="differentPasswords" value="Вы ввели 2 разных пароля." />
+		</node>
+		<node name="PasswordRecoveryDialog">
+			<node name="title" value="Восстановление пароля" />
+			<node name="email" value="E-mail" />
+		</node>
+		<node name="recoverySuccessfulBox">
+			<node name="title" value="Восстановление пароля" />
+			<node name="message" value="Инструкция по восстановлению&#10;выслана на адрес&#10;%s" />
 		</node>
 	</node>
 	<node name="style">

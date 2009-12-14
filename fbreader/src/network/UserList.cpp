@@ -37,6 +37,7 @@ UserList::UserList() {
 		std::string userName = ZLStringOption(ZLCategoryKey::NETWORK, USER_LIST, userOptionName, "").value();
 		if (!userName.empty()) {
 			myUserNames.push_back(userName);
+			mySavedNames.insert(userName);
 		}
 	}
 	if (myUserNames.empty()) {
@@ -45,15 +46,21 @@ UserList::UserList() {
 }
 
 UserList::~UserList() {
-	for (unsigned int i = 0; i < MAX_USER_NAMES; ++i) {
+	unsigned int i = 0;
+	for (size_t k = 0; k < myUserNames.size() && i < MAX_USER_NAMES; ++k) {
+		const std::string &name = myUserNames[k];
+		if (mySavedNames.find(name) != mySavedNames.end()) {
+			std::string userOptionName(USER);
+			ZLStringUtil::appendNumber(userOptionName, i++);
+			ZLStringOption userOption(ZLCategoryKey::NETWORK, USER_LIST, userOptionName, "");
+			userOption.setValue(name);
+		}
+	}
+	while (i < MAX_USER_NAMES) {
 		std::string userOptionName(USER);
-		ZLStringUtil::appendNumber(userOptionName, i);
+		ZLStringUtil::appendNumber(userOptionName, i++);
 		ZLStringOption userOption(ZLCategoryKey::NETWORK, USER_LIST, userOptionName, "");
-		if (i < myUserNames.size()) {
-			userOption.setValue(myUserNames[i]);
-		} else {
-			userOption.setValue("");
-		}		
+		userOption.setValue("");
 	}
 }
 
@@ -67,8 +74,12 @@ void UserList::addUser(const std::string &user) {
 		myUserNames.erase(it);
 	}
 	myUserNames.insert(myUserNames.begin(), user);
-	if (myUserNames.size() > MAX_USER_NAMES) {
-		myUserNames.erase(myUserNames.begin() + MAX_USER_NAMES, myUserNames.end());
-	}
 }
 
+void UserList::saveUser(const std::string &user) {
+	std::vector<std::string>::iterator it = std::find(myUserNames.begin(), myUserNames.end(), user);
+	if (it == myUserNames.end()) {
+		myUserNames.insert(myUserNames.begin(), user);
+	}
+	mySavedNames.insert(user);
+}

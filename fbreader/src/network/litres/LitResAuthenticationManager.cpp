@@ -64,7 +64,6 @@ ZLBoolean3 LitResAuthenticationManager::isAuthorised(bool useNetwork) {
 
 	std::string firstName, lastName, newSid;
 	shared_ptr<ZLXMLReader> xmlReader = new LitResLoginDataParser(firstName, lastName, newSid);
-	LitResAuthenticationDataParser &parser = (LitResAuthenticationDataParser &) *xmlReader;
 
 	std::string query;
 	ZLNetworkUtil::addParameter(query, "sid", mySidOption.value());
@@ -77,8 +76,8 @@ ZLBoolean3 LitResAuthenticationManager::isAuthorised(bool useNetwork) {
 	));
 	std::string error = ZLNetworkManager::Instance().perform(dataList);
 
-	if (!error.empty() || !parser.error().empty()) {
-		if (parser.error() != NetworkErrors::errorMessage(NetworkErrors::ERROR_AUTHENTICATION_FAILED)) {
+	if (!error.empty()) {
+		if (error != NetworkErrors::errorMessage(NetworkErrors::ERROR_AUTHENTICATION_FAILED)) {
 			return B3_UNDEFINED;
 		}
 		mySidChecked = true;
@@ -94,7 +93,6 @@ ZLBoolean3 LitResAuthenticationManager::isAuthorised(bool useNetwork) {
 std::string LitResAuthenticationManager::authorise(const std::string &pwd) {
 	std::string firstName, lastName, newSid;
 	shared_ptr<ZLXMLReader> xmlReader = new LitResLoginDataParser(firstName, lastName, newSid);
-	LitResAuthenticationDataParser &parser = (LitResAuthenticationDataParser &) *xmlReader;
 
 	std::string query;
 	ZLNetworkUtil::addParameter(query, "login", UserNameOption.value());
@@ -110,9 +108,8 @@ std::string LitResAuthenticationManager::authorise(const std::string &pwd) {
 		xmlReader
 	));
 	std::string error = ZLNetworkManager::Instance().perform(dataList);
-	if (error.empty()) {
-		error = parser.error();
-	}
+
+	mySidChecked = true;
 	if (!error.empty()) {
 		mySidUserNameOption.setValue("");
 		mySidOption.setValue("");
@@ -153,7 +150,6 @@ std::string LitResAuthenticationManager::purchaseBook(NetworkLibraryBookItem &bo
 
 	std::string account, bookId;
 	shared_ptr<ZLXMLReader> xmlReader = new LitResPurchaseDataParser(account, bookId);
-	LitResAuthenticationDataParser &parser = (LitResAuthenticationDataParser &) *xmlReader;
 
 	std::string query;
 	ZLNetworkUtil::addParameter(query, "sid", sid);
@@ -166,12 +162,15 @@ std::string LitResAuthenticationManager::purchaseBook(NetworkLibraryBookItem &bo
 		xmlReader
 	));
 	std::string error = ZLNetworkManager::Instance().perform(dataList);
-	if (error.empty()) {
-		error = parser.error();
-	}
+
 	if (!account.empty()) {
 		myAccount = account;
 		myAccount.append(LitResUtil::CURRENCY_SUFFIX);
+	}
+	if (error == NetworkErrors::errorMessage(NetworkErrors::ERROR_AUTHENTICATION_FAILED)) {
+		mySidChecked = true;
+		mySidUserNameOption.setValue("");
+		mySidOption.setValue("");
 	}
 	const std::string alreadyPurchasedError = NetworkErrors::errorMessage(NetworkErrors::ERROR_PURCHASE_ALREADY_PURCHASED);
 	if (error != alreadyPurchasedError) {
@@ -276,7 +275,7 @@ shared_ptr<ZLExecutionData> LitResAuthenticationManager::loadPurchasedBooks() {
 	return new ZLNetworkXMLParserData(
 		LitResUtil::litresLink("pages/catalit_browser/" + query), 
 		certificate(),
-		new LitResDataParser(myPurchasedBooksList, LitResUtil::Instance().genres(), mgr)
+		new LitResDataParser(myPurchasedBooksList, mgr)
 	);
 }
 
@@ -321,4 +320,56 @@ void LitResAuthenticationManager::loadAccountOnSuccess() {
 
 bool LitResAuthenticationManager::skipIPSupported() {
 	return true;
+}
+
+bool LitResAuthenticationManager::registrationSupported() {
+	return true;
+}
+
+std::string LitResAuthenticationManager::registerUser(const std::string &login, const std::string &password, const std::string &email) {
+	std::string newSid;
+	shared_ptr<ZLXMLReader> xmlReader = new LitResRegisterUserDataParser(newSid);
+
+	std::string query;
+	ZLNetworkUtil::addParameter(query, "new_login", login);
+	ZLNetworkUtil::addParameter(query, "new_pwd1", password);
+	ZLNetworkUtil::addParameter(query, "mail", email);
+
+	ZLExecutionData::Vector dataList;
+	dataList.push_back(new ZLNetworkXMLParserData(
+		LitResUtil::litresLink("pages/catalit_register_user/" + query),
+		certificate(),
+		xmlReader
+	));
+	std::string error = ZLNetworkManager::Instance().perform(dataList);
+
+	mySidChecked = true;
+	if (!error.empty()) {
+		mySidUserNameOption.setValue("");
+		mySidOption.setValue("");
+		return error;
+	}
+	mySidOption.setValue(newSid);
+	mySidUserNameOption.setValue(login);
+	return "";
+}
+
+bool LitResAuthenticationManager::passwordRecoverySupported() {
+	return true;
+}
+
+std::string LitResAuthenticationManager::recoverPassword(const std::string &email) {
+	std::string newSid;
+	shared_ptr<ZLXMLReader> xmlReader = new LitResPasswordRecoveryDataParser();
+
+	std::string query;
+	ZLNetworkUtil::addParameter(query, "mail", email);
+
+	ZLExecutionData::Vector dataList;
+	dataList.push_back(new ZLNetworkXMLParserData(
+		LitResUtil::litresLink("pages/catalit_recover_pass/" + query),
+		certificate(),
+		xmlReader
+	));
+	return ZLNetworkManager::Instance().perform(dataList);
 }

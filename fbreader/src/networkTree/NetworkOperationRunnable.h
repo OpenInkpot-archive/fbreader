@@ -104,6 +104,30 @@ private:
 	NetworkLibraryBookItem &myBook;
 };
 
+class PasswordRecoveryRunnable : public NetworkOperationRunnable {
+
+public:
+	PasswordRecoveryRunnable(NetworkAuthenticationManager &mgr, const std::string &email);
+	void run();
+
+private:
+	NetworkAuthenticationManager &myManager;
+	const std::string &myEMail;
+};
+
+class RegisterUserRunnable : public NetworkOperationRunnable {
+
+public:
+	RegisterUserRunnable(NetworkAuthenticationManager &mgr, const std::string &login, const std::string &password, const std::string &email);
+	void run();
+
+private:
+	NetworkAuthenticationManager &myManager;
+	const std::string &myLogin;
+	const std::string &myPassword;
+	const std::string &myEMail;
+};
+
 
 class SearchRunnable : public NetworkOperationRunnable {
 

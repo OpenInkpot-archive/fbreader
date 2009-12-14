@@ -23,14 +23,19 @@
 #include "FBReader.h"
 #include "ScrollingAction.h"
 
-ScrollingAction::ScrollingAction(const FBReader::ScrollingOptions &options, ZLBlockTreeView::ScrollingMode mode, bool forward) : myOptions(options), myMode(mode), myForward(forward) {
+ScrollingAction::ScrollingAction(
+	ZLTextView::ScrollingMode textScrollingMode,
+	ZLBlockTreeView::ScrollingMode blockScrollingMode,
+	bool forward
+) : myTextScrollingMode(textScrollingMode), myBlockScrollingMode(blockScrollingMode), myForward(forward) {
+}
+
+int ScrollingAction::scrollingDelay() const {
+	return 0;
 }
 
 bool ScrollingAction::isEnabled() const {
-	const FBReader &fbreader = FBReader::Instance();
-	return
-		(&myOptions != &fbreader.TapScrollingOptions) ||
-		fbreader.EnableTapScrollingOption.value();
+	return true;
 }
 
 bool ScrollingAction::useKeyDelay() const {
@@ -39,33 +44,58 @@ bool ScrollingAction::useKeyDelay() const {
 
 void ScrollingAction::run() {
 	FBReader &fbreader = FBReader::Instance();
-	int delay = fbreader.myLastScrollingTime.millisecondsTo(ZLTime());
 	shared_ptr<ZLView> view = fbreader.currentView();
+	int delay = fbreader.myLastScrollingTime.millisecondsTo(ZLTime());
 	if (view.isNull() ||
-			(delay >= 0 && delay < myOptions.DelayOption.value())) {
+			(delay >= 0 && delay < scrollingDelay())) {
 		return;
 	}
 
 	if (view->typeId() == ZLTextView::TYPE_ID) {
-		ZLTextView::ScrollingMode oType = (ZLTextView::ScrollingMode)myOptions.ModeOption.value();
-		unsigned int oValue = 0;
-		switch (oType) {
-			case ZLTextView::KEEP_LINES:
-				oValue = myOptions.LinesToKeepOption.value();
-				break;
-			case ZLTextView::SCROLL_LINES:
-				oValue = myOptions.LinesToScrollOption.value();
-				break;
-			case ZLTextView::SCROLL_PERCENTAGE:
-				oValue = myOptions.PercentToScrollOption.value();
-				break;
-			default:
-				break;
-		}
-		((ZLTextView&)*view).scrollPage(myForward, oType, oValue);
+		((ZLTextView&)*view).scrollPage(myForward, myTextScrollingMode, textOptionValue());
 		FBReader::Instance().refreshWindow();
 	} else if (view->typeId() == ZLBlockTreeView::TYPE_ID) {
-		((ZLBlockTreeView&)*view).scroll(myMode, !myForward);
+		((ZLBlockTreeView&)*view).scroll(myBlockScrollingMode, !myForward);
 	}
 	fbreader.myLastScrollingTime = ZLTime();
+}
+
+LineScrollingAction::LineScrollingAction(bool forward) : ScrollingAction(ZLTextView::SCROLL_LINES, ZLBlockTreeView::ITEM, forward) {
+}
+
+int LineScrollingAction::scrollingDelay() const {
+	return FBReader::Instance().KeyScrollingDelayOption.value();
+}
+
+size_t LineScrollingAction::textOptionValue() const {
+	return FBReader::Instance().LinesToScrollOption.value();
+}
+
+PageScrollingAction::PageScrollingAction(bool forward) : ScrollingAction(ZLTextView::KEEP_LINES, ZLBlockTreeView::PAGE, forward) {
+}
+
+int PageScrollingAction::scrollingDelay() const {
+	return FBReader::Instance().KeyScrollingDelayOption.value();
+}
+
+size_t PageScrollingAction::textOptionValue() const {
+	return FBReader::Instance().LinesToKeepOption.value();
+}
+
+MouseWheelScrollingAction::MouseWheelScrollingAction(bool forward) : ScrollingAction(ZLTextView::SCROLL_LINES, ZLBlockTreeView::ITEM, forward) {
+}
+
+size_t MouseWheelScrollingAction::textOptionValue() const {
+	return 1;
+}
+
+TapScrollingAction::TapScrollingAction(bool forward) : ScrollingAction(ZLTextView::KEEP_LINES, ZLBlockTreeView::NONE, forward) {
+}
+
+size_t TapScrollingAction::textOptionValue() const {
+	return FBReader::Instance().LinesToKeepOption.value();
+}
+
+bool TapScrollingAction::isEnabled() const {
+	return FBReader::Instance().EnableTapScrollingOption.value();
 }

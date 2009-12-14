@@ -50,9 +50,8 @@ Section "FBReader"
 	WriteRegStr HKCU "Software\FBReader\options\Options" "LeftMargin" "50" 
 	WriteRegStr HKCU "Software\FBReader\options\Options" "RightMargin" "50" 
 	WriteRegStr HKCU "Software\FBReader\options\Options" "KeyDelay" "0" 
-	WriteRegStr HKCU "Software\FBReader\options\SmallScrolling" "ScrollingDelay" "true" 
-	WriteRegStr HKCU "Software\FBReader\options\LargeScrolling" "ScrollingDelay" "true" 
-	WriteRegStr HKCU "Software\FBReader\options\TapScrolling" "Enabled" "false" 
+	WriteRegStr HKCU "Software\FBReader\options\Scrollings" "Delay" "0" 
+	WriteRegStr HKCU "Software\FBReader\options\TapScrolling" "Enabled" "true" 
 SectionEnd
 
 Section "Create Shortcut on Desktop"

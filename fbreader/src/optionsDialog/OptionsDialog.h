@@ -25,7 +25,6 @@
 class ZLOptionsDialog;
 class ZLDialogContent;
 class OptionsPage;
-class ScrollingOptionsPage;
 class KeyBindingsPage;
 class ConfigPage;
 class NetworkLibraryPage;
@@ -51,7 +50,6 @@ private:
 
 private:
 	shared_ptr<ZLOptionsDialog> myDialog;
-	shared_ptr<ScrollingOptionsPage> myScrollingPage;
 	shared_ptr<OptionsPage> myFormatPage;
 	shared_ptr<OptionsPage> myStylePage;
 	shared_ptr<KeyBindingsPage> myKeyBindingsPage;

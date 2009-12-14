@@ -18,8 +18,10 @@
  */
 
 #include <cmath>
+#include <algorithm>
 
 #include <ZLUnicodeUtil.h>
+#include <ZLTime.h>
 
 #include "FBView.h"
 #include "FBReader.h"
@@ -111,9 +113,17 @@ const std::string &FBView::caption() const {
 
 void FBView::setCaption(const std::string &caption) {
 	myCaption = caption;
+	std::replace(myCaption.begin(), myCaption.end(), '\n', ' ');
+	std::replace(myCaption.begin(), myCaption.end(), '\r', ' ');
+	ZLUnicodeUtil::cleanUtf8String(myCaption);
 }
 
 bool FBView::onStylusPress(int x, int y) {
+	if (!myTapScroller.isNull()) {
+		ZLTimeManager::Instance().removeTask(myTapScroller);
+		myTapScroller.reset();
+	}
+
 	myPressedX = x;
 	myPressedY = y;
 	myIsReleasedWithoutMotion = true;
@@ -133,7 +143,32 @@ bool FBView::_onStylusPress(int, int) {
 	return false;
 }
 
+class FBView::TapScroller : public ZLRunnable {
+
+public:
+	TapScroller(FBView &view, int y);
+
+private:
+	void run();
+
+private:
+	FBView &myView;
+	const int myY;
+};
+
+FBView::TapScroller::TapScroller(FBView &view, int y) : myView(view), myY(y) {
+}
+
+void FBView::TapScroller::run() {
+	myView.doTapScrolling(myY);
+}
+
 bool FBView::onStylusRelease(int x, int y) {
+	if (!myTapScroller.isNull()) {
+		ZLTimeManager::Instance().removeTask(myTapScroller);
+		myTapScroller.reset();
+	}
+
 	if (ZLTextView::onStylusRelease(x, y)) {
 		return true;
 	}
@@ -149,7 +184,8 @@ bool FBView::onStylusRelease(int x, int y) {
 			fbreader.EnableTapScrollingOption.value() &&
 			(!ZLBooleanOption(ZLCategoryKey::EMPTY, ZLOption::PLATFORM_GROUP, ZLOption::FINGER_TAP_DETECTABLE, false).value() ||
 			 !fbreader.TapScrollingOnFingerOnlyOption.value())) {
-		doTapScrolling(y);
+		myTapScroller = new TapScroller(*this, y);
+		ZLTimeManager::Instance().addAutoRemovableTask(myTapScroller, DOUBLE_CLICK_DELAY);
 		return true;
 	}
 
