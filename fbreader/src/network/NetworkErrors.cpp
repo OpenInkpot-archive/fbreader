@@ -30,6 +30,15 @@ const std::string NetworkErrors::ERROR_PURCHASE_ALREADY_PURCHASED = "purchaseAlr
 const std::string NetworkErrors::ERROR_BOOK_NOT_PURCHASED = "bookNotPurchased";
 const std::string NetworkErrors::ERROR_DOWNLOAD_LIMIT_EXCEEDED = "downloadLimitExceeded";
 
+const std::string NetworkErrors::ERROR_LOGIN_ALREADY_TAKEN = "loginAlreadyTaken";
+const std::string NetworkErrors::ERROR_LOGIN_WAS_NOT_SPECIFIED = "loginNotSpecified";
+const std::string NetworkErrors::ERROR_PASSWORD_WAS_NOT_SPECIFIED = "passwordNotSpecified";
+const std::string NetworkErrors::ERROR_EMAIL_WAS_NOT_SPECIFIED = "emailNotSpecified";
+const std::string NetworkErrors::ERROR_INVALID_EMAIL = "invalidEMail";
+const std::string NetworkErrors::ERROR_TOO_MANY_REGISTRATIONS = "tooManyRegistrations";
+
+const std::string NetworkErrors::ERROR_NO_USER_EMAIL = "noUserEmail";
+
 const std::string NetworkErrors::ERROR_SOMETHING_WRONG = "somethingWrongMessage";
 const std::string NetworkErrors::ERROR_UNSUPPORTED_OPERATION = "unsupportedOperation";
 

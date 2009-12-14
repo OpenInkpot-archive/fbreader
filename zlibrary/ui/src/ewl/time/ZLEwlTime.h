@@ -32,6 +32,9 @@ public:
 	void addTask(shared_ptr<ZLRunnable> task, int interval);
 	void removeTask(shared_ptr<ZLRunnable> task);
 
+protected:
+	virtual void removeTaskInternal(shared_ptr<ZLRunnable> task);
+
 private:
 	std::map<shared_ptr<ZLRunnable>,int> myHandlers;
 };

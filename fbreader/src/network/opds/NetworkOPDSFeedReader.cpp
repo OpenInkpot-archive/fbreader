@@ -28,9 +28,9 @@
 
 #include "../NetworkOperationData.h"
 #include "../NetworkLibraryItems.h"
-#include "../NetworkLink.h"
 #include "../NetworkAuthenticationManager.h"
-#include "../opdsLink/OPDSSubCatalogLoader.h"
+#include "../opdsLink/OPDSLink.h"
+#include "../opdsLink/OPDSCatalogItem.h"
 
 NetworkOPDSFeedReader::NetworkOPDSFeedReader(const std::string &baseURL, NetworkOperationData &result) : myBaseURL(baseURL), myData(result), myIndex(0) {
 	myIgnoredItems.insert("http://feedbooks.com/news/catalog.atom");
@@ -103,12 +103,12 @@ shared_ptr<NetworkLibraryItem> NetworkOPDSFeedReader::readBookItem(OPDSEntry &en
 	
 	book.setAuthenticationManager(myData.Link.authenticationManager());
 
-	book.title() = entry.title();
-	book.language() = entry.dcLanguage();
+	book.setTitle(entry.title());
+	book.setLanguage(entry.dcLanguage());
 	if (!entry.dcIssued().isNull()) {
-		book.date() = entry.dcIssued()->getDateTime(true);
+		book.setDate(entry.dcIssued()->getDateTime(true));
 	}
-	book.annotation() = entry.summary();
+	book.setAnnotation(entry.summary());
 
 	for (size_t i = 0; i < entry.categories().size(); ++i) {
 		ATOMCategory &category = *(entry.categories()[i]);
@@ -122,16 +122,16 @@ shared_ptr<NetworkLibraryItem> NetworkOPDSFeedReader::readBookItem(OPDSEntry &en
 		const std::string &type = link.type();
 		if (rel == OPDSConstants::REL_COVER ||
 				rel == OPDSConstants::REL_STANZA_COVER) {
-			if (book.cover().empty() && 
+			if (book.coverURL().empty() && 
 					(type == OPDSConstants::MIME_IMG_PNG ||
 					 type == OPDSConstants::MIME_IMG_JPEG)) {
-				book.cover() = href;
+				book.setCoverURL(href);
 			}
 		} else if (rel == OPDSConstants::REL_THUMBNAIL ||
 							 rel == OPDSConstants::REL_STANZA_THUMBNAIL) {
 			if (type == OPDSConstants::MIME_IMG_PNG ||
 					type == OPDSConstants::MIME_IMG_JPEG) {
-				book.cover() = href;
+				book.setCoverURL(href);
 			}
 		} else if (rel == OPDSConstants::REL_ACQUISITION || rel.empty()) {
 			if (type == OPDSConstants::MIME_APP_EPUB) {
@@ -245,13 +245,12 @@ shared_ptr<NetworkLibraryItem> NetworkOPDSFeedReader::readCatalogItem(OPDSEntry 
 	std::string annotation = entry.summary();
 	annotation.erase(std::remove(annotation.begin(), annotation.end(), 0x09), annotation.end());
 	annotation.erase(std::remove(annotation.begin(), annotation.end(), 0x0A), annotation.end());
-	return new NetworkLibraryCatalogItem(
-		myData.Link,
+	return new OPDSCatalogItem(
+		(OPDSLink&)myData.Link,
 		ZLNetworkUtil::url(myBaseURL, url),
 		ZLNetworkUtil::url(myBaseURL, htmlURL),
 		entry.title(),
 		annotation,
-		coverURL,
-		OPDSSubCatalogLoader::Instance()
+		coverURL
 	);
 }

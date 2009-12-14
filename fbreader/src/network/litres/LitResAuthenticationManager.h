@@ -61,6 +61,14 @@ private:
 
 	const std::string &certificate();
 
+public: // new User Registration
+	bool registrationSupported();
+	std::string registerUser(const std::string &login, const std::string &password, const std::string &email);
+
+public: // Password Recovery
+	bool passwordRecoverySupported();
+	std::string recoverPassword(const std::string &email);
+
 private:
 	bool mySidChecked;
 

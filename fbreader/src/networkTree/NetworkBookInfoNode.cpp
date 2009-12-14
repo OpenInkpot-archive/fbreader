@@ -17,13 +17,12 @@
  * 02110-1301, USA.
  */
 
-#include <iostream>
-
 #include <ZLResource.h>
 #include <ZLImage.h>
 #include <ZLFile.h>
 #include <ZLStringUtil.h>
 #include <ZLNetworkManager.h>
+#include <ZLNetworkUtil.h>
 #include <ZLDialogManager.h>
 
 #include "NetworkNodes.h"
@@ -34,6 +33,7 @@
 
 #include "../network/NetworkLinkCollection.h"
 #include "../network/NetworkAuthenticationManager.h"
+#include "../network/NetworkErrors.h"
 
 #include "../library/Book.h"
 
@@ -50,6 +50,49 @@ private:
 	const bool myDemo;
 };
 
+class NetworkBookInfoNode::ReadAction : public ZLRunnable {
+
+public:
+	ReadAction(shared_ptr<NetworkLibraryItem> book);
+	void run();
+
+private:
+	shared_ptr<NetworkLibraryItem> myBook;
+};
+
+class NetworkBookInfoNode::ReadDemoAction : public ZLRunnable {
+
+public:
+	ReadDemoAction(shared_ptr<NetworkLibraryItem> book);
+	void run();
+
+private:
+	shared_ptr<NetworkLibraryItem> myBook;
+};
+
+class NetworkBookInfoNode::BuyAction : public ZLRunnable {
+
+public:
+	BuyAction(shared_ptr<NetworkLibraryItem> book);
+	void run();
+
+private:
+	shared_ptr<NetworkLibraryItem> myBook;
+};
+
+class NetworkBookInfoNode::DeleteAction : public ZLRunnable {
+
+public:
+	DeleteAction(shared_ptr<NetworkLibraryItem> book);
+	void run();
+
+private:
+	void removeFormat(NetworkLibraryBookItem &book, NetworkLibraryBookItem::URLType format);
+
+private:
+	shared_ptr<NetworkLibraryItem> myBook;
+};
+
 static const std::string DEMO_SUFFIX = " (фрагмент)";
 static const std::string DEMO_TAG = "Фрагмент";
 
@@ -60,15 +103,7 @@ const std::string &NetworkBookInfoNode::typeId() const {
 	return TYPE_ID;
 }
 
-NetworkBookInfoNode::NetworkBookInfoNode(NetworkAuthorNode *parent, shared_ptr<NetworkLibraryItem> book) : FBReaderNode(parent), myBook(book) {
-	init();
-}
-
-NetworkBookInfoNode::NetworkBookInfoNode(NetworkSeriesNode *parent, shared_ptr<NetworkLibraryItem> book) : FBReaderNode(parent), myBook(book) {
-	init();
-}
-
-NetworkBookInfoNode::NetworkBookInfoNode(NetworkCatalogNode *parent, shared_ptr<NetworkLibraryItem> book) : FBReaderNode(parent), myBook(book) {
+NetworkBookInfoNode::NetworkBookInfoNode(NetworkContainerNode *parent, shared_ptr<NetworkLibraryItem> book) : FBReaderNode(parent), myBook(book) {
 	init();
 }
 
@@ -130,7 +165,7 @@ void NetworkBookInfoNode::paint(ZLPaintContext &context, int vOffset) {
 }
 
 shared_ptr<ZLImage> NetworkBookInfoNode::extractCoverImage() const {
-	shared_ptr<ZLImage> image = NetworkCatalogUtil::getImageByUrl(myBook->cover());
+	shared_ptr<ZLImage> image = NetworkCatalogUtil::getImageByUrl(myBook->coverURL());
 	return !image.isNull() ? image : defaultCoverImage("booktree-book.png");
 }
 
@@ -273,7 +308,15 @@ void NetworkBookInfoNode::DownloadAction::run() {
 
 	FBReader &fbreader = FBReader::Instance();
 	shared_ptr<Book> downloaderBook;
-	fbreader.createBook(downloader.fileName(), downloaderBook);
+	const std::string fileName = downloader.fileName();
+	fbreader.createBook(fileName, downloaderBook);
+	if (downloaderBook.isNull()) {
+		//ZLFile(fileName).remove(); // TODO: Remove file???
+		// TODO: add errorBox???
+		fbreader.refreshWindow();
+		return;
+	}
+
 	downloaderBook->removeAllAuthors();
 	for (std::vector<NetworkLibraryBookItem::AuthorData>::const_iterator it = book.authors().begin(); it != book.authors().end(); ++it) {
 		downloaderBook->addAuthor(it->DisplayName, it->SortKey);
@@ -337,6 +380,7 @@ void NetworkBookInfoNode::BuyAction::run() {
 			return;
 		}
 		fbreader.invalidateAccountDependents();
+		fbreader.refreshWindow();
 		if (!mgr.needPurchase(book)) {
 			return;
 		}
@@ -358,6 +402,9 @@ void NetworkBookInfoNode::BuyAction::run() {
 	}
 	if (downloadBook) {
 		DownloadAction(myBook, false).run();
+	}
+	if (mgr.isAuthorised() == B3_FALSE) {
+		fbreader.invalidateAccountDependents();
 	}
 	fbreader.refreshWindow();
 }

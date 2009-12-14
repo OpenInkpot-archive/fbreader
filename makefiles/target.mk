@@ -17,6 +17,9 @@
 #TARGET_ARCH = ebr
 #UI_TYPE = nanoX
 
+#TARGET_ARCH = iliad
+#UI_TYPE = gtk
+
 TARGET_ARCH = desktop
 #UI_TYPE = gtk
 #UI_TYPE = qt

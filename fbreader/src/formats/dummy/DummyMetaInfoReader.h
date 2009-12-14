@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,22 +17,30 @@
  * 02110-1301, USA.
  */
 
-#ifndef __OPDSSUBCATALOGLOADER_H__
-#define __OPDSSUBCATALOGLOADER_H__
+#ifndef __DUMMYMETAINFOREADER_H__
+#define __DUMMYMETAINFOREADER_H__
 
-#include "../NetworkLibraryItems.h"
+#include <string>
 
-class OPDSSubCatalogLoader : public NetworkSubCatalogLoader {
+class Book;
+
+class DummyMetaInfoReader {
 
 public:
-	static shared_ptr<NetworkSubCatalogLoader> Instance();
+	DummyMetaInfoReader(Book &book);
+	~DummyMetaInfoReader();
+	bool readMetaInfo(shared_ptr<ZLInputStream> stream);
+
+	/*
+	void startElementHandler(int tag, const char **attributes);
+	void endElementHandler(int tag);
+	void characterDataHandler(const char *text, size_t len);
+	*/
 
 private:
-	static shared_ptr<NetworkSubCatalogLoader> ourInstance;
-
-private:
-	OPDSSubCatalogLoader();
-	std::string load(NetworkLibraryCatalogItem &item, NetworkLibraryItemList &children);
+	Book &myBook;
 };
 
-#endif /* __OPDSSUBCATALOGLOADER_H__ */
+inline DummyMetaInfoReader::~DummyMetaInfoReader() {}
+
+#endif /* __DUMMYMETAINFOREADER_H__ */

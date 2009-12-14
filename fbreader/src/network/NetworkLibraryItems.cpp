@@ -31,10 +31,18 @@ NetworkLibraryItem::NetworkLibraryItem() {
 
 NetworkLibraryItem::NetworkLibraryItem(const NetworkLibraryItem &item) :
 	myTitle(item.myTitle), 
-	myCover(item.myCover) {
+	myCoverURL(item.myCoverURL) {
 }
 
 NetworkLibraryItem::~NetworkLibraryItem() {
+}
+
+void NetworkLibraryItem::setTitle(const std::string &title) {
+	myTitle = title;
+}
+
+void NetworkLibraryItem::setCoverURL(const std::string &coverURL) {
+	myCoverURL = coverURL;
 }
 
 const std::string NetworkLibraryCatalogItem::TYPE_ID = "catalogItem";
@@ -46,17 +54,15 @@ NetworkLibraryCatalogItem::NetworkLibraryCatalogItem(
 	const std::string &title,
 	const std::string &summary,
 	const std::string &coverURL,
-	shared_ptr<NetworkSubCatalogLoader> subCatalogLoader,
 	bool dependsOnAccount
 ) :
 	myLink(link),
 	myURL(url),
 	myHtmlURL(htmlURL),
 	mySummary(summary),
-	mySubCatalogLoader(subCatalogLoader),
 	myDependsOnAccount(dependsOnAccount) {
-	this->title() = title;
-	this->cover() = coverURL;
+	setTitle(title);
+	setCoverURL(coverURL);
 }
 
 const std::string &NetworkLibraryCatalogItem::typeId() const {
@@ -80,7 +86,8 @@ NetworkLibraryBookItem::NetworkLibraryBookItem(const NetworkLibraryBookItem &boo
 	myId(book.myId), 
 	myLanguage(book.myLanguage), 
 	myDate(book.myDate), 
-	mySeries(book.mySeries), 
+	mySeriesTitle(book.mySeriesTitle), 
+	myIndexInSeries(book.myIndexInSeries),
 	myPrice(book.myPrice), 
 	myURLByType(book.myURLByType), 
 	myAuthors(book.myAuthors), 
@@ -162,12 +169,23 @@ void NetworkLibraryBookItem::setAuthenticationManager(shared_ptr<NetworkAuthenti
 	myAuthenticationManager = manager;
 }
 
-std::string NetworkLibraryCatalogItem::loadSubCatalog(NetworkLibraryItemList &children) {
-	if (mySubCatalogLoader.isNull()) {
-		return NetworkErrors::errorMessage(NetworkErrors::ERROR_UNSUPPORTED_OPERATION);
-	}
-	return mySubCatalogLoader->load(*this, children);
+void NetworkLibraryBookItem::setLanguage(const std::string &language) {
+	myLanguage = language;
 }
 
-NetworkSubCatalogLoader::~NetworkSubCatalogLoader() {
+void NetworkLibraryBookItem::setDate(const std::string &date) {
+	myDate = date;
+}
+
+void NetworkLibraryBookItem::setPrice(const std::string &price) {
+	myPrice = price;
+}
+
+void NetworkLibraryBookItem::setAnnotation(const std::string &annotation) {
+	myAnnotation = annotation;
+}
+
+void NetworkLibraryBookItem::setSeries(const std::string &title, int index) {
+	mySeriesTitle = title;
+	myIndexInSeries = index;
 }

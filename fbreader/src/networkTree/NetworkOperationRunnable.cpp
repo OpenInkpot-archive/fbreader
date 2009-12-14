@@ -130,6 +130,28 @@ void PurchaseBookRunnable::run() {
 	myErrorMessage = myManager.purchaseBook(myBook);
 }
 
+PasswordRecoveryRunnable::PasswordRecoveryRunnable(NetworkAuthenticationManager &mgr, const std::string &email) : 
+	NetworkOperationRunnable("passwordRecovery"), 
+	myManager(mgr), 
+	myEMail(email) {
+}
+
+void PasswordRecoveryRunnable::run() {
+	myErrorMessage = myManager.recoverPassword(myEMail);
+}
+
+RegisterUserRunnable::RegisterUserRunnable(NetworkAuthenticationManager &mgr, const std::string &login, const std::string &password, const std::string &email) : 
+	NetworkOperationRunnable("registerUser"), 
+	myManager(mgr), 
+	myLogin(login), 
+	myPassword(password), 
+	myEMail(email) {
+}
+
+void RegisterUserRunnable::run() {
+	myErrorMessage = myManager.registerUser(myLogin, myPassword, myEMail);
+}
+
 
 SearchRunnable::SearchRunnable() : NetworkOperationRunnable("downloadBookList") {
 }
@@ -160,5 +182,5 @@ LoadSubCatalogRunnable::LoadSubCatalogRunnable(NetworkLibraryCatalogItem &item, 
 }
 
 void LoadSubCatalogRunnable::run() {
-	myErrorMessage = myItem.loadSubCatalog(myChildren);
+	myErrorMessage = myItem.loadChildren(myChildren);
 }

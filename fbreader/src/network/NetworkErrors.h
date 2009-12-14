@@ -36,6 +36,15 @@ public:
 	static const std::string ERROR_BOOK_NOT_PURCHASED;
 	static const std::string ERROR_DOWNLOAD_LIMIT_EXCEEDED;
 
+	static const std::string ERROR_LOGIN_ALREADY_TAKEN;
+	static const std::string ERROR_LOGIN_WAS_NOT_SPECIFIED;
+	static const std::string ERROR_PASSWORD_WAS_NOT_SPECIFIED;
+	static const std::string ERROR_EMAIL_WAS_NOT_SPECIFIED;
+	static const std::string ERROR_INVALID_EMAIL;
+	static const std::string ERROR_TOO_MANY_REGISTRATIONS;
+
+	static const std::string ERROR_NO_USER_EMAIL;
+
 	static const std::string ERROR_SOMETHING_WRONG;
 	static const std::string ERROR_UNSUPPORTED_OPERATION;
 

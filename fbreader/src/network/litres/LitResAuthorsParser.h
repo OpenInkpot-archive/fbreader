@@ -17,26 +17,34 @@
  * 02110-1301, USA.
  */
 
-#ifndef __USERNAMESENTRY_H__
-#define __USERNAMESENTRY_H__
+#ifndef __LITRESAUTHORSPARSER_H__
+#define __LITRESAUTHORSPARSER_H__
 
-#include <ZLOptionEntry.h>
+#include <vector>
 
-#include "../network/UserList.h"
+#include <ZLXMLReader.h>
+
+#include "LitResAuthor.h"
 
 
-class UserNamesEntry : public ZLComboOptionEntry {
+class LitResAuthorsParser : public ZLXMLReader {
 
 public:
-	UserNamesEntry(UserList &userList, ZLStringOption &userNameOption);
-
-	const std::string &initialValue() const;
-	const std::vector<std::string> &values() const;
-	void onAccept(const std::string &value);
+	LitResAuthorsParser(std::vector<LitResAuthor> &authors);
 
 private:
-	UserList &myUserList;
-	ZLStringOption &myUserNameOption;
+	void startElementHandler(const char *tag, const char **attributes);
+	void endElementHandler(const char *tag);
+	void characterDataHandler(const char *text, size_t len);
+
+	enum State {
+		START, PERSONS, SUBJECT, TITLE, TITLE_MAIN, FIRST, MIDDLE, LAST
+	};
+
+private:
+	std::vector<LitResAuthor> &myAuthors;
+	std::string myId, myTitle, myFirstName, myMiddleName, myLastName;
+	State myState;
 };
 
-#endif /* __USERNAMESENTRY_H__ */
+#endif /* __LITRESAUTHORSPARSER_H__ */

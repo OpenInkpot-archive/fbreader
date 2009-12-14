@@ -17,23 +17,10 @@
  * 02110-1301, USA.
  */
 
-#include "UserNamesEntry.h"
+#include "NetworkNodes.h"
 
-
-UserNamesEntry::UserNamesEntry(UserList &userList, ZLStringOption &userNameOption) : 
-	ZLComboOptionEntry(true), myUserList(userList), myUserNameOption(userNameOption) {
+NetworkContainerNode::NetworkContainerNode(ZLBlockTreeView::RootNode *parent, size_t atPosition) : FBReaderNode(parent, atPosition) {
 }
 
-const std::string &UserNamesEntry::initialValue() const {
-	return myUserNameOption.value();
+NetworkContainerNode::NetworkContainerNode(NetworkContainerNode *parent, size_t atPosition) : FBReaderNode(parent, atPosition) {
 }
-
-const std::vector<std::string> &UserNamesEntry::values() const {
-	return myUserList.users();
-}
-
-void UserNamesEntry::onAccept(const std::string &value) {
-	myUserList.addUser(value);
-	myUserNameOption.setValue(value);
-}
-

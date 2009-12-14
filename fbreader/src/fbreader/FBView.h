@@ -22,6 +22,7 @@
 
 #include <ZLTextView.h>
 #include <ZLTextStyle.h>
+#include <ZLRunnable.h>
 
 class FBIndicatorStyle : public ZLTextPositionIndicatorInfo {
 
@@ -51,6 +52,9 @@ public:
 };
 
 class FBView : public ZLTextView {
+
+private:
+	class TapScroller;
 
 public:
 	static FBIndicatorStyle& commonIndicatorInfo();
@@ -107,6 +111,8 @@ private:
 	int myPressedX;
 	int myPressedY;
 	bool myIsReleasedWithoutMotion;
+
+	shared_ptr<ZLRunnable> myTapScroller;
 };
 
 inline int FBView::pressedX() const { return myPressedX; }

@@ -31,13 +31,15 @@ class ActionCode {
 
 public:
 	static const std::string SHOW_READING;
-	static const std::string SHOW_COLLECTION;
-	static const std::string SHOW_NET_LIBRARY;
-	static const std::string SHOW_OPTIONS;
+	static const std::string SHOW_LIBRARY;
+	static const std::string SHOW_NETWORK_LIBRARY;
+	static const std::string SHOW_TOC;
+	static const std::string SHOW_HELP;
+	static const std::string SHOW_OPTIONS_DIALOG;
 	static const std::string SHOW_MENU;
+	static const std::string SHOW_BOOK_INFO_DIALOG;
 	static const std::string UNDO;
 	static const std::string REDO;
-	static const std::string SHOW_CONTENTS;
 	static const std::string SEARCH;
 	static const std::string FIND_PREVIOUS;
 	static const std::string FIND_NEXT;
@@ -59,8 +61,6 @@ public:
 	static const std::string TOGGLE_FULLSCREEN;
 	static const std::string FULLSCREEN_ON;
 	static const std::string ADD_BOOK;
-	static const std::string SHOW_BOOK_INFO;
-	static const std::string SHOW_HELP;
 	static const std::string ROTATE_SCREEN;
 	static const std::string QUIT;
 	static const std::string OPEN_PREVIOUS_BOOK;

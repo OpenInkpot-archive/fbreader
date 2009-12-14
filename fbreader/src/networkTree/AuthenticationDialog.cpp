@@ -27,9 +27,41 @@
 
 #include "AuthenticationDialog.h"
 #include "NetworkOperationRunnable.h"
-#include "UserNamesEntry.h"
 
+#include "../network/UserList.h"
 #include "../network/NetworkAuthenticationManager.h"
+
+class UserNamesEntry : public ZLComboOptionEntry {
+
+public:
+	UserNamesEntry(UserList &userList, ZLStringOption &userNameOption);
+
+	const std::string &initialValue() const;
+	const std::vector<std::string> &values() const;
+	void onAccept(const std::string &value);
+
+private:
+	UserList &myUserList;
+	ZLStringOption &myUserNameOption;
+};
+
+UserNamesEntry::UserNamesEntry(UserList &userList, ZLStringOption &userNameOption) : 
+	ZLComboOptionEntry(true), myUserList(userList), myUserNameOption(userNameOption) {
+}
+
+const std::string &UserNamesEntry::initialValue() const {
+	return myUserNameOption.value();
+}
+
+const std::vector<std::string> &UserNamesEntry::values() const {
+	return myUserList.users();
+}
+
+void UserNamesEntry::onAccept(const std::string &value) {
+	myUserList.addUser(value);
+	myUserNameOption.setValue(value);
+}
+
 
 class PasswordOptionEntry : public ZLPasswordOptionEntry {
 
@@ -55,7 +87,8 @@ void PasswordOptionEntry::onAccept(const std::string &value) {
 	myPassword = value;
 }
 
-AuthenticationDialog::AuthenticationDialog(NetworkAuthenticationManager &mgr, const std::string &errorMessage, std::string &password) {
+AuthenticationDialog::AuthenticationDialog(NetworkAuthenticationManager &mgr, UserList &userList, const std::string &errorMessage, std::string &password) :
+	myUserList(userList) {
 	myDialog = ZLDialogManager::Instance().createDialog(ZLResourceKey("AuthenticationDialog"));
 
 	if (!errorMessage.empty()) {
@@ -72,8 +105,8 @@ AuthenticationDialog::AuthenticationDialog(NetworkAuthenticationManager &mgr, co
 	myDialog->addButton(ZLDialogManager::CANCEL_BUTTON, false);
 }
 
-bool AuthenticationDialog::runDialog(NetworkAuthenticationManager &mgr, const std::string &errorMessage, std::string &password) {
-	AuthenticationDialog dlg(mgr, errorMessage, password);
+bool AuthenticationDialog::runDialog(NetworkAuthenticationManager &mgr, UserList &userList, const std::string &errorMessage, std::string &password) {
+	AuthenticationDialog dlg(mgr, userList, errorMessage, password);
 	if (dlg.dialog().run()) {
 		dlg.dialog().acceptValues();
 		return true;
@@ -83,9 +116,10 @@ bool AuthenticationDialog::runDialog(NetworkAuthenticationManager &mgr, const st
 
 bool AuthenticationDialog::run(NetworkAuthenticationManager &mgr) {
 	std::string errorMessage;
+	UserList userList;
 	while (true) {
 		std::string password;
-		if (!runDialog(mgr, errorMessage, password)) {
+		if (!runDialog(mgr, userList, errorMessage, password)) {
 			mgr.logOut();
 			return false;
 		}
@@ -108,6 +142,7 @@ bool AuthenticationDialog::run(NetworkAuthenticationManager &mgr) {
 				errorMessage = initializer.errorMessage();
 				mgr.logOut();
 			} else {
+				userList.saveUser(mgr.currentUserName());
 				return true;
 			}
 		}

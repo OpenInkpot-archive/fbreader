@@ -25,6 +25,8 @@
 #include "NetworkNodes.h"
 #include "NetworkOperationRunnable.h"
 #include "AuthenticationDialog.h"
+#include "PasswordRecoveryDialog.h"
+#include "RegisterUserDialog.h"
 
 #include "../fbreader/FBReader.h"
 
@@ -33,12 +35,38 @@
 #include "../network/NetworkLink.h"
 #include "../network/NetworkAuthenticationManager.h"
 
+class NetworkCatalogRootNode::LoginAction : public ZLRunnable {
+
+public:
+	LoginAction(NetworkAuthenticationManager &mgr);
+	void run();
+
+private:
+	NetworkAuthenticationManager &myManager;
+};
+
+class NetworkCatalogRootNode::LogoutAction : public ZLRunnable {
+
+public:
+	LogoutAction(NetworkAuthenticationManager &mgr);
+	void run();
+
+private:
+	NetworkAuthenticationManager &myManager;
+};
+
 NetworkCatalogRootNode::NetworkCatalogRootNode(ZLBlockTreeView::RootNode *parent, NetworkLink &link, size_t atPosition) : NetworkCatalogNode(parent, link.libraryItem(), atPosition), myLink(link) {
 	shared_ptr<NetworkAuthenticationManager> mgr = myLink.authenticationManager();
 	if (!mgr.isNull()) {
 		myLoginAction = new LoginAction(*mgr);
 		myLogoutAction = new LogoutAction(*mgr);
 		myRefillAccountAction = new RefillAccountAction(*mgr);
+		if (mgr->registrationSupported()) {
+			myRegisterUserAction = new RegisterUserAction(*mgr);
+		}
+		if (mgr->passwordRecoverySupported()) {
+			myPasswordRecoveryAction = new PasswordRecoveryAction(*mgr);
+		}
 	}
 	myDontShowAction = new DontShowAction(myLink);
 }
@@ -47,11 +75,17 @@ const NetworkLink &NetworkCatalogRootNode::link() const {
 	return myLink;
 }
 
+bool NetworkCatalogRootNode::hasAuxHyperlink() const {
+	shared_ptr<NetworkAuthenticationManager> mgr = myLink.authenticationManager();
+	return !mgr.isNull() && mgr->isAuthorised(false) == B3_FALSE;
+}
+
 void NetworkCatalogRootNode::paintHyperlinks(ZLPaintContext &context, int vOffset) {
 	const ZLResource &resource =
 		ZLResource::resource("networkView")["libraryItemRootNode"];
 
 	int left = 0;
+	int auxleft = 0;
 	drawHyperlink(
 		context, left, vOffset,
 		resource[isOpen() ? "collapseTree" : "expandTree"].value(),
@@ -65,6 +99,8 @@ void NetworkCatalogRootNode::paintHyperlinks(ZLPaintContext &context, int vOffse
 	if (!mgr.isNull()) {
 		if (mgr->isAuthorised(false) == B3_FALSE) {
 			drawHyperlink(context, left, vOffset, resource["login"].value(), myLoginAction);
+			drawAuxHyperlink(context, auxleft, vOffset, resource["register"].value(), myRegisterUserAction);
+			drawAuxHyperlink(context, auxleft, vOffset, resource["passwordRecovery"].value(), myPasswordRecoveryAction);
 		} else {
 			const std::string logoutString = ZLStringUtil::printf(resource["logout"].value(), mgr->currentUserName());
 			drawHyperlink(context, left, vOffset, logoutString, myLogoutAction);
@@ -125,12 +161,31 @@ NetworkCatalogRootNode::RefillAccountAction::RefillAccountAction(NetworkAuthenti
 }
 
 void NetworkCatalogRootNode::RefillAccountAction::run() {
-	std::string url = myManager.refillAccountLink();
-	shared_ptr<ProgramCollection> collection = FBReader::Instance().webBrowserCollection();
-	if (!url.empty() && !collection.isNull()) {
-		shared_ptr<Program> program = collection->currentProgram();
-		if (!program.isNull()) {
-			program->run("openLink", url);
-		}
+	FBReader::Instance().openLinkInBrowser(myManager.refillAccountLink());
+}
+
+NetworkCatalogRootNode::PasswordRecoveryAction::PasswordRecoveryAction(NetworkAuthenticationManager &mgr) : myManager(mgr) {
+}
+
+void NetworkCatalogRootNode::PasswordRecoveryAction::run() {
+	if (!NetworkOperationRunnable::tryConnect()) {
+		return;
 	}
+
+	PasswordRecoveryDialog::run(myManager);
+	FBReader::Instance().invalidateAccountDependents();
+	FBReader::Instance().refreshWindow();
+}
+
+NetworkCatalogRootNode::RegisterUserAction::RegisterUserAction(NetworkAuthenticationManager &mgr) : myManager(mgr) {
+}
+
+void NetworkCatalogRootNode::RegisterUserAction::run() {
+	if (!NetworkOperationRunnable::tryConnect()) {
+		return;
+	}
+
+	RegisterUserDialog::run(myManager);
+	FBReader::Instance().invalidateAccountDependents();
+	FBReader::Instance().refreshWindow();
 }

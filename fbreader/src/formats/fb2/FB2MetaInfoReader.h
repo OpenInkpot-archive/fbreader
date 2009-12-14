@@ -17,30 +17,44 @@
  * 02110-1301, USA.
  */
 
-#ifndef __DUMMYDESCRIPTIONREADER_H__
-#define __DUMMYDESCRIPTIONREADER_H__
+#ifndef __FB2METAINFOREADER_H__
+#define __FB2METAINFOREADER_H__
 
 #include <string>
 
+#include "FB2Reader.h"
+
 class Book;
 
-class DummyDescriptionReader {
+class FB2MetaInfoReader : public FB2Reader {
 
 public:
-	DummyDescriptionReader(Book &book);
-	~DummyDescriptionReader();
-	bool readMetaInfo(shared_ptr<ZLInputStream> stream);
+	FB2MetaInfoReader(Book &book);
+	bool readMetaInfo();
 
-	/*
 	void startElementHandler(int tag, const char **attributes);
 	void endElementHandler(int tag);
 	void characterDataHandler(const char *text, size_t len);
-	*/
 
 private:
 	Book &myBook;
+
+	bool myReturnCode;
+
+	enum {
+		READ_NOTHING,
+		READ_SOMETHING,
+		READ_TITLE,
+		READ_AUTHOR,
+		READ_AUTHOR_NAME_0,
+		READ_AUTHOR_NAME_1,
+		READ_AUTHOR_NAME_2,
+		READ_LANGUAGE,
+		READ_GENRE
+	} myReadState;
+
+	std::string myAuthorNames[3];
+	std::string myBuffer;
 };
 
-inline DummyDescriptionReader::~DummyDescriptionReader() {}
-
-#endif /* __DUMMYDESCRIPTIONREADER_H__ */
+#endif /* __FB2METAINFOREADER_H__ */

@@ -17,10 +17,12 @@
  * 02110-1301, USA.
  */
 
+#include <cstdlib>
+
 #include <ZLStringUtil.h>
 
 #include "LitResDataParser.h"
-
+#include "LitResGenre.h"
 #include "LitResUtil.h"
 
 #include "../NetworkAuthenticationManager.h"
@@ -42,34 +44,30 @@ static const std::string TAG_DATE = "date";
 static const std::string TAG_SEQUENCE = "sequence";
 static const std::string TAG_LANGUAGE = "lang";
 
+std::string LitResDataParser::stringAttributeValue(const char **attributes, const char *name) {
+	if (attributes == 0) {
+		return std::string();
+	}
+	const char *value = attributeValue(attributes, name);
+	return value != 0 ? value : std::string();
+}
 
-LitResDataParser::LitResDataParser(NetworkLibraryItemList &books, const std::map<std::string, LitResGenre> &genres, shared_ptr<NetworkAuthenticationManager> mgr) : 
+LitResDataParser::LitResDataParser(NetworkLibraryItemList &books, shared_ptr<NetworkAuthenticationManager> mgr) : 
 	myBooks(books), 
 	myIndex(0), 
-	myGenres(genres), 
 	myAuthenticationManager(mgr) {
 	myState = START;
 }
 
 
 void LitResDataParser::startElementHandler(const char *tag, const char **attributes) {
-	myAttributes.clear();
-	while (*attributes != 0) {
-		std::string name(*attributes++);
-		if (*attributes == 0) {
-			break;
-		}
-		std::string value(*attributes++);
-		myAttributes.insert(std::make_pair(name, value));
-	}
-	processState(tag, false);
+	processState(tag, false, attributes);
 	myState = getNextState(tag, false);
 	myBuffer.clear();
 }
 
 void LitResDataParser::endElementHandler(const char *tag) {
-	myAttributes.clear();
-	processState(tag, true);
+	processState(tag, true, 0);
 	myState = getNextState(tag, true);
 	myBuffer.clear();
 }
@@ -78,22 +76,25 @@ void LitResDataParser::characterDataHandler(const char *data, size_t len) {
 	myBuffer.append(data, len);
 }
 
-void LitResDataParser::processState(const std::string &tag, bool closed) {
+void LitResDataParser::processState(const std::string &tag, bool closed, const char **attributes) {
 	switch(myState) {
 	case START: 
 		break;
 	case CATALOG: 
 		if (!closed && TAG_BOOK == tag) {
-			const std::string &bookId = myAttributes["hub_id"];
+			const std::string bookId = stringAttributeValue(attributes, "hub_id");
 			myCurrentBook = new NetworkLibraryBookItem(bookId, myIndex++);
 			currentBook().setAuthenticationManager(myAuthenticationManager);
 
-			currentBook().cover() = myAttributes["cover_preview"];
+			currentBook().setCoverURL(stringAttributeValue(attributes, "cover_preview"));
 
-			currentBook().urlByType()[NetworkLibraryBookItem::LINK_HTTP] =
-				LitResUtil::appendLFrom(myAttributes["url"]);
+			const std::string url = stringAttributeValue(attributes, "url");
+			if (!url.empty()) {
+				currentBook().urlByType()[NetworkLibraryBookItem::LINK_HTTP] =
+					LitResUtil::appendLFrom(url);
+			}
 
-			const std::string &hasTrial = myAttributes["has_trial"];
+			const std::string hasTrial = stringAttributeValue(attributes, "has_trial");
 			if (hasTrial == "1") {
 				std::string demoUrl;
 				LitResUtil::makeDemoUrl(demoUrl, bookId);
@@ -102,9 +103,9 @@ void LitResDataParser::processState(const std::string &tag, bool closed) {
 				}
 			}
 
-			currentBook().price() = myAttributes["price"];
-			if (!currentBook().price().empty()) {
-				currentBook().price().append(LitResUtil::CURRENCY_SUFFIX);
+			const char *price = attributeValue(attributes, "price");
+			if (price != 0 && *price != '\0') {
+				currentBook().setPrice(price + LitResUtil::CURRENCY_SUFFIX);
 			}
 		}
 		break;
@@ -125,8 +126,13 @@ void LitResDataParser::processState(const std::string &tag, bool closed) {
 				myAuthorMiddleName.clear();
 				myAuthorLastName.clear();
 			} else if (TAG_SEQUENCE == tag) {
-				const std::string &sequence = myAttributes["name"];
-				currentBook().series() = sequence;
+				const char *seriesTitle = attributeValue(attributes, "name");
+				if (seriesTitle != 0) {
+					const char *indexInSeries = attributeValue(attributes, "number");
+					currentBook().setSeries(
+						seriesTitle, indexInSeries != 0 ? atoi(indexInSeries) : 0
+					);
+				}
 			}
 		} 
 		break;
@@ -173,16 +179,23 @@ void LitResDataParser::processState(const std::string &tag, bool closed) {
 	case GENRE: 
 		if (closed && TAG_GENRE == tag) {
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
-			std::map<std::string, LitResGenre>::const_iterator it = myGenres.find(myBuffer);
-			if (it != myGenres.end()) {
-				currentBook().tags().push_back(it->second.Title);
+
+			const std::map<std::string, shared_ptr<LitResGenre> > &genresMap = LitResUtil::Instance().genresMap();
+			const std::map<shared_ptr<LitResGenre>, std::string> &genresTitles = LitResUtil::Instance().genresTitles();
+
+			std::map<std::string, shared_ptr<LitResGenre> >::const_iterator it = genresMap.find(myBuffer);
+			if (it != genresMap.end()) {
+				std::map<shared_ptr<LitResGenre>, std::string>::const_iterator jt = genresTitles.find(it->second);
+				if (jt != genresTitles.end()) {
+					currentBook().tags().push_back(jt->second);
+				}
 			}
 		}
 		break;
 	case BOOK_TITLE: 
 		if (closed && TAG_BOOK_TITLE == tag) {
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
-			currentBook().title() = myBuffer;
+			currentBook().setTitle(myBuffer);
 		}
 		break;
 	case ANNOTATION: 
@@ -216,13 +229,13 @@ void LitResDataParser::processState(const std::string &tag, bool closed) {
 	case DATE:
 		if (closed && TAG_DATE == tag) {
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
-			currentBook().date() = myBuffer;
+			currentBook().setDate(myBuffer);
 		}
 		break;
 	case LANGUAGE:
 		if (closed && TAG_LANGUAGE == tag) {
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
-			currentBook().language() = myBuffer;
+			currentBook().setLanguage(myBuffer);
 		}
 		break;
 	}

@@ -40,3 +40,6 @@ void ZLEwlTimeManager::removeTask(shared_ptr<ZLRunnable> task) {
 		myHandlers.erase(it);
 	}
 }
+
+void ZLEwlTimeManager::removeTaskInternal(shared_ptr<ZLRunnable> task) {
+}

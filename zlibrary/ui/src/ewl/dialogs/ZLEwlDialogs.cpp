@@ -88,8 +88,8 @@ static struct _action {
 	{ "gotoSectionEnd",		_("Go to End of Section") },
 	{ "nextTOCSection",		_("Go to Next TOC Section") },
 	{ "previousTOCSection",	_("Go to Previous TOC Section") },
-	{ "largeScrollForward",	_("Large Scroll Forward") },
-	{ "largeScrollBackward",	_("Large Scroll Backward") },
+	{ "pageForward",	_("Next Page") },
+	{ "pageBackward",	_("Previous Page") },
 	{ "undo",					_("Undo") },
 	{ "redo",					_("Redo") },
 	{ "search",				_("Search") },
@@ -1340,8 +1340,8 @@ void ZLEwlBookInfo(FBReader &f)
 	}
 	list_add_tv(_("Author: "), authors);
 
-	if(!book->seriesName().empty()) {
-		list_add_tv(_("Series: "), book->seriesName());
+	if(!book->seriesTitle().empty()) {
+		list_add_tv(_("Series: "), book->seriesTitle());
 		stringstream s;
 		s << book->indexInSeries();
 		list_add_tv(_("Book number: "), s.str());

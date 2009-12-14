@@ -17,9 +17,27 @@
  * 02110-1301, USA.
  */
 
-#include <ZLibrary.h>
+#ifndef __OPDSCATALOGITEM_H__
+#define __OPDSCATALOGITEM_H__
 
-#include "../../../../core/src/unix/library/ZLibraryImplementation.h"
+#include "../NetworkLibraryItems.h"
 
-void initLibrary() {
-}
+class OPDSLink;
+
+class OPDSCatalogItem : public NetworkLibraryCatalogItem {
+
+public:
+	OPDSCatalogItem(
+		OPDSLink &link,
+		const std::string &url,
+		const std::string &htmlURL,
+		const std::string &title,
+		const std::string &summary,
+		const std::string &coverURL
+	);
+
+private:
+	std::string loadChildren(NetworkLibraryItemList &children);
+};
+
+#endif /* __OPDSCATALOGITEM_H__ */

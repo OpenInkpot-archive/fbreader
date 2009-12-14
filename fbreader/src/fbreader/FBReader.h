@@ -63,23 +63,12 @@ public:
 		ALL_MODES = 0xFF
 	};
 
-	struct ScrollingOptions {
-		ScrollingOptions(const std::string &groupName, long delayValue, long modeValue, long linesToKeepValue, long linesToScrollValue, long percentToScrollValue);
-		
-		ZLIntegerRangeOption DelayOption;
-		ZLIntegerOption ModeOption;
-		ZLIntegerRangeOption LinesToKeepOption;
-		ZLIntegerRangeOption LinesToScrollOption;
-		ZLIntegerRangeOption PercentToScrollOption;
-	};
-
 public:
 	ZLBooleanOption QuitOnCancelOption;
 
-	ScrollingOptions PageScrollingOptions;
-	ScrollingOptions LineScrollingOptions;
-	ScrollingOptions MouseScrollingOptions;
-	ScrollingOptions TapScrollingOptions;
+	ZLIntegerRangeOption KeyScrollingDelayOption;
+	ZLIntegerRangeOption LinesToScrollOption;
+	ZLIntegerRangeOption LinesToKeepOption;
 	ZLBooleanOption EnableTapScrollingOption;
 	ZLBooleanOption TapScrollingOnFingerOnlyOption;
 
@@ -219,6 +208,7 @@ friend class SearchPatternAction;
 friend class FindNextAction;
 friend class FindPreviousAction;
 friend class ScrollingAction;
+friend class ScrollingAction2;
 friend class ChangeFontSizeAction;
 friend class CancelAction;
 //friend class ToggleIndicatorAction;

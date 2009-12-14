@@ -43,6 +43,7 @@
 #include "../../../../../fbreader/src/fbreader/FBReader.h"
 #include "../../../../../fbreader/src/bookmodel/BookModel.h"
 #include "../../../../../fbreader/src/fbreader/BookTextView.h"
+#include "../../../../../zlibrary/text/include/ZLTextPositionIndicator.h"
 #include "../../../../../fbreader/src/library/Book.h"
 #include "../../../../../fbreader/src/library/Author.h"
 
@@ -540,7 +541,7 @@ void set_properties()
 	set_prop_str(2, book->title().c_str());
 	set_prop_str(3, ZLFile::fileNameToUtf8(ZLFile(fileName).name(false)).c_str());
 	set_prop_str(4, ZLFile::fileNameToUtf8(ZLFile(fileName).path()).c_str());
-	set_prop_str(5, book->seriesName().c_str());
+	set_prop_str(5, book->seriesTitle().c_str());
 	set_prop_int(6, book->indexInSeries());
 /*	set_prop_int(9, f->bookTextView().positionIndicator()->textPosition());
 	set_prop_int(10, f->bookTextView().positionIndicator()->currentPage());

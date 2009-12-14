@@ -57,8 +57,7 @@ bool PalmDocStream::processRecord() {
 			myBufferLength = DocDecompressor().decompress(*myBase, myBuffer, recordSize, myMaxRecordSize);
 			break;
 		case 1:				// No compression
-			myBase->read(myBuffer, recordSize);
-			myBufferLength = recordSize;
+			myBufferLength = myBase->read(myBuffer, std::min(recordSize, myMaxRecordSize));
 			break;
 	}
 	myBufferOffset = 0;

@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-  <group name="SmallScrolling">
-    <option name="ScrollingDelay" value="0"/>
-  </group>
-  <group name="LargeScrolling">
-    <option name="ScrollingDelay" value="0"/>
-  </group>
-  <group name="TapScrolling">
-    <option name="Enabled" value="false"/>
+  <group name="Scrollings">
+    <option name="Delay" value="0"/>
   </group>
   <group name="Indicator">
     <option name="Time" value="false"/>

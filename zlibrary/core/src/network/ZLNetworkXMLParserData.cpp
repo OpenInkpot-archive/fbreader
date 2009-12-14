@@ -17,7 +17,6 @@
  * 02110-1301, USA.
  */
 
-#include <iostream>
 #include <ZLUnicodeUtil.h>
 #include <ZLStringUtil.h>
 
@@ -102,6 +101,10 @@ size_t ZLNetworkXMLParserData::parseData(void *ptr, size_t size, size_t nmemb) {
 	}
 	myInputStream->setBuffer((const char*) ptr, size * nmemb);
 	if (!myReader->readDocument(myInputStream)) {
+		return 0;
+	}
+	if (!myReader->errorMessage().empty()) {
+		setErrorMessage(myReader->errorMessage());
 		return 0;
 	}
 	return size * nmemb;

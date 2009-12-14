@@ -24,6 +24,7 @@
 
 #include "ZLTextView.h"
 #include "ZLTextLineInfo.h"
+#include "ZLTextPositionIndicator.h"
 
 #include "../../../../fbreader/src/fbreader/FBReader.h"
 

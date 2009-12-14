@@ -20,22 +20,21 @@
 #ifndef __LITRESDATAPARSER_H__
 #define __LITRESDATAPARSER_H__
 
-#include <map>
-#include <set>
-
 #include <ZLXMLReader.h>
 
 #include "../NetworkLibraryItems.h"
 
-#include "LitResGenre.h"
-
+class LitResGenre;
 class NetworkAuthenticationManager;
 
 
 class LitResDataParser : public ZLXMLReader {
 
+private:
+	static std::string stringAttributeValue(const char **attributes, const char *name);
+
 public:
-	LitResDataParser(NetworkLibraryItemList &books, const std::map<std::string, LitResGenre> &genres, shared_ptr<NetworkAuthenticationManager> mgr);
+	LitResDataParser(NetworkLibraryItemList &books, shared_ptr<NetworkAuthenticationManager> mgr);
 
 private:
 	void startElementHandler(const char *tag, const char **attributes);
@@ -49,7 +48,7 @@ private:
 		ANNOTATION, DATE, LANGUAGE,
 	};
 
-	void processState(const std::string &tag, bool closed);
+	void processState(const std::string &tag, bool closed, const char **attributes);
 	State getNextState(const std::string &tag, bool closed);
 
 	NetworkLibraryBookItem &currentBook();
@@ -61,13 +60,11 @@ private:
 	unsigned int myIndex;
 
 	State myState;
-	std::map<std::string, std::string> myAttributes;
 
 	std::string myAuthorFirstName;
 	std::string myAuthorMiddleName;
 	std::string myAuthorLastName;
 
-	const std::map<std::string, LitResGenre> &myGenres;
 	shared_ptr<NetworkAuthenticationManager> myAuthenticationManager;
 };
 

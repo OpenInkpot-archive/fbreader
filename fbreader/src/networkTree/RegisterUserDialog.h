@@ -17,47 +17,34 @@
  * 02110-1301, USA.
  */
 
-#ifndef __FB2DESCRIPTIONREADER_H__
-#define __FB2DESCRIPTIONREADER_H__
+#ifndef __REGISTERUSERDIALOG_H__
+#define __REGISTERUSERDIALOG_H__
 
 #include <string>
 
-#include "FB2Reader.h"
+class ZLDialog;
+class NetworkAuthenticationManager;
 
-class Book;
-
-class FB2DescriptionReader : public FB2Reader {
-
-public:
-	FB2DescriptionReader(Book &book);
-	~FB2DescriptionReader();
-	bool readMetaInfo();
-
-	void startElementHandler(int tag, const char **attributes);
-	void endElementHandler(int tag);
-	void characterDataHandler(const char *text, size_t len);
+class RegisterUserDialog {
 
 private:
-	Book &myBook;
+	RegisterUserDialog(const std::string &login, const std::string &password, const std::string &email, const std::string &errorMessage);
 
-	bool myReturnCode;
+	ZLDialog &dialog();
 
-	enum {
-		READ_NOTHING,
-		READ_SOMETHING,
-		READ_TITLE,
-		READ_AUTHOR,
-		READ_AUTHOR_NAME_0,
-		READ_AUTHOR_NAME_1,
-		READ_AUTHOR_NAME_2,
-		READ_LANGUAGE,
-		READ_GENRE
-	} myReadState;
+	static bool runDialog(std::string &login, std::string &password, std::string &email, std::string &errorMessage);
 
-	std::string myAuthorNames[3];
-	std::string myBuffer;
+public:
+	static bool run(NetworkAuthenticationManager &mgr);
+
+private:
+	shared_ptr<ZLDialog> myDialog;
+	std::string myLogin;
+	std::string myPassword0;
+	std::string myPassword1;
+	std::string myEMail;
 };
 
-inline FB2DescriptionReader::~FB2DescriptionReader() {}
+inline ZLDialog &RegisterUserDialog::dialog() { return *myDialog; }
 
-#endif /* __FB2DESCRIPTIONREADER_H__ */
+#endif /* __REGISTERUSERDIALOG_H__ */

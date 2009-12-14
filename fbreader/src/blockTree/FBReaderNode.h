@@ -25,6 +25,7 @@
 #include <ZLBlockTreeView.h>
 
 class ZLImage;
+class FBTextStyle;
 
 class FBReaderNode : public ZLBlockTreeNode {
 
@@ -47,6 +48,12 @@ public:
 	void drawTitle(ZLPaintContext &context, int vOffset, const std::string &text, bool highlighted = false);
 	void drawSummary(ZLPaintContext &context, int vOffset, const std::string &text, bool highlighted = false);
 	void drawHyperlink(ZLPaintContext &context, int &hOffset, int &vOffset, const std::string &text, shared_ptr<ZLRunnable> action);
+	void drawAuxHyperlink(ZLPaintContext &context, int &hOffset, int &vOffset, const std::string &text, shared_ptr<ZLRunnable> action);
+	virtual bool hasAuxHyperlink() const;
+
+private:
+	void internalDrawHyperlink(ZLPaintContext &context, int &hOffset, int &vOffset, const std::string &text, shared_ptr<ZLRunnable> action, bool aux);
+	int unitSize(ZLPaintContext &context, const FBTextStyle &style) const;
 
 protected:
 	shared_ptr<ZLRunnable> expandTreeAction();

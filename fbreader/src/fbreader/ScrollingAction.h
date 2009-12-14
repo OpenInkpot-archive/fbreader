@@ -21,22 +21,68 @@
 #define __SCROLLINGACTION_H__
 
 #include <ZLApplication.h>
+#include <ZLTextView.h>
 #include <ZLBlockTreeView.h>
-
-#include "FBReader.h"
 
 class ScrollingAction : public ZLApplication::Action {
 
+protected:
+	ScrollingAction(
+		ZLTextView::ScrollingMode textScrollingMode,
+		ZLBlockTreeView::ScrollingMode blockScrollingMode,
+		bool forward
+	);
+
 public:
-	ScrollingAction(const FBReader::ScrollingOptions &options, ZLBlockTreeView::ScrollingMode mode, bool forward);
+	virtual size_t textOptionValue() const = 0;
+	virtual int scrollingDelay() const;
 	bool isEnabled() const;
 	bool useKeyDelay() const;
 	void run();
 
 private:
-	const FBReader::ScrollingOptions &myOptions;
-	const ZLBlockTreeView::ScrollingMode myMode;
+	const ZLTextView::ScrollingMode myTextScrollingMode;
+	const ZLBlockTreeView::ScrollingMode myBlockScrollingMode;
 	const bool myForward;
+};
+
+class LineScrollingAction : public ScrollingAction {
+
+public:
+	LineScrollingAction(bool forward);
+
+private:
+	int scrollingDelay() const;
+	size_t textOptionValue() const;
+};
+
+class PageScrollingAction : public ScrollingAction {
+
+public:
+	PageScrollingAction(bool forward);
+
+private:
+	int scrollingDelay() const;
+	size_t textOptionValue() const;
+};
+
+class MouseWheelScrollingAction : public ScrollingAction {
+
+public:
+	MouseWheelScrollingAction(bool forward);
+
+private:
+	size_t textOptionValue() const;
+};
+
+class TapScrollingAction : public ScrollingAction {
+
+public:
+	TapScrollingAction(bool forward);
+
+private:
+	size_t textOptionValue() const;
+	bool isEnabled() const;
 };
 
 #endif /* __SCROLLINGACTION_H__ */
