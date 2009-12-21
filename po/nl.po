@@ -46,98 +46,6 @@ msgstr "Naar Pagina"
 msgid "Show Table of Contents"
 msgstr "Inhoudsopgave weergeven"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:691
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1099
-msgid "Margins"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:708
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1100
-msgid "First Line Indent"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:734
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1123
-msgid "Indicator Height"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:741
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1124
-msgid "Offset From Text"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:748
-msgid "Indicator Font Size"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:822
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1152
-msgid "Default Language"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:830
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:997
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1161
-msgid "Default Encoding Set"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:837
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1004
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1162
-msgid "Default Encoding"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:986
-msgid "Book Language"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1030
-msgid "Break Paragraph At"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1059
-#, c-format
-msgid "Key %d"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1086
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1290
-msgid "Format & Style"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1096
-msgid "Bold"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1101
-msgid "Auto Hyphenations"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1110
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1291
-msgid "Indicator"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1118
-msgid "Show Indicator"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1119
-msgid "Show TOC Marks"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1120
-msgid "Show Position"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1121
-msgid "Show Time"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1122
-msgid "Show Battery"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1132
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1194
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1292
@@ -495,3 +403,95 @@ msgstr "Regelafstand"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1098
 msgid "Alignment"
 msgstr "Uitlijning"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:691
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1099
+msgid "Margins"
+msgstr "Marges"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1059
+#, c-format
+msgid "Key %d"
+msgstr "Toets %d"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1030
+msgid "Break Paragraph At"
+msgstr "Breek Paragaaf af op"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:734
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1123
+msgid "Indicator Height"
+msgstr "Indicator hoogte"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:708
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1100
+msgid "First Line Indent"
+msgstr "Eerste regel inspringen"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:748
+msgid "Indicator Font Size"
+msgstr "Indicator Font Grootte"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:741
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1124
+msgid "Offset From Text"
+msgstr "Afstand van tekst"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:830
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:997
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1161
+msgid "Default Encoding Set"
+msgstr "Standaard Encoding Set"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:822
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1152
+msgid "Default Language"
+msgstr "Standaard Taal"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:986
+msgid "Book Language"
+msgstr "Taal Boek"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:837
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1004
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1162
+msgid "Default Encoding"
+msgstr "Standaard Encoding"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1118
+msgid "Show Indicator"
+msgstr "Toon Indicator"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1119
+msgid "Show TOC Marks"
+msgstr "Toon Inhoudsopgave punten"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1120
+msgid "Show Position"
+msgstr "Toon Positie"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1121
+msgid "Show Time"
+msgstr "Toon Tijd"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1086
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1290
+msgid "Format & Style"
+msgstr "Formaat & Style"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1096
+msgid "Bold"
+msgstr "Vet"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1101
+msgid "Auto Hyphenations"
+msgstr "Auto Koppelteken"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1110
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1291
+msgid "Indicator"
+msgstr "Indicator"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1122
+msgid "Show Battery"
+msgstr "Toon Battery status"
