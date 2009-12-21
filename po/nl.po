@@ -46,86 +46,6 @@ msgstr "Naar Pagina"
 msgid "Show Table of Contents"
 msgstr "Inhoudsopgave weergeven"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:113
-msgid "Esperanto"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:114
-msgid "Spanish"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
-msgid "Finnish"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:116
-msgid "French"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:117
-msgid "Hebrew"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
-msgid "Indonesian"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
-msgid "Italian"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
-msgid "Norwegian"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
-msgid "Portuguese"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
-msgid "Russian"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
-msgid "Swedish"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
-msgid "Turkish"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
-msgid "Ukrainian"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
-msgid "Chinese"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:127
-msgid "Other"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
-msgid "undefined"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
-msgid "left"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
-msgid "right"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
-msgid "center"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
-msgid "justify"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
 msgid "New Line"
 msgstr ""
@@ -495,3 +415,83 @@ msgstr "Arabisch"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:112
 msgid "English"
 msgstr "Engels"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:113
+msgid "Esperanto"
+msgstr "Esperanto"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
+msgid "Swedish"
+msgstr "Zweeds"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
+msgid "Russian"
+msgstr "Russich"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
+msgid "Finnish"
+msgstr "Fins"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:114
+msgid "Spanish"
+msgstr "Spaans"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:117
+msgid "Hebrew"
+msgstr "Hebreeuws"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:116
+msgid "French"
+msgstr "Frans"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
+msgid "Italian"
+msgstr "Italiaans"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
+msgid "Indonesian"
+msgstr "Indonesisch"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
+msgid "Portuguese"
+msgstr "Portugees"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
+msgid "Norwegian"
+msgstr "Noors"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+msgid "undefined"
+msgstr "niet gedefinieerd"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+msgid "left"
+msgstr "links"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+msgid "right"
+msgstr "rechts"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+msgid "center"
+msgstr "gecentreerd"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
+msgid "Turkish"
+msgstr "Turks"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
+msgid "Ukrainian"
+msgstr "Oekrains"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
+msgid "Chinese"
+msgstr "Chinees"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:127
+msgid "Other"
+msgstr "Anders"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+msgid "justify"
+msgstr "gejustificeerd"
