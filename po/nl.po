@@ -46,89 +46,6 @@ msgstr "Naar Pagina"
 msgid "Show Table of Contents"
 msgstr "Inhoudsopgave weergeven"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1132
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1194
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1292
-msgid "Language"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1143
-msgid "Detect Language and Encoding"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1169
-msgid "iso-8859-1 -> win-1251"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1179
-msgid "Book Settings"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1197
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1207
-msgid "Encoding"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1206
-msgid "Encoding Set"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1242
-msgid "Break Paragraph at"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1250
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1294
-msgid "Keys"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1282
-msgid "Settings"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1293
-msgid "Book settings"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1308
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1394
-msgid "Book Info"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1323
-msgid "File: "
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1325
-msgid "Title: "
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1326
-msgid "Author: "
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1329
-msgid "Series: "
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1332
-msgid "Book number: "
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1389
-msgid "Book Menu"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
-msgid "On"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:184
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
-msgid "Off"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
 msgid "Go to Home"
 msgstr "Ga naar begin"
@@ -495,3 +412,86 @@ msgstr "Indicator"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1122
 msgid "Show Battery"
 msgstr "Toon Battery status"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1132
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1194
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1292
+msgid "Language"
+msgstr "Taal"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1308
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1394
+msgid "Book Info"
+msgstr "Boek informatie"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1293
+msgid "Book settings"
+msgstr "Boek instellingen"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1169
+msgid "iso-8859-1 -> win-1251"
+msgstr "iso-8859-1 -> win-1251"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1143
+msgid "Detect Language and Encoding"
+msgstr "Detecteer Taal en Encoding"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1197
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1207
+msgid "Encoding"
+msgstr "Encoding"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1179
+msgid "Book Settings"
+msgstr "Boek Instellingen"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1242
+msgid "Break Paragraph at"
+msgstr "Breek paragraaf af op"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1206
+msgid "Encoding Set"
+msgstr "Encoding Set"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1282
+msgid "Settings"
+msgstr "Instellingen"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1250
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1294
+msgid "Keys"
+msgstr "Toetsen"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1332
+msgid "Book number: "
+msgstr "Boek nummer:"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1389
+msgid "Book Menu"
+msgstr "Boek menu:"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
+msgid "On"
+msgstr "Aan"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:184
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
+msgid "Off"
+msgstr "Uit"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1323
+msgid "File: "
+msgstr "Bestandsnaam:"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1325
+msgid "Title: "
+msgstr "Titel:"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1326
+msgid "Author: "
+msgstr "Auteur:"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1329
+msgid "Series: "
+msgstr "Serie:"
