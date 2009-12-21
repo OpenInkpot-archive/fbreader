@@ -1,3 +1,4 @@
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
@@ -44,90 +45,6 @@ msgstr "Naar Pagina"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:81
 msgid "Show Table of Contents"
 msgstr "Inhoudsopgave weergeven"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
-msgid "Go to Home"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
-msgid "Go to Start of Section"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
-msgid "Go to End of Section"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
-msgid "Go to Next TOC Section"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
-msgid "Go to Previous TOC Section"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
-msgid "Large Scroll Forward"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
-msgid "Large Scroll Backward"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
-msgid "Undo"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
-msgid "Redo"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:353
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:379
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:402
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1400
-msgid "Search"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
-msgid "Increase Font Size"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
-msgid "Decrease Font Size"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
-msgid "Toggle Bold Font"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
-msgid "Toggle Position Indicator"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
-msgid "Arabic"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
-msgid "Czech"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
-msgid "German"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
-msgid "German (traditional orthography)"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:111
-msgid "Greek"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:112
-msgid "English"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:113
 msgid "Esperanto"
@@ -495,3 +412,86 @@ msgstr ""
 msgid "Off"
 msgstr ""
 
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
+msgid "Go to Home"
+msgstr "Ga naar begin"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
+msgid "Increase Font Size"
+msgstr "Vergroot Font"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:353
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:379
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:402
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1400
+msgid "Search"
+msgstr "Zoek"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
+msgid "Go to End of Section"
+msgstr "Naar einde sectie"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
+msgid "Go to Start of Section"
+msgstr "Naar begin sectie"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
+msgid "Go to Previous TOC Section"
+msgstr "Naar vorige sectie"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
+msgid "Go to Next TOC Section"
+msgstr "Naar volgende sectie"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
+msgid "Large Scroll Backward"
+msgstr "Sprong achterwaarts"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
+msgid "Large Scroll Forward"
+msgstr "Sprong voorwaarts"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
+msgid "Redo"
+msgstr "Doe opnieuw"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+msgid "Undo"
+msgstr "Maak ongedaan"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
+msgid "Czech"
+msgstr "Tjechisch"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
+msgid "German"
+msgstr "Duits"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
+msgid "German (traditional orthography)"
+msgstr "Duits traditioneel"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:111
+msgid "Greek"
+msgstr "Grieks"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
+msgid "Decrease Font Size"
+msgstr "Verklein Font"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+msgid "Toggle Bold Font"
+msgstr "Font Bold aan/uit"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
+msgid "Toggle Position Indicator"
+msgstr "Positie Indicator aan/uit"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
+msgid "Arabic"
+msgstr "Arabisch"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:112
+msgid "English"
+msgstr "Engels"
