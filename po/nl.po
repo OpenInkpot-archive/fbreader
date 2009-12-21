@@ -46,16 +46,6 @@ msgstr "Naar Pagina"
 msgid "Show Table of Contents"
 msgstr "Inhoudsopgave weergeven"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:674
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1097
-msgid "Line Spacing"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:681
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1098
-msgid "Alignment"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:691
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1099
 msgid "Margins"
@@ -495,3 +485,13 @@ msgstr "Linkermarge"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1125
 msgid "Font Size"
 msgstr "Font grootte"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:674
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1097
+msgid "Line Spacing"
+msgstr "Regelafstand"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:681
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1098
+msgid "Alignment"
+msgstr "Uitlijning"
