@@ -46,107 +46,6 @@ msgstr "Naar Pagina"
 msgid "Show Table of Contents"
 msgstr "Inhoudsopgave weergeven"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
-msgid "New Line"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
-msgid "Empty Line"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
-msgid "Line With Indent"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:230
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1398
-msgid "Table Of Contents"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:295
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1402
-msgid "Bookmarks"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:296
-msgid "Delete"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:304
-msgid "Page "
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:318
-msgid "Bookmark added"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:347
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:373
-msgid "<- Search ->"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:349
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:375
-msgid "Search ->"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:351
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:377
-msgid "<- Search"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:360
-msgid "Text not found"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:484
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:677
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1097
-#, c-format
-msgid "%d%%"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:501
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:557
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:670
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:751
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1095
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1125
-#, c-format
-msgid "%dpt"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:618
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:701
-msgid "Left Margin"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:621
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:702
-msgid "Right Margin"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:624
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:703
-msgid "Top Margin"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:627
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:704
-msgid "Bottom Margin"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:660
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1094
-msgid "Font Family"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:667
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1095
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1125
-msgid "Font Size"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:674
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1097
 msgid "Line Spacing"
@@ -495,3 +394,104 @@ msgstr "Anders"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
 msgid "justify"
 msgstr "gejustificeerd"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
+msgid "New Line"
+msgstr "Nieuwe Regel"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:351
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:377
+msgid "<- Search"
+msgstr "<- Zoeken"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:349
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:375
+msgid "Search ->"
+msgstr "Zoeken ->"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
+msgid "Line With Indent"
+msgstr "Regel met inspring"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
+msgid "Empty Line"
+msgstr "Lege Regel"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:295
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1402
+msgid "Bookmarks"
+msgstr "Bladwijzers"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:230
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1398
+msgid "Table Of Contents"
+msgstr "Inhoudsopgave"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:304
+msgid "Page "
+msgstr "Pagina"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:296
+msgid "Delete"
+msgstr "Verwijderen"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:347
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:373
+msgid "<- Search ->"
+msgstr "<-Zoeken->"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:318
+msgid "Bookmark added"
+msgstr "Bladwijzer toegevoegd"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:621
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:702
+msgid "Right Margin"
+msgstr "Rechtermarge"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:624
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:703
+msgid "Top Margin"
+msgstr "Bovenmarge"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:627
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:704
+msgid "Bottom Margin"
+msgstr "Ondermarge"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:660
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1094
+msgid "Font Family"
+msgstr "Font type"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:360
+msgid "Text not found"
+msgstr "Tekst niet gevonden"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:484
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:677
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1097
+#, c-format
+msgid "%d%%"
+msgstr "%d%%"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:501
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:557
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:670
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:751
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1095
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1125
+#, c-format
+msgid "%dpt"
+msgstr "%dpt"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:618
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:701
+msgid "Left Margin"
+msgstr "Linkermarge"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:667
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1095
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1125
+msgid "Font Size"
+msgstr "Font grootte"
