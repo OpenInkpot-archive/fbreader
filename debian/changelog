@@ -1,3 +1,11 @@
+fbreader (0.10.7-15) zelazny; urgency=low
+
+  * Rebuild due to EFL update.
+  * Translations added: Dutch, Japanese.
+  * Translations updated: Belarusian, German.
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Fri, 15 Jan 2010 10:51:31 +0600
+
 fbreader (0.10.7-14) asimov; urgency=low
 
   [ Alexander Kerner ]
