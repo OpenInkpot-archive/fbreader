@@ -126,7 +126,7 @@ void BookTextView::setModel(shared_ptr<ZLTextModel> model, const std::string &la
 
 	myBookmarks.clear();
 	myCurrentBookmarkSize = 0;
-	myCurrentBookmarkSize = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, BMK_SIZE, 0).value();
+	myCurrentBookmarkSize = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, myBook->filePath(), BMK_SIZE, 0).value();
 	for(int i = 0; i < myCurrentBookmarkSize; i++) {
 		std::string bufferParagraph = BMK_PARAGRAPH_PREFIX;
 		std::string bufferWord = BMK_WORD_PREFIX;
@@ -135,9 +135,9 @@ void BookTextView::setModel(shared_ptr<ZLTextModel> model, const std::string &la
 		ZLStringUtil::appendNumber(bufferWord, i);
 		ZLStringUtil::appendNumber(bufferPage, i);
 		Position pos;
-		pos.Paragraph = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, bufferParagraph, -1).value();
-		pos.Word = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, bufferWord, -1).value();
-		int page = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, bufferPage, -1).value();
+		pos.Paragraph = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, myBook->filePath(), bufferParagraph, -1).value();
+		pos.Word = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, myBook->filePath(), bufferWord, -1).value();
+		int page = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, myBook->filePath(), bufferPage, -1).value();
 		myBookmarks.push_back(std::make_pair(pos, page));
 	}
 
@@ -189,7 +189,9 @@ void BookTextView::saveState() {
 }
 
 void BookTextView::saveBookmarks() {
-	ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, BMK_SIZE, 0).setValue(myBookmarks.size());
+	if(myBook == NULL)
+		return;
+	ZLIntegerOption(ZLCategoryKey::BOOKMARKS, myBook->filePath(), BMK_SIZE, 0).setValue(myBookmarks.size());
 	for (unsigned int i = 0; i < myBookmarks.size(); ++i) {
 		std::string bufferParagraph = BMK_PARAGRAPH_PREFIX;
 		std::string bufferWord = BMK_WORD_PREFIX;
@@ -197,9 +199,9 @@ void BookTextView::saveBookmarks() {
 		ZLStringUtil::appendNumber(bufferParagraph, i);
 		ZLStringUtil::appendNumber(bufferWord, i);
 		ZLStringUtil::appendNumber(bufferPage, i);
-		ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, bufferParagraph, -1).setValue(myBookmarks[i].first.Paragraph);
-		ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, bufferWord, -1).setValue(myBookmarks[i].first.Word);
-		ZLIntegerOption(ZLCategoryKey::BOOKMARKS, LAST_STATE_GROUP, bufferPage, -1).setValue(myBookmarks[i].second);
+		ZLIntegerOption(ZLCategoryKey::BOOKMARKS, myBook->filePath(), bufferParagraph, -1).setValue(myBookmarks[i].first.Paragraph);
+		ZLIntegerOption(ZLCategoryKey::BOOKMARKS, myBook->filePath(), bufferWord, -1).setValue(myBookmarks[i].first.Word);
+		ZLIntegerOption(ZLCategoryKey::BOOKMARKS, myBook->filePath(), bufferPage, -1).setValue(myBookmarks[i].second);
 	}
 }
 
