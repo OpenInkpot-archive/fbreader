@@ -1,5 +1,5 @@
 Source: fbreader
-Section: media
+Section: gui
 Priority: optional
 Maintainer: Alexander Kerner <lunohod@openinkpot.org>
 Standards-Version: 3.7.2
