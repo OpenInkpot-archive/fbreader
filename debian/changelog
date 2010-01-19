@@ -1,3 +1,13 @@
+fbreader (0.12.1-1) zelazny; urgency=low
+
+  [ Alexander Kerner ]
+  * New upstream release
+  
+  [ Mikhail Gusarov ]
+  * Updated translations: Ukrainian
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Tue, 19 Jan 2010 07:38:59 +0600
+
 fbreader (0.10.7-15) zelazny; urgency=low
 
   * Rebuild due to EFL update.
