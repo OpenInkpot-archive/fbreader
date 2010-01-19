@@ -498,7 +498,6 @@ static void init_properties()
 
 void set_properties()
 {
-	return;
 	if(!(window && connection))
 		return;
 
@@ -598,7 +597,6 @@ void delete_properties()
 
 void update_position_property()
 {
-	return;
 	if(!atoms[9].atom)
 		return;
 
