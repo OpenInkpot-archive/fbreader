@@ -1,3 +1,9 @@
+fbreader (0.12.1-2) zelazny; urgency=low
+
+  * Fix images
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 19 Jan 2010 02:44:58 +0100
+
 fbreader (0.12.1-1) zelazny; urgency=low
 
   [ Alexander Kerner ]
