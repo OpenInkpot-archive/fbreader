@@ -26,9 +26,44 @@
 #include <ZLUnicodeUtil.h>
 #include <ZLEncodingConverter.h>
 
+#include <ZLAsynchronousInputStream.h>
+
 #include "ZLXMLReader.h"
 
 #include "expat/ZLXMLReaderInternal.h"
+
+
+
+class ZLXMLReaderHandler : public ZLAsynchronousInputStream::Handler {
+
+public:
+	ZLXMLReaderHandler(ZLXMLReader &reader);
+
+	void initialize(const char *encoding);
+	void shutdown();
+	bool handleBuffer(const char *data, size_t len);
+
+private:
+	ZLXMLReader &myReader;
+};
+
+ZLXMLReaderHandler::ZLXMLReaderHandler(ZLXMLReader &reader) : myReader(reader) {
+}
+
+void ZLXMLReaderHandler::initialize(const char *encoding) {
+	myReader.initialize(encoding);
+}
+
+void ZLXMLReaderHandler::shutdown() {
+	myReader.shutdown();
+}
+
+bool ZLXMLReaderHandler::handleBuffer(const char *data, size_t len) {
+	return myReader.readFromBuffer(data, len);
+}
+
+
+
 
 static const size_t BUFFER_SIZE = 2048;
 
@@ -68,17 +103,15 @@ bool ZLXMLReader::readDocument(shared_ptr<ZLInputStream> stream) {
 	}
 
 	bool useWindows1252 = false;
-	if (ZLEncodingCollection::useWindows1252Hack()) {
-		stream->read(myParserBuffer, 256);
-		std::string stringBuffer(myParserBuffer, 256);
-		stream->seek(0, true);
-		int index = stringBuffer.find('>');
+	stream->read(myParserBuffer, 256);
+	std::string stringBuffer(myParserBuffer, 256);
+	stream->seek(0, true);
+	int index = stringBuffer.find('>');
+	if (index > 0) {
+		stringBuffer = ZLUnicodeUtil::toLower(stringBuffer.substr(0, index));
+		int index = stringBuffer.find("\"iso-8859-1\"");
 		if (index > 0) {
-			stringBuffer = ZLUnicodeUtil::toLower(stringBuffer.substr(0, index));
-			int index = stringBuffer.find("\"iso-8859-1\"");
-			if (index > 0) {
-				useWindows1252 = true;
-			}
+			useWindows1252 = true;
 		}
 	}
 	initialize(useWindows1252 ? "windows-1252" : 0);
@@ -108,7 +141,7 @@ void ZLXMLReader::shutdown() {
 	myNamespaces.clear();
 }
 
-bool ZLXMLReader::readFromBuffer(const char *data, int len) {
+bool ZLXMLReader::readFromBuffer(const char *data, size_t len) {
 	return myInternalReader->parseBuffer(data, len);
 }
 
@@ -134,4 +167,18 @@ const char *ZLXMLReader::attributeValue(const char **xmlattributes, const char *
 		++xmlattributes;
 	}
 	return 0;
+}
+
+bool ZLXMLReader::readDocument(shared_ptr<ZLAsynchronousInputStream> stream) {
+	ZLXMLReaderHandler handler(*this);
+	return stream->processInput(handler);
+}
+
+const std::string &ZLXMLReader::errorMessage() const {
+	return myErrorMessage;
+}
+
+void ZLXMLReader::setErrorMessage(const std::string &message) {
+	myErrorMessage = message;
+	interrupt();
 }

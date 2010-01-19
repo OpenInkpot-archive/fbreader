@@ -17,8 +17,6 @@
  * 02110-1301, USA.
  */
 
-#include <iostream>
-
 #include <cstring>
 
 #include <ZLFile.h>
@@ -563,5 +561,5 @@ void XHTMLReader::characterDataHandler(const char *text, size_t len) {
 }
 
 const std::vector<std::string> &XHTMLReader::externalDTDs() const {
-	return EntityFilesCollector::instance().externalDTDs("xhtml");
+	return EntityFilesCollector::Instance().externalDTDs("xhtml");
 }

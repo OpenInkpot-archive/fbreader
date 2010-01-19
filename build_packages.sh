@@ -33,7 +33,7 @@ fi
 
 create_tmpdir() {
 	mkdir $tmpdir
-	cp -r Makefile build_packages.sh zlibrary fbreader makefiles README.build distributions distributions-nonGPL $tmpdir
+	cp -r Makefile build_packages.sh zlibrary fbreader makefiles README.build CHANGES* distributions distributions-nonGPL $tmpdir
 	rm -rf `find $tmpdir -name ".svn"`
 	make -C $tmpdir distclean 1> /dev/null 2>&1
 
@@ -47,6 +47,9 @@ create_tmpdir() {
 		echo OK;
 		echo -en "Removing Swedish localization... ";
 		rm -rf fbreader/data/resources/sv.xml zlibrary/core/data/resources/sv.xml fbreader/data/help/MiniHelp.*.sv.fb2;
+		echo OK;
+		echo -en "Removing German localization... ";
+		rm -rf fbreader/data/resources/de.xml zlibrary/core/data/resources/de.xml fbreader/data/help/MiniHelp.*.de.fb2;
 		echo OK;
 		echo -en "Removing Czech hyphenation patterns... ";
 		zip -dq zlibrary/text/data/hyphenationPatterns.zip cs.pattern;
@@ -131,11 +134,7 @@ if [ $1 == all ]; then
 elif [ $1 == supported ]; then
 	create_tmpdir
 	build_package desktop debian
-	build_package maemo2 debian
-	build_package maemo3 debian
-	build_package maemo4 debian
 	build_package win32 nsi
-	build_package desktop tarball
 	build_package source tarball
 	remove_tmpdir
 else

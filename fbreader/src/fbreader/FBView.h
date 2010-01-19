@@ -22,23 +22,7 @@
 
 #include <ZLTextView.h>
 #include <ZLTextStyle.h>
-
-class FBReader;
-
-class FBMargins {
-
-public:
-	ZLIntegerRangeOption LeftMarginOption;
-	ZLIntegerRangeOption RightMarginOption;
-	ZLIntegerRangeOption TopMarginOption;
-	ZLIntegerRangeOption BottomMarginOption;
-
-	FBMargins();
-
-private:
-	FBMargins(const FBMargins&);
-	const FBMargins& operator = (const FBMargins&);
-};
+#include <ZLRunnable.h>
 
 class FBIndicatorStyle : public ZLTextPositionIndicatorInfo {
 
@@ -69,25 +53,24 @@ public:
 
 class FBView : public ZLTextView {
 
+private:
+	class TapScroller;
+
 public:
-	static FBMargins& margins();
 	static FBIndicatorStyle& commonIndicatorInfo();
 	static ZLBooleanOption &selectionOption();
-
-	void scrollAndUpdatePage(bool forward, ScrollingMode mode, unsigned int value);
 
 	virtual bool hasContents() const;
 
 private:
 	static shared_ptr<ZLTextPositionIndicatorInfo> ourIndicatorInfo;
-	static shared_ptr<FBMargins> ourMargins;
 	static shared_ptr<ZLBooleanOption> ourSelectionOption;
 
 protected:
 	void doTapScrolling(int y);
 
 public:
-	FBView(FBReader &reader, shared_ptr<ZLPaintContext> context);
+	FBView(ZLPaintContext &context);
 
 	bool onFingerTap(int x, int y);
 
@@ -98,13 +81,13 @@ public:
 	int rightMargin() const;
 	int topMargin() const;
 	int bottomMargin() const;
+	ZLColor backgroundColor() const;
+	ZLColor color(const std::string &colorStyle) const;
+	shared_ptr<ZLTextStyle> baseStyle() const;
 
 	bool isSelectionEnabled() const;
 
 protected:
-	FBReader &fbreader();
-	const FBReader &fbreader() const;
-
 	bool onStylusPress(int x, int y);
 	virtual bool _onStylusPress(int x, int y);
 	bool onStylusRelease(int x, int y);
@@ -128,17 +111,9 @@ private:
 	int myPressedX;
 	int myPressedY;
 	bool myIsReleasedWithoutMotion;
+
+	shared_ptr<ZLRunnable> myTapScroller;
 };
-
-inline FBReader &FBView::fbreader() { return (FBReader&)application(); }
-inline const FBReader &FBView::fbreader() const { return (const FBReader&)application(); }
-
-inline FBMargins& FBView::margins() {
-	if (ourMargins.isNull()) {
-		ourMargins = new FBMargins();
-	}
-	return *ourMargins;
-}
 
 inline int FBView::pressedX() const { return myPressedX; }
 inline int FBView::pressedY() const { return myPressedY; }

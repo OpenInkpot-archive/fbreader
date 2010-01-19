@@ -17,12 +17,12 @@
 	<binding key="Return" action="preferences"/> 
 	<binding key="Escape" action="cancel"/>
 
-	<binding key="Next" action="largeScrollForward"/>
-	<binding key="Prior" action="largeScrollBackward"/>
-	<binding key="Down" action="largeScrollForward"/>
-	<binding key="Up" action="largeScrollBackward"/>
-	<binding key="Right" action="largeScrollForward"/>
-	<binding key="Left" action="largeScrollBackward"/>
+	<binding key="Next" action="pageForward"/>
+	<binding key="Prior" action="pageBackward"/>
+	<binding key="Down" action="pageForward"/>
+	<binding key="Up" action="pageBackward"/>
+	<binding key="Right" action="pageForward"/>
+	<binding key="Left" action="pageBackward"/>
 
 	<binding key="XF86AudioPlay" action="toggleIndicator"/>
 	<binding key="XF86Search" action="fontSizeDialog"/>

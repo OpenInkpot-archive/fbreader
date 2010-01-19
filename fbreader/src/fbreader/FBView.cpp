@@ -18,21 +18,16 @@
  */
 
 #include <cmath>
+#include <algorithm>
 
 #include <ZLUnicodeUtil.h>
+#include <ZLTime.h>
 
 #include "FBView.h"
 #include "FBReader.h"
 #include "FBReaderActions.h"
-
-static const std::string OPTIONS = "Options";
-
-FBMargins::FBMargins() :
-	LeftMarginOption(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, "LeftMargin", 0, 1000, 4),
-	RightMarginOption(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, "RightMargin", 0, 1000, 4),
-	TopMarginOption(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, "TopMargin", 0, 1000, 0),
-	BottomMarginOption(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, "BottomMargin", 0, 1000, 4) {
-}
+#include "../options/FBOptions.h"
+#include "../options/FBTextStyle.h"
 
 static const std::string INDICATOR = "Indicator";
 
@@ -86,7 +81,6 @@ int FBIndicatorStyle::fontSize() const {
 }
 
 shared_ptr<ZLTextPositionIndicatorInfo> FBView::ourIndicatorInfo;
-shared_ptr<FBMargins> FBView::ourMargins;
 shared_ptr<ZLBooleanOption> FBView::ourSelectionOption;
 
 FBIndicatorStyle& FBView::commonIndicatorInfo() {
@@ -96,7 +90,7 @@ FBIndicatorStyle& FBView::commonIndicatorInfo() {
 	return (FBIndicatorStyle&)*ourIndicatorInfo;
 }
 
-FBView::FBView(FBReader &reader, shared_ptr<ZLPaintContext> context) : ZLTextView(reader, context) {
+FBView::FBView(ZLPaintContext &context) : ZLTextView(context) {
 }
 
 shared_ptr<ZLTextPositionIndicatorInfo> FBView::indicatorInfo() const {
@@ -108,9 +102,9 @@ shared_ptr<ZLTextPositionIndicatorInfo> FBView::indicatorInfo() const {
 
 void FBView::doTapScrolling(int y) {
 	if (2 * y < context().height()) {
-		fbreader().doAction(ActionCode::TAP_SCROLL_BACKWARD);
+		FBReader::Instance().doAction(ActionCode::TAP_SCROLL_BACKWARD);
 	} else {
-		fbreader().doAction(ActionCode::TAP_SCROLL_FORWARD);
+		FBReader::Instance().doAction(ActionCode::TAP_SCROLL_FORWARD);
 	}
 }
 
@@ -125,9 +119,17 @@ const std::string &FBView::caption() const {
 
 void FBView::setCaption(const std::string &caption) {
 	myCaption = caption;
+	std::replace(myCaption.begin(), myCaption.end(), '\n', ' ');
+	std::replace(myCaption.begin(), myCaption.end(), '\r', ' ');
+	ZLUnicodeUtil::cleanUtf8String(myCaption);
 }
 
 bool FBView::onStylusPress(int x, int y) {
+	if (!myTapScroller.isNull()) {
+		ZLTimeManager::Instance().removeTask(myTapScroller);
+		myTapScroller.reset();
+	}
+
 	myPressedX = x;
 	myPressedY = y;
 	myIsReleasedWithoutMotion = true;
@@ -147,7 +149,32 @@ bool FBView::_onStylusPress(int, int) {
 	return false;
 }
 
+class FBView::TapScroller : public ZLRunnable {
+
+public:
+	TapScroller(FBView &view, int y);
+
+private:
+	void run();
+
+private:
+	FBView &myView;
+	const int myY;
+};
+
+FBView::TapScroller::TapScroller(FBView &view, int y) : myView(view), myY(y) {
+}
+
+void FBView::TapScroller::run() {
+	myView.doTapScrolling(myY);
+}
+
 bool FBView::onStylusRelease(int x, int y) {
+	if (!myTapScroller.isNull()) {
+		ZLTimeManager::Instance().removeTask(myTapScroller);
+		myTapScroller.reset();
+	}
+
 	if (ZLTextView::onStylusRelease(x, y)) {
 		return true;
 	}
@@ -156,13 +183,15 @@ bool FBView::onStylusRelease(int x, int y) {
 		return true;
 	}
 
+	FBReader &fbreader = FBReader::Instance();
 	myIsReleasedWithoutMotion =
 		myIsReleasedWithoutMotion && (abs(x - pressedX()) <= 5) && (abs(y - pressedY()) <= 5);
 	if (isReleasedWithoutMotion() &&
-			fbreader().EnableTapScrollingOption.value() &&
+			fbreader.EnableTapScrollingOption.value() &&
 			(!ZLBooleanOption(ZLCategoryKey::EMPTY, ZLOption::PLATFORM_GROUP, ZLOption::FINGER_TAP_DETECTABLE, false).value() ||
-			 !fbreader().TapScrollingOnFingerOnlyOption.value())) {
-		doTapScrolling(y);
+			 !fbreader.TapScrollingOnFingerOnlyOption.value())) {
+		myTapScroller = new TapScroller(*this, y);
+		ZLTimeManager::Instance().addAutoRemovableTask(myTapScroller, DOUBLE_CLICK_DELAY);
 		return true;
 	}
 
@@ -241,36 +270,42 @@ std::string FBView::word(const ZLTextElementArea &area) const {
 }
 
 int FBView::leftMargin() const {
-	return margins().LeftMarginOption.value();
+	return FBOptions::Instance().LeftMarginOption.value();
 }
 
 int FBView::rightMargin() const {
-	return margins().RightMarginOption.value();
+	return FBOptions::Instance().RightMarginOption.value();
 }
 
 int FBView::topMargin() const {
-	return margins().TopMarginOption.value();
+	return FBOptions::Instance().TopMarginOption.value();
 }
 
 int FBView::bottomMargin() const {
-	return margins().BottomMarginOption.value();
+	return FBOptions::Instance().BottomMarginOption.value();
+}
+
+ZLColor FBView::backgroundColor() const {
+	return FBOptions::Instance().BackgroundColorOption.value();
+}
+
+ZLColor FBView::color(const std::string &colorStyle) const {
+	return FBOptions::Instance().colorOption(colorStyle).value();
+}
+
+shared_ptr<ZLTextStyle> FBView::baseStyle() const {
+	return FBTextStyle::InstanceAsPtr();
 }
 
 ZLBooleanOption &FBView::selectionOption() {
 	if (ourSelectionOption.isNull()) {
-		ourSelectionOption = new ZLBooleanOption(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, "IsSelectionEnabled", true);
+		ourSelectionOption = new ZLBooleanOption(ZLCategoryKey::LOOK_AND_FEEL, "Options", "IsSelectionEnabled", true);
 	}
 	return *ourSelectionOption;
 }
 
 bool FBView::isSelectionEnabled() const {
 	return selectionOption().value();
-}
-
-void FBView::scrollAndUpdatePage(bool forward, ScrollingMode mode, unsigned int value) {
-	scrollPage(forward, mode, value);
-	preparePaintInfo();
-	fbreader().refreshWindow();
 }
 
 bool FBView::hasContents() const {

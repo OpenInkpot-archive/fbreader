@@ -216,6 +216,23 @@ void ZLWin32PaintContext::drawImage(int x, int y, const ZLImageData &image) {
 	}
 }
 
+void ZLWin32PaintContext::drawImage(int x, int y, const ZLImageData &image, int width, int height, ScalingType type) {
+	ZLWin32ImageData &win32Image = (ZLWin32ImageData&)image;
+	const BYTE *pixels = win32Image.pixels(myBackgroundColor);
+	if (pixels == 0) {
+		return;
+	}
+	const int origWidth = image.width();
+	const int origHeight = image.height();
+	const int realWidth = imageWidth(image, width, height, type);
+	const int realHeight = imageHeight(image, width, height, type);
+	SetStretchBltMode(myDisplayContext, STRETCH_HALFTONE);
+	StretchDIBits(myDisplayContext,
+		x, y - realHeight, realWidth, realHeight,
+		0, 0, origWidth, origHeight,
+		pixels, win32Image.info(), DIB_RGB_COLORS, SRCCOPY);
+}
+
 void ZLWin32PaintContext::drawLine(int x0, int y0, int x1, int y1) {
 	if (myDisplayContext == 0) {
 		return;

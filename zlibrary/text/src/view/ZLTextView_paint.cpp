@@ -24,13 +24,14 @@
 
 #include "ZLTextView.h"
 #include "ZLTextLineInfo.h"
+#include "ZLTextPositionIndicator.h"
 
 #include "../../../../fbreader/src/fbreader/FBReader.h"
 
 bool link_not_terminated;
 
 void ZLTextView::paint() {
-	FBReader& fbreader = (FBReader&)application();
+	FBReader& fbreader = FBReader::Instance();
 	if (fbreader.mode() == FBReader::BOOK_TEXT_MODE)
 		fbreader.pageFootnotes.erase(fbreader.pageFootnotes.begin(), fbreader.pageFootnotes.end());
 
@@ -41,7 +42,7 @@ void ZLTextView::paint() {
 
 	myTextElementMap.clear();
 	myTreeNodeMap.clear();
-	context().clear(ZLTextStyleCollection::instance().baseStyle().BackgroundColorOption.value());
+	context().clear(backgroundColor());
 
 	if (empty()) {
 		return;
@@ -159,13 +160,13 @@ void ZLTextView::drawSelectionRectangle(int left, int top, int right, int bottom
 	left = std::max(left, lineStartMargin());
 	right = std::min(right, viewWidth() + lineStartMargin() - 1);
 	if (left < right) {
-		context().setFillColor(ZLTextStyleCollection::instance().baseStyle().SelectionBackgroundColorOption.value());
+		context().setFillColor(color(ZLTextStyle::SELECTION_BACKGROUND));
 		context().fillRectangle(visualX(left), top, visualX(right), bottom);
 	}
 }
 
 void ZLTextView::drawTextLine(const ZLTextLineInfo &info, int y, size_t from, size_t to) {
-	FBReader &fbreader = (FBReader&)application();
+	FBReader &fbreader = FBReader::Instance();
 	const ZLTextParagraphCursor &paragraph = info.RealStart.paragraphCursor();
 
 	const ZLTextElementIterator fromIt = myTextElementMap.begin() + from;
@@ -279,7 +280,7 @@ void ZLTextView::drawTextLine(const ZLTextLineInfo &info, int y, size_t from, si
 			if (kind == ZLTextElement::WORD_ELEMENT) {
 				drawWord(wx, wy, (const ZLTextWord&)element, it->StartCharIndex, -1, false);
 			} else {
-				context().drawImage(wx, wy, *((const ZLTextImageElement&)element).image());
+				context().drawImage(wx, wy, *((const ZLTextImageElement&)element).image(), viewWidth(), textAreaHeight(), ZLPaintContext::SCALE_REDUCE_SIZE);
 			}
 			++it;
 		} else if(kind == ZLTextElement::CONTROL_ELEMENT) {
@@ -389,7 +390,7 @@ void ZLTextView::drawTextLine(const ZLTextLineInfo &info, int y, size_t from, si
 		}
 		int len = info.End.charIndex() - start;
 		const ZLTextWord &word = (const ZLTextWord&)info.End.element();
-		context().setColor(myStyle.textStyle()->color());
+		context().setColor(color(myStyle.textStyle()->colorStyle()));
 		const int x = myStyle.baseIsRtl() ? context().width() - it->XEnd : it->XStart;
 		const int y = it->YEnd - myStyle.elementDescent(word) - myStyle.textStyle()->verticalShift();
 		drawWord(x, y, word, start, len, it->AddHyphenationSign);
@@ -455,6 +456,8 @@ void ZLTextView::prepareTextLine(const ZLTextLineInfo &info, int y) {
 			if (myStyle.baseIsRtl()) {
 				x += metrics.FullWidth - myStyle.textStyle()->lineEndIndent(metrics, myStyle.baseIsRtl()) - info.Width;
 			}
+			break;
+		case ALIGN_LINESTART:
 			break;
 		case ALIGN_CENTER:
 			x += (metrics.FullWidth - myStyle.textStyle()->lineEndIndent(metrics, myStyle.baseIsRtl()) - info.Width) / 2;

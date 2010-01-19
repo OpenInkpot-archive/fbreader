@@ -19,15 +19,13 @@
 
 #include "../../../../core/src/win32/util/W32WCHARUtil.h"
 #include "ZLWin32DialogManager.h"
+#include "ZLWin32ProgressDialog.h"
 #include "ZLWin32Dialog.h"
 #include "../application/ZLWin32ApplicationWindow.h"
 #include "../image/ZLWin32ImageManager.h"
 #include "ZLWin32OptionsDialog.h"
 #include "ZLWin32SelectionDialog.h"
 #include "ZLWin32MessageBox.h"
-/*
-#include "ZLWin32WaitMessage.h"
-*/
 
 void ZLWin32DialogManager::createApplicationWindow(ZLApplication *application) const {
 	myApplicationWindow = new ZLWin32ApplicationWindow(application);
@@ -71,14 +69,8 @@ bool ZLWin32DialogManager::selectionDialog(const ZLResourceKey &key, ZLTreeHandl
 	return ZLWin32SelectionDialog(*myApplicationWindow, dialogTitle(key), handler).runWithSize();
 }
 
-void ZLWin32DialogManager::wait(const ZLResourceKey &key, ZLRunnable &runnable) const {
-	if (myApplicationWindow != 0) {
-		myApplicationWindow->setWait(true);
-	}
-	runnable.run();
-	if (myApplicationWindow != 0) {
-		myApplicationWindow->setWait(false);
-	}
+shared_ptr<ZLProgressDialog> ZLWin32DialogManager::createProgressDialog(const ZLResourceKey &key) const {
+	return new ZLWin32ProgressDialog(myApplicationWindow, key);
 }
 
 bool ZLWin32DialogManager::isClipboardSupported(ClipboardType type) const {
@@ -108,7 +100,7 @@ void ZLWin32DialogManager::setClipboardImage(const ZLImageData &image, Clipboard
 		if (pixels != 0) {
 			if (OpenClipboard(myApplicationWindow->mainWindow())) {
 				EmptyClipboard();
-				HDC dc = GetDC(myApplicationWindow->mainWindow());
+				HDC dc = GetDC(0);
 				BITMAPINFOHEADER header;
 				ZeroMemory(&header, sizeof(header));
 				header.biSize = sizeof(header);
@@ -124,13 +116,8 @@ void ZLWin32DialogManager::setClipboardImage(const ZLImageData &image, Clipboard
 					pixels, win32Image.info(),
 					DIB_RGB_COLORS
 				);
-					/*
-					x, y - height, width, height,
-					0, 0, width, height,
-					pixels, win32Image.info(), DIB_RGB_COLORS, SRCCOPY);
-					*/
 				SetClipboardData(CF_BITMAP, bitmap);
-				ReleaseDC(myApplicationWindow->mainWindow(), dc);
+				ReleaseDC(0, dc);
 				CloseClipboard();
 			}
 		}

@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-  <group name="SmallScrolling">
-    <option name="ScrollingDelay" value="0"/>
-  </group>
-  <group name="LargeScrolling">
-    <option name="ScrollingDelay" value="0"/>
-  </group>
-  <group name="TapScrolling">
-    <option name="Enabled" value="false"/>
+  <group name="Scrollings">
+    <option name="Delay" value="0"/>
   </group>
   <group name="Indicator">
     <option name="Time" value="false"/>
@@ -25,5 +19,11 @@
     <option name="BookPath" value="~/FBooks:~/Books"/>
     <option name="DownloadDirectory" value="~/FBooks"/>
     <option name="DitherAlgo" value="2"/>
+  </group>
+  <group name="Style">
+	  <option name="Base:fontFamily" value="Liberation Sans"/>
+	  <option name="Base:fontSize" value="8"/>
+	  <option name="Base:bold" value="true"/>
+	  <option name="Base:lineSpacingPercent" value="100"/>
   </group>
 </config>

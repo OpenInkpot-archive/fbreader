@@ -40,6 +40,10 @@ int ZLEwlDialogManager::internalBox(const gchar *icon, const ZLResourceKey &key,
 bool ZLEwlDialogManager::selectionDialog(const ZLResourceKey &key, ZLTreeHandler &handler) const {
 }
 
+shared_ptr<ZLProgressDialog> ZLEwlDialogManager::createProgressDialog(const ZLResourceKey &key) const {
+	return NULL;
+}
+
 void ZLEwlDialogManager::wait(const ZLResourceKey &key, ZLRunnable &runnable) const {
 	runnable.run();
 }

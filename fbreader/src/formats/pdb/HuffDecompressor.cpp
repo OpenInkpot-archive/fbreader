@@ -1,188 +1,192 @@
-#include <stdio.h>
-#include <string.h>
+/*
+ * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+
+#include <cstring>
 
 #include <ZLInputStream.h>
 
 #include "PdbReader.h"
+#include "BitReader.h"
 #include "HuffDecompressor.h"
 
-BitReader::BitReader(unsigned char *data, int len) {
+HuffDecompressor::HuffDecompressor(ZLInputStream& stream, 
+                        const std::vector<unsigned long>::const_iterator beginIt, 
+                        const std::vector<unsigned long>::const_iterator endIt,
+						const unsigned long endHuffDataOffset, const unsigned long extraFlags) : myExtraFlags(extraFlags), myErrorCode(ERROR_NONE) {
+	
 
-	adata = new unsigned char[len+8];
-	memcpy(adata, data, len);
-	memset(adata+len, 0, 8);
-	pos = 0;
-	nbits = len * 8;
+	const unsigned long huffHeaderOffset = *beginIt;
+	const unsigned long huffRecordsNumber = endIt - beginIt;
+	const unsigned long huffDataOffset = *(beginIt + 1);
+	
+	stream.seek(huffHeaderOffset, true);
+	stream.seek(16, false);
+	unsigned long cacheTableOffset, baseTableOffset;
+	PdbUtil::readUnsignedLongBE(stream, cacheTableOffset);
+	PdbUtil::readUnsignedLongBE(stream, baseTableOffset); 
+	
 
-}
-
-BitReader::~BitReader() {
-	delete adata;
-}
-
-unsigned long BitReader::peek(int n) {
-
-        unsigned long long r = 0;
-	unsigned long g = 0;
-        while (g < n) {
-		r = (r << 8) | adata[(pos+g)>>3];
-		g = g + 8 - ((pos+g) & 7);
+	myCacheTable = new unsigned long[256];
+	stream.seek(huffHeaderOffset + cacheTableOffset, true);
+	for (size_t i = 0; i < 256; ++i) {
+		PdbUtil::readUnsignedLongLE(stream, myCacheTable[i]); //LE
 	}
-        r = (r >> (g - n));
-	r &= ((1LL << n) - 1LL);
-	return (unsigned long)r;
-
-}
-
-bool BitReader::eat(int n) {
-
-	pos += n;
-	return (pos <= nbits);
-
-}
-
-size_t BitReader::left() {
-
-	return nbits - pos;
-
-}
-
-static unsigned long unpack_ulong_msb(unsigned char *d, int off) {
-	return (d[off] << 24) | (d[off+1] << 16) | (d[off+2] << 8) | d[off+3];
-}
-
-static unsigned long unpack_ulong_lsb(unsigned char *d, int off) {
-	return (d[off+3] << 24) | (d[off+2] << 16) | (d[off+1] << 8) | d[off];
-}
-
-HuffDecompressor::HuffDecompressor(shared_ptr<ZLInputStream> &base, PdbHeader &header, size_t start, size_t count) {
-
-	size_t curoff, nextoff, off1, off2;
-	int i;
-
-	huffs = new unsigned char * [count];
-	huffcount = count;
-	ready = false;
-
-	for (i=0; i<count; i++) {
-		curoff = header.Offsets[start+i];
-		nextoff =
-			(start+i+1 < header.Offsets.size()) ?
-			header.Offsets[start+i+1] :
-			base->sizeOfOpened();
-
-		huffs[i] = new unsigned char[8+nextoff-curoff];
-		base->seek(curoff, true);
-		base->read((char *)huffs[i], nextoff-curoff);
-		memset(huffs[i]+(nextoff-curoff), 0, 8);
+	
+	myBaseTable = new unsigned long[64]; 
+	stream.seek(huffHeaderOffset + baseTableOffset, true);
+	for (size_t i = 0; i < 64; ++i) {
+		PdbUtil::readUnsignedLongLE(stream, myBaseTable[i]); //LE
 	}
-
-	if (strncmp((const char *)huffs[0], "HUFF", 4) != 0) {
-		fprintf(stderr, "Invalid HUFF header\n");
-		return;
+	
+	stream.seek(huffDataOffset + 12, true);
+	PdbUtil::readUnsignedLongBE(stream, myEntryBits);	
+	
+	size_t huffDataSize = endHuffDataOffset - huffDataOffset;
+	myData = new unsigned char[huffDataSize];
+	stream.seek(huffDataOffset, true);
+	if (huffDataSize == stream.read((char*)myData, huffDataSize)) {	
+		myDicts = new unsigned char* [huffRecordsNumber - 1];
+		for(size_t i = 0; i < huffRecordsNumber - 1;  ++i) {	
+			size_t shift = *(beginIt + i + 1) - huffDataOffset;
+			myDicts[i] = myData + shift;
+		}
+	} else {
+		myErrorCode = ERROR_CORRUPTED_FILE;
 	}
-	if (strncmp((const char *)huffs[1], "CDIC", 4) != 0) {
-		fprintf(stderr, "Invalid CDIC header\n");
-		return;
-	}
-
-	entry_bits = unpack_ulong_msb(huffs[1], 12);
-	off1 = unpack_ulong_msb(huffs[0], 16);
-	off2 = unpack_ulong_msb(huffs[0], 20);
-	dict1 = new unsigned long[256];
-	for (i=0; i<256; i++) dict1[i] = unpack_ulong_lsb(huffs[0], off1+i*4);
-	dict2 = new unsigned long[64];
-	for (i=0; i<64; i++) dict2[i] = unpack_ulong_lsb(huffs[0], off2+i*4);
-	dicts = huffs+1;
-	ready = true;
-
+	
+	myTargetBuffer = 0;
+	myTargetBufferEnd = 0;
+	myTargetBufferPtr = 0;
 }
 
 HuffDecompressor::~HuffDecompressor() {
-	int i;
-	for (i=0; i<huffcount; i++) delete huffs[i];
-	delete huffs;
-	if (! ready) return;
-	delete dict1;
-	delete dict2;
+	delete[] myCacheTable;
+	delete[] myBaseTable;
+	delete[] myData;
+	delete[] myDicts;
 }
 
-void HuffDecompressor::do_unpack(BitReader *bits, int depth) {
+bool HuffDecompressor::error() const {
+	return myErrorCode == ERROR_CORRUPTED_FILE;
+}
 
-	unsigned long dw, v, codelen, code, r, dicno, off1, off2, blen;
-	unsigned char *dic, *slice;
-	BitReader *br;
-
-	//fprintf(stderr, "\nU(%i,%i) ", bits->left(), depth);
-
-	if (depth > 32) {
-		fprintf(stderr, "Corrupt file\n");
-		ready = 0;
-		return;
+size_t HuffDecompressor::decompress(ZLInputStream &stream, char *targetBuffer, size_t compressedSize, size_t maxUncompressedSize) {
+	if ((compressedSize == 0) || (myErrorCode == ERROR_CORRUPTED_FILE)) {
+		return 0;
 	}
-
-	while (bits->left() > 0) {
-		dw = bits->peek(32);
-		v = dict1[dw >> 24];
- 		codelen = v & 0x1f;
-		if (codelen == 0) {
-			fprintf(stderr, "codelen=0\n");
-			ready = 0;
-			return;
-		}
-		code = (codelen == 0) ? 0 : (dw >> (32 - codelen));
-		r = (v >> 8);
-		if ((v & 0x80) == 0) {
-			while (code < dict2[(codelen-1)*2]) {
-				codelen += 1;
-				code = (codelen == 0) ? 0 : (dw >> (32 - codelen));
+	if (targetBuffer != 0) { 
+		unsigned char *sourceBuffer = new unsigned char[compressedSize];
+    	myTargetBuffer = targetBuffer;
+		myTargetBufferEnd = targetBuffer + maxUncompressedSize;
+    	myTargetBufferPtr = targetBuffer;
+		if (stream.read((char*)sourceBuffer, compressedSize) == compressedSize) {
+			size_t trailSize = sizeOfTrailingEntries(sourceBuffer, compressedSize); 
+        	if (trailSize < compressedSize) { 
+				bitsDecompress(BitReader(sourceBuffer, compressedSize - trailSize));
+			} else {
+				myErrorCode = ERROR_CORRUPTED_FILE;
 			}
-			r = dict2[(codelen-1)*2+1];
 		}
-		r -= code;
-		if (codelen == 0) {
-			fprintf(stderr, "codelen=0\n");
-			ready = 0;
-			return;
-		}
-		if (! bits->eat(codelen)) return;
-		dicno = (entry_bits == 32) ? 0 : (r >> entry_bits);
-		off1 = 16 + (r - (dicno << entry_bits)) * 2;
-		dic = dicts[dicno];
-		off2 = 16 + dic[off1] * 256 + dic[off1+1];
-		blen = dic[off2] * 256 + dic[off2+1];
-		slice = dic+(off2+2);
-		if (blen & 0x8000) {
-			blen &= 0x7fff;
-			if (rpos+blen > rmax-1) blen = rmax-1-rpos;
-			if (blen != 0) memcpy(rbuffer+rpos, slice, blen);
-			rbuffer[rpos+blen] = 0;
-			//if (blen != 0) fprintf(stderr, "[%s]", rbuffer+rpos);
-			rpos += blen;
-		} else {
-			do_unpack(br = new BitReader(slice, blen & 0x7fff), depth + 1);
-			delete br;
-			if (! ready) return;
-		}
-
+		delete[] sourceBuffer;
+	} else {
+		myTargetBuffer = 0;
+		myTargetBufferEnd = 0;
+		myTargetBufferPtr = 0;
 	}
 
+	return myTargetBufferPtr - myTargetBuffer;
+}
+
+void HuffDecompressor::bitsDecompress(BitReader bits, size_t depth) {
+	if (depth > 32) {
+		myErrorCode = ERROR_CORRUPTED_FILE;
+		return;
+	}	
+
+	while (bits.left()) {
+    	const unsigned long dw = (unsigned long)bits.peek(32);
+	    const unsigned long v = myCacheTable[dw >> 24];
+  	 	unsigned long codelen = v & 0x1F;
+		//if ((codelen == 0) || (codelen > 32)) {
+		//	return false;
+		//} 
+		unsigned long code = dw >> (32 - codelen);
+    	unsigned long r = (v >> 8);
+    	if (!(v & 0x80)) {
+        	while (code < myBaseTable[(codelen - 1) * 2]) {
+            	codelen += 1;
+            	code = dw >> (32 - codelen);
+			}
+        	r = myBaseTable[(codelen - 1) * 2 + 1];
+		}
+    	r -= code;
+		//if (codelen == 0) {
+		//	return false;
+		//} 
+		if (!bits.eat(codelen)) {
+			return;
+		}
+    	const unsigned long dicno = r >> myEntryBits;
+    	const unsigned long off1 = 16 + (r - (dicno << myEntryBits)) * 2;
+    	const unsigned char* dict = myDicts[dicno];							//TODO need index check 
+    	const unsigned long off2 = 16 + dict[off1] * 256 + dict[off1 + 1];	//TODO need index check 
+    	const unsigned long blen = dict[off2] * 256 + dict[off2 + 1];		//TODO need index check 
+    	const unsigned char* slice = dict + off2 + 2;
+		const unsigned long sliceSize = blen & 0x7fff;
+    	if (blen & 0x8000) {
+        	if (myTargetBufferPtr + sliceSize < myTargetBufferEnd) {
+        		memcpy(myTargetBufferPtr, slice, sliceSize);
+        		myTargetBufferPtr += sliceSize;
+        	} else {
+        		return;
+        	}
+    	} else {
+			bitsDecompress(BitReader(slice, sliceSize), depth + 1);
+		}
+	}
+}
+
+size_t HuffDecompressor::sizeOfTrailingEntries(unsigned char* data, size_t size) const {
+	size_t num = 0;
+	size_t flags = myExtraFlags >> 1;
+	while (flags) {
+    	if (flags & 1) {
+			if (num < size) {
+        		num += readVariableWidthIntegerBE(data, size - num);
+			}
+		}
+    	flags >>= 1;
+	}
+	return num;
 }
 
 
-size_t HuffDecompressor::decompress(ZLInputStream &stream, char *buffer, size_t csize, size_t maxsize) {
-
-	BitReader *br;
-	unsigned char *inbuffer = new unsigned char[csize+8];
-	stream.read((char *)inbuffer, csize);
-	memset(inbuffer+csize, 0, 8);
-	rbuffer = (unsigned char *)buffer;
-	rpos = 0;
-	rmax = maxsize;
-	do_unpack(br = new BitReader(inbuffer, csize), 0);
-	delete br;
-	delete inbuffer;
-	return rpos;
-
+size_t HuffDecompressor::readVariableWidthIntegerBE(unsigned char* ptr, size_t psize) const {
+    unsigned char bitsSaved = 0;
+	size_t result = 0;
+    while (true) {
+        const unsigned char oneByte = ptr[psize - 1];
+        result |= (oneByte & 0x7F) << bitsSaved;
+        bitsSaved += 7;
+        psize -= 1;
+        if (((oneByte & 0x80) != 0) || (bitsSaved >= 28) || (psize == 0)) {
+            return result;
+		}
+	}
 }
-

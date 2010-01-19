@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2008 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,47 +21,43 @@
 #define __HUFFDECOMPRESSOR_H__
 
 #include <string>
-#include <shared_ptr.h>
 
 class ZLInputStream;
-
-class BitReader {
-
-public:
-	BitReader(unsigned char *data, int len);
-	~BitReader();
-	unsigned long peek(int n);
-	bool eat(int n);
-	size_t left();
-
-private:
-	unsigned char *adata;
-	int pos;
-	int nbits;
-
-};
-
+class BitReader;
 
 class HuffDecompressor {
 
 public:
-	HuffDecompressor(shared_ptr<ZLInputStream> &base, PdbHeader &header, size_t start, size_t count);
+	HuffDecompressor(ZLInputStream& stream, 
+						const std::vector<unsigned long>::const_iterator beginHuffRecordOffsetIt, 
+						const std::vector<unsigned long>::const_iterator endHuffRecordOffsetIt,
+						const unsigned long endHuffDataOffset, const unsigned long extraFlags);
 	~HuffDecompressor();
+
 	size_t decompress(ZLInputStream &stream, char *buffer, size_t compressedSize, size_t maxUncompressedSize);
+	bool error() const;
+private:
+	size_t sizeOfTrailingEntries(unsigned char* data, size_t size) const;
+	size_t readVariableWidthIntegerBE(unsigned char* ptr, size_t psize) const;
+	void bitsDecompress(BitReader bits, size_t depth = 0);
 
 private:
-	void do_unpack(BitReader *bits, int depth);
-	unsigned char **huffs;
-	int huffcount;
-	unsigned long *dict1;
-	unsigned long *dict2;
-	unsigned char **dicts;
-	bool ready;
-	unsigned char *rbuffer;
-	int rpos;
-	int rmax;
-	unsigned long entry_bits;
+	unsigned long myEntryBits;
+	unsigned long myExtraFlags;
 
+	unsigned long* myCacheTable;
+	unsigned long* myBaseTable;
+	unsigned char* myData;
+	unsigned char** myDicts;
+
+	char* myTargetBuffer;
+	char* myTargetBufferEnd;
+	char* myTargetBufferPtr;
+
+	enum {
+		ERROR_NONE,
+		ERROR_CORRUPTED_FILE
+	} myErrorCode;
 };
 
-#endif /* __DOCDECOMPRESSOR_H__ */
+#endif /* __HUFFDECOMPRESSOR_H__ */

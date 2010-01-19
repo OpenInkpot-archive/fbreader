@@ -27,7 +27,7 @@
 #include "FBReader.h"
 #include "FBView.h"
 #include "FBReaderActions.h"
-#include "../options/FBOptions.h"
+#include "../options/FBCategoryKey.h"
 
 #include "../../../zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.h"
 
@@ -59,7 +59,6 @@ const std::string &SearchPatternEntry::initialValue() const {
 
 const std::vector<std::string> &SearchPatternEntry::values() const {
 	if (myValues.empty()) {
-		// TODO: implement
 		myValues.push_back(myAction.SearchPatternOption.value());
 		for (int i = 1; i < 6; ++i) {
 			std::string pattern = PATTERN;
@@ -89,15 +88,15 @@ void SearchPatternEntry::onAccept(const std::string &value) {
 	}
 }
 
-SearchAction::SearchAction(FBReader &fbreader) : FBAction(fbreader) {
-}
-
 bool SearchAction::isVisible() const {
-	shared_ptr<ZLView> view = fbreader().currentView();
-	return !view.isNull() && ((FBView&)*view).hasContents();
+	shared_ptr<ZLView> view = FBReader::Instance().currentView();
+	return
+		!view.isNull() && 
+		view->typeId() == ZLTextView::TYPE_ID &&
+		((FBView&)*view).hasContents();
 }
 
-SearchPatternAction::SearchPatternAction(FBReader &fbreader) : SearchAction(fbreader),
+SearchPatternAction::SearchPatternAction() :
 	SearchBackwardOption(FBCategoryKey::SEARCH, SEARCH, "Backward", false),
 	SearchIgnoreCaseOption(FBCategoryKey::SEARCH, SEARCH, "IgnoreCase", true),
 	SearchInWholeTextOption(FBCategoryKey::SEARCH, SEARCH, "WholeText", false),
@@ -106,55 +105,30 @@ SearchPatternAction::SearchPatternAction(FBReader &fbreader) : SearchAction(fbre
 }
 
 void SearchPatternAction::run() {
-	FBReader &f = fbreader();
-	ZLEwlSearchDialog(f);
-/*	ZLTextView &textView = (ZLTextView&)*fbreader().currentView();
-
-	shared_ptr<ZLDialog> searchDialog = ZLDialogManager::instance().createDialog(ZLResourceKey("textSearchDialog"));
-
-	searchDialog->addOption(ZLResourceKey("text"), new SearchPatternEntry(*this));
-	searchDialog->addOption(ZLResourceKey("ignoreCase"), SearchIgnoreCaseOption);
-	searchDialog->addOption(ZLResourceKey("wholeText"), SearchInWholeTextOption);
-	searchDialog->addOption(ZLResourceKey("backward"), SearchBackwardOption);
-	if (textView.hasMultiSectionModel()) {
-		searchDialog->addOption(ZLResourceKey("currentSection"), SearchThisSectionOnlyOption);
-	}
-	searchDialog->addButton(ZLResourceKey("go"), true);
-	searchDialog->addButton(ZLDialogManager::CANCEL_BUTTON, false);
-
-	if (searchDialog->run()) {
-		searchDialog->acceptValues();
-		textView.search(
-			SearchPatternOption.value(),
-			SearchIgnoreCaseOption.value(),
-			SearchInWholeTextOption.value(),
-			SearchBackwardOption.value(),
-			SearchThisSectionOnlyOption.value()
-		);
-	}
-*/	
-}
-
-FindNextAction::FindNextAction(FBReader &fbreader) : SearchAction(fbreader) {
+	ZLEwlSearchDialog(FBReader::Instance());
 }
 
 bool FindNextAction::isEnabled() const {
-	shared_ptr<ZLView> view = fbreader().currentView();
-	return (!view.isNull()) && ((ZLTextView&)*view).canFindNext();
+	shared_ptr<ZLView> view = FBReader::Instance().currentView();
+	return
+		!view.isNull() && 
+		view->typeId() == ZLTextView::TYPE_ID &&
+		((ZLTextView&)*view).canFindNext();
+	return false;
 }
 
 void FindNextAction::run() {
-	((ZLTextView&)*fbreader().currentView()).findNext();
-}
-
-FindPreviousAction::FindPreviousAction(FBReader &fbreader) : SearchAction(fbreader) {
+	((ZLTextView&)*FBReader::Instance().currentView()).findNext();
 }
 
 bool FindPreviousAction::isEnabled() const {
-	shared_ptr<ZLView> view = fbreader().currentView();
-	return (!view.isNull()) && ((ZLTextView&)*view).canFindPrevious();
+	shared_ptr<ZLView> view = FBReader::Instance().currentView();
+	return
+		!view.isNull() && 
+		view->typeId() == ZLTextView::TYPE_ID &&
+		((ZLTextView&)*view).canFindPrevious();
 }
 
 void FindPreviousAction::run() {
-	((ZLTextView&)*fbreader().currentView()).findPrevious();
+	((ZLTextView&)*FBReader::Instance().currentView()).findPrevious();
 }

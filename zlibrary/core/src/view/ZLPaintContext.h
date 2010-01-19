@@ -60,9 +60,17 @@ public:
 	virtual int descent() const = 0;
 	virtual void drawString(int x, int y, const char *str, int len, bool rtl) = 0;
 
+	enum ScalingType {
+		SCALE_FIT_TO_SIZE,
+		SCALE_REDUCE_SIZE
+	};
+
 	int imageWidth(const ZLImageData &image) const;
 	int imageHeight(const ZLImageData &image) const;
+	int imageWidth(const ZLImageData &image, int width, int height, ScalingType type) const;
+	int imageHeight(const ZLImageData &image, int width, int height, ScalingType type) const;
 	virtual void drawImage(int x, int y, const ZLImageData &image) = 0;
+	virtual void drawImage(int x, int y, const ZLImageData &image, int width, int height, ScalingType type) = 0;
 
 	virtual void drawLine(int x0, int y0, int x1, int y1) = 0;
 	virtual void fillRectangle(int x0, int y0, int x1, int y1) = 0;

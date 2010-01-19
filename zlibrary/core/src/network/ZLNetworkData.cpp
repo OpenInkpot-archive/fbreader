@@ -17,13 +17,23 @@
  * 02110-1301, USA.
  */
 
+#include <ZLLogger.h>
+
 #include "ZLNetworkData.h"
 
-ZLNetworkData::ZLNetworkData(const std::string &url) : myURL(url) {
-//	myHandle = curl_easy_init();
+const std::string ZLNetworkData::TYPE_ID = "ZLNetworkData";
+
+ZLNetworkData::ZLNetworkData(const std::string &url, const std::string &sslCertificate) : myURL(url), mySSLCertificate(sslCertificate) {
+	/*
+	myHandle = curl_easy_init();
 	if (myHandle != 0) {
-//		curl_easy_setopt(myHandle, CURLOPT_URL, myURL.c_str());
+		curl_easy_setopt(myHandle, CURLOPT_URL, myURL.c_str());
+		if (!sslCertificate.empty()) {
+			curl_easy_setopt(myHandle, CURLOPT_CAINFO, sslCertificate.c_str());
+		}
+		ZLLogger::Instance().println("URL", myURL);
 	}
+	*/
 }
 
 ZLNetworkData::~ZLNetworkData() {
@@ -32,10 +42,26 @@ ZLNetworkData::~ZLNetworkData() {
 	}
 }
 
+const std::string &ZLNetworkData::type() const {
+	return TYPE_ID;
+}
+
 const std::string &ZLNetworkData::url() const {
 	return myURL;
 }
 
+const std::string &ZLNetworkData::sslCertificate() const {
+	return mySSLCertificate;
+}
+
 CURL *ZLNetworkData::handle() {
 	return myHandle;
+}
+
+const std::string &ZLNetworkData::errorMessage() const {
+	return myErrorMessage;
+}
+
+void ZLNetworkData::setErrorMessage(const std::string &message) {
+	myErrorMessage = message;
 }

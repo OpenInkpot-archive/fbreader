@@ -15,13 +15,13 @@
 	<binding key="Alt+7" action="toggleTurbo"/>
 	<binding key="8" action="hyperlinkNavStart"/>
 	<binding key="Alt+8" action="search"/>
-	<binding key="9" action="largeScrollBackward"/>
-	<binding key="0" action="largeScrollForward"/>
+	<binding key="9" action="pageBackward"/>
+	<binding key="0" action="pageForward"/>
 	<binding key="Return" action="menu"/> 
 	<binding key="Alt+Return" action="preferences"/> 
 	<binding key="Escape" action="cancel"/>
-	<binding key="Right" action="largeScrollForward"/>
-	<binding key="Left" action="largeScrollBackward"/>
+	<binding key="Right" action="pageForward"/>
+	<binding key="Left" action="pageBackward"/>
 	<binding key="+" action="increaseFont"/>
 	<binding key="-" action="decreaseFont"/>
 </keymap>
