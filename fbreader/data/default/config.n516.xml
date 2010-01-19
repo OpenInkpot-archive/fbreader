@@ -20,4 +20,10 @@
     <option name="DownloadDirectory" value="~/FBooks"/>
     <option name="DitherAlgo" value="2"/>
   </group>
+  <group name="Style">
+	  <option name="Base:fontFamily" value="Liberation Sans"/>
+	  <option name="Base:fontSize" value="8"/>
+	  <option name="Base:bold" value="true"/>
+	  <option name="Base:lineSpacingPercent" value="100"/>
+  </group>
 </config>
