@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: messages_fr\n"
 "Report-Msgid-Bugs-To: @PACKAGE_BUGREPORT@\n"
-"POT-Creation-Date: 2009-11-14 17:26+0100\n"
+"POT-Creation-Date: 2010-01-20 00:35+0100\n"
 "PO-Revision-Date: 2009-06-26 14:22+0200\n"
 "Last-Translator: Miguel <ink@canteras.org>\n"
 "Language-Team: \n"
@@ -24,473 +24,466 @@ msgstr ""
 "FBReader:\n"
 "Ajuda"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:75
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:79
 msgid "None"
 msgstr "Cap"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:76
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:80
 msgid "Add Bookmark"
 msgstr "Afegir marcador"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:77
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:81
 msgid "Show Bookmarks"
 msgstr "Mostrar marcadors"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:78
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
 msgid "Hyperlinks mode"
 msgstr "Mode de hipervincles"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:79
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
 msgid "Show Footnotes"
 msgstr "Mostrar notes de peu de pàgina"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:80
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:151
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1396
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:153
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1411
 msgid "Go To Page"
 msgstr "Anar a la pàgina"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:81
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
 msgid "Show Table of Contents"
 msgstr "Mostrar taula de continguts"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
 msgid "Go to Home"
 msgstr "Anar a l'inici"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
 msgid "Go to Start of Section"
 msgstr "Anar a l'inici de la secció"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
 msgid "Go to End of Section"
 msgstr "Anar al final de la secció"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
 msgid "Go to Next TOC Section"
 msgstr "Anar a la següent secció de la taula de continguts"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
 msgid "Go to Previous TOC Section"
 msgstr "Anar a la anterior secció de la taula de continguts"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
-msgid "Large Scroll Forward"
-msgstr "Desplaçament gran avant"
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
+msgid "Next Page"
+msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
-msgid "Large Scroll Backward"
-msgstr "Desplaçament gran enrere"
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
+msgid "Previous Page"
+msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
 msgid "Undo"
 msgstr "Desfer"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
 msgid "Redo"
 msgstr "Refer"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:353
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:379
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:402
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1400
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:354
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:380
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:403
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1415
 msgid "Search"
 msgstr "Cercar"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
 msgid "Increase Font Size"
 msgstr "Augmentar grandària de la font"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
 msgid "Decrease Font Size"
 msgstr "Disminuir grandària de la font"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:98
 msgid "Toggle Bold Font"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:99
 msgid "Toggle Position Indicator"
 msgstr "Canviar l'indicador de posició"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:111
 msgid "Arabic"
 msgstr "Àrab"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:112
 msgid "Czech"
 msgstr "Txec"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:113
 msgid "German"
 msgstr "Alemany"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:114
 msgid "German (traditional orthography)"
 msgstr "Alemany (ortografia tradicional)"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:111
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
 msgid "Greek"
 msgstr "Grec"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:112
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:116
 msgid "English"
 msgstr "Anglés"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:113
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:117
 msgid "Esperanto"
 msgstr "Esperanto"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:114
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "Spanish"
 msgstr "Castellà"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
 msgid "Finnish"
 msgstr "Finès"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:116
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
 msgid "French"
 msgstr "Francès"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:117
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
 msgid "Hebrew"
 msgstr "Hebreu"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
 msgid "Indonesian"
 msgstr "Indonesi"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
 msgid "Italian"
 msgstr "Italià"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
 msgid "Norwegian"
 msgstr "Norueg"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
 msgid "Portuguese"
 msgstr "Portuguès"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
 msgid "Russian"
 msgstr "Rus"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:127
 msgid "Swedish"
 msgstr "Suec"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:128
 msgid "Turkish"
 msgstr "Turc"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:129
 msgid "Ukrainian"
 msgstr "Ucraïnès"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
 msgid "Chinese"
 msgstr "Xinès"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:127
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
 msgid "Other"
 msgstr "Altre"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
 msgid "undefined"
 msgstr "indefinit"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
 msgid "left"
 msgstr "esquerra"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
 msgid "right"
 msgstr "dreta"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
 msgid "center"
 msgstr "centre"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
 msgid "justify"
 msgstr "justificat"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:136
 msgid "New Line"
 msgstr "Nova línia"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:136
 msgid "Empty Line"
 msgstr "Línia buida"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:136
 msgid "Line With Indent"
 msgstr "Línia amb sagnat"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:230
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1398
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:231
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1413
 msgid "Table Of Contents"
 msgstr "Taula de continguts"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:295
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1402
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:296
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1417
 msgid "Bookmarks"
 msgstr "Marcadors"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:296
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:297
 msgid "Delete"
 msgstr "Esborrar"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:304
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:305
 msgid "Page "
 msgstr "Pàgina "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:318
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:319
 msgid "Bookmark added"
 msgstr "Marcador afegit"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:347
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:373
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:348
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:374
 msgid "<- Search ->"
 msgstr "← Cercar →"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:349
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:375
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:350
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:376
 msgid "Search ->"
 msgstr "Cercar →"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:351
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:377
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:352
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:378
 msgid "<- Search"
 msgstr "← Cercar"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:360
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:361
 msgid "Text not found"
 msgstr "Text no trobat"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:484
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:677
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1097
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:489
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:686
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1104
 #, c-format
 msgid "%d%%"
 msgstr "%d%%"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:501
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:557
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:670
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:751
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1095
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:508
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:564
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:679
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:760
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1102
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1132
 #, c-format
 msgid "%dpt"
 msgstr "%dpt"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:618
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:701
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:627
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:710
 msgid "Left Margin"
 msgstr "Marge esquerre"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:621
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:702
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:630
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:711
 msgid "Right Margin"
 msgstr "Marge dret"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:624
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:703
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:633
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:712
 msgid "Top Margin"
 msgstr "Marge superior"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:627
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:704
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:636
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:713
 msgid "Bottom Margin"
 msgstr "Marge inferior"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:660
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1094
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:669
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1101
 msgid "Font Family"
 msgstr "Família de la font"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:667
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1095
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:676
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1102
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1132
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1502
 msgid "Font Size"
 msgstr "Grandària de la font"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:674
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1097
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:683
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1104
 msgid "Line Spacing"
 msgstr "Espaciat de línia"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:681
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1098
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:690
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1105
 msgid "Alignment"
 msgstr "Aliniament"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:691
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1099
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:700
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1106
 msgid "Margins"
 msgstr "Marges"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:708
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1100
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:717
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1107
 msgid "First Line Indent"
 msgstr "Sagnat de primera línia"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:734
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1123
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:743
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1130
 msgid "Indicator Height"
 msgstr "Indicador d'alçada"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:741
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1124
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:750
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1131
 msgid "Offset From Text"
 msgstr "Desplaçament des del text"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:748
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:757
 msgid "Indicator Font Size"
 msgstr "Indicador de grandària de font"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:822
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1152
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:831
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1159
 msgid "Default Language"
 msgstr "Idioma per defecte"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:830
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:997
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1161
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:839
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1003
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1168
 msgid "Default Encoding Set"
 msgstr "Tipus de codificació per defecte"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:837
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1004
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1162
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:846
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1010
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1169
 msgid "Default Encoding"
 msgstr "Codificació per defecte"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:986
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:992
 msgid "Book Language"
 msgstr "Idioma del llibre"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1030
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1036
 msgid "Break Paragraph At"
 msgstr "Tallar paràgraf a"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1059
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1065
 #, c-format
 msgid "Key %d"
 msgstr "Tecla %d"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1086
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1290
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1093
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1297
 msgid "Format & Style"
 msgstr "Format i estil"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1096
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1103
 msgid "Bold"
 msgstr "Negreta"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1101
-msgid "Auto Hyphenations"
-msgstr "Separació silàbica automàtica"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1110
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1291
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1117
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1298
 msgid "Indicator"
 msgstr "Indicador"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1118
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1125
 msgid "Show Indicator"
 msgstr "Mostrar indicador"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1119
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1126
 msgid "Show TOC Marks"
 msgstr "Mostrar marques de la taula de continguts"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1120
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1127
 msgid "Show Position"
 msgstr "Mostrar posició"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1121
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1128
 msgid "Show Time"
 msgstr "Mostrar hora"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1122
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1129
 msgid "Show Battery"
 msgstr "Mostrar bateria"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1132
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1194
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1292
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1139
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1201
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1299
 msgid "Language"
 msgstr "Idioma"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1143
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1150
 msgid "Detect Language and Encoding"
 msgstr "Detectar idioma i codificació"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1169
-msgid "iso-8859-1 -> win-1251"
-msgstr "iso-8859-1 → win-1251"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1179
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1186
 msgid "Book Settings"
 msgstr "Preferències del llibre"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1197
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1207
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1204
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1214
 msgid "Encoding"
 msgstr "Codificació"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1206
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1213
 msgid "Encoding Set"
 msgstr "Tipus de codificació"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1242
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1249
 msgid "Break Paragraph at"
 msgstr "Tallar paràgraf a"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1250
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1294
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1257
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1301
 msgid "Keys"
 msgstr "Tecles"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1282
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1289
 msgid "Settings"
 msgstr "Preferències"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1293
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1300
 msgid "Book settings"
 msgstr "Preferències del llibre"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1308
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1394
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1315
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1409
 msgid "Book Info"
 msgstr "Informació del llibre"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1323
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1330
 msgid "File: "
 msgstr "Fitxer: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1325
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1332
 msgid "Title: "
 msgstr "Títol: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1326
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1341
 msgid "Author: "
 msgstr "Autor: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1329
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1344
 msgid "Series: "
 msgstr "Sèrie: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1332
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1347
 msgid "Book number: "
 msgstr "Nombre de llibre: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1389
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1404
 msgid "Book Menu"
 msgstr "Menú del llibre"
 
@@ -503,6 +496,18 @@ msgstr "Encès"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
 msgid "Off"
 msgstr "Apagat"
+
+#~ msgid "Large Scroll Forward"
+#~ msgstr "Desplaçament gran avant"
+
+#~ msgid "Large Scroll Backward"
+#~ msgstr "Desplaçament gran enrere"
+
+#~ msgid "Auto Hyphenations"
+#~ msgstr "Separació silàbica automàtica"
+
+#~ msgid "iso-8859-1 -> win-1251"
+#~ msgstr "iso-8859-1 → win-1251"
 
 #~ msgid "Full path: "
 #~ msgstr "Ruta completa: "
