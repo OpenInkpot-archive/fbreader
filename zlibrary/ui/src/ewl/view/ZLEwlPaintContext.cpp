@@ -548,8 +548,7 @@ void ZLEwlPaintContext::drawString(int x, int y, const char *str, int len, bool 
 ZLImageData *cover_image = NULL;
 
 void ZLEwlPaintContext::drawImage(int x, int y, const ZLImageData &image, int width, int height, ZLPaintContext::ScalingType type) {
-	//TODO!!!
-	fprintf(stderr, "draw scaled image\n");
+	drawImage(x, y, image);
 }
 
 void ZLEwlPaintContext::drawImage(int x, int y, const ZLImageData &image) {
