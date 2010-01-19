@@ -18,7 +18,9 @@
 	<binding key="Escape" action="cancel"/>
 
 	<binding key="Next" action="pageForward"/>
+	<binding key="Alt+Next" action="pageForward"/>
 	<binding key="Prior" action="pageBackward"/>
+	<binding key="Alt+Prior" action="pageBackward"/>
 	<binding key="Down" action="pageForward"/>
 	<binding key="Up" action="pageBackward"/>
 	<binding key="Right" action="pageForward"/>
