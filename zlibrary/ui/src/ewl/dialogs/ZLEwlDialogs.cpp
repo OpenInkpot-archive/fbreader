@@ -667,6 +667,7 @@ void format_style_handler(int idx, bool is_alt)
 	cb_olist *current_olist = olists.back();
 	if(0 == idx) {
 		INIT_VLIST(_("Font Family"), font_family_handler);
+		vlist->font_list = true;
 
 		for(int i = 0; i < myContext->fontFamilies().size(); i++)
 			ADD_VALUE_STRING(myContext->fontFamilies().at(i).c_str());

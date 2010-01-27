@@ -91,6 +91,7 @@ typedef struct _cb_vlist cb_vlist;
 
 struct _cb_vlist {
 	string name;
+	bool font_list;
 	vector<cb_item_value> values;
 	cb_olist *parent;
 	int parent_item_idx;
@@ -272,6 +273,7 @@ extern cb_vlist *vlist;
 		}	\
 		vlist = new cb_vlist;	\
 		vlist->name = (__name);	\
+		vlist->font_list = false; \
 		vlist->item_handler = (__handler);	\
 		vlist->destroy_handler = refresh_view; \
 		vlist->parent = olists.back();	\

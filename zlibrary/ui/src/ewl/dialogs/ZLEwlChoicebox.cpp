@@ -25,6 +25,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <algorithm>
+#include <cctype>
+#include <sstream>
 
 #include <Ecore.h>
 #include <Ecore_X.h>
@@ -513,9 +516,30 @@ static void rcb_draw_handler(Evas_Object* choicebox,
 		return;
 
 	cb_item_value *iv = &vlist->values.at(item_num);
-	edje_object_part_text_set(item, "title", iv->text.c_str());
-	edje_object_part_text_set(item, "value", "");
 
+	if(vlist->font_list) {
+		std::string fn = iv->text;
+		fn.erase(remove_if(fn.begin(), fn.end(), static_cast<int(*)(int)>( isspace )), fn.end());
+
+		const Evas_Object *tb = edje_object_part_object_get(item, "title");
+		const Evas_Textblock_Style *st = evas_object_textblock_style_get(tb);
+
+		if(!strstr(evas_textblock_style_get(st), fn.c_str())) {
+			char *style;
+			asprintf(&style, "%s%s='+font=%s'/%s='-'", evas_textblock_style_get(st), fn.c_str(), fn.c_str(), fn.c_str());
+			evas_textblock_style_set((Evas_Textblock_Style*)st, style);
+			evas_object_textblock_style_set((Evas_Object*)tb, (Evas_Textblock_Style*)st);
+			free(style);
+		}
+
+		std::stringstream s;
+		s << "<" << fn << ">" << iv->text << "</" << fn << ">";
+		edje_object_part_text_set(item, "title", s.str().c_str());
+	} else {
+		edje_object_part_text_set(item, "title", iv->text.c_str());
+	}
+
+	edje_object_part_text_set(item, "value", "");
 //	fprintf(stderr, "rcd_draw_handle: choicebox: %p, item: %p, item_num: %d, page_position: %d, param: %p\n",
 //			choicebox, item, item_num, page_position, param);
 }
