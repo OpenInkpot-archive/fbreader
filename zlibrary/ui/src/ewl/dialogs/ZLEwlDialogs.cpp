@@ -675,6 +675,7 @@ void format_style_handler(int idx, bool is_alt)
 		cb_rcb_new();
 	} else if(1 == idx) {
 		INIT_VLIST(_("Font Size"), font_size_handler);
+		vlist->fsize_list = true;
 
 		for(int i = 0; i <= FONT_SIZE_MAX; i++)
 			ADD_VALUE_INT_F(FONT_SIZE(i), _("%dpt"));

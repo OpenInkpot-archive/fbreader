@@ -34,6 +34,7 @@
 #include <Ecore_Evas.h>
 #include <Edje.h>
 
+#include "../../../../../fbreader/src/options/FBTextStyle.h"
 
 #include <libintl.h>
 
@@ -42,6 +43,8 @@ extern "C" {
 #include <libchoicebox.h>
 #include <libeoi.h>
 }
+
+#define _(x) x
 
 #define SETTINGS_LEFT_NAME "settings_left"
 #define SETTINGS_RIGHT_NAME "settings_right"
@@ -535,11 +538,46 @@ static void rcb_draw_handler(Evas_Object* choicebox,
 		std::stringstream s;
 		s << "<" << fn << ">" << iv->text << "</" << fn << ">";
 		edje_object_part_text_set(item, "title", s.str().c_str());
+		edje_object_part_text_set(item, "value", "");
+	} else if(vlist->fsize_list) {
+		std::stringstream s;
+		s << "fsize" << iv->ival;
+
+		const Evas_Object *tb = edje_object_part_object_get(item, "title");
+		const Evas_Textblock_Style *st = evas_object_textblock_style_get(tb);
+
+		char *c = strdup(s.str().c_str());
+		if(!strstr(evas_textblock_style_get(st), c)) {
+			char *style;
+			asprintf(&style, "%sfsize%d='+font_size=%d'/fsize%d='-'", evas_textblock_style_get(st), iv->ival, (iv->ival - 1) * ecore_x_dpi_get() / 72, iv->ival);
+			evas_textblock_style_set((Evas_Textblock_Style*)st, style);
+			evas_object_textblock_style_set((Evas_Object*)tb, (Evas_Textblock_Style*)st);
+			free(style);
+		}
+
+		std::string fn = FBTextStyle::Instance().FontFamilyOption.value();
+		fn.erase(remove_if(fn.begin(), fn.end(), static_cast<int(*)(int)>( isspace )), fn.end());
+
+		if(!strstr(evas_textblock_style_get(st), fn.c_str())) {
+			char *style;
+			asprintf(&style, "%s%s='+font=%s'/%s='-'", evas_textblock_style_get(st), fn.c_str(), fn.c_str(), fn.c_str());
+			evas_textblock_style_set((Evas_Textblock_Style*)st, style);
+			evas_object_textblock_style_set((Evas_Object*)tb, (Evas_Textblock_Style*)st);
+			free(style);
+		}
+
+		char *s2;
+		asprintf(&s2, "<%s><%s>%s</%s></%s>", fn.c_str(), c, _("ABCabc"), c, fn.c_str());
+		edje_object_part_text_set(item, "value", iv->text.c_str());
+		edje_object_part_text_set(item, "title", s2);
+
+		free(s2);
+		free(c);
 	} else {
 		edje_object_part_text_set(item, "title", iv->text.c_str());
+		edje_object_part_text_set(item, "value", "");
 	}
 
-	edje_object_part_text_set(item, "value", "");
 //	fprintf(stderr, "rcd_draw_handle: choicebox: %p, item: %p, item_num: %d, page_position: %d, param: %p\n",
 //			choicebox, item, item_num, page_position, param);
 }
