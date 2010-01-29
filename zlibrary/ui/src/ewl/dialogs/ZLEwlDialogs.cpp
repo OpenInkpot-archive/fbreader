@@ -28,6 +28,7 @@
 #include <ewl/Ewl.h>
 #include <Evas.h>
 #include <Edje.h>
+#include <Efreet.h>
 
 #include <iostream>
 #include <sstream>
@@ -1050,10 +1051,9 @@ void single_key_handler(int idx, bool is_alt)
 		return;
 
 	ZLKeyBindings *kb = &(*myFbreader->myBindings0);
-	stringstream k;
-	k << (vlist->parent_item_idx+1);
+	char *key = (char*)olists.back()->items.at(vlist->parent_item_idx).data;
 
-	kb->bindKey(k.str(), actions[idx].actionId);
+	kb->bindKey(key, actions[idx].actionId);
 	cb_item_value &iv = olists.back()->items.at(vlist->parent_item_idx).current_value;
 	iv.text = iv.sval = actions[idx].actionName;
 
@@ -1064,9 +1064,10 @@ void single_key_handler(int idx, bool is_alt)
 void keys_handler(int idx, bool is_alt)
 {
 	char *k;
-	asprintf(&k, _("Key %d"), idx + 1);
+	asprintf(&k, _("Key %s"), olists.back()->items.at(idx).name.c_str());
 
 	INIT_VLIST(k, single_key_handler);
+	free(k);
 
 	for(struct _action *a = actions; a->actionName; a++)
 		ADD_VALUE_STRING(a->actionName);
@@ -1266,14 +1267,51 @@ void options_dialog_handler(int idx, bool is_alt)
 
 		struct _action *a;
 		ZLKeyBindings *kb = &(*myFbreader->myBindings0);
-		for(int k = 1; k <= 9; k++) {
-			stringstream s;
-			s << k;
 
-			for(a = actions; a->actionId && kb->getBinding(s.str()).compare(a->actionId); a++)
+		efreet_init();
+		Efreet_Ini* ini = efreet_ini_new("/usr/share/FBReader/default/keydefs.ini");
+		if(!ini || !ini->data)
+		{
+			if(ini)
+				efreet_ini_free(ini);
+			return;
+		};
+
+		efreet_ini_section_set(ini, "main");
+		char *keys = strdup(efreet_ini_string_get(ini, "keys"));
+
+		efreet_ini_section_set(ini, "keynames");
+
+		char *p = strtok(keys, " ,");
+		while(p) {
+			char *keyname = gettext(efreet_ini_string_get(ini, p));
+
+			if(!strcmp(p, "Space"))
+				p = " ";
+
+			for(a = actions; a->actionId && kb->getBinding(p).compare(a->actionId); a++)
 				;
 
-			ADD_OPTION_STRING(s.str(), a->actionName ? a->actionName : kb->getBinding(s.str()));
+			ADD_OPTION_STRING_DATA(keyname, a->actionName ? a->actionName : kb->getBinding(p), strdup(p));
+
+			p = strtok(NULL, " ,");
+		}
+
+		free(keys);
+
+		efreet_ini_free(ini);
+		efreet_shutdown();
+
+		if(0) {
+			for(int k = 1; k <= 9; k++) {
+				stringstream s;
+				s << k;
+
+				for(a = actions; a->actionId && kb->getBinding(s.str()).compare(a->actionId); a++)
+					;
+
+				ADD_OPTION_STRING(s.str(), a->actionName ? a->actionName : kb->getBinding(s.str()));
+			}
 		}
 
 		cb_lcb_redraw();

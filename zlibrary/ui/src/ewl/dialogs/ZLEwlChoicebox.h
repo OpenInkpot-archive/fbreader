@@ -116,6 +116,9 @@ extern vector<cb_olist *> olists;
 extern cb_vlist *vlist;
 
 #define ADD_OPTION_STRING(__name, __value) \
+		ADD_OPTION_STRING_DATA(__name, __value, NULL)
+
+#define ADD_OPTION_STRING_DATA(__name, __value, __data) \
 		i.name = (__name);	\
 		i.type = ITEM_OPTION;	\
 		i.values.clear();	\
@@ -123,7 +126,7 @@ extern cb_vlist *vlist;
 		i.current_value.text = i.current_value.sval = (__value);	\
 		i.current_value.type = VAL_STRING;	\
 		i.item_handler = NULL; \
-		i.data = NULL; \
+		i.data = (__data); \
 		options->items.push_back(i);
 
 #define ADD_OPTION_INT_T(__name, __value, __valuetext) \
