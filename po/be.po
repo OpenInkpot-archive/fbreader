@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
 "Report-Msgid-Bugs-To: @PACKAGE_BUGREPORT@\n"
-"POT-Creation-Date: 2010-01-20 00:35+0100\n"
+"POT-Creation-Date: 2010-01-29 19:37+0100\n"
 "PO-Revision-Date: 2009-07-13 22:40+0300\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -24,478 +24,651 @@ msgstr ""
 msgid "FBReader: Help"
 msgstr "FBReader: Дапамога"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:79
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
 msgid "None"
 msgstr "Няма"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:80
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
 msgid "Add Bookmark"
 msgstr "Дадаць закладку"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:81
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
 msgid "Show Bookmarks"
 msgstr "Паказаць закладкі"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
 msgid "Hyperlinks mode"
 msgstr "Рэжым спасылак"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
 msgid "Show Footnotes"
 msgstr "Паказаць зноскі"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:153
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1411
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:156
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1454
 msgid "Go To Page"
 msgstr "Да старонкі"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
 msgid "Show Table of Contents"
 msgstr "Паказаць змест"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
 msgid "Go to Home"
 msgstr "Да пачатку кнігі"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
 msgid "Go to Start of Section"
 msgstr "Да пачатку раздзела"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
 msgid "Go to End of Section"
 msgstr "Да канчатка раздзела"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
 msgid "Go to Next TOC Section"
 msgstr "Да наступнага раздзела"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
 msgid "Go to Previous TOC Section"
 msgstr "Да папярэдняга раздзела"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
 msgid "Next Page"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
 msgid "Previous Page"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
 msgid "Undo"
 msgstr "Вярнуць"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
 msgid "Redo"
 msgstr "Паўтарыць"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:354
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:380
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:403
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1415
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:98
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:357
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:383
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:406
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1458
 msgid "Search"
 msgstr "Шукаць"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:99
 msgid "Increase Font Size"
 msgstr "Павялічыць памер тэксту"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:100
 msgid "Decrease Font Size"
 msgstr "Паменьшыць памер тэксту"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:98
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
 msgid "Toggle Bold Font"
 msgstr "Цёмны шрыфт"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:99
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:102
 msgid "Toggle Position Indicator"
 msgstr "Паказаць індыкатар месцазнаходжання"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:111
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:114
 msgid "Arabic"
 msgstr "Арабская"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:112
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
 msgid "Czech"
 msgstr "Чэшская"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:113
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:116
 msgid "German"
 msgstr "Нямецкая"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:114
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:117
 msgid "German (traditional orthography)"
 msgstr "Нямецкая (Традыцыйная арфаграфія)"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "Greek"
 msgstr "Грэцкая"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:116
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
 msgid "English"
 msgstr "Англійская"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:117
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
 msgid "Esperanto"
 msgstr "Эсперанта"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
 msgid "Spanish"
 msgstr "Іспанская"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
 msgid "Finnish"
 msgstr "Фінская"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
 msgid "French"
 msgstr "Французская"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
 msgid "Hebrew"
 msgstr "Габрэйская"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
 msgid "Indonesian"
 msgstr "Інданэзійская"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
 msgid "Italian"
 msgstr "Італьянская"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:127
 msgid "Norwegian"
 msgstr "Нарвежская"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:128
 msgid "Portuguese"
 msgstr "Партугальская"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:129
 msgid "Russian"
 msgstr "Руская"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:127
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
 msgid "Swedish"
 msgstr "Шведская"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:128
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
 msgid "Turkish"
 msgstr "Турэцкая"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:129
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
 msgid "Ukrainian"
 msgstr "Украінская"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:133
 msgid "Chinese"
 msgstr "Кітайская"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:134
 msgid "Other"
 msgstr "Іншыя"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:138
 msgid "undefined"
 msgstr "нявызначана"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:138
 msgid "left"
 msgstr "Улева"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:138
 msgid "right"
 msgstr "Управа"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:138
 msgid "center"
 msgstr "Пасярэдзіне"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:138
 msgid "justify"
 msgstr "Па шырыні"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:136
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
 msgid "New Line"
 msgstr "Новы радок"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:136
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
 msgid "Empty Line"
 msgstr "Пусты радок"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:136
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
 msgid "Line With Indent"
 msgstr "Чырвоны радок"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:231
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1413
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:234
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1456
 msgid "Table Of Contents"
 msgstr "Змест"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:296
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1417
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:299
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1460
 msgid "Bookmarks"
 msgstr "Закладкі"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:297
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:300
 msgid "Delete"
 msgstr "Выдалиць"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:305
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:308
 msgid "Page "
 msgstr "Старонка"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:319
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:322
 msgid "Bookmark added"
 msgstr "Закладка дададзеная"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:348
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:374
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:351
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:377
 msgid "<- Search ->"
 msgstr "<- Шукаць ->"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:350
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:376
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:353
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:379
 msgid "Search ->"
 msgstr "Шукаць ->"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:352
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:378
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:355
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:381
 msgid "<- Search"
 msgstr "<- Шукаць"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:361
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:364
 msgid "Text not found"
 msgstr "Тэкст не знойдзены"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:489
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:686
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1104
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:492
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:691
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1109
 #, c-format
 msgid "%d%%"
 msgstr "%d%%"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:508
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:564
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:679
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:760
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1102
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1132
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:511
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:567
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:684
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:765
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1107
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1137
 #, c-format
 msgid "%dpt"
 msgstr "%d пт"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:627
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:710
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:630
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:715
 msgid "Left Margin"
 msgstr "Левае поле"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:630
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:711
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:633
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:716
 msgid "Right Margin"
 msgstr "Правае поле"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:633
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:712
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:636
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:717
 msgid "Top Margin"
 msgstr "Верхняе поле"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:636
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:713
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:639
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:718
 msgid "Bottom Margin"
 msgstr "Ніжняе поле"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:669
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1101
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:672
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1106
 msgid "Font Family"
 msgstr "Шрыфт"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:676
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1102
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1132
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1502
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:680
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1107
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1137
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1545
 msgid "Font Size"
 msgstr "Памер шрыфта"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:683
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1104
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:688
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1109
 msgid "Line Spacing"
 msgstr "Інтэрвал"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:690
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1105
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:695
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1110
 msgid "Alignment"
 msgstr "Раўнаванне"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:700
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1106
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:705
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1111
 msgid "Margins"
 msgstr "Палі"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:717
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1107
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:722
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1112
 msgid "First Line Indent"
 msgstr "Чырвоны радок"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:743
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1130
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:748
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1135
 msgid "Indicator Height"
 msgstr "Вышыня індыкатару"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:750
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1131
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:755
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1136
 msgid "Offset From Text"
 msgstr "Водступ ад тэксту"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:757
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:762
 msgid "Indicator Font Size"
 msgstr "Памер шрыфта"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:831
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1159
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:836
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1164
 msgid "Default Language"
 msgstr "Прадвызначаная мова"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:839
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1003
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1168
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:844
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1008
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1173
 msgid "Default Encoding Set"
 msgstr "Прадвызначаны набор знаказбораў"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:846
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1010
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1169
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:851
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1015
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1174
 msgid "Default Encoding"
 msgstr "Прадвызначаны знаказбор"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:992
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:997
 msgid "Book Language"
 msgstr "Мова кнігі"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1036
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1041
 msgid "Break Paragraph At"
 msgstr "Скончыць параграф на"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1065
-#, c-format
-msgid "Key %d"
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1069
+#, fuzzy, c-format
+msgid "Key %s"
 msgstr "Кнопка %d"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1093
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1297
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1098
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1340
 msgid "Format & Style"
 msgstr "Фармат і стыль"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1103
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1108
 msgid "Bold"
 msgstr "Цёмны"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1117
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1298
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1122
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1341
 msgid "Indicator"
 msgstr "Індыкатар"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1130
 msgid "Show Indicator"
 msgstr "Паказваць індыкатар"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1126
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1131
 msgid "Show TOC Marks"
 msgstr "Паказваць адметкі раздзелаў"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1127
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1132
 msgid "Show Position"
 msgstr "Паказваць пазіцыю"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1128
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1133
 msgid "Show Time"
 msgstr "Паказваць час"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1129
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1134
 msgid "Show Battery"
 msgstr "Паказваць батарэю"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1139
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1201
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1299
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1144
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1206
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1342
 msgid "Language"
 msgstr "Мова"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1150
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1155
 msgid "Detect Language and Encoding"
 msgstr "Вызначыць мову і знаказбор аўтаматычна"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1186
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1191
 msgid "Book Settings"
 msgstr "Настаўленні кнігі"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1204
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1214
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1209
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1219
 msgid "Encoding"
 msgstr "Знаказбор"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1213
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1218
 msgid "Encoding Set"
 msgstr "Набор знаказбораў"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1249
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1254
 msgid "Break Paragraph at"
 msgstr "Скончыць параграф на"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1257
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1301
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1262
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1344
 msgid "Keys"
 msgstr "Кнопкі"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1289
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1332
 msgid "Settings"
 msgstr "Настаўленні"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1300
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1343
 msgid "Book settings"
 msgstr "Настаўленні кнігі"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1315
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1409
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1358
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1452
 msgid "Book Info"
 msgstr "Звесткі кнігі"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1330
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1373
 msgid "File: "
 msgstr "Файл:"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1332
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1375
 msgid "Title: "
 msgstr "Загаловак:"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1341
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1384
 msgid "Author: "
 msgstr "Аўтар:"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1344
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1387
 msgid "Series: "
 msgstr "Серыя:"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1347
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1390
 msgid "Book number: "
 msgstr "Нумар кнігі ў серыі:"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1404
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1447
 msgid "Book Menu"
 msgstr "Меню кнігі"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:181
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:203
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:186
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:208
 msgid "On"
 msgstr "Укл."
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:184
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:206
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:189
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:211
 msgid "Off"
 msgstr "Выкл."
+
+#: fbreader/data/default/keydefs.n516.tmpl:4
+#: fbreader/data/default/keydefs.v3.tmpl:4
+msgid "0"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:5
+#: fbreader/data/default/keydefs.v3.tmpl:5
+msgid "1"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:6
+#: fbreader/data/default/keydefs.v3.tmpl:6
+msgid "2"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:7
+#: fbreader/data/default/keydefs.v3.tmpl:7
+msgid "3"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:8
+#: fbreader/data/default/keydefs.v3.tmpl:8
+msgid "4"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:9
+#: fbreader/data/default/keydefs.v3.tmpl:9
+msgid "5"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:10
+#: fbreader/data/default/keydefs.v3.tmpl:10
+msgid "6"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:11
+#: fbreader/data/default/keydefs.v3.tmpl:11
+msgid "7"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:12
+#: fbreader/data/default/keydefs.v3.tmpl:12
+msgid "8"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:13
+#: fbreader/data/default/keydefs.v3.tmpl:13
+msgid "9"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:14
+#, fuzzy
+msgid "M/Bookmark"
+msgstr "Закладкі"
+
+#: fbreader/data/default/keydefs.n516.tmpl:17
+#: fbreader/data/default/keydefs.v3.tmpl:24
+msgid "OK"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:18
+msgid "Back"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:19
+msgid "Next"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:20
+msgid "Prior"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:21
+msgid "LP Next"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:22
+msgid "LP Prior"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:23
+msgid "Down"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:24
+msgid "Up"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:25
+#: fbreader/data/default/keydefs.v3.tmpl:28
+#, fuzzy
+msgid "Right"
+msgstr "Управа"
+
+#: fbreader/data/default/keydefs.n516.tmpl:26
+#: fbreader/data/default/keydefs.v3.tmpl:30
+#, fuzzy
+msgid "Left"
+msgstr "Улева"
+
+#: fbreader/data/default/keydefs.n516.tmpl:28
+msgid "Zoom"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:14
+msgid "LP 0"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:15
+msgid "LP 1"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:16
+msgid "LP 2"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:17
+msgid "LP 3"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:18
+msgid "LP 4"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:19
+msgid "LP 5"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:20
+msgid "LP 6"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:21
+msgid "LP 7"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:22
+msgid "LP 8"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:23
+msgid "LP 9"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:25
+msgid "LP OK"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:26
+msgid "C"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:29
+#, fuzzy
+msgid "LP Right"
+msgstr "Управа"
+
+#: fbreader/data/default/keydefs.v3.tmpl:31
+msgid "LP Left"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:32
+msgid "+"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:33
+msgid "-"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Menu"
+#~ msgstr "Меню кнігі"
 
 #~ msgid "Large Scroll Forward"
 #~ msgstr "На старонку далей"
