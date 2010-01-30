@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
 "Report-Msgid-Bugs-To: @PACKAGE_BUGREPORT@\n"
-"POT-Creation-Date: 2010-01-29 19:37+0100\n"
+"POT-Creation-Date: 2010-01-30 01:48+0100\n"
 "PO-Revision-Date: 2009-09-04 12:56+0530\n"
 "Last-Translator: sankarshan mukhopadhyay <sankarshan@fedoraproject.org>\n"
 "Language-Team: anubad@lists.ankur.org.in\n"
@@ -23,430 +23,452 @@ msgstr ""
 msgid "FBReader: Help"
 msgstr "FBReader:সহায়িকা"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:80
 msgid "None"
 msgstr "একটিও নয়"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:81
 msgid "Add Bookmark"
 msgstr "বুকমার্ক যোগ করুন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
 msgid "Show Bookmarks"
 msgstr "বুকমার্ক প্রদর্শন করুন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
 msgid "Hyperlinks mode"
 msgstr "হাইপারলিংক মোড"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
 msgid "Show Footnotes"
 msgstr "পদটীকা প্রদর্শন করুন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:156
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:157
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1454
 msgid "Go To Page"
 msgstr "ঐ পৃষ্ঠায় যাওয়া হবে"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
 msgid "Show Table of Contents"
 msgstr "সূচীপত্র প্রদর্শন করা হবে"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
 msgid "Go to Home"
 msgstr "শুরু বা হোম-এ য়াওয়া হবে"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
 msgid "Go to Start of Section"
 msgstr "সেকশন-এর শুরুতে যাওয়া হবে"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
 msgid "Go to End of Section"
 msgstr "সেকশন-এর শেষে যাওয়া হবে"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
 msgid "Go to Next TOC Section"
 msgstr "পরের TOC সেকশন-এ যাওয়া হবে"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
 msgid "Go to Previous TOC Section"
 msgstr "আগের TOC সেকশন-এ যাওয়া হবে"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
 msgid "Next Page"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
 msgid "Previous Page"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
 msgid "Undo"
 msgstr "পূর্বাবস্থা"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
 msgid "Redo"
 msgstr "পুনরাবৃত্তি"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:98
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:357
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:383
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:406
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:358
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:384
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:407
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1458
 msgid "Search"
 msgstr "খুঁজে নিন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:99
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
 msgid "Increase Font Size"
 msgstr "ফন্টের মাপ বাড়ানো হবে"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:100
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:98
 msgid "Decrease Font Size"
 msgstr "ফন্টের মাপ কমানো হবে"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:99
 msgid "Toggle Bold Font"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:102
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:100
 msgid "Toggle Position Indicator"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:114
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
+#, fuzzy
+msgid "Show Settings"
+msgstr "স্থান প্রদর্শন করুন"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
+msgid "Cancel/Quit"
+msgstr ""
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:105
+msgid "Show Local Menu"
+msgstr ""
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
+#, fuzzy
+msgid "Show Help"
+msgstr "সময় প্রদর্শন করুন"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
+msgid "Show font size dialog"
+msgstr ""
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
 msgid "Arabic"
 msgstr ""
 "আরবি\n"
 "আরবি"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:116
 msgid "Czech"
 msgstr "চেক"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:116
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:117
 msgid "German"
 msgstr "জার্মান"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:117
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "German (traditional orthography)"
 msgstr "জার্মান"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
 msgid "Greek"
 msgstr "গ্রীক"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
 msgid "English"
 msgstr "ইংরাজী"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
 msgid "Esperanto"
 msgstr "এস্পেরান্তো"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
 msgid "Spanish"
 msgstr "স্প্যানিশ"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
 msgid "Finnish"
 msgstr "ফিনিশ"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
 msgid "French"
 msgstr "ফরাসী"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
 msgid "Hebrew"
 msgstr "হিব্রু"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
 msgid "Indonesian"
 msgstr "ইন্দোনেশীয়"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:127
 msgid "Italian"
 msgstr "ইতালিয়ান"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:127
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:128
 msgid "Norwegian"
 msgstr "নরওয়েজিয়ান"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:128
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:129
 msgid "Portuguese"
 msgstr "পর্তুগীজ"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:129
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
 msgid "Russian"
 msgstr "রাশিয়ান"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
 msgid "Swedish"
 msgstr "সুইডিশ"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
 msgid "Turkish"
 msgstr "তুর্কী"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:133
 msgid "Ukrainian"
 msgstr "ইউক্রেনিয়ান"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:133
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:134
 msgid "Chinese"
 msgstr "চাইনিজ"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:134
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
 msgid "Other"
 msgstr "অন্যান্য"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:138
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
 msgid "undefined"
 msgstr "অজানা"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:138
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
 msgid "left"
 msgstr "বাঁদিক"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:138
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
 msgid "right"
 msgstr "ডানদিক"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:138
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
 msgid "center"
 msgstr "মাঝখানে"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:138
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
 msgid "justify"
 msgstr "জাস্টিফাই অ্যালাইনমেন্ট"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:140
 msgid "New Line"
 msgstr "নতুন লাইন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:140
 msgid "Empty Line"
 msgstr "শূন্য লাইন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:140
 msgid "Line With Indent"
 msgstr "ইন্ডেন্টসহ লাইন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:234
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:235
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1456
 msgid "Table Of Contents"
 msgstr "সূচীপত্র"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:299
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:300
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1460
 msgid "Bookmarks"
 msgstr "বুকমার্ক"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:300
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:301
 msgid "Delete"
 msgstr "মুছে ফেলুন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:308
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:309
 msgid "Page "
 msgstr "পৃষ্ঠা"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:322
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:323
 msgid "Bookmark added"
 msgstr "বুকমার্ক যোগ করা হয়েছে"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:351
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:377
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:352
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:378
 msgid "<- Search ->"
 msgstr "← Search →"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:353
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:379
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:354
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:380
 msgid "Search ->"
 msgstr "Search →"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:355
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:381
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:356
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:382
 msgid "<- Search"
 msgstr "← Search"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:364
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:365
 msgid "Text not found"
 msgstr "টেক্সট খুঁজে পাওয়া যায়নি"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:492
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:691
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1109
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:493
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:692
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1110
 #, c-format
 msgid "%d%%"
 msgstr "%d%%"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:511
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:567
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:684
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:765
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1107
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1137
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:512
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:568
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:685
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:766
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1108
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1138
 #, c-format
 msgid "%dpt"
 msgstr "%dpt"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:630
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:715
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:631
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:716
 msgid "Left Margin"
 msgstr "বাঁদিকের মার্জিন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:633
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:716
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:634
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:717
 msgid "Right Margin"
 msgstr "ডানদিকের মার্জিন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:636
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:717
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:637
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:718
 msgid "Top Margin"
 msgstr "উপরের মার্জিন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:639
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:718
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:640
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:719
 msgid "Bottom Margin"
 msgstr "নীচের মার্জিন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:672
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1106
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:673
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1107
 msgid "Font Family"
 msgstr "ফন্টের ছাঁদ"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:680
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1107
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1137
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:681
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1108
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1138
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1545
 msgid "Font Size"
 msgstr "ফন্টের আকার"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:688
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1109
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:689
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1110
 msgid "Line Spacing"
 msgstr "লাইনের মধ্যবর্তী স্থান"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:695
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1110
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:696
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1111
 msgid "Alignment"
 msgstr "দিশা"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:705
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1111
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:706
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1112
 msgid "Margins"
 msgstr "মার্জিন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:722
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1112
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:723
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1113
 msgid "First Line Indent"
 msgstr "প্রথম লাইনের ইন্ডেন্ট"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:748
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1135
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:749
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1136
 msgid "Indicator Height"
 msgstr "ইন্ডিকেটর উচ্চতা"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:755
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1136
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:756
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1137
 msgid "Offset From Text"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:762
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:763
 msgid "Indicator Font Size"
 msgstr "ইন্ডিকেটর ফন্টের মাপ"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:836
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1164
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:837
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1165
 msgid "Default Language"
 msgstr "ডিফল্ট ভাষা"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:844
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1008
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1173
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:845
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1009
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1174
 msgid "Default Encoding Set"
 msgstr "ডিফল্ট এনকোডিং সেট"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:851
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1015
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1174
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:852
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1016
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1175
 msgid "Default Encoding"
 msgstr "ডিফল্ট এনকোডিং"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:997
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:998
 msgid "Book Language"
 msgstr "বইয়ের ভাষা"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1041
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1042
 msgid "Break Paragraph At"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1069
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1070
 #, c-format
 msgid "Key %s"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1098
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1099
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1340
 msgid "Format & Style"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1108
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1109
 msgid "Bold"
 msgstr "গাঢ়"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1122
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1123
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1341
 msgid "Indicator"
 msgstr "ইন্ডিকেটর"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1130
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1131
 msgid "Show Indicator"
 msgstr "ইন্ডিকেটর প্রদর্শন করুন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1131
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1132
 msgid "Show TOC Marks"
 msgstr "TOC মার্ক প্রদর্শন করুন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1132
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1133
 msgid "Show Position"
 msgstr "স্থান প্রদর্শন করুন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1133
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1134
 msgid "Show Time"
 msgstr "সময় প্রদর্শন করুন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1134
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1135
 msgid "Show Battery"
 msgstr "ব্যাটারির অবস্থা প্রদর্শন করুন"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1144
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1206
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1145
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1207
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1342
 msgid "Language"
 msgstr "ভাষা"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1155
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1156
 msgid "Detect Language and Encoding"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1191
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1192
 msgid "Book Settings"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1209
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1219
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1210
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1220
 msgid "Encoding"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1218
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1219
 msgid "Encoding Set"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1254
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1255
 msgid "Break Paragraph at"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1262
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1263
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1344
 msgid "Keys"
 msgstr ""
