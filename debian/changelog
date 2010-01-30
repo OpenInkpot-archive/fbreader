@@ -1,3 +1,16 @@
+fbreader (0.12.1-3) zelazny; urgency=low
+
+  * Add long-pressed wheel up/down to keymap
+  * Add preview of font face and font size
+  * Fix the bad rendering of png files
+  * Allow changing keybindings for all possible keys
+  * Update .po files
+  * Get dpi using plain xcb
+  * Add new action names
+  * Update translations
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 30 Jan 2010 01:52:53 +0100
+
 fbreader (0.12.1-2) zelazny; urgency=low
 
   * Fix images
