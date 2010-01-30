@@ -40,6 +40,10 @@
 
 extern "C" {
 #include <xcb/xcb.h>
+#define class class_
+#include <xcb/xcb_aux.h>
+#undef class
+
 #include <libchoicebox.h>
 #include <libeoi.h>
 }
@@ -548,8 +552,28 @@ static void rcb_draw_handler(Evas_Object* choicebox,
 
 		char *c = strdup(s.str().c_str());
 		if(!strstr(evas_textblock_style_get(st), c)) {
+			static int dpi = 0;
+
+			if(!dpi) {
+				xcb_connection_t     *connection;
+				xcb_screen_t         *screen;
+				int                   screen_number;
+
+				connection = xcb_connect (NULL, &screen_number);
+				if (xcb_connection_has_error(connection)) {
+					fprintf (stderr, "ERROR: can't connect to an X server\n");
+					exit(-1);
+				}
+
+				screen = xcb_aux_get_screen (connection, screen_number);
+
+				dpi = (((double)screen->width_in_pixels) * 25.4) / ((double) screen->width_in_millimeters);
+
+				xcb_disconnect(connection);
+			}
+
 			char *style;
-			asprintf(&style, "%sfsize%d='+font_size=%d'/fsize%d='-'", evas_textblock_style_get(st), iv->ival, (iv->ival - 1) * ecore_x_dpi_get() / 72, iv->ival);
+			asprintf(&style, "%sfsize%d='+font_size=%d'/fsize%d='-'", evas_textblock_style_get(st), iv->ival, iv->ival * dpi / 72, iv->ival);
 			evas_textblock_style_set((Evas_Textblock_Style*)st, style);
 			evas_object_textblock_style_set((Evas_Object*)tb, (Evas_Textblock_Style*)st);
 			free(style);
