@@ -96,12 +96,15 @@ static struct _action {
 	{ "search",				_("Search") },
 	{ "increaseFont",			_("Increase Font Size") },
 	{ "decreaseFont",			_("Decrease Font Size") },
-    { "toggleBold",           _("Toggle Bold Font") },
+	{ "toggleBold",           _("Toggle Bold Font") },
 	{ "toggleIndicator",		_("Toggle Position Indicator") },
-//	{ "preferences",			_("Show Options Dialog") },
-//	{ "bookInfo",				_("Show Book Info Dialog") },
-//	{ "cancel",				_("Cancel") },
-//	{ "quit",					_("Quit") },
+	{ "preferences",			_("Show Settings") },
+	//	{ "bookInfo",				_("Show Book Info Dialog") },
+	{ "cancel",				_("Cancel/Quit") },
+	//	{ "quit",					_("Quit") },
+	{ "menu",				_("Show Local Menu") },
+	{ "help",				_("Show Help") },
+	{ "fontSizeDialog",		_("Show font size dialog") },
 	{ NULL,					NULL }
 };
 
