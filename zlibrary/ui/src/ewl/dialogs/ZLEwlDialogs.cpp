@@ -761,6 +761,7 @@ void indicator_handler(int idx, bool is_alt)
 		cb_rcb_new();
 	} else if(7 == idx) {
 		INIT_VLIST(_("Indicator Font Size"), indicator_font_size_handler);
+		vlist->fsize_list = true;
 
 		for(int i = 0; i <= 16 - FONT_SIZE_MIN; i++)
 			ADD_VALUE_INT_F(FONT_SIZE(i), _("%dpt"));
