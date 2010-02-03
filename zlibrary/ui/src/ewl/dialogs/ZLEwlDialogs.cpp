@@ -882,7 +882,7 @@ void book_encoding_set_handler(int idx, bool is_alt)
 
 	shared_ptr<Book> book = myFbreader->myModel->book();
 	book->setEncoding(newenc);
-	BooksDBUtil::saveInfo(ZLFile(myFbreader->myModel->book()->filePath()));
+	Library::Instance().updateBook(book);
 
 	cb_item_value &iv = olists.back()->items.at(vlist->parent_item_idx).current_value;
 	iv.text = iv.sval = sets.at(idx)->name();
@@ -917,7 +917,7 @@ void book_encoding_handler(int idx, bool is_alt)
 	std::string newenc = (*pinfos).at(idx)->name();
 
 	book->setEncoding(newenc);
-	BooksDBUtil::saveInfo(ZLFile(myFbreader->myModel->book()->filePath()));
+	Library::Instance().updateBook(book);
 
 	cb_item_value &iv = olists.back()->items.at(vlist->parent_item_idx).current_value;
 	iv.text = iv.sval = newenc;
@@ -935,7 +935,7 @@ void book_language_handler(int idx, bool is_alt)
 
 	book->setLanguage(languages[idx].langId);
 
-	BooksDBUtil::saveInfo(ZLFile(myFbreader->myModel->book()->filePath()));
+	Library::Instance().updateBook(book);
 
 	cb_item_value &iv = olists.back()->items.at(vlist->parent_item_idx).current_value;
 	iv.text = iv.sval = languages[idx].langName; //(description->myLanguage);
@@ -1153,7 +1153,7 @@ void options_dialog_handler(int idx, bool is_alt)
 		cb_olist_item i;
 
 
-		ADD_OPTION_BOOL_H(_("Detect Language and Encoding"), pc.LanguageAutoDetectOption.value(), ZLBooleanOption_handler, &pc.DefaultLanguageOption);
+		ADD_OPTION_BOOL_H(_("Detect Language and Encoding"), pc.LanguageAutoDetectOption.value(), ZLBooleanOption_handler, &pc.LanguageAutoDetectOption);
 
 		const char *l;
 		for(unsigned int i = 0; i < sizeof(languages) / sizeof(struct _language) && languages[i].langId; i++) {
