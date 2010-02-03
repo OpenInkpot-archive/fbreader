@@ -1111,7 +1111,7 @@ void options_dialog_handler(int idx, bool is_alt)
 		ADD_OPTION_INT_T(	_("Alignment"), baseStyle.AlignmentOption.value(), alignments[baseStyle.AlignmentOption.value()]);
 		ADD_OPTION_STRING(	_("Margins"), "");
 		ADD_OPTION_INT(		_("First Line Indent"), decoration->FirstLineIndentDeltaOption.value());
-		//ADD_OPTION_BOOL_H(	_("Auto Hyphenations"), baseStyle.AutoHyphenationOption.value(), ZLBooleanOption_handler, &baseStyle.AutoHyphenationOption);
+		ADD_OPTION_BOOL_H(	_("Auto Hyphenations"), collection.AutoHyphenationOption.value(), ZLBooleanOption_handler, &collection.AutoHyphenationOption);
 
 		cb_lcb_redraw();
 	} else if(1 == idx) {
