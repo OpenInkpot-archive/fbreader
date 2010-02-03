@@ -494,10 +494,6 @@ msgstr "Вкл"
 msgid "Off"
 msgstr "Выкл"
 
-#: fbreader/data/default/keydefs.n516.tmpl:22
-msgid "LP Prior"
-msgstr ""
-
 #: fbreader/data/default/keydefs.n516.tmpl:26
 #: fbreader/data/default/keydefs.v3.tmpl:30
 msgid "Left"
@@ -571,10 +567,6 @@ msgstr "Кнопка C"
 #: fbreader/data/default/keydefs.n516.tmpl:19
 msgid "Next"
 msgstr "Колесо вниз"
-
-#: fbreader/data/default/keydefs.n516.tmpl:20
-msgid "Prior"
-msgstr "Колесо ввер"
 
 #: fbreader/data/default/keydefs.n516.tmpl:21
 msgid "LP Next"
@@ -678,3 +670,11 @@ msgstr "Размер шрифта"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
 msgid "Show Settings"
 msgstr "Настройки"
+
+#: fbreader/data/default/keydefs.n516.tmpl:20
+msgid "Prior"
+msgstr "Колесо вверх"
+
+#: fbreader/data/default/keydefs.n516.tmpl:22
+msgid "LP Prior"
+msgstr "Колесо вверх (долгое нажатие)"
