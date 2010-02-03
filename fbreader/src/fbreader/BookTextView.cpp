@@ -71,6 +71,7 @@ BookTextView::BookTextView(ZLPaintContext &context) :
 
 BookTextView::~BookTextView() {
 	saveState();
+	setModel(0, "", 0);
 }
 
 void BookTextView::readBookState(const Book &book) {
@@ -178,7 +179,7 @@ void BookTextView::saveState() {
 		ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, CHAR_OPTION_NAME, 0).setValue(cursor.charIndex());
 		ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, POSITION_IN_BUFFER, 0).setValue(myCurrentPointInStack);
 		ZLBooleanOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, STATE_VALID, false).setValue(true);
-		ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, POSITION_OPTION_NAME, 0).setValue(positionIndicator()->textPosition());
+		//ZLIntegerOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, POSITION_OPTION_NAME, 0).setValue(positionIndicator()->textPosition());
 
 		if (myStackChanged) {
 			BooksDB::Instance().saveBookStateStack(*myBook, myPositionStack);
