@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,15 +48,20 @@ ZLApplication &ZLApplication::Instance() {
 	return *ourInstance;
 }
 
+void ZLApplication::deleteInstance() {
+	if (ourInstance != 0) {
+		delete ourInstance;
+		ourInstance = 0;
+	}
+}
+
 ZLApplication::ZLApplication(const std::string &name) : ZLApplicationBase(name),
 	RotationAngleOption(ZLCategoryKey::CONFIG, ROTATION, ANGLE, ZLView::DEGREES90),
 	AngleStateOption(ZLCategoryKey::CONFIG, STATE, ANGLE, ZLView::DEGREES0),
 	KeyboardControlOption(ZLCategoryKey::CONFIG, KEYBOARD, FULL_CONTROL, false),
 	ConfigAutoSavingOption(ZLCategoryKey::CONFIG, CONFIG, AUTO_SAVE, true),
 	ConfigAutoSaveTimeoutOption(ZLCategoryKey::CONFIG, CONFIG, TIMEOUT, 1, 6000, 30),
-	KeyDelayOption(ZLCategoryKey::CONFIG, "Options", "KeyDelay", 0, 5000, 250),
-	myViewWidget(0),
-	myWindow(0) {
+	KeyDelayOption(ZLCategoryKey::CONFIG, "Options", "KeyDelay", 0, 5000, 250) {
 	ourInstance = this;
 	myContext = ZLibrary::createContext();
 	if (ConfigAutoSavingOption.value()) {
@@ -72,14 +77,10 @@ ZLApplication::ZLApplication(const std::string &name) : ZLApplicationBase(name),
 }
 
 ZLApplication::~ZLApplication() {
-	if (myWindow != 0) {
+	if (!myWindow.isNull()) {
 		if (KeyboardControlOption.value()) {
 			grabAllKeys(false);
 		}
-		delete myWindow;
-	}
-	if (myViewWidget != 0) {
-		delete myViewWidget;
 	}
 	ourInstance = 0;
 }
@@ -100,25 +101,6 @@ bool ZLApplication::closeView() {
 void ZLApplication::openFile(const std::string&) {
 }
 
-ZLApplicationWindow::ZLApplicationWindow(ZLApplication *application) : myApplication(application), myToggleButtonLock(false) {
-	myApplication->myWindow = this;
-}
-
-void ZLApplicationWindow::init() {
-	myApplication->myViewWidget = createViewWidget();
-
-	initToolbar(WINDOW_TOOLBAR);
-	initToolbar(FULLSCREEN_TOOLBAR);
-	initMenu();
-}
-
-void ZLApplicationWindow::initToolbar(ToolbarType type) {
-	const ZLToolbar::ItemVector &toolbarItems = myApplication->toolbar(type).items();
-	for (ZLToolbar::ItemVector::const_iterator it = toolbarItems.begin(); it != toolbarItems.end(); ++it) {
-		addToolbarItem(*it);
-	}
-}
-
 void ZLApplication::addAction(const std::string &actionId, shared_ptr<Action> action) {
 	myActionMap[actionId] = action;
 }
@@ -128,7 +110,7 @@ void ZLApplication::setView(shared_ptr<ZLView> view) {
 		return;
 	}
 
-	if (myViewWidget != 0) {
+	if (!myViewWidget.isNull()) {
 		myViewWidget->setView(view);
 		resetWindowCaption();
 		refreshWindow();
@@ -138,20 +120,20 @@ void ZLApplication::setView(shared_ptr<ZLView> view) {
 }
 
 shared_ptr<ZLView> ZLApplication::currentView() const {
-	return (myViewWidget != 0) ? myViewWidget->view() : 0;
+	return myViewWidget.isNull() ? 0 : myViewWidget->view();
 }
 
 void ZLApplication::refreshWindow() {
-	if (myViewWidget != 0) {
+	if (!myViewWidget.isNull()) {
 		myViewWidget->repaint();
 	}
-	if (myWindow != 0) {
+	if (!myWindow.isNull()) {
 		myWindow->refresh();
 	}
 }
 
 void ZLApplication::presentWindow() {
-	if (myWindow != 0) {
+	if (!myWindow.isNull()) {
 		myWindow->present();
 	}
 }
@@ -185,7 +167,7 @@ void ZLApplication::doAction(const std::string &actionId) {
 }
 
 void ZLApplication::resetWindowCaption() {
-	if (myWindow != 0) {
+	if (!myWindow.isNull()) {
 		if ((currentView() == 0) || (currentView()->caption().empty())) {
 			myWindow->setCaption(ZLibrary::ApplicationName());
 		} else {
@@ -210,84 +192,8 @@ bool ZLApplication::Action::useKeyDelay() const {
 }
 
 void ZLApplication::trackStylus(bool track) {
-	if (myViewWidget != 0) {
+	if (!myViewWidget.isNull()) {
 		myViewWidget->trackStylus(track);
-	}
-}
-
-void ZLApplicationWindow::refresh() {
-	refreshToolbar(WINDOW_TOOLBAR);
-	refreshToolbar(FULLSCREEN_TOOLBAR);
-	processAllEvents();
-}
-
-void ZLApplicationWindow::refreshToolbar(ToolbarType type) {
-	const ZLToolbar::ItemVector &items = application().toolbar(type).items();
-	bool enableToolbarSpace = false;
-	ZLToolbar::ItemPtr lastSeparator = 0;
-	for (ZLToolbar::ItemVector::const_iterator it = items.begin(); it != items.end(); ++it) {
-		switch ((*it)->type()) {
-			case ZLToolbar::Item::TEXT_FIELD:
-			case ZLToolbar::Item::COMBO_BOX:
-			case ZLToolbar::Item::PLAIN_BUTTON:
-			case ZLToolbar::Item::MENU_BUTTON:
-				{
-					ZLToolbar::ActionItem &button = (ZLToolbar::ActionItem&)**it;
-					const std::string &id = button.actionId();
-        
-					const bool visible = application().isActionVisible(id);
-					const bool enabled = application().isActionEnabled(id);
-        
-					if (visible) {
-						if (!lastSeparator.isNull()) {
-							setToolbarItemState(lastSeparator, true, true);
-							lastSeparator = 0;
-						}
-						enableToolbarSpace = true;
-					}
-					setToolbarItemState(*it, visible, enabled);
-				}
-				break;
-			case ZLToolbar::Item::TOGGLE_BUTTON:
-				{
-					ZLToolbar::ToggleButtonItem &button = (ZLToolbar::ToggleButtonItem&)**it;
-					const std::string &id = button.actionId();
-        
-					const bool visible = application().isActionVisible(id);
-					const bool enabled = application().isActionEnabled(id);
-        
-					if (visible) {
-						if (!lastSeparator.isNull()) {
-							setToolbarItemState(lastSeparator, true, true);
-							lastSeparator = 0;
-						}
-						enableToolbarSpace = true;
-					}
-					/*
-					if (!enabled && button.isPressed()) {
-						button.buttonGroup().press(0);
-						//application().doAction(group->UnselectAllButtonsActionId);
-						myToggleButtonLock = true;
-						setToggleButtonState(button);
-						myToggleButtonLock = false;
-					}
-					*/
-					setToolbarItemState(*it, visible, enabled);
-					setToggleButtonState(button);
-				}
-				break;
-			case ZLToolbar::Item::SEPARATOR:
-				if (enableToolbarSpace) {
-					lastSeparator = *it;
-					enableToolbarSpace = false;
-				} else {
-					setToolbarItemState(*it, false, true);
-				}
-				break;
-		}
-	}
-	if (!lastSeparator.isNull()) {
-		setToolbarItemState(lastSeparator, false, true);
 	}
 }
 
@@ -306,29 +212,29 @@ void ZLApplication::doActionByKey(const std::string &key) {
 }
 
 void ZLApplication::grabAllKeys(bool grab) {
-	if (myWindow != 0) {
+	if (!myWindow.isNull()) {
 		myWindow->grabAllKeys(grab);
 	}
 }
 
 void ZLApplication::setHyperlinkCursor(bool hyperlink) {
-	if (myWindow != 0) {
+	if (!myWindow.isNull()) {
 		myWindow->setHyperlinkCursor(hyperlink);
 	}
 }
 
 bool ZLApplication::isFullscreen() const {
-	return (myWindow != 0) && myWindow->isFullscreen();
+	return !myWindow.isNull() && myWindow->isFullscreen();
 }
 
 void ZLApplication::setFullscreen(bool fullscreen) {
-	if (myWindow != 0) {
+	if (!myWindow.isNull()) {
 		myWindow->setFullscreen(fullscreen);
 	}
 }
 
 void ZLApplication::quit() {
-	if (myWindow != 0) {
+	if (!myWindow.isNull()) {
 		myWindow->close();
 	}
 }
@@ -360,113 +266,32 @@ shared_ptr<ZLPaintContext> ZLApplication::context() {
 	return myContext;
 }
 
-ZLApplicationWindow::ToolbarType ZLApplicationWindow::type(const ZLToolbar::Item &item) const {
-	return
-		(&item.toolbar() == &application().toolbar(WINDOW_TOOLBAR)) ?
-			WINDOW_TOOLBAR : FULLSCREEN_TOOLBAR;
-}
-
-bool ZLApplicationWindow::hasFullscreenToolbar() const {
-	return !application().toolbar(FULLSCREEN_TOOLBAR).items().empty();
-}
-
-void ZLApplicationWindow::onButtonPress(const ZLToolbar::AbstractButtonItem &button) {
-	if (myToggleButtonLock) {
-		return;
-	}
-	if (button.type() == ZLToolbar::Item::TOGGLE_BUTTON) {
-		ZLToolbar::ToggleButtonItem &toggleButton = (ZLToolbar::ToggleButtonItem&)button;
-		myToggleButtonLock = true;
-		if (toggleButton.isPressed()) {
-			setToggleButtonState(toggleButton);
-			myToggleButtonLock = false;
-			return;
-		} else {
-			toggleButton.press();
-			const ZLToolbar::ButtonGroup::ItemSet &items = toggleButton.buttonGroup().myItems;
-			for (ZLToolbar::ButtonGroup::ItemSet::const_iterator it = items.begin(); it != items.end(); ++it) {
-				setToggleButtonState(**it);
-			}
-		}
-		myToggleButtonLock = false;
-	}
-	application().doAction(button.actionId());
-}
-
 bool ZLApplication::isViewFinal() const {
 	return true;
 }
 
 void ZLApplication::setVisualParameter(const std::string &id, const std::string &value) {
-	if (myWindow != 0) {
+	if (!myWindow.isNull()) {
 		myWindow->setVisualParameter(id, value);
 	}
 }
 
 void ZLApplication::setParameterValueList(const std::string &id, const std::vector<std::string> &values) {
-	if (myWindow != 0) {
+	if (!myWindow.isNull()) {
 		myWindow->setParameterValueList(id, values);
 	}
 }
 
 const std::string &ZLApplication::visualParameter(const std::string &id) {
-	if (myWindow != 0) {
+	if (!myWindow.isNull()) {
 		return myWindow->visualParameter(id);
 	}
 	static const std::string EMPTY;
 	return EMPTY;
 }
 
-void ZLApplicationWindow::setVisualParameter(const std::string &id, const std::string &value) {
-	std::map<std::string,shared_ptr<VisualParameter> >::iterator it = myParameterMap.find(id);
-	if (it != myParameterMap.end()) {
-		it->second->setValue(value);
-	}
-}
-
-void ZLApplicationWindow::setParameterValueList(const std::string &id, const std::vector<std::string> &values) {
-	std::map<std::string,shared_ptr<VisualParameter> >::iterator it = myParameterMap.find(id);
-	if (it != myParameterMap.end()) {
-		it->second->setValueList(values);
-	}
-}
-
-const std::string &ZLApplicationWindow::visualParameter(const std::string &id) {
-	std::map<std::string,shared_ptr<VisualParameter> >::const_iterator it = myParameterMap.find(id);
-	if (it != myParameterMap.end()) {
-		return it->second->value();
-	}
-	static const std::string EMPTY;
-	return EMPTY;
-}
-
-void ZLApplicationWindow::addVisualParameter(const std::string &id, shared_ptr<VisualParameter> parameter) {
-	if (!parameter.isNull()) {
-		myParameterMap[id] = parameter;
-	}
-}
-
-ZLApplicationWindow::VisualParameter::~VisualParameter() {
-}
-
-const std::string &ZLApplicationWindow::VisualParameter::value() const {
-	myValue = internalValue();
-	return myValue;
-}
-
-void ZLApplicationWindow::VisualParameter::setValue(const std::string &value) {
-	if (value != myValue) {
-		myValue = value;
-		internalSetValue(value);
-	}
-}
-
-void ZLApplicationWindow::VisualParameter::restoreOldValue() {
-	internalSetValue(myValue);
-}
-
 ZLView::Angle ZLApplication::rotation() const {
-	return (myViewWidget != 0) ? myViewWidget->rotation() : ZLView::DEGREES0;
+	return myViewWidget.isNull() ? ZLView::DEGREES0 : myViewWidget->rotation();
 }
 
 shared_ptr<ZLKeyBindings> ZLApplication::keyBindings() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ public:
 	LitResAuthenticationManager(const std::string &siteName);
 
 public:
-	ZLBoolean3 isAuthorised(bool useNetwork = true);
+	AuthenticationStatus isAuthorised(bool useNetwork = true);
 	std::string authorise(const std::string &pwd);
 	void logOut();
 	bool skipIPSupported();
@@ -49,14 +49,16 @@ public:
 	std::string refillAccountLink();
 	std::string currentAccount();
 
+	std::string reloadPurchasedBooks();
 	void collectPurchasedBooks(NetworkLibraryItemList &list);
 
 private:
-	shared_ptr<ZLExecutionData> loadPurchasedBooks();
+	shared_ptr<ZLExecutionData> loadPurchasedBooks(std::set<std::string> &purchasedBooksIds, NetworkLibraryItemList &purchasedBooksList);
+	void loadPurchasedBooksOnError(std::set<std::string> &purchasedBooksIds, NetworkLibraryItemList &purchasedBooksList);
+	void loadPurchasedBooksOnSuccess(std::set<std::string> &purchasedBooksIds, NetworkLibraryItemList &purchasedBooksList);
+
 	shared_ptr<ZLExecutionData> loadAccount(std::string &dummy1);
-	void loadPurchasedBooksOnError();
 	void loadAccountOnError();
-	void loadPurchasedBooksOnSuccess();
 	void loadAccountOnSuccess();
 
 	const std::string &certificate();

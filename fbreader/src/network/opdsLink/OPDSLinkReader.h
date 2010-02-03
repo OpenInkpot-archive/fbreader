@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 
 #ifndef __OPDSLINKREADER_H__
 #define __OPDSLINKREADER_H__
+
+#include <set>
 
 #include <ZLXMLReader.h>
 
@@ -46,9 +48,14 @@ private:
 		READ_ICON_NAME,
 		READ_SEARCH_DESCRIPTION,
 		READ_SEARCH_PART,
+		READ_IGNORED,
+		READ_IGNORED_LINK,
+		READ_AUTHENTICATION_DESCRIPTION,
+		READ_AUTHENTICATION_PART,
 	} myState;
 	std::string myLinkType;
 	std::string mySearchPartName;
+	std::string myAuthenticationPartName;
 
 	std::string mySiteName;
 	std::string myTitle;
@@ -58,6 +65,12 @@ private:
 
 	std::string mySearchType;
 	std::map<std::string,std::string> mySearchParts;
+
+	std::string myIgnoredLink;
+	std::set<std::string> myIgnoredFeeds;
+
+	std::string myAuthenticationType;
+	std::map<std::string,std::string> myAuthenticationParts;
 };
 
 #endif /* __OPDSLINKREADER_H__ */

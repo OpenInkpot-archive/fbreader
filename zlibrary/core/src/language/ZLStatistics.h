@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ public:
 	ZLArrayBasedStatistics(size_t charSequenceSize, size_t size, size_t volume, unsigned long long squaresVolume);	
 	~ZLArrayBasedStatistics();
 
-	ZLArrayBasedStatistics& operator = (const ZLArrayBasedStatistics &other);
+	ZLArrayBasedStatistics &operator = (const ZLArrayBasedStatistics &other);
 	void insert(const ZLCharSequence &charSequence, size_t frequency);
 	
 	bool empty() const;

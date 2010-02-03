@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -144,7 +144,7 @@ private:
 
 	ZLTime myLastScrollingTime;
 
-	BookModel *myModel;
+	shared_ptr<BookModel> myModel;
 
 	shared_ptr<ZLKeyBindings> myBindings0;
 	shared_ptr<ZLKeyBindings> myBindings90;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,10 +32,11 @@
 #include "../opdsLink/OPDSLink.h"
 #include "../opdsLink/OPDSCatalogItem.h"
 
-NetworkOPDSFeedReader::NetworkOPDSFeedReader(const std::string &baseURL, NetworkOperationData &result) : myBaseURL(baseURL), myData(result), myIndex(0) {
-	myIgnoredItems.insert("http://feedbooks.com/news/catalog.atom");
-	myIgnoredItems.insert("https://feedbooks.com/user/profile.atom");
-	myIgnoredItems.insert("urn:uuid:01182b8b-4719-2369-35e0-107bce646b54");
+NetworkOPDSFeedReader::NetworkOPDSFeedReader(const std::string &baseURL, NetworkOperationData &result, const std::set<std::string> &ignoredFeeds) : 
+	myBaseURL(baseURL), 
+	myData(result), 
+	myIndex(0), 
+	myIgnoredFeeds(ignoredFeeds) {
 }
 
 void NetworkOPDSFeedReader::processFeedStart() {
@@ -68,7 +69,7 @@ void NetworkOPDSFeedReader::processFeedEntry(shared_ptr<OPDSEntry> entry) {
 	if (entry.isNull()) {
 		return;
 	}
-	if (myIgnoredItems.count(entry->id()->uri()) != 0) {
+	if (myIgnoredFeeds.count(entry->id()->uri()) != 0) {
 		return;
 	}
 	OPDSEntry &e = *entry;

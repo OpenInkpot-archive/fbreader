@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,15 +41,18 @@ public:
 	};
 
 protected:
-	ZLTextModel(const size_t rowSize);
+	ZLTextModel(const std::string &language, const size_t rowSize);
 
 public:
 	virtual ~ZLTextModel();
 	virtual Kind kind() const = 0;
 
+	const std::string &language() const;
+	bool isRtl() const;
+
 	size_t paragraphsNumber() const;
-	ZLTextParagraph *operator[] (size_t index);
-	const ZLTextParagraph *operator[] (size_t index) const;
+	ZLTextParagraph *operator [] (size_t index);
+	const ZLTextParagraph *operator [] (size_t index) const;
 	const std::vector<ZLTextMark> &marks() const;
 
 	virtual void search(const std::string &text, size_t startIndex, size_t endIndex, bool ignoreCase) const;
@@ -74,6 +77,7 @@ protected:
 	void addParagraphInternal(ZLTextParagraph *paragraph);
 	
 private:
+	const std::string myLanguage;
 	std::vector<ZLTextParagraph*> myParagraphs;
 	mutable std::vector<ZLTextMark> myMarks;
 	mutable ZLTextRowMemoryAllocator myAllocator;
@@ -88,7 +92,7 @@ private:
 class ZLTextPlainModel : public ZLTextModel {
 
 public:
-	ZLTextPlainModel(const size_t rowSize);
+	ZLTextPlainModel(const std::string &language, const size_t rowSize);
 	Kind kind() const;
 	void createParagraph(ZLTextParagraph::Kind kind);
 };
@@ -96,7 +100,7 @@ public:
 class ZLTextTreeModel : public ZLTextModel {
 
 public:
-	ZLTextTreeModel();
+	ZLTextTreeModel(const std::string &language);
 	~ZLTextTreeModel();
 	Kind kind() const;
 
@@ -113,11 +117,11 @@ inline size_t ZLTextModel::paragraphsNumber() const { return myParagraphs.size()
 inline const std::vector<ZLTextMark> &ZLTextModel::marks() const { return myMarks; }
 inline void ZLTextModel::removeAllMarks() { myMarks.clear(); }
 
-inline ZLTextParagraph *ZLTextModel::operator[] (size_t index) {
+inline ZLTextParagraph *ZLTextModel::operator [] (size_t index) {
 	return myParagraphs[std::min(myParagraphs.size() - 1, index)];
 }
 
-inline const ZLTextParagraph *ZLTextModel::operator[] (size_t index) const {
+inline const ZLTextParagraph *ZLTextModel::operator [] (size_t index) const {
 	return myParagraphs[std::min(myParagraphs.size() - 1, index)];
 }
 

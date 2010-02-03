@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,9 @@ void SearchOnNetworkAction::run() {
 		if (link.OnOption.value()) {
 			shared_ptr<NetworkAuthenticationManager> mgr = link.authenticationManager();
 			if (!mgr.isNull()) {
-				if (mgr->isAuthorised() == B3_TRUE && mgr->needsInitialization()) {
+				IsAuthorisedRunnable checker(*mgr);
+				checker.executeWithUI();
+				if (checker.result() == B3_TRUE && mgr->needsInitialization()) {
 					InitializeAuthenticationManagerRunnable initializer(*mgr);
 					initializer.executeWithUI();
 					if (initializer.hasErrors()) {

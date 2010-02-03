@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -114,16 +114,20 @@ const std::string &NetworkCatalogNode::typeId() const {
 	return TYPE_ID;
 }
 
+std::string NetworkCatalogNode::title() const {
+	return myItem->title();
+}
+
+std::string NetworkCatalogNode::summary() const {
+	return ((const NetworkLibraryCatalogItem&)*myItem).summary();
+}
 
 void NetworkCatalogNode::paint(ZLPaintContext &context, int vOffset) {
 	removeAllHyperlinks();
 
 	((NetworkView&)view()).drawCoverLater(this, vOffset);
-	drawTitle(context, vOffset, myItem->title());
-	const std::string &summary = item().summary();
-	if (!summary.empty()) {
-		drawSummary(context, vOffset, summary);
-	}
+	drawTitle(context, vOffset);
+	drawSummary(context, vOffset);
 
 	paintHyperlinks(context, vOffset);
 }
@@ -218,13 +222,14 @@ void NetworkCatalogNode::ExpandCatalogAction::run() {
 	NetworkLink &link = myNode.item().link();
 	if (!link.authenticationManager().isNull()) {
 		NetworkAuthenticationManager &mgr = *link.authenticationManager();
-		ZLBoolean3 authState = mgr.isAuthorised();
-		std::cerr << "authState == " << authState << std::endl;
-		if (authState == B3_UNDEFINED) {
-			// TODO: show information message???
+		IsAuthorisedRunnable checker(mgr);
+		checker.executeWithUI();
+		std::cerr << "authState == " << checker.result() << std::endl;
+		if (checker.hasErrors()) {
+			checker.showErrorMessage();
 			return;
 		}
-		if (authState == B3_TRUE && mgr.needsInitialization()) {
+		if (checker.result() == B3_TRUE && mgr.needsInitialization()) {
 			InitializeAuthenticationManagerRunnable initializer(mgr);
 			initializer.executeWithUI();
 			if (initializer.hasErrors()) {

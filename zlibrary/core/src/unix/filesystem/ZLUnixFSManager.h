@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,10 @@
 
 class ZLUnixFSManager : public ZLFSManager {
 
-private:
+protected:
 	void normalize(std::string &path) const;
+
+private:
 	std::string resolveSymlink(const std::string &path) const;
 	ZLFSDir *createNewDirectory(const std::string &path) const;
 	ZLFSDir *createPlainDirectory(const std::string &path) const;

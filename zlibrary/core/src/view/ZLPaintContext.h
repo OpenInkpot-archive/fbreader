@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,9 +87,9 @@ private:
 
 private:
 	ZLPaintContext(const ZLPaintContext&);
-	const ZLPaintContext& operator = (const ZLPaintContext&);
+	const ZLPaintContext &operator = (const ZLPaintContext&);
 
-friend class ZLPartialPaintContext;
+friend class ZLMirroredPaintContext;
 };
 
 inline int ZLPaintContext::imageWidth(const ZLImageData &image) const { return image.width(); }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,15 @@ public:
 	ZLBooleanOption SkipIPOption;
 
 public:
-	virtual ZLBoolean3 isAuthorised(bool useNetwork = true) = 0;
+	struct AuthenticationStatus {
+		const ZLBoolean3 Status;
+		const std::string Message;
+
+		AuthenticationStatus(bool status);
+		AuthenticationStatus(const std::string &msg);
+	};
+
+	virtual AuthenticationStatus isAuthorised(bool useNetwork = true) = 0;
 	virtual std::string authorise(const std::string &pwd) = 0; // returns error message
 	virtual void logOut() = 0;
 
@@ -64,7 +72,7 @@ public: // Account specific methods (can be called only if authorised!!!)
 	virtual std::string refillAccountLink();
 	virtual std::string currentAccount();
 
-	virtual const std::string &certificate() = 0;
+	virtual const std::string &certificate();
 
 public: // new User Registration
 	virtual bool registrationSupported();
@@ -78,5 +86,8 @@ private: // disable copying
 	NetworkAuthenticationManager(const NetworkAuthenticationManager &);
 	const NetworkAuthenticationManager &operator = (const NetworkAuthenticationManager &);
 };
+
+inline NetworkAuthenticationManager::AuthenticationStatus::AuthenticationStatus(bool status) : Status(status ? B3_TRUE : B3_FALSE) {}
+inline NetworkAuthenticationManager::AuthenticationStatus::AuthenticationStatus(const std::string &msg) : Status(B3_UNDEFINED), Message(msg) {}
 
 #endif /* __NETWORKAUTHENTICATIONMANAGER_H__ */

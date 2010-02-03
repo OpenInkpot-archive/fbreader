@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 #include <ZLResource.h>
 #include <ZLImage.h>
 #include <ZLExecutionData.h>
-#include <ZLTime.h>
+#include <ZLTimeManager.h>
 
 #include "NetworkView.h"
 #include "NetworkNodes.h"
@@ -106,7 +106,7 @@ bool NetworkView::CoverUpdater::hasTasks() const {
 }
 
 void NetworkView::CoverUpdater::run() {
-	ZLExecutionData::executeAll(myDataVector);
+	ZLExecutionData::perform(myDataVector);
 }
 
 NetworkView::CoverUpdaterRunner::CoverUpdaterRunner(shared_ptr<CoverUpdater> updater) : myUpdater(updater) {
@@ -196,7 +196,8 @@ void NetworkView::makeUpToDate() {
 			}
 		}
 		if (!processed) {
-			new NetworkCatalogRootNode(&rootNode(), link, nodeCount++);
+			NetworkCatalogNode *ptr = new NetworkCatalogRootNode(&rootNode(), link, nodeCount++);
+			ptr->item().onDisplayItem();
 		}
 	}
 
@@ -231,8 +232,8 @@ void NetworkView::makeUpToDate() {
 	}
 
 	if (srNode != 0) {
-		srNode->open(true);
-		ensureVisible(srNode);
+		srNode->open(false);
+		srNode->expandOrCollapseSubtree();
 	}
 }
 
@@ -324,5 +325,5 @@ bool NetworkView::processAccountDependent(NetworkLibraryCatalogItem &item) {
 	if (link.authenticationManager().isNull()) {
 		return true;
 	}
-	return link.authenticationManager()->isAuthorised() != B3_FALSE;
+	return link.authenticationManager()->isAuthorised().Status != B3_FALSE;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,8 +45,8 @@ public:
 	~FBReaderNode();
 
 	void drawCover(ZLPaintContext &context, int vOffset);
-	void drawTitle(ZLPaintContext &context, int vOffset, const std::string &text, bool highlighted = false);
-	void drawSummary(ZLPaintContext &context, int vOffset, const std::string &text, bool highlighted = false);
+	void drawTitle(ZLPaintContext &context, int vOffset, bool highlighted = false);
+	void drawSummary(ZLPaintContext &context, int vOffset, bool highlighted = false);
 	void drawHyperlink(ZLPaintContext &context, int &hOffset, int &vOffset, const std::string &text, shared_ptr<ZLRunnable> action);
 	void drawAuxHyperlink(ZLPaintContext &context, int &hOffset, int &vOffset, const std::string &text, shared_ptr<ZLRunnable> action);
 	virtual bool hasAuxHyperlink() const;
@@ -63,6 +63,8 @@ protected:
 public:
 	virtual const std::string &typeId() const = 0;
 	shared_ptr<ZLImage> coverImage() const;
+	virtual std::string title() const = 0;
+	virtual std::string summary() const;
 
 	void expandOrCollapseSubtree();
 

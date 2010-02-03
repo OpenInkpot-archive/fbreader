@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +20,28 @@
 #include <cstring>
 #include <algorithm>
 
+#include <ZLibrary.h>
 #include <ZLSearchUtil.h>
+#include <ZLLanguageUtil.h>
 
 #include "ZLTextModel.h"
 #include "ZLTextParagraph.h"
 
-ZLTextModel::ZLTextModel(const size_t rowSize) : myAllocator(rowSize), myLastEntryStart(0) {
+ZLTextModel::ZLTextModel(const std::string &language, const size_t rowSize) : myLanguage(language.empty() ? ZLibrary::Language() : language), myAllocator(rowSize), myLastEntryStart(0) {
 }
 
 ZLTextModel::~ZLTextModel() {
 	for (std::vector<ZLTextParagraph*>::const_iterator it = myParagraphs.begin(); it != myParagraphs.end(); ++it) {
 		delete *it;
 	}
+}
+
+const std::string &ZLTextModel::language() const {
+	return myLanguage;
+}
+
+bool ZLTextModel::isRtl() const {
+	return ZLLanguageUtil::isRTLLanguage(myLanguage);
 }
 
 void ZLTextModel::search(const std::string &text, size_t startIndex, size_t endIndex, bool ignoreCase) const {
@@ -94,7 +104,7 @@ ZLTextMark ZLTextModel::previousMark(ZLTextMark position) const {
 	return *it;
 }
 
-ZLTextTreeModel::ZLTextTreeModel() : ZLTextModel(8192) {
+ZLTextTreeModel::ZLTextTreeModel(const std::string &language) : ZLTextModel(language, 8192) {
 	myRoot = new ZLTextTreeParagraph();
 	myRoot->open(true);
 }
@@ -131,7 +141,7 @@ void ZLTextTreeModel::selectParagraph(size_t index) const {
 	}
 }
 
-ZLTextPlainModel::ZLTextPlainModel(const size_t rowSize) : ZLTextModel(rowSize) {
+ZLTextPlainModel::ZLTextPlainModel(const std::string &language, const size_t rowSize) : ZLTextModel(language, rowSize) {
 }
 
 void ZLTextPlainModel::createParagraph(ZLTextParagraph::Kind kind) {

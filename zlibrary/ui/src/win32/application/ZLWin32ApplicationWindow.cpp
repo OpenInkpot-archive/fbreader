@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2007-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -138,8 +138,8 @@ LRESULT ZLWin32ApplicationWindow::mainLoopCallback(HWND hWnd, UINT uMsg, WPARAM 
 				GetWindowRect(myMainWindow, &rectangle);
 				myXOption.setValue(rectangle.left);
 				myYOption.setValue(rectangle.top);
-				myWidthOption.setValue(rectangle.right - rectangle.left + 1);
-				myHeightOption.setValue(rectangle.bottom - rectangle.top + 1);
+				myWidthOption.setValue(rectangle.right - rectangle.left);
+				myHeightOption.setValue(rectangle.bottom - rectangle.top);
 			}
 			application().closeView();
 			return 0;
@@ -300,6 +300,8 @@ void ZLWin32ApplicationWindow::processAllEvents() {
 
 ZLWin32ApplicationWindow::~ZLWin32ApplicationWindow() {
 	ourApplicationWindow = 0;
+	ZLWin32DialogManager &dManager = (ZLWin32DialogManager&)ZLWin32DialogManager::Instance();
+	dManager.removeApplicationWindow();
 }
 
 void ZLWin32ApplicationWindow::setToggleButtonState(const ZLToolbar::ToggleButtonItem &button) {

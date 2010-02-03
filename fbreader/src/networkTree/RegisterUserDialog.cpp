@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -131,7 +131,7 @@ bool RegisterUserDialog::run(NetworkAuthenticationManager &mgr) {
 			continue;
 		}
 
-		if (mgr.isAuthorised() != B3_FALSE && mgr.needsInitialization()) {
+		if (mgr.isAuthorised().Status != B3_FALSE && mgr.needsInitialization()) {
 			InitializeAuthenticationManagerRunnable initializer(mgr);
 			initializer.executeWithUI();
 			if (initializer.hasErrors()) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ void FBReaderNode::drawCover(ZLPaintContext &context, int vOffset) {
 	context.drawImage(hOffset + (w - width) / 2, vOffset + (h + height) / 2, *coverData, width, height, ZLPaintContext::SCALE_FIT_TO_SIZE);
 }
 
-void FBReaderNode::drawTitle(ZLPaintContext &context, int vOffset, const std::string &text, bool highlighted) {
+void FBReaderNode::drawTitle(ZLPaintContext &context, int vOffset, bool highlighted) {
 	const FBTextStyle &style = FBTextStyle::Instance();
 	const int unit = unitSize(context, style);
 	const int hOffset = level() * unit * 3 + unit * 2;
@@ -99,10 +99,16 @@ void FBReaderNode::drawTitle(ZLPaintContext &context, int vOffset, const std::st
 		FBOptions::Instance().RegularTextColorOption.value());
 	context.setFont(style.fontFamily(), style.fontSize(), style.bold(), style.italic());
 
+	const std::string text = title();
 	context.drawString(hOffset, vOffset + 2 * unit, text.data(), text.size(), false);
 }
 
-void FBReaderNode::drawSummary(ZLPaintContext &context, int vOffset, const std::string &text, bool highlighted) {
+void FBReaderNode::drawSummary(ZLPaintContext &context, int vOffset, bool highlighted) {
+	const std::string text = summary();
+	if (text.empty()) {
+		return;
+	}
+
 	const FBTextStyle &style = FBTextStyle::Instance();
 	const int unit = unitSize(context, style);
 	const int hOffset = level() * unit * 3 + unit * 2;
@@ -204,4 +210,21 @@ int FBReaderNode::height(ZLPaintContext &context) const {
 int FBReaderNode::unitSize(ZLPaintContext &context, const FBTextStyle &style) const {
 	context.setFont(style.fontFamily(), style.fontSize(), style.bold(), style.italic());
 	return (context.stringHeight() * 2 + 2) / 3;
+}
+
+std::string FBReaderNode::summary() const {
+	std::string result;
+	int count = 0;
+	const ZLBlockTreeNode::List &subNodes = children();
+	ZLBlockTreeNode::List::const_iterator it = subNodes.begin();
+	for (; it != subNodes.end() && count < 3; ++it, ++count) {
+		if (count > 0) {
+			result += ", ";
+		}
+		result += ((const FBReaderNode*)*it)->title();
+	}
+	if (it != subNodes.end()) {
+		result += ", ...";
+	}
+	return result;
 }

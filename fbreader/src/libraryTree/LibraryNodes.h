@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ public:
 private:
 	const std::string &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
+	std::string title() const;
 	void paint(ZLPaintContext &context, int vOffset);
 
 private:
@@ -64,6 +65,7 @@ public:
 private:
 	const std::string &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
+	std::string title() const;
 	void paint(ZLPaintContext &context, int vOffset);
 
 private:
@@ -95,6 +97,7 @@ public:
 private:
 	const std::string &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
+	std::string title() const;
 	void paint(ZLPaintContext &context, int vOffset);
 
 private:
@@ -124,6 +127,8 @@ public:
 private:
 	const std::string &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
+	std::string title() const;
+	std::string summary() const;
 	void paint(ZLPaintContext &context, int vOffset);
 
 private:

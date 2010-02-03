@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ void ZLZipHeader::skipEntry(ZLInputStream &stream, const ZLZipHeader &header) {
 		ZLZDecompressor decompressor((size_t)-1);
 		while (decompressor.decompress(stream, 0, 2048) == 2048) {
 		}
-		stream.seek(16, false);
+		//stream.seek(16, false);
 	} else {
 		stream.seek(header.ExtraLength + header.CompressedSize, false);
 	}

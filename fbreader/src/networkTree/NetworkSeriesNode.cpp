@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,39 @@ const std::string &NetworkSeriesNode::typeId() const {
 	return TYPE_ID;
 }
 
-NetworkSeriesNode::NetworkSeriesNode(NetworkContainerNode *parent, const std::string &seriesTitle) : NetworkContainerNode(parent), mySeriesTitle(seriesTitle) {
+NetworkSeriesNode::NetworkSeriesNode(NetworkContainerNode *parent, const std::string &seriesTitle, SummaryType summaryType) : 
+	NetworkContainerNode(parent), mySeriesTitle(seriesTitle), mySummaryType(summaryType) {
+}
+
+std::string NetworkSeriesNode::title() const {
+	return mySeriesTitle;
+}
+
+std::string NetworkSeriesNode::summary() const {
+	if (mySummary.empty()) {
+		if (mySummaryType == BOOKS) {
+			mySummary = FBReaderNode::summary();
+		} else {
+			std::set<NetworkLibraryBookItem::AuthorData> authorSet;
+			const std::vector<ZLBlockTreeNode*> &books = children();
+			for (std::vector<ZLBlockTreeNode*>::const_iterator it = books.begin(); it != books.end(); ++it) {
+				const NetworkLibraryBookItem &book = 
+					(const NetworkLibraryBookItem&)*((NetworkBookInfoNode*)*it)->book();
+				const std::vector<NetworkLibraryBookItem::AuthorData> &authors = book.authors();
+				for (std::vector<NetworkLibraryBookItem::AuthorData>::const_iterator it = authors.begin(); it != authors.end(); ++it) {
+					if (authorSet.find(*it) == authorSet.end()) {
+						authorSet.insert(*it);
+						if (!mySummary.empty()) {
+							mySummary += ", ";
+						}
+						mySummary += it->DisplayName;
+					}
+				}
+			}
+		}
+	}
+	
+	return mySummary;
 }
 
 void NetworkSeriesNode::paint(ZLPaintContext &context, int vOffset) {
@@ -39,7 +71,8 @@ void NetworkSeriesNode::paint(ZLPaintContext &context, int vOffset) {
 	removeAllHyperlinks();
 
 	((NetworkView&)view()).drawCoverLater(this, vOffset);
-	drawTitle(context, vOffset, mySeriesTitle);
+	drawTitle(context, vOffset);
+	drawSummary(context, vOffset);
 
 	int left = 0;
 	drawHyperlink(

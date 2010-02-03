@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2007-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 #include "../message/ZLWin32Message.h"
 #include "../../../../core/src/win32/config/ZLWin32Config.h"
 #include "../../../../core/src/win32/encoding/ZLWin32EncodingConverter.h"
+#include "../../../../core/src/unix/curl/ZLCurlNetworkManager.h"
 
 const std::string ZLibrary::FileNameDelimiter("\\");
 const std::string ZLibrary::PathDelimiter(";");
@@ -65,6 +66,7 @@ bool ZLibrary::init(int &argc, char **&argv) {
 	ZLWin32CommunicationManager::createInstance();
 	ZLWin32ImageManager::createInstance();
 	ZLEncodingCollection::Instance().registerProvider(new ZLWin32EncodingConverterProvider());
+	ZLCurlNetworkManager::createInstance();
 
 	return true;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,8 @@
 #include <algorithm>
 
 #include <ZLUnicodeUtil.h>
-#include <ZLTime.h>
+#include <ZLTimeManager.h>
+#include <ZLTextSelectionModel.h>
 
 #include "FBView.h"
 #include "FBReader.h"
@@ -164,6 +165,8 @@ void FBView::TapScroller::run() {
 }
 
 bool FBView::onStylusRelease(int x, int y) {
+	const bool hadSelection = !selectionModel().isEmpty();
+
 	if (!myTapScroller.isNull()) {
 		ZLTimeManager::Instance().removeTask(myTapScroller);
 		myTapScroller.reset();
@@ -180,7 +183,7 @@ bool FBView::onStylusRelease(int x, int y) {
 	FBReader &fbreader = FBReader::Instance();
 	myIsReleasedWithoutMotion =
 		myIsReleasedWithoutMotion && (abs(x - pressedX()) <= 5) && (abs(y - pressedY()) <= 5);
-	if (isReleasedWithoutMotion() &&
+	if (!hadSelection && isReleasedWithoutMotion() &&
 			fbreader.EnableTapScrollingOption.value() &&
 			(!ZLBooleanOption(ZLCategoryKey::EMPTY, ZLOption::PLATFORM_GROUP, ZLOption::FINGER_TAP_DETECTABLE, false).value() ||
 			 !fbreader.TapScrollingOnFingerOnlyOption.value())) {
@@ -235,13 +238,13 @@ bool FBView::_onStylusMovePressed(int, int) {
 	return false;
 }
 
-std::string FBView::word(const ZLTextElementArea &area) const {
+std::string FBView::word(const ZLTextElementRectangle &rectangle) const {
 	std::string txt;
 
-	if (area.Kind == ZLTextElement::WORD_ELEMENT) {
-		ZLTextWordCursor cursor = startCursor();
-		cursor.moveToParagraph(area.ParagraphIndex);
-		cursor.moveTo(area.ElementIndex, 0);
+	if (rectangle.Kind == ZLTextElement::WORD_ELEMENT) {
+		ZLTextWordCursor cursor = textArea().startCursor();
+		cursor.moveToParagraph(rectangle.ParagraphIndex);
+		cursor.moveTo(rectangle.ElementIndex, 0);
 		const ZLTextWord &word = (ZLTextWord&)cursor.element();
 		ZLUnicodeUtil::Ucs4String ucs4;
 		ZLUnicodeUtil::utf8ToUcs4(ucs4, word.Data, word.Size);

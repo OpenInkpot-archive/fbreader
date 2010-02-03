@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,10 @@ shared_ptr<Book> SeriesNode::book() const {
 	return myBook;
 }
 
+std::string SeriesNode::title() const {
+	return myBook->seriesTitle();
+}
+
 void SeriesNode::paint(ZLPaintContext &context, int vOffset) {
 	const ZLResource &resource =
 		ZLResource::resource("libraryView")["seriesNode"];
@@ -44,7 +48,8 @@ void SeriesNode::paint(ZLPaintContext &context, int vOffset) {
 	removeAllHyperlinks();
 
 	drawCover(context, vOffset);
-	drawTitle(context, vOffset, myBook->seriesTitle());
+	drawTitle(context, vOffset);
+	drawSummary(context, vOffset);
 
 	int left = 0;
 	drawHyperlink(

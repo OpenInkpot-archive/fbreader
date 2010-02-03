@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,6 +51,7 @@ const std::string ActionCode::FULLSCREEN_ON = "onFullscreen";
 const std::string ActionCode::ADD_BOOK = "addBook";
 const std::string ActionCode::ROTATE_SCREEN = "rotate";
 const std::string ActionCode::QUIT = "quit";
+const std::string ActionCode::FORCE_QUIT = "forceQuit";
 const std::string ActionCode::OPEN_PREVIOUS_BOOK = "previousBook";
 const std::string ActionCode::GOTO_NEXT_TOC_SECTION = "nextTOCSection";
 const std::string ActionCode::GOTO_PREVIOUS_TOC_SECTION = "previousTOCSection";

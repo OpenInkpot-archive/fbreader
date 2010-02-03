@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,13 +23,12 @@
 #include <string>
 #include <vector>
 
-#include <ZLOptions.h>
-
 #include <shared_ptr.h>
 
-#include "NetworkLibraryItems.h"
+#include <ZLOptions.h>
+#include <ZLExecutionData.h>
 
-class ZLSlowProcessListener;
+#include "NetworkLibraryItems.h"
 
 class NetworkLink;
 class NetworkBookCollection;
@@ -56,7 +55,7 @@ public:
 	std::string bookFileName(const std::string &networkBookId) const;
 	std::string makeBookFileName(const std::string &url, NetworkLibraryBookItem::URLType format);
 
-	bool downloadBook(const std::string &url, const std::string &networkBookId, NetworkLibraryBookItem::URLType format, std::string &fileName, const std::string &sslSertificate, shared_ptr<ZLSlowProcessListener> listener);
+	bool downloadBook(const std::string &url, const std::string &networkBookId, NetworkLibraryBookItem::URLType format, std::string &fileName, const std::string &sslSertificate, shared_ptr<ZLExecutionData::Listener> listener);
 
 	shared_ptr<NetworkBookCollection> simpleSearch(const std::string &pattern);
 	shared_ptr<NetworkBookCollection> advancedSearch(const std::string &titleAndSeries, const std::string &author, const std::string &tag, const std::string &annotation);

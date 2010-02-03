@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,7 +80,7 @@ const ZLTextView &ZLTextView::PositionIndicator::textView() const {
 }
 
 ZLPaintContext &ZLTextView::PositionIndicator::context() const {
-	return myTextView.context();
+	return myTextView.textArea().context();
 }
 
 int ZLTextView::PositionIndicator::bottom() const {
@@ -92,11 +92,11 @@ int ZLTextView::PositionIndicator::top() const {
 }
 
 int ZLTextView::PositionIndicator::left() const {
-	return myTextView.lineStartMargin();
+	return myTextView.textArea().hOffset();
 }
 
 int ZLTextView::PositionIndicator::right() const {
-	return myTextView.lineStartMargin() + myTextView.viewWidth() - myExtraWidth - 1;
+	return myTextView.textArea().hOffset() + myTextView.textArea().width() - myExtraWidth - 1;
 }
 
 const std::vector<size_t> &ZLTextView::PositionIndicator::textSize() const {
@@ -110,7 +110,7 @@ size_t ZLTextView::PositionIndicator::startTextIndex() const {
 
 size_t ZLTextView::PositionIndicator::endTextIndex() const {
 	std::vector<size_t>::const_iterator i = myTextView.nextBreakIterator();
-	return (i != myTextView.myTextBreaks.end()) ? *i : myTextView.myModel->paragraphsNumber();
+	return (i != myTextView.myTextBreaks.end()) ? *i : myTextView.textArea().model()->paragraphsNumber();
 }
 
 void ZLTextView::PositionIndicator::drawExtraText(const std::string &text) {
@@ -118,22 +118,18 @@ void ZLTextView::PositionIndicator::drawExtraText(const std::string &text) {
 	context().setColor(myTextView.color());
 
 	int width = context().stringWidth(text.data(), text.length(), false);
-	if (myTextView.visualX(0) == 0) {
-		context().drawString(right() - width, bottom() - 2, text.data(), text.length(), false);
-	} else {
-		context().drawString(myTextView.visualX(right()), bottom() - 2, text.data(), text.length(), false);
-	}
+	context().drawString(right() - width, bottom() - 2, text.data(), text.length(), false);
 	myExtraWidth += text.length() * context().stringWidth("0", 1, false) + context().spaceWidth();
 }
 
 size_t ZLTextView::PositionIndicator::sizeOfTextBeforeParagraph(size_t paragraphIndex) const {
-	if (myTextView.myModel->kind() == ZLTextModel::TREE_MODEL) {
-		ZLTextWordCursor cursor = myTextView.startCursor();
+	if (myTextView.textArea().model()->kind() == ZLTextModel::TREE_MODEL) {
+		ZLTextWordCursor cursor = myTextView.textArea().startCursor();
 		if (cursor.isNull()) {
-			cursor = myTextView.endCursor();
+			cursor = myTextView.textArea().endCursor();
 		}
 		if (!cursor.isNull()) {
-			const ZLTextTreeModel &treeModel = (const ZLTextTreeModel&)*myTextView.myModel;
+			const ZLTextTreeModel &treeModel = (const ZLTextTreeModel&)*myTextView.textArea().model();
 			size_t sum = 0;
 			for (size_t i = 0; i < paragraphIndex; ++i) {
 				const ZLTextTreeParagraph *para = (const ZLTextTreeParagraph*)treeModel[i];
@@ -166,7 +162,7 @@ size_t ZLTextView::PositionIndicator::sizeOfTextBeforeCursor(const ZLTextWordCur
 
 std::string ZLTextView::PositionIndicator::textPositionString() const {
 	std::string buffer;
-	ZLStringUtil::appendNumber(buffer, 1 + sizeOfTextBeforeCursor(myTextView.endCursor()) / 2048);
+	ZLStringUtil::appendNumber(buffer, 1 + sizeOfTextBeforeCursor(myTextView.textArea().endCursor()) / 2048);
 	buffer += '/';
 	ZLStringUtil::appendNumber(buffer, 1 + sizeOfTextBeforeParagraph(endTextIndex()) / 2048);
 
@@ -177,7 +173,7 @@ std::string ZLTextView::PositionIndicator::textPositionString() const {
 
 	const std::vector<size_t> &textSizeVector = myTextView.myTextSize;
 	const size_t fullTextSize = textSizeVector[endTextIndex()] - textSizeVector[startTextIndex()];
-	ZLStringUtil::appendNumber(buffer, 100 * sizeOfTextBeforeCursor(myTextView.endCursor()) / fullTextSize);
+	ZLStringUtil::appendNumber(buffer, 100 * sizeOfTextBeforeCursor(myTextView.textArea().endCursor()) / fullTextSize);
 
 	return buffer + '%';
 	*/
@@ -202,7 +198,7 @@ std::string ZLTextView::PositionIndicator::timeString() const {
 void ZLTextView::PositionIndicator::draw() {
 	ZLPaintContext &context = this->context();
 
-	ZLTextWordCursor endCursor = myTextView.endCursor();
+	ZLTextWordCursor endCursor = myTextView.textArea().endCursor();
 	bool isEndOfText = false;
 	if (endCursor.isEndOfParagraph()) {
 		isEndOfText = !endCursor.nextParagraph();
@@ -229,20 +225,20 @@ void ZLTextView::PositionIndicator::draw() {
 
 	if (!isEndOfText) {
 		fillWidth =
-			muldiv(fillWidth, sizeOfTextBeforeCursor(myTextView.endCursor()), sizeOfTextBeforeParagraph(endTextIndex()));
+			muldiv(fillWidth, sizeOfTextBeforeCursor(myTextView.textArea().endCursor()), sizeOfTextBeforeParagraph(endTextIndex()));
 	}
 
 	context.setColor(myTextView.color());
 	context.setFillColor(myInfo.color());
-	context.fillRectangle(myTextView.visualX(left + 1), top + 1, myTextView.visualX(left + fillWidth + 1), bottom - 1);
-	context.drawLine(myTextView.visualX(left), top, myTextView.visualX(right), top);
-	context.drawLine(myTextView.visualX(left), bottom, myTextView.visualX(right), bottom);
-	context.drawLine(myTextView.visualX(left), bottom, myTextView.visualX(left), top);
-	context.drawLine(myTextView.visualX(right), bottom, myTextView.visualX(right), top);
+	context.fillRectangle(left + 1, top + 1, left + fillWidth + 1, bottom - 1);
+	context.drawLine(left, top, right, top);
+	context.drawLine(left, bottom, right, bottom);
+	context.drawLine(left, bottom, left, top);
+	context.drawLine(right, bottom, right, top);
 }
 
 bool ZLTextView::PositionIndicator::onStylusPress(int x, int y) {
-	x = myTextView.visualX(x);
+	x = myTextView.textArea().realX(x);
 
 	const long bottom = this->bottom();
 	const long top = this->top();
@@ -258,7 +254,7 @@ bool ZLTextView::PositionIndicator::onStylusPress(int x, int y) {
 		return true;
 	}
 
-	if (myTextView.endCursor().isNull()) {
+	if (myTextView.textArea().endCursor().isNull()) {
 		return false;
 	}
 	size_t fullTextSize = sizeOfTextBeforeParagraph(endTextIndex());

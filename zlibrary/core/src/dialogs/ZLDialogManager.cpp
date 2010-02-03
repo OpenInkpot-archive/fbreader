@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,5 +94,9 @@ shared_ptr<ZLProgressDialog> ZLDialogManager::createProgressDialog(const ZLResou
 
 void ZLDialogManager::wait(const ZLResourceKey &key, ZLRunnable &runnable) const {
 	shared_ptr<ZLProgressDialog> dialog = createProgressDialog(key);
-	dialog->run(runnable);
+	if (!dialog.isNull()) {
+		dialog->run(runnable);
+	} else {
+		runnable.run();
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
 #include <ZLDialogManager.h>
 #include <ZLProgressDialog.h>
 #include <ZLNetworkManager.h>
-#include <ZLSlowProcess.h>
 
 #include "NetworkOperationRunnable.h"
 
@@ -96,6 +95,23 @@ void DownloadBookRunnable::run() {
 
 const std::string &DownloadBookRunnable::fileName() const {
 	return myFileName;
+}
+
+
+IsAuthorisedRunnable::IsAuthorisedRunnable(NetworkAuthenticationManager &mgr) :
+	NetworkOperationRunnable("authenticationCheck"),
+	myManager(mgr),
+	myResult(B3_UNDEFINED) {
+}
+
+void IsAuthorisedRunnable::run() {
+	NetworkAuthenticationManager::AuthenticationStatus auth = myManager.isAuthorised(true);
+	myErrorMessage = auth.Message;
+	myResult = auth.Status;
+}
+
+ZLBoolean3 IsAuthorisedRunnable::result() {
+	return myResult;
 }
 
 

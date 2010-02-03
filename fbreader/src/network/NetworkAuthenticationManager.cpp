@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ std::string NetworkAuthenticationManager::networkBookId(const NetworkLibraryBook
 }
 
 NetworkLibraryBookItem::URLType NetworkAuthenticationManager::downloadLinkType(const NetworkLibraryBookItem &) {
-	return NetworkLibraryBookItem::LINK_HTTP;
+	return NetworkLibraryBookItem::NONE;
 }
 
 bool NetworkAuthenticationManager::needsInitialization() {
@@ -86,4 +86,9 @@ bool NetworkAuthenticationManager::passwordRecoverySupported() {
 
 std::string NetworkAuthenticationManager::recoverPassword(const std::string &) {
 	return NetworkErrors::errorMessage(NetworkErrors::ERROR_UNSUPPORTED_OPERATION);
+}
+
+const std::string &NetworkAuthenticationManager::certificate() {
+	static const std::string _empty = "";
+	return _empty;
 }

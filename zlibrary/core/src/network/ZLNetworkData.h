@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +20,6 @@
 #ifndef __ZLNETWORKDATA_H__
 #define __ZLNETWORKDATA_H__
 
-#include <curl/curl.h>
-
 #include <string>
 
 #include <ZLExecutionData.h>
@@ -40,7 +38,6 @@ public:
 
 	const std::string &url() const;
 	const std::string &sslCertificate() const;
-	CURL *handle();
 
 	virtual bool doBefore() = 0;
 	virtual void doAfter(bool success) = 0;
@@ -53,7 +50,6 @@ protected:
 private:
 	const std::string myURL;
 	const std::string mySSLCertificate;
-	CURL *myHandle;
 	std::string myErrorMessage;
 };
 

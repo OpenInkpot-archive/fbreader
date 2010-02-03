@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,6 +51,13 @@ shared_ptr<Author> AuthorNode::author() const {
 	return myAuthor;
 }
 
+std::string AuthorNode::title() const {
+	if (myAuthor.isNull()) {
+		return ZLResource::resource("libraryView")["authorNode"]["unknownAuthor"].value();
+	}
+	return myAuthor->name();
+}
+
 void AuthorNode::paint(ZLPaintContext &context, int vOffset) {
 	const ZLResource &resource =
 		ZLResource::resource("libraryView")["authorNode"];
@@ -58,9 +65,8 @@ void AuthorNode::paint(ZLPaintContext &context, int vOffset) {
 	removeAllHyperlinks();
 
 	drawCover(context, vOffset);
-	drawTitle(context, vOffset,
-		myAuthor.isNull() ? resource["unknownAuthor"].value() : myAuthor->name()
-	);
+	drawTitle(context, vOffset);
+	drawSummary(context, vOffset);
 
 	int left = 0;
 	drawHyperlink(

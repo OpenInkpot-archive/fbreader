@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include <string>
 
 #include <ZLRunnable.h>
+#include <ZLBoolean3.h>
 
 #include "../network/NetworkLibraryItems.h"
 #include "../network/NetworkBookCollection.h"
@@ -70,6 +71,19 @@ private:
 	NetworkLibraryBookItem::URLType myFormat;
 
 	std::string myFileName;
+};
+
+class IsAuthorisedRunnable : public NetworkOperationRunnable {
+
+public:
+	IsAuthorisedRunnable(NetworkAuthenticationManager &mgr);
+	void run();
+
+	ZLBoolean3 result();
+
+private:
+	NetworkAuthenticationManager &myManager;
+	ZLBoolean3 myResult;
 };
 
 class AuthoriseRunnable : public NetworkOperationRunnable {

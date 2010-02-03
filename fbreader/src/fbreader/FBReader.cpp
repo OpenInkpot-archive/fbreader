@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #include <ZLStringUtil.h>
 #include <ZLResource.h>
 #include <ZLMessage.h>
+#include <ZLTimeManager.h>
 
 #include <ZLTextStyleCollection.h>
 #include <ZLTextHyphenator.h>
@@ -96,7 +97,6 @@ FBReader::FBReader(const std::string &bookToOpen) :
 	myBookAlreadyOpen(false),
 	myActionOnCancel(UNFULLSCREEN) {
 
-	myModel = 0;
 	myBookTextView = new BookTextView(*context());
 	myFootnoteView = new FootnoteView(*context());
 	myContentsView = new ContentsView(*context());
@@ -142,6 +142,7 @@ FBReader::FBReader(const std::string &bookToOpen) :
 	addAction(ActionCode::CANCEL, new CancelAction());
 	addAction(ActionCode::SHOW_HIDE_POSITION_INDICATOR, new ToggleIndicatorAction());
 	addAction(ActionCode::QUIT, new QuitAction());
+	addAction(ActionCode::FORCE_QUIT, new ForceQuitAction());
 	addAction(ActionCode::OPEN_PREVIOUS_BOOK, new OpenPreviousBookAction());
 	addAction(ActionCode::SHOW_HELP, new ShowHelpAction());
 	addAction(ActionCode::GOTO_NEXT_TOC_SECTION, new GotoNextTOCSectionAction());
@@ -160,9 +161,6 @@ FBReader::FBReader(const std::string &bookToOpen) :
 }
 
 FBReader::~FBReader() {
-	if (myModel != 0) {
-		delete myModel;
-	}
 	ZLTextStyleCollection::deleteInstance();
 	PluginCollection::deleteInstance();
 	ZLTextHyphenator::deleteInstance();
@@ -278,21 +276,18 @@ void FBReader::openBookInternal(shared_ptr<Book> book) {
 		FootnoteView &footnoteView = (FootnoteView&)*myFootnoteView;
 
 		bookTextView.saveState();
-		bookTextView.setModel(0, "", 0);
+		bookTextView.setModel(0, 0);
 		bookTextView.setContentsModel(0);
-		contentsView.setModel(0, "");
-		if (myModel != 0) {
-			delete myModel;
-		}
+		contentsView.setModel(0);
+		myModel.reset();
 		myModel = new BookModel(book);
-		const std::string &lang = book->language();
-		ZLTextHyphenator::Instance().load(lang);
-		bookTextView.setModel(myModel->bookTextModel(), lang, book);
+		ZLTextHyphenator::Instance().load(book->language());
+		bookTextView.setModel(myModel->bookTextModel(), book);
 		bookTextView.setCaption(book->title());
 		bookTextView.setContentsModel(myModel->contentsModel());
-		footnoteView.setModel(0, lang);
+		footnoteView.setModel(0);
 		footnoteView.setCaption(book->title());
-		contentsView.setModel(myModel->contentsModel(), lang);
+		contentsView.setModel(myModel->contentsModel());
 		contentsView.setCaption(book->title());
 
 		myRecentBooks.addBook(book);
@@ -321,14 +316,14 @@ void FBReader::tryShowFootnoteView(const std::string &id, const std::string &typ
 	if (type == "external") {
 		openLinkInBrowser(id);
 	} else if (type == "internal") {
-		if ((myMode == BOOK_TEXT_MODE) && (myModel != 0)) {
+		if (myMode == BOOK_TEXT_MODE && !myModel.isNull()) {
 			BookModel::Label label = myModel->label(id);
 			if (!label.Model.isNull()) {
 				if (label.Model == myModel->bookTextModel()) {
 					bookTextView().gotoParagraph(label.ParagraphNumber);
 				} else {
 					FootnoteView &view = ((FootnoteView&)*myFootnoteView);
-					view.setModel(label.Model, myModel->book()->language());
+					view.setModel(label.Model);
 					setMode(FOOTNOTE_MODE);
 					view.gotoParagraph(label.ParagraphNumber);
 				}

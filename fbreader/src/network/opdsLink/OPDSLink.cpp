@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,12 +21,13 @@
 
 #include <ZLStringUtil.h>
 #include <ZLNetworkUtil.h>
-#include <ZLNetworkXMLParserData.h>
+#include <ZLNetworkManager.h>
 
 #include "OPDSLink.h"
 #include "OPDSCatalogItem.h"
 
 #include "../NetworkOperationData.h"
+#include "../NetworkAuthenticationManager.h"
 #include "../opds/OPDSXMLParser.h"
 #include "../opds/NetworkOPDSFeedReader.h"
 
@@ -123,9 +124,9 @@ shared_ptr<ZLExecutionData> OPDSLink::createNetworkData(const std::string &url, 
 	if (url.empty()) {
 		return 0;
 	}
-	return new ZLNetworkXMLParserData(
+	return ZLNetworkManager::Instance().createXMLParserData(
 		url,
-		new OPDSXMLParser(new NetworkOPDSFeedReader(url, result))
+		new OPDSXMLParser(new NetworkOPDSFeedReader(url, result, myIgnoredFeeds))
 	);
 }
 
@@ -155,6 +156,15 @@ void OPDSLink::setupAdvancedSearch(
 ) {
 	myAdvancedSearch = new AdvancedSearch(type, titleParameter, authorParameter, tagParameter, annotationParameter);
 }
+
+void OPDSLink::setIgnoredFeeds(const std::set<std::string> &ignoredFeeds) {
+	myIgnoredFeeds = ignoredFeeds;
+}
+
+void OPDSLink::setAuthenticationManager(shared_ptr<NetworkAuthenticationManager> mgr) {
+	myAuthenticationManager = mgr;
+}
+
 
 shared_ptr<NetworkLibraryItem> OPDSLink::libraryItem() {
 	return new OPDSCatalogItem(
@@ -201,4 +211,8 @@ shared_ptr<ZLExecutionData> OPDSLink::resume(NetworkOperationData &data) {
 	const std::string url = data.ResumeURI;
 	data.clear();
 	return createNetworkData(url, data);
+}
+
+shared_ptr<NetworkAuthenticationManager> OPDSLink::authenticationManager() {
+	return myAuthenticationManager;
 }

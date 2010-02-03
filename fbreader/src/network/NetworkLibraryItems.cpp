@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,6 +67,13 @@ NetworkLibraryCatalogItem::NetworkLibraryCatalogItem(
 
 const std::string &NetworkLibraryCatalogItem::typeId() const {
 	return TYPE_ID;
+}
+
+void NetworkLibraryCatalogItem::onDisplayItem() {
+}
+
+NetworkLibraryCatalogItem::CatalogType NetworkLibraryCatalogItem::catalogType() const {
+	return OTHER;
 }
 
 const std::string NetworkLibraryBookItem::TYPE_ID = "bookItem";

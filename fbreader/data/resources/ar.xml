@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Arabic FBReader resources, by Khaled Hosny -->
 <resources>
 	<node name="libraryView">
 		<node name="authorNode">
@@ -446,6 +447,7 @@
 			<node name="loadSubCatalog" toBeTranslated="true" value="Loading catalog. Please, wait..." />
 			<node name="registerUser" toBeTranslated="true" value="Registering new account. Please, wait..." />
 			<node name="passwordRecovery" toBeTranslated="true" value="Recovering password. Please, wait..." />
+			<node name="authenticationCheck" toBeTranslated="true" value="Account validation. Please, wait..." />
 		</node>
 		<node name="purchaseConfirmBox">
 			<node name="title" toBeTranslated="true" value="Purchase book" />
@@ -485,6 +487,10 @@
 		<node name="recoverySuccessfulBox">
 			<node name="title" toBeTranslated="true" value="Password Recovery" />
 			<node name="message" toBeTranslated="true" value="A message with further instructions&#10;has been sent to&#10;%s" />
+		</node>
+		<node name="cantOpenDownloadedFile">
+			<node name="title" toBeTranslated="true" value="Download Error" />
+			<node name="message" toBeTranslated="true" value="Can&apos;t open downloaded file&#10;%s." />
 		</node>
 	</node>
 	<node name="style">

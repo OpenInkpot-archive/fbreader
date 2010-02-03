@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,9 +22,7 @@
 #include <ZLStringUtil.h>
 #include <ZLUnicodeUtil.h>
 #include <ZLNetworkUtil.h>
-#include <ZLNetworkXMLParserData.h>
 #include <ZLNetworkManager.h>
-#include <ZLSlowProcess.h>
 
 #include <ZLibrary.h>
 #include <ZLDir.h>
@@ -100,9 +98,10 @@ void LitResUtil::makeDemoUrl(std::string &url, const std::string &bookId) {
 
 void LitResUtil::validateGenres() {
 	if (!myGenresValid) {
-		loadGenres();
-		buildGenresTitles(myGenresTree);
-		myGenresValid = true;
+		if (loadGenres()) {
+			buildGenresTitles(myGenresTree);
+			myGenresValid = true;
+		}
 	}
 }
 
@@ -154,7 +153,7 @@ void LitResUtil::fillGenreIds(const std::string &tag, std::vector<std::string> &
 	}
 }
 
-void LitResUtil::loadGenres() {
+bool LitResUtil::loadGenres() {
 	static const std::string directoryPath = ZLNetworkManager::CacheDirectory();
 	static shared_ptr<ZLDir> dir = ZLFile(directoryPath).directory(true);
 
@@ -166,16 +165,17 @@ void LitResUtil::loadGenres() {
 
 	if (dir.isNull()) {
 		ZLExecutionData::Vector dataList;
-		dataList.push_back(
-			new ZLNetworkXMLParserData(url, new LitResGenresParser(myGenresTree, myGenresMap))
+		dataList.push_back(ZLNetworkManager::Instance().createXMLParserData(
+			url, new LitResGenresParser(myGenresTree, myGenresMap))
 		);
 		const std::string error = ZLNetworkManager::Instance().perform(dataList);
 		if (!error.empty()) {
 			myGenresTree.clear();
 			myGenresMap.clear();
 			myGenresTitles.clear();
+			return false;
 		}
-		return;
+		return true;
 	}
 
 	std::string cacheName;
@@ -230,11 +230,11 @@ void LitResUtil::loadGenres() {
 	}
 
 	if (cacheName.empty()) {
-		return;
+		return false;
 	}
 
 	shared_ptr<ZLXMLReader> parser = new LitResGenresParser(myGenresTree, myGenresMap);
-	parser->readDocument(cacheName);
+	return parser->readDocument(cacheName);
 }
 
 void LitResUtil::buildGenresTitles(const std::vector<shared_ptr<LitResGenre> > &genres, const std::string &titlePrefix) {

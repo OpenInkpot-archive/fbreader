@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,6 +53,7 @@ public:
 	static void utf8ToUcs2(Ucs2String &to, const char *from, int length, int toLength = -1);
 	static void utf8ToUcs2(Ucs2String &to, const std::string &from, int toLength = -1);
 	static int firstChar(Ucs4Char &ch, const char *utf8String);
+	static int firstChar(Ucs4Char &ch, const std::string &utf8String);
 	static void ucs4ToUtf8(std::string &to, const Ucs4String &from, int toLength = -1);
 	static int ucs4ToUtf8(char *to, Ucs4Char ch);
 	static void ucs2ToUtf8(std::string &to, const Ucs2String &from, int toLength = -1);

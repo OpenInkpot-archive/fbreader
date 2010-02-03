@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,14 @@ const std::string &SearchResultNode::typeId() const {
 	return TYPE_ID;
 }
 
+std::string SearchResultNode::title() const {
+	return ZLResource::resource("networkView")["searchResultNode"]["title"].value();
+}
+
+std::string SearchResultNode::summary() const {
+	return mySummary;
+}
+
 void SearchResultNode::paint(ZLPaintContext &context, int vOffset) {
 	const ZLResource &resource =
 		ZLResource::resource("networkView")["searchResultNode"];
@@ -48,8 +56,8 @@ void SearchResultNode::paint(ZLPaintContext &context, int vOffset) {
 	removeAllHyperlinks();
 
 	((NetworkView&)view()).drawCoverLater(this, vOffset);
-	drawTitle(context, vOffset, resource["title"].value());
-	drawSummary(context, vOffset, mySummary);
+	drawTitle(context, vOffset);
+	drawSummary(context, vOffset);
 
 	int left = 0;
 	drawHyperlink(

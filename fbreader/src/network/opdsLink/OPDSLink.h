@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,13 @@
 #ifndef __OPDSLINK_H__
 #define __OPDSLINK_H__
 
+#include <set>
+#include <string>
+
 #include "../NetworkLink.h"
+
+
+class NetworkAuthenticationManager;
 
 class OPDSLink : public NetworkLink {
 
@@ -28,7 +34,7 @@ private:
 	class AdvancedSearch;
 
 protected:
-	static shared_ptr<ZLExecutionData> createNetworkData(const std::string &url, NetworkOperationData &result);
+	shared_ptr<ZLExecutionData> createNetworkData(const std::string &url, NetworkOperationData &result);
 
 public:
 	OPDSLink(
@@ -47,6 +53,8 @@ public:
 		const std::string &tagParameter,
 		const std::string &annotationParameter
 	);
+	void setIgnoredFeeds(const std::set<std::string> &ignoredFeeds);
+	void setAuthenticationManager(shared_ptr<NetworkAuthenticationManager> mgr);
 
 private:
 	const std::string searchURL(const std::string &pattern) const;
@@ -63,6 +71,8 @@ private:
 		const std::string &annotation);
 	shared_ptr<ZLExecutionData> resume(NetworkOperationData &result);
 
+	shared_ptr<NetworkAuthenticationManager> authenticationManager();
+
 friend class OPDSCatalogItem;
 
 private:
@@ -72,6 +82,8 @@ private:
 	const std::string mySummary;
 	const std::string myIconName;
 	shared_ptr<AdvancedSearch> myAdvancedSearch;
+	std::set<std::string> myIgnoredFeeds;
+	shared_ptr<NetworkAuthenticationManager> myAuthenticationManager;
 };
 
 #endif /* __OPDSLINK_H__ */

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 
 #include <ZLExecutionData.h>
 #include <ZLNetworkManager.h>
-#include <ZLNetworkXMLParserData.h>
 
 #include "OPDSCatalogItem.h"
 #include "OPDSLink.h"
@@ -42,7 +41,7 @@ std::string OPDSCatalogItem::loadChildren(NetworkLibraryItemList &children) {
 	NetworkOperationData data(link());
 
 	shared_ptr<ZLExecutionData> networkData =
-		OPDSLink::createNetworkData(url(), data);
+		((OPDSLink &)link()).createNetworkData(url(), data);
 
 	while (!networkData.isNull()) {
 		ZLExecutionData::Vector dataList;

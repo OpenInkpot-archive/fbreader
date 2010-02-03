@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +26,9 @@
 #include <optionEntries/ZLSimpleOptionEntry.h>
 #include <ZLibrary.h>
 
-#include <ZLTextView.h>
 #include <ZLBlockTreeView.h>
+#include <ZLTextView.h>
+#include <ZLTextSelectionModel.h>
 
 #include "FBReader.h"
 #include "FBReaderActions.h"
@@ -91,7 +92,6 @@ void AddBookAction::run() {
 	FBReader &fbreader = FBReader::Instance();
 
 	const ZLResourceKey dialogKey("addFileDialog");
-	const ZLResource &msgResource = ZLResource::resource("dialog")[dialogKey];
 	FBFileHandler handler;
 	if (ZLDialogManager::Instance().selectionDialog(dialogKey, handler)) {
 		shared_ptr<Book> book = handler.description();
@@ -115,7 +115,7 @@ bool ScrollToHomeAction::isEnabled() const {
 	if (!isVisible()) {
 		return false;
 	}
-	ZLTextWordCursor cursor = FBReader::Instance().bookTextView().startCursor();
+	ZLTextWordCursor cursor = FBReader::Instance().bookTextView().textArea().startCursor();
 	return cursor.isNull() || !cursor.isStartOfParagraph() || !cursor.paragraphCursor().isFirst();
 }
 
@@ -130,7 +130,7 @@ bool ScrollToStartOfTextAction::isEnabled() const {
 	if (!isVisible()) {
 		return false;
 	}
-	ZLTextWordCursor cursor = FBReader::Instance().bookTextView().startCursor();
+	ZLTextWordCursor cursor = FBReader::Instance().bookTextView().textArea().startCursor();
 	return cursor.isNull() || !cursor.isStartOfParagraph() || !cursor.paragraphCursor().isFirst();
 }
 
@@ -145,7 +145,7 @@ bool ScrollToEndOfTextAction::isEnabled() const {
 	if (!isVisible()) {
 		return false;
 	}
-	ZLTextWordCursor cursor = FBReader::Instance().bookTextView().endCursor();
+	ZLTextWordCursor cursor = FBReader::Instance().bookTextView().textArea().endCursor();
 	return cursor.isNull() || !cursor.isEndOfParagraph() || !cursor.paragraphCursor().isLast();
 }
 
@@ -288,20 +288,24 @@ void QuitAction::run() {
 	FBReader::Instance().closeView();
 }
 
+void ForceQuitAction::run() {
+	FBReader::Instance().quit();
+}
+
 bool GotoNextTOCSectionAction::isVisible() const {
 	FBReader &fbreader = FBReader::Instance();
 	if (fbreader.mode() != FBReader::BOOK_TEXT_MODE) {
 		return false;
 	}
 	const ContentsView &contentsView = (const ContentsView&)*fbreader.myContentsView;
-	shared_ptr<ZLTextModel> model = contentsView.model();
+	shared_ptr<ZLTextModel> model = contentsView.textArea().model();
 	return !model.isNull() && (model->paragraphsNumber() > 1);
 }
 
 bool GotoNextTOCSectionAction::isEnabled() const {
 	FBReader &fbreader = FBReader::Instance();
 	const ContentsView &contentsView = (const ContentsView&)*fbreader.myContentsView;
-	shared_ptr<ZLTextModel> model = contentsView.model();
+	shared_ptr<ZLTextModel> model = contentsView.textArea().model();
 	return !model.isNull() && ((int)contentsView.currentTextViewParagraph() < (int)model->paragraphsNumber() - 1);
 }
 
@@ -309,7 +313,7 @@ void GotoNextTOCSectionAction::run() {
 	FBReader &fbreader = FBReader::Instance();
 	ContentsView &contentsView = (ContentsView&)*fbreader.myContentsView;
 	size_t current = contentsView.currentTextViewParagraph();
-	const ContentsModel &contentsModel = (const ContentsModel&)*contentsView.model();
+	const ContentsModel &contentsModel = (const ContentsModel&)*contentsView.textArea().model();
 	int reference = contentsModel.reference(((const ZLTextTreeParagraph*)contentsModel[current + 1]));
 	if (reference != -1) {
 		((ZLTextView&)*fbreader.myBookTextView).gotoParagraph(reference);
@@ -323,14 +327,14 @@ bool GotoPreviousTOCSectionAction::isVisible() const {
 		return false;
 	}
 	const ContentsView &contentsView = (const ContentsView&)*fbreader.myContentsView;
-	shared_ptr<ZLTextModel> model = contentsView.model();
+	shared_ptr<ZLTextModel> model = contentsView.textArea().model();
 	return !model.isNull() && (model->paragraphsNumber() > 1);
 }
 
 bool GotoPreviousTOCSectionAction::isEnabled() const {
 	const FBReader &fbreader = FBReader::Instance();
 	const ContentsView &contentsView = (const ContentsView&)*fbreader.myContentsView;
-	shared_ptr<ZLTextModel> model = contentsView.model();
+	shared_ptr<ZLTextModel> model = contentsView.textArea().model();
 	if (model.isNull()) {
 		return false;
 	}
@@ -340,7 +344,7 @@ bool GotoPreviousTOCSectionAction::isEnabled() const {
 		return true;
 	}
 	if (tocIndex == 0) {
-		const ZLTextWordCursor &cursor = fbreader.bookTextView().startCursor();
+		const ZLTextWordCursor &cursor = fbreader.bookTextView().textArea().startCursor();
 		if (cursor.isNull()) {
 			return false;
 		}
@@ -358,17 +362,17 @@ void GotoPreviousTOCSectionAction::run() {
 	FBReader &fbreader = FBReader::Instance();
 	ContentsView &contentsView = (ContentsView&)*fbreader.myContentsView;
 	size_t current = contentsView.currentTextViewParagraph(false);
-	const ContentsModel &contentsModel = (const ContentsModel&)*contentsView.model();
+	const ContentsModel &contentsModel = (const ContentsModel&)*contentsView.textArea().model();
 
 	int reference = contentsModel.reference(((const ZLTextTreeParagraph*)contentsModel[current]));
-	const ZLTextWordCursor &cursor = fbreader.bookTextView().startCursor();
+	const ZLTextWordCursor &cursor = fbreader.bookTextView().textArea().startCursor();
 	if (!cursor.isNull() &&
 			(cursor.elementIndex() == 0)) {
 		int paragraphIndex = cursor.paragraphCursor().index();
 		if (reference == paragraphIndex) {
 			reference = contentsModel.reference(((const ZLTextTreeParagraph*)contentsModel[current - 1]));
 		} else if (reference == paragraphIndex - 1) {
-			const ZLTextModel &textModel = *fbreader.bookTextView().model();
+			const ZLTextModel &textModel = *fbreader.bookTextView().textArea().model();
 			const ZLTextParagraph *para = textModel[paragraphIndex];
 			if ((para != 0) && (para->kind() == ZLTextParagraph::END_OF_SECTION_PARAGRAPH)) {
 				reference = contentsModel.reference(((const ZLTextTreeParagraph*)contentsModel[current - 1]));
@@ -437,12 +441,8 @@ bool SelectionAction::isEnabled() const {
 	return !selectionModel.text().empty() || !selectionModel.image().isNull();
 }
 
-ZLTextView &SelectionAction::textView() {
+ZLTextView &SelectionAction::textView() const {
 	return (ZLTextView&)*FBReader::Instance().currentView();
-}
-
-const ZLTextView &SelectionAction::textView() const {
-	return (const ZLTextView&)*FBReader::Instance().currentView();
 }
 
 bool CopySelectedTextAction::isVisible() const {
@@ -450,7 +450,7 @@ bool CopySelectedTextAction::isVisible() const {
 }
 
 void CopySelectedTextAction::run() {
-	textView().copySelectedTextToClipboard(ZLDialogManager::CLIPBOARD_MAIN);
+	textView().selectionModel().copySelectionToClipboard(ZLDialogManager::CLIPBOARD_MAIN);
 }
 
 bool OpenSelectedTextInDictionaryAction::isVisible() const {

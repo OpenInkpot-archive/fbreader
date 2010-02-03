@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,15 +28,17 @@
 #include <ZLExecutionData.h>
 
 class ZLNetworkData;
-class ZLSlowProcessListener;
+class ZLOutputStream;
+class ZLXMLReader;
 
-class ZLNetworkManager {
+class ZLNetworkManager : public ZLExecutionData::Runner {
 
 public:
 	static void deleteInstance();
 	static ZLNetworkManager &Instance();
 
 	static std::string CacheDirectory();
+	static std::string CookiesPath();
 
 protected:
 	static ZLNetworkManager *ourInstance;
@@ -65,15 +67,26 @@ protected:
 
 public:
 	// returns error message
-	std::string downloadFile(const std::string &url, const std::string &fileName, shared_ptr<ZLSlowProcessListener> listener = 0) const;
-	std::string downloadFile(const std::string &url, const std::string &fileName, const std::string &sslCertificate, shared_ptr<ZLSlowProcessListener> listener = 0) const;
-	// returns error message
-	std::string perform(const ZLExecutionData::Vector &dataList) const;
+	std::string downloadFile(const std::string &url, const std::string &fileName, shared_ptr<ZLExecutionData::Listener> listener = 0) const;
+	std::string downloadFile(const std::string &url, const std::string &fileName, const std::string &sslCertificate, shared_ptr<ZLExecutionData::Listener> listener = 0) const;
+
+public:
+	virtual shared_ptr<ZLExecutionData> createNoActionData(const std::string &url, const std::string &sslCertificate) const = 0;
+	virtual shared_ptr<ZLExecutionData> createNoActionData(const std::string &url) const = 0;
+
+	virtual shared_ptr<ZLExecutionData> createReadToStringData(const std::string &url, std::string &dataString, const std::string &sslCertificate) const = 0;
+	virtual shared_ptr<ZLExecutionData> createReadToStringData(const std::string &url, std::string &dataString) const = 0;
+
+	virtual shared_ptr<ZLExecutionData> createDownloadData(const std::string &url, const std::string &fileName, const std::string &sslCertificate, shared_ptr<ZLOutputStream> stream = 0) const = 0;
+	virtual shared_ptr<ZLExecutionData> createDownloadData(const std::string &url, const std::string &fileName, shared_ptr<ZLOutputStream> stream = 0) const = 0;
+
+	virtual shared_ptr<ZLExecutionData> createXMLParserData(const std::string &url, const std::string &sslCertificate, shared_ptr<ZLXMLReader> reader) const = 0;
+	virtual shared_ptr<ZLExecutionData> createXMLParserData(const std::string &url, shared_ptr<ZLXMLReader> reader) const = 0;
+
+	virtual shared_ptr<ZLExecutionData> createPostFormData(const std::string &url, const std::string &sslCertificate, const std::vector<std::pair<std::string, std::string> > &formData) const = 0;
+	virtual shared_ptr<ZLExecutionData> createPostFormData(const std::string &url, const std::vector<std::pair<std::string, std::string> > &formData) const = 0;
 
 private:
-	// void* instead of CURL* to avoid curl.h including
-	void setStandardOptions(void *curlHandle, const std::string &proxy) const;
-
 	mutable shared_ptr<ZLIntegerRangeOption> myConnectTimeoutOption;
 	mutable shared_ptr<ZLIntegerRangeOption> myTimeoutOption;
 	mutable shared_ptr<ZLBooleanOption> myUseProxyOption;

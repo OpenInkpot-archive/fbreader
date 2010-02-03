@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,6 +61,7 @@ public:
 	static const std::string ADD_BOOK;
 	static const std::string ROTATE_SCREEN;
 	static const std::string QUIT;
+	static const std::string FORCE_QUIT;
 	static const std::string OPEN_PREVIOUS_BOOK;
 	static const std::string GOTO_NEXT_TOC_SECTION;
 	static const std::string GOTO_PREVIOUS_TOC_SECTION;
@@ -246,6 +247,12 @@ public:
 	void run();
 };
 
+class ForceQuitAction : public ZLApplication::Action {
+
+public:
+	void run();
+};
+
 class OpenPreviousBookAction : public ZLApplication::Action {
 
 public:
@@ -288,8 +295,7 @@ public:
 	bool isEnabled() const;
 
 protected:
-	ZLTextView &textView();
-	const ZLTextView &textView() const;
+	ZLTextView &textView() const;
 };
 
 class CopySelectedTextAction : public SelectionAction {

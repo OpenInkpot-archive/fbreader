@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 #include <ZLibrary.h>
 #include <ZLStringUtil.h>
 #include <ZLNetworkManager.h>
-#include <ZLNetworkDownloadData.h>
 #include <ZLDir.h>
 #include <ZLFile.h>
 #include <ZLFileImage.h>
@@ -68,7 +67,7 @@ shared_ptr<ZLExecutionData> ZLNetworkImage::synchronizationData() const {
 	}
 	myIsSynchronized = true;
 
-	return new ZLNetworkDownloadData(myURL, myFileName);
+	return ZLNetworkManager::Instance().createDownloadData(myURL, myFileName);
 }
 
 const shared_ptr<std::string> ZLNetworkImage::stringData() const {

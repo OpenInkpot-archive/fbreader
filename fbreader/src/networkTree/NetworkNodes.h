@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,6 +64,8 @@ public:
 protected:
 	const std::string &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
+	std::string title() const;
+	std::string summary() const;
 	virtual shared_ptr<ZLImage> lastResortCoverImage() const;
 	void paint(ZLPaintContext &context, int vOffset);
 
@@ -156,6 +158,8 @@ public:
 private:
 	const std::string &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
+	std::string title() const;
+	std::string summary() const;
 	void paint(ZLPaintContext &context, int vOffset);
 
 private:
@@ -179,6 +183,7 @@ public:
 private:
 	const std::string &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
+	std::string title() const;
 	void paint(ZLPaintContext &context, int vOffset);
 
 private:
@@ -190,8 +195,10 @@ class NetworkSeriesNode : public NetworkContainerNode {
 public:
 	static const std::string TYPE_ID;
 
+	enum SummaryType { AUTHORS, BOOKS };
+
 protected:
-	NetworkSeriesNode(NetworkContainerNode *parent, const std::string &seriesTitle);
+	NetworkSeriesNode(NetworkContainerNode *parent, const std::string &seriesTitle, SummaryType summaryType);
 
 friend class NetworkNodesFactory;
 
@@ -201,10 +208,14 @@ public:
 private:
 	const std::string &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
+	std::string title() const;
+	std::string summary() const;
 	void paint(ZLPaintContext &context, int vOffset);
 
 private:
 	std::string mySeriesTitle;
+	SummaryType mySummaryType;
+	mutable std::string mySummary;
 };
 
 class NetworkBookInfoNode : public FBReaderNode {
@@ -233,8 +244,11 @@ public:
 private:
 	const std::string &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
+	std::string title() const;
+	std::string summary() const;
 	void paint(ZLPaintContext &context, int vOffset);
 
+	const NetworkLibraryBookItem &bookItem() const;
 	NetworkLibraryBookItem &bookItem();
 
 	bool hasLocalCopy();
@@ -253,6 +267,7 @@ private:
 };
 
 inline shared_ptr<NetworkLibraryItem> NetworkBookInfoNode::book() { return myBook; }
-inline NetworkLibraryBookItem &NetworkBookInfoNode::bookItem() { return (NetworkLibraryBookItem &) *myBook; }
+inline const NetworkLibraryBookItem &NetworkBookInfoNode::bookItem() const { return (const NetworkLibraryBookItem&)*myBook; }
+inline NetworkLibraryBookItem &NetworkBookInfoNode::bookItem() { return (NetworkLibraryBookItem&)*myBook; }
 
 #endif /* __NETWORKNODES_H__ */

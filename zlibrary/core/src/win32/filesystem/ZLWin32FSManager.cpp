@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2007-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,13 +89,13 @@ void ZLWin32FSManager::normalize(std::string &path) const {
 
 	static std::string HomeDir = getHomeDir();
 	static std::string PwdDir = getPwdDir();
-	static std::string APPattern = "%APPLICATION_PATH%";
+	static std::string APPattern = "~~";
 	static std::string AP = getAppDir();
 
-	if (path[0] == '~') {
-		path = HomeDir + path.substr(1);
-	} else if (ZLStringUtil::stringStartsWith(path, APPattern)) {
+	if (ZLStringUtil::stringStartsWith(path, APPattern)) {
 		path = AP + path.substr(APPattern.length());
+	} else if (path[0] == '~') {
+		path = HomeDir + path.substr(1);
 	} else if ((path.length() > 1) && (path[1] != ':') &&
 							!ZLStringUtil::stringStartsWith(path, "\\\\")) {
 		path = PwdDir + "\\" + path;

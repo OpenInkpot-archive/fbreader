@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,6 +66,11 @@ class NetworkLibraryCatalogItem : public NetworkLibraryItem {
 public:
 	static const std::string TYPE_ID;
 
+	enum CatalogType {
+		OTHER,
+		BY_AUTHORS,
+	};
+
 public:
 	NetworkLibraryCatalogItem(
 		NetworkLink &link,
@@ -84,10 +89,12 @@ public:
 	const std::string &htmlURL() const;
 	const std::string &summary() const;
 
-	// returns error message
-	virtual std::string loadChildren(NetworkLibraryItemList &children) = 0;
+	virtual void onDisplayItem(); // method is called each time the View Node is created for the Item.
+	virtual std::string loadChildren(NetworkLibraryItemList &children) = 0; // returns error message
 
 	bool dependsOnAccount() const;
+
+	virtual CatalogType catalogType() const;
 
 private:
 	NetworkLink &myLink;
