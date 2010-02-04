@@ -1,3 +1,15 @@
+fbreader (0.12.1-4) zelazny; urgency=low
+
+  * l10n: Updates to Russian (ru) translation
+  * Update .po files
+  * Fix broken settings. #797
+  * Fix saving last position for all open books. #794
+  * Resurrect hyphenation setting
+  * Font size preview in indicator settings
+  * Show font preview in standalone font size dialog
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Thu, 04 Feb 2010 02:23:17 +0100
+
 fbreader (0.12.1-3) zelazny; urgency=low
 
   * Add long-pressed wheel up/down to keymap
