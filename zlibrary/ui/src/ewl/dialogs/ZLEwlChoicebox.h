@@ -83,6 +83,8 @@ struct _cb_olist {
 	cb_olist *parent;
 	int parent_item_idx;
 
+	bool fsize_list;
+
 	void(*item_handler)(int, bool);
 	void(*destroy_handler)();
 };

@@ -99,6 +99,57 @@ static void lcb_page_updated_handler(Evas_Object* choicebox,
 	choicebox_aux_edje_footer_handler(footer, "text", cur_page, total_pages);
 }
 
+static void textblock_style_add_font(Evas_Object *item, string font)
+{
+	const Evas_Object *tb = edje_object_part_object_get(item, "title");
+	const Evas_Textblock_Style *st = evas_object_textblock_style_get(tb);
+
+	if(!strstr(evas_textblock_style_get(st), font.c_str())) {
+		char *style;
+		asprintf(&style, "%s%s='+font=%s'/%s='-'", evas_textblock_style_get(st), font.c_str(), font.c_str(), font.c_str());
+		evas_textblock_style_set((Evas_Textblock_Style*)st, style);
+		evas_object_textblock_style_set((Evas_Object*)tb, (Evas_Textblock_Style*)st);
+		free(style);
+	}
+}
+
+static void textblock_style_add_fsize(Evas_Object *item, int fsize)
+{
+	const Evas_Object *tb = edje_object_part_object_get(item, "title");
+	const Evas_Textblock_Style *st = evas_object_textblock_style_get(tb);
+
+	char *c;
+	asprintf(&c, "fsize%d", fsize);
+	if(!strstr(evas_textblock_style_get(st), c)) {
+		static int dpi = 0;
+
+		if(!dpi) {
+			xcb_connection_t     *connection;
+			xcb_screen_t         *screen;
+			int                   screen_number;
+
+			connection = xcb_connect (NULL, &screen_number);
+			if (xcb_connection_has_error(connection)) {
+				fprintf (stderr, "ERROR: can't connect to an X server\n");
+				exit(-1);
+			}
+
+			screen = xcb_aux_get_screen (connection, screen_number);
+
+			dpi = (((double)screen->width_in_pixels) * 25.4) / ((double) screen->width_in_millimeters);
+
+			xcb_disconnect(connection);
+		}
+
+		char *style;
+		asprintf(&style, "%sfsize%d='+font_size=%d'/fsize%d='-'", evas_textblock_style_get(st), fsize, fsize * dpi / 72, fsize);
+		evas_textblock_style_set((Evas_Textblock_Style*)st, style);
+		evas_object_textblock_style_set((Evas_Object*)tb, (Evas_Textblock_Style*)st);
+		free(style);
+	}
+	free(c);
+}
+
 static void lcb_draw_handler(Evas_Object* choicebox,
 		Evas_Object* item,
 		int item_num,
@@ -122,21 +173,34 @@ static void lcb_draw_handler(Evas_Object* choicebox,
 		edje_object_part_text_set(item, "title", i->name.c_str());
 		edje_object_part_text_set(item, "value", "");
 	} else if(i->type == ITEM_OPTION) {
-		edje_object_part_text_set(item, "title", i->name.c_str());
+		if(l->fsize_list) {
+			std::string fn = FBTextStyle::Instance().FontFamilyOption.value();
+			fn.erase(remove_if(fn.begin(), fn.end(), static_cast<int(*)(int)>( isspace )), fn.end());
+			textblock_style_add_font(item, fn);
+			textblock_style_add_fsize(item, i->current_value.ival);
 
-		if(i->values.empty())
-			edje_object_part_text_set(item, "value",  i->current_value.text.c_str());
-		else if(i->values.size() <= 3) {
-			string s;
-			for(int z = 0; z < i->values.size(); z++)
-				if(z != i->curval_idx) {
-					s += "  <inactive>";
-					s += i->values.at(z).text;
-					s += "</inactive>";
-				} else
-					s += "  " + i->values.at(z).text;
+			char *s2;
+			asprintf(&s2, "<%s><fsize%d>%s</fsize%d></%s>", fn.c_str(), i->current_value.ival, _("ABCabc"), i->current_value.ival, fn.c_str());
+			edje_object_part_text_set(item, "value", i->current_value.text.c_str());
+			edje_object_part_text_set(item, "title", s2);
+			free(s2);
+		} else {
+			edje_object_part_text_set(item, "title", i->name.c_str());
 
-				edje_object_part_text_set(item, "value", s.c_str());
+			if(i->values.empty())
+				edje_object_part_text_set(item, "value",  i->current_value.text.c_str());
+			else if(i->values.size() <= 3) {
+				string s;
+				for(int z = 0; z < i->values.size(); z++)
+					if(z != i->curval_idx) {
+						s += "  <inactive>";
+						s += i->values.at(z).text;
+						s += "</inactive>";
+					} else
+						s += "  " + i->values.at(z).text;
+
+					edje_object_part_text_set(item, "value", s.c_str());
+			}
 		}
 	}
 
@@ -527,76 +591,23 @@ static void rcb_draw_handler(Evas_Object* choicebox,
 	if(vlist->font_list) {
 		std::string fn = iv->text;
 		fn.erase(remove_if(fn.begin(), fn.end(), static_cast<int(*)(int)>( isspace )), fn.end());
-
-		const Evas_Object *tb = edje_object_part_object_get(item, "title");
-		const Evas_Textblock_Style *st = evas_object_textblock_style_get(tb);
-
-		if(!strstr(evas_textblock_style_get(st), fn.c_str())) {
-			char *style;
-			asprintf(&style, "%s%s='+font=%s'/%s='-'", evas_textblock_style_get(st), fn.c_str(), fn.c_str(), fn.c_str());
-			evas_textblock_style_set((Evas_Textblock_Style*)st, style);
-			evas_object_textblock_style_set((Evas_Object*)tb, (Evas_Textblock_Style*)st);
-			free(style);
-		}
+		textblock_style_add_font(item, fn);
 
 		std::stringstream s;
 		s << "<" << fn << ">" << iv->text << "</" << fn << ">";
 		edje_object_part_text_set(item, "title", s.str().c_str());
 		edje_object_part_text_set(item, "value", "");
 	} else if(vlist->fsize_list) {
-		std::stringstream s;
-		s << "fsize" << iv->ival;
-
-		const Evas_Object *tb = edje_object_part_object_get(item, "title");
-		const Evas_Textblock_Style *st = evas_object_textblock_style_get(tb);
-
-		char *c = strdup(s.str().c_str());
-		if(!strstr(evas_textblock_style_get(st), c)) {
-			static int dpi = 0;
-
-			if(!dpi) {
-				xcb_connection_t     *connection;
-				xcb_screen_t         *screen;
-				int                   screen_number;
-
-				connection = xcb_connect (NULL, &screen_number);
-				if (xcb_connection_has_error(connection)) {
-					fprintf (stderr, "ERROR: can't connect to an X server\n");
-					exit(-1);
-				}
-
-				screen = xcb_aux_get_screen (connection, screen_number);
-
-				dpi = (((double)screen->width_in_pixels) * 25.4) / ((double) screen->width_in_millimeters);
-
-				xcb_disconnect(connection);
-			}
-
-			char *style;
-			asprintf(&style, "%sfsize%d='+font_size=%d'/fsize%d='-'", evas_textblock_style_get(st), iv->ival, iv->ival * dpi / 72, iv->ival);
-			evas_textblock_style_set((Evas_Textblock_Style*)st, style);
-			evas_object_textblock_style_set((Evas_Object*)tb, (Evas_Textblock_Style*)st);
-			free(style);
-		}
-
 		std::string fn = FBTextStyle::Instance().FontFamilyOption.value();
 		fn.erase(remove_if(fn.begin(), fn.end(), static_cast<int(*)(int)>( isspace )), fn.end());
-
-		if(!strstr(evas_textblock_style_get(st), fn.c_str())) {
-			char *style;
-			asprintf(&style, "%s%s='+font=%s'/%s='-'", evas_textblock_style_get(st), fn.c_str(), fn.c_str(), fn.c_str());
-			evas_textblock_style_set((Evas_Textblock_Style*)st, style);
-			evas_object_textblock_style_set((Evas_Object*)tb, (Evas_Textblock_Style*)st);
-			free(style);
-		}
+		textblock_style_add_font(item, fn);
+		textblock_style_add_fsize(item, iv->ival);
 
 		char *s2;
-		asprintf(&s2, "<%s><%s>%s</%s></%s>", fn.c_str(), c, _("ABCabc"), c, fn.c_str());
+		asprintf(&s2, "<%s><fsize%d>%s</fsize%d></%s>", fn.c_str(), iv->ival, _("ABCabc"), iv->ival, fn.c_str());
 		edje_object_part_text_set(item, "value", iv->text.c_str());
 		edje_object_part_text_set(item, "title", s2);
-
 		free(s2);
-		free(c);
 	} else {
 		edje_object_part_text_set(item, "title", iv->text.c_str());
 		edje_object_part_text_set(item, "value", "");

@@ -1548,14 +1548,12 @@ void ZLEwlFontSizeDialog(FBReader &f)
 	options->parent_item_idx = -1;
 	options->item_handler = font_size_dialog_handler;
 	options->destroy_handler = refresh_view;
+	options->fsize_list = true;
 
 	cb_olist_item i;
 
 	for(int idx = 0; idx <= FONT_SIZE_MAX; idx++) {
-		stringstream s;
-		s << FONT_SIZE(idx);
-		s << "pt";
-		ADD_SUBMENU_ITEM(s.str());
+		ADD_OPTION_INT_F("", FONT_SIZE(idx), "%dpt");
 	}
 
 	FBTextStyle &baseStyle = FBTextStyle::Instance();
