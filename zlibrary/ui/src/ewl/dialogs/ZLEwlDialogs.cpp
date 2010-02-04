@@ -708,6 +708,7 @@ void format_style_handler(int idx, bool is_alt)
 		options->parent_item_idx = idx;
 		options->item_handler = margins_handler;
 		options->destroy_handler = NULL;
+		options->fsize_list = false;
 
 		cb_olist_item i;
 
@@ -1102,6 +1103,7 @@ void options_dialog_handler(int idx, bool is_alt)
 		options->parent_item_idx = idx;
 		options->item_handler = format_style_handler;
 		options->destroy_handler = NULL;
+		options->fsize_list = false;
 
 		cb_olist_item i;
 
@@ -1126,6 +1128,7 @@ void options_dialog_handler(int idx, bool is_alt)
 		options->parent_item_idx = idx;
 		options->item_handler = indicator_handler;
 		options->destroy_handler = NULL;
+		options->fsize_list = false;
 
 		cb_olist_item i;
 
@@ -1148,6 +1151,7 @@ void options_dialog_handler(int idx, bool is_alt)
 		options->parent_item_idx = idx;
 		options->item_handler = language_handler;
 		options->destroy_handler = NULL;
+		options->fsize_list = false;
 
 		PluginCollection &pc = PluginCollection::Instance();
 
@@ -1195,6 +1199,7 @@ void options_dialog_handler(int idx, bool is_alt)
 		options->parent_item_idx = idx;
 		options->item_handler = book_settings_handler;
 		options->destroy_handler = NULL;
+		options->fsize_list = false;
 
 		cb_olist_item i;
 
@@ -1266,6 +1271,7 @@ void options_dialog_handler(int idx, bool is_alt)
 		options->parent_item_idx = idx;
 		options->item_handler = keys_handler;
 		options->destroy_handler = NULL;
+		options->fsize_list = false;
 
 		cb_olist_item i;
 
@@ -1335,6 +1341,7 @@ void ZLEwlOptionsDialog(FBReader &f)
 	options->parent_item_idx = -1;
 	options->item_handler = options_dialog_handler;
 	options->destroy_handler = settings_close_handler;
+	options->fsize_list = false;
 
 	cb_olist_item i;
 
