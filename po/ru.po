@@ -1,9 +1,9 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
@@ -410,10 +410,6 @@ msgstr "Формат и стиль"
 msgid "Bold"
 msgstr "Полужирный"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1117
-msgid "Auto Hyphenations"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1126
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1349
 msgid "Indicator"
@@ -605,16 +601,6 @@ msgstr "Вниз"
 msgid "Up"
 msgstr "Вверх"
 
-#: fbreader/data/default/keydefs.n516.tmpl:25
-#: fbreader/data/default/keydefs.v3.tmpl:28
-msgid "Right"
-msgstr "Налево"
-
-#: fbreader/data/default/keydefs.n516.tmpl:26
-#: fbreader/data/default/keydefs.v3.tmpl:30
-msgid "Left"
-msgstr "Направо"
-
 #: fbreader/data/default/keydefs.n516.tmpl:28
 msgid "Zoom"
 msgstr "Кнопка зум"
@@ -682,3 +668,17 @@ msgstr "Кнопка +"
 #: fbreader/data/default/keydefs.v3.tmpl:33
 msgid "-"
 msgstr "Кнопка -"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1117
+msgid "Auto Hyphenations"
+msgstr "Автоматический перенос слов"
+
+#: fbreader/data/default/keydefs.n516.tmpl:25
+#: fbreader/data/default/keydefs.v3.tmpl:28
+msgid "Right"
+msgstr "Влево"
+
+#: fbreader/data/default/keydefs.n516.tmpl:26
+#: fbreader/data/default/keydefs.v3.tmpl:30
+msgid "Left"
+msgstr "Вправо"
