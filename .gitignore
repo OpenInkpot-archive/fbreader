@@ -8,3 +8,4 @@ tags
 *.swp
 po/*.mo
 
+.vimrc
