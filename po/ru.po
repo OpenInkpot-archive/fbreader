@@ -673,12 +673,12 @@ msgstr "Кнопка -"
 msgid "Auto Hyphenations"
 msgstr "Автоматический перенос слов"
 
-#: fbreader/data/default/keydefs.n516.tmpl:25
-#: fbreader/data/default/keydefs.v3.tmpl:28
-msgid "Right"
-msgstr "Влево"
-
 #: fbreader/data/default/keydefs.n516.tmpl:26
 #: fbreader/data/default/keydefs.v3.tmpl:30
 msgid "Left"
+msgstr "Влево"
+
+#: fbreader/data/default/keydefs.n516.tmpl:25
+#: fbreader/data/default/keydefs.v3.tmpl:28
+msgid "Right"
 msgstr "Вправо"
