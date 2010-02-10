@@ -1,9 +1,9 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
@@ -71,14 +71,6 @@ msgstr "转到下一节"
 msgid "Go to Previous TOC Section"
 msgstr "转到上一节"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
-msgid "Next Page"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
-msgid "Previous Page"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
 msgid "Undo"
 msgstr "撤销"
@@ -103,35 +95,9 @@ msgstr "增大字体"
 msgid "Decrease Font Size"
 msgstr "减小字体"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:99
-msgid "Toggle Bold Font"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:100
 msgid "Toggle Position Indicator"
 msgstr "显示/隐藏位置指示器"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
-#, fuzzy
-msgid "Show Settings"
-msgstr "书籍设置"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
-msgid "Cancel/Quit"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:105
-msgid "Show Local Menu"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
-#, fuzzy
-msgid "Show Help"
-msgstr "显示时间"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
-msgid "Show font size dialog"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
 msgid "Arabic"
@@ -570,11 +536,6 @@ msgstr ""
 msgid "9"
 msgstr ""
 
-#: fbreader/data/default/keydefs.n516.tmpl:14
-#, fuzzy
-msgid "M/Bookmark"
-msgstr "书签"
-
 #: fbreader/data/default/keydefs.n516.tmpl:17
 #: fbreader/data/default/keydefs.v3.tmpl:24
 msgid "OK"
@@ -689,7 +650,42 @@ msgstr ""
 msgid "-"
 msgstr ""
 
-#, fuzzy
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
+msgid "Previous Page"
+msgstr "上一页"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
+msgid "Next Page"
+msgstr "下一页"
+
+#: fbreader/data/default/keydefs.n516.tmpl:14
+msgid "M/Bookmark"
+msgstr ""
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
+msgid "Cancel/Quit"
+msgstr "取消/退出"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:105
+msgid "Show Local Menu"
+msgstr ""
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
+msgid "Show Help"
+msgstr "显示帮助"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
+msgid "Show font size dialog"
+msgstr "设置字体大小"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:99
+msgid "Toggle Bold Font"
+msgstr "切换粗体字"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
+msgid "Show Settings"
+msgstr "书籍设置"
+
 #~ msgid "Menu"
 #~ msgstr "书籍菜单"
 
