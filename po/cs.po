@@ -2,14 +2,14 @@
 #
 # Copyright (C) 2009 ben1981 <ben1981@centrum.cz>
 # This file is distributed under the same license as the FBReader package.
-# ben1981 <ben1981@centrum.cz>, 2009.
+# ben1981 <ben1981@centrum.cz>, 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
 "Report-Msgid-Bugs-To: @PACKAGE_BUGREPORT@\n"
 "POT-Creation-Date: 2010-02-04 02:17+0100\n"
-"PO-Revision-Date: 2009-09-30 17:38+0100\n"
+"PO-Revision-Date: 2010-02-12 10:16+0100\n"
 "Last-Translator: ben1981 <ben1981@centrum.cz>\n"
 "Language-Team: Czech <openinkpot-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -73,11 +73,11 @@ msgstr "Jít na předchozí kapitolu"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
 msgid "Next Page"
-msgstr ""
+msgstr "Další Stránka"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
 msgid "Previous Page"
-msgstr ""
+msgstr "Předchozí Stránka"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
 msgid "Undo"
@@ -112,26 +112,24 @@ msgid "Toggle Position Indicator"
 msgstr "Zapnout indikátor pozice"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
-#, fuzzy
 msgid "Show Settings"
-msgstr "Nastavení knihy"
+msgstr "Zobrazit nastavení"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
 msgid "Cancel/Quit"
-msgstr ""
+msgstr "Zrušit/Zavřít"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:105
 msgid "Show Local Menu"
-msgstr ""
+msgstr "Zobrazit Místní Menu"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
-#, fuzzy
 msgid "Show Help"
-msgstr "Zobrazit čas"
+msgstr "Zobrazit Nápovědu"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
 msgid "Show font size dialog"
-msgstr ""
+msgstr "Zobrazit okno velikosti fontu"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
 msgid "Arabic"
@@ -399,9 +397,9 @@ msgid "Break Paragraph At"
 msgstr "Zalomit odstavec na"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1072
-#, fuzzy, c-format
+#, c-format
 msgid "Key %s"
-msgstr "Klávesa %d"
+msgstr "Klávesa %s"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1101
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1348
@@ -523,175 +521,170 @@ msgstr "Vypnuto"
 #: fbreader/data/default/keydefs.n516.tmpl:4
 #: fbreader/data/default/keydefs.v3.tmpl:4
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: fbreader/data/default/keydefs.n516.tmpl:5
 #: fbreader/data/default/keydefs.v3.tmpl:5
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: fbreader/data/default/keydefs.n516.tmpl:6
 #: fbreader/data/default/keydefs.v3.tmpl:6
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: fbreader/data/default/keydefs.n516.tmpl:7
 #: fbreader/data/default/keydefs.v3.tmpl:7
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: fbreader/data/default/keydefs.n516.tmpl:8
 #: fbreader/data/default/keydefs.v3.tmpl:8
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #: fbreader/data/default/keydefs.n516.tmpl:9
 #: fbreader/data/default/keydefs.v3.tmpl:9
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: fbreader/data/default/keydefs.n516.tmpl:10
 #: fbreader/data/default/keydefs.v3.tmpl:10
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: fbreader/data/default/keydefs.n516.tmpl:11
 #: fbreader/data/default/keydefs.v3.tmpl:11
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #: fbreader/data/default/keydefs.n516.tmpl:12
 #: fbreader/data/default/keydefs.v3.tmpl:12
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #: fbreader/data/default/keydefs.n516.tmpl:13
 #: fbreader/data/default/keydefs.v3.tmpl:13
 msgid "9"
-msgstr ""
+msgstr "9"
 
 #: fbreader/data/default/keydefs.n516.tmpl:14
-#, fuzzy
 msgid "M/Bookmark"
-msgstr "Záložky"
+msgstr "M/Záložka"
 
 #: fbreader/data/default/keydefs.n516.tmpl:17
 #: fbreader/data/default/keydefs.v3.tmpl:24
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: fbreader/data/default/keydefs.n516.tmpl:18
 msgid "Back"
-msgstr ""
+msgstr "Zpět"
 
 #: fbreader/data/default/keydefs.n516.tmpl:19
 msgid "Next"
-msgstr ""
+msgstr "Další"
 
 #: fbreader/data/default/keydefs.n516.tmpl:20
 msgid "Prior"
-msgstr ""
+msgstr "Předchozí"
 
 #: fbreader/data/default/keydefs.n516.tmpl:21
 msgid "LP Next"
-msgstr ""
+msgstr "Podržet Další"
 
 #: fbreader/data/default/keydefs.n516.tmpl:22
 msgid "LP Prior"
-msgstr ""
+msgstr "Podržet Předchozí"
 
 #: fbreader/data/default/keydefs.n516.tmpl:23
 msgid "Down"
-msgstr ""
+msgstr "Dolů"
 
 #: fbreader/data/default/keydefs.n516.tmpl:24
 msgid "Up"
-msgstr ""
+msgstr "Nahoru"
 
 #: fbreader/data/default/keydefs.n516.tmpl:25
 #: fbreader/data/default/keydefs.v3.tmpl:28
-#, fuzzy
 msgid "Right"
-msgstr "vpravo"
+msgstr "Doprava"
 
 #: fbreader/data/default/keydefs.n516.tmpl:26
 #: fbreader/data/default/keydefs.v3.tmpl:30
-#, fuzzy
 msgid "Left"
-msgstr "vlevo"
+msgstr "Doleva"
 
 #: fbreader/data/default/keydefs.n516.tmpl:28
 msgid "Zoom"
-msgstr ""
+msgstr "Zvětšit"
 
 #: fbreader/data/default/keydefs.v3.tmpl:14
 msgid "LP 0"
-msgstr ""
+msgstr "Podržet 0"
 
 #: fbreader/data/default/keydefs.v3.tmpl:15
 msgid "LP 1"
-msgstr ""
+msgstr "Podržet 1"
 
 #: fbreader/data/default/keydefs.v3.tmpl:16
 msgid "LP 2"
-msgstr ""
+msgstr "Podržet 2"
 
 #: fbreader/data/default/keydefs.v3.tmpl:17
 msgid "LP 3"
-msgstr ""
+msgstr "Podržet 3"
 
 #: fbreader/data/default/keydefs.v3.tmpl:18
 msgid "LP 4"
-msgstr ""
+msgstr "Podržet 4"
 
 #: fbreader/data/default/keydefs.v3.tmpl:19
 msgid "LP 5"
-msgstr ""
+msgstr "Podržet 5"
 
 #: fbreader/data/default/keydefs.v3.tmpl:20
 msgid "LP 6"
-msgstr ""
+msgstr "Podržet 6"
 
 #: fbreader/data/default/keydefs.v3.tmpl:21
 msgid "LP 7"
-msgstr ""
+msgstr "Podržet 7"
 
 #: fbreader/data/default/keydefs.v3.tmpl:22
 msgid "LP 8"
-msgstr ""
+msgstr "Podržet 8"
 
 #: fbreader/data/default/keydefs.v3.tmpl:23
 msgid "LP 9"
-msgstr ""
+msgstr "Podržet 9"
 
 #: fbreader/data/default/keydefs.v3.tmpl:25
 msgid "LP OK"
-msgstr ""
+msgstr "Podržet OK"
 
 #: fbreader/data/default/keydefs.v3.tmpl:26
 msgid "C"
-msgstr ""
+msgstr "C"
 
 #: fbreader/data/default/keydefs.v3.tmpl:29
-#, fuzzy
 msgid "LP Right"
-msgstr "vpravo"
+msgstr "Podržet Vpravo"
 
 #: fbreader/data/default/keydefs.v3.tmpl:31
 msgid "LP Left"
-msgstr ""
+msgstr "Podržet Vlevo"
 
 #: fbreader/data/default/keydefs.v3.tmpl:32
 msgid "+"
-msgstr ""
+msgstr "+"
 
 #: fbreader/data/default/keydefs.v3.tmpl:33
 msgid "-"
-msgstr ""
+msgstr "-"
 
-#, fuzzy
 #~ msgid "Menu"
-#~ msgstr "Menu knihy"
+#~ msgstr "Menu"
 
 #~ msgid "Large Scroll Forward"
 #~ msgstr "Rychlý přesun vpřed"
