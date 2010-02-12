@@ -1,9 +1,9 @@
 # translation of messages_fr.po to French
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
-#
+# 
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
 # Louvre <diogenedebian@gmail.com>, 2009.
 msgid ""
@@ -74,14 +74,6 @@ msgstr "Aller à la section suivante de la table des matières"
 msgid "Go to Previous TOC Section"
 msgstr "Aller à la section précédente de la table des matières"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
-msgid "Next Page"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
-msgid "Previous Page"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
 msgid "Undo"
 msgstr "Annuler"
@@ -119,22 +111,10 @@ msgstr "Activer/Désactiver l'indicateur de position"
 msgid "Show Settings"
 msgstr "Réglages du livre"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
-msgid "Cancel/Quit"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:105
-msgid "Show Local Menu"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
 #, fuzzy
 msgid "Show Help"
 msgstr "Afficher l'heure"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
-msgid "Show font size dialog"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
 msgid "Arabic"
@@ -523,176 +503,192 @@ msgstr "Active"
 msgid "Off"
 msgstr "Inactif"
 
-#: fbreader/data/default/keydefs.n516.tmpl:4
-#: fbreader/data/default/keydefs.v3.tmpl:4
-msgid "0"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:5
-#: fbreader/data/default/keydefs.v3.tmpl:5
-msgid "1"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:6
-#: fbreader/data/default/keydefs.v3.tmpl:6
-msgid "2"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:7
-#: fbreader/data/default/keydefs.v3.tmpl:7
-msgid "3"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:8
-#: fbreader/data/default/keydefs.v3.tmpl:8
-msgid "4"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:9
-#: fbreader/data/default/keydefs.v3.tmpl:9
-msgid "5"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:10
-#: fbreader/data/default/keydefs.v3.tmpl:10
-msgid "6"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:11
-#: fbreader/data/default/keydefs.v3.tmpl:11
-msgid "7"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:12
-#: fbreader/data/default/keydefs.v3.tmpl:12
-msgid "8"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:13
-#: fbreader/data/default/keydefs.v3.tmpl:13
-msgid "9"
-msgstr ""
-
 #: fbreader/data/default/keydefs.n516.tmpl:14
 #, fuzzy
 msgid "M/Bookmark"
 msgstr "Marque-pages"
 
-#: fbreader/data/default/keydefs.n516.tmpl:17
-#: fbreader/data/default/keydefs.v3.tmpl:24
-msgid "OK"
-msgstr ""
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
+msgid "Previous Page"
+msgstr "Page précédente"
 
-#: fbreader/data/default/keydefs.n516.tmpl:18
-msgid "Back"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:19
-msgid "Next"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:20
-msgid "Prior"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:21
-msgid "LP Next"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:22
-msgid "LP Prior"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:23
-msgid "Down"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:24
-msgid "Up"
-msgstr ""
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
+msgid "Next Page"
+msgstr "Page suivante"
 
 #: fbreader/data/default/keydefs.n516.tmpl:25
 #: fbreader/data/default/keydefs.v3.tmpl:28
-#, fuzzy
 msgid "Right"
-msgstr "droit"
+msgstr "Droit"
 
-#: fbreader/data/default/keydefs.n516.tmpl:26
-#: fbreader/data/default/keydefs.v3.tmpl:30
-#, fuzzy
-msgid "Left"
-msgstr "gauche"
+#: fbreader/data/default/keydefs.n516.tmpl:24
+msgid "Up"
+msgstr "Haut"
 
-#: fbreader/data/default/keydefs.n516.tmpl:28
-msgid "Zoom"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:23
+msgid "Down"
+msgstr "Bas"
 
-#: fbreader/data/default/keydefs.v3.tmpl:14
-msgid "LP 0"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:22
+msgid "LP Prior"
+msgstr "Appui-long précédent"
 
 #: fbreader/data/default/keydefs.v3.tmpl:15
 msgid "LP 1"
-msgstr ""
+msgstr "Appui-long 1"
 
-#: fbreader/data/default/keydefs.v3.tmpl:16
-msgid "LP 2"
-msgstr ""
+#: fbreader/data/default/keydefs.v3.tmpl:14
+msgid "LP 0"
+msgstr "Appui-long 0"
+
+#: fbreader/data/default/keydefs.n516.tmpl:28
+msgid "Zoom"
+msgstr "Zoom"
+
+#: fbreader/data/default/keydefs.n516.tmpl:26
+#: fbreader/data/default/keydefs.v3.tmpl:30
+msgid "Left"
+msgstr "Gauche"
 
 #: fbreader/data/default/keydefs.v3.tmpl:17
 msgid "LP 3"
-msgstr ""
+msgstr "Appui-long 3"
 
-#: fbreader/data/default/keydefs.v3.tmpl:18
-msgid "LP 4"
-msgstr ""
+#: fbreader/data/default/keydefs.v3.tmpl:16
+msgid "LP 2"
+msgstr "Appui-long 2"
 
-#: fbreader/data/default/keydefs.v3.tmpl:19
-msgid "LP 5"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:10
+#: fbreader/data/default/keydefs.v3.tmpl:10
+msgid "6"
+msgstr "6"
 
-#: fbreader/data/default/keydefs.v3.tmpl:20
-msgid "LP 6"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:11
+#: fbreader/data/default/keydefs.v3.tmpl:11
+msgid "7"
+msgstr "7"
 
-#: fbreader/data/default/keydefs.v3.tmpl:21
-msgid "LP 7"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:12
+#: fbreader/data/default/keydefs.v3.tmpl:12
+msgid "8"
+msgstr "8"
 
-#: fbreader/data/default/keydefs.v3.tmpl:22
-msgid "LP 8"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:13
+#: fbreader/data/default/keydefs.v3.tmpl:13
+msgid "9"
+msgstr "9"
 
-#: fbreader/data/default/keydefs.v3.tmpl:23
-msgid "LP 9"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:17
+#: fbreader/data/default/keydefs.v3.tmpl:24
+msgid "OK"
+msgstr "OK"
 
-#: fbreader/data/default/keydefs.v3.tmpl:25
-msgid "LP OK"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:18
+msgid "Back"
+msgstr "Retour"
 
-#: fbreader/data/default/keydefs.v3.tmpl:26
-msgid "C"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:19
+msgid "Next"
+msgstr "Suivant"
 
-#: fbreader/data/default/keydefs.v3.tmpl:29
-#, fuzzy
-msgid "LP Right"
-msgstr "droit"
+#: fbreader/data/default/keydefs.n516.tmpl:20
+msgid "Prior"
+msgstr "Précédent"
 
-#: fbreader/data/default/keydefs.v3.tmpl:31
-msgid "LP Left"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:32
-msgid "+"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:21
+msgid "LP Next"
+msgstr "Appui-long suivant"
 
 #: fbreader/data/default/keydefs.v3.tmpl:33
 msgid "-"
-msgstr ""
+msgstr "-"
 
-#, fuzzy
+#: fbreader/data/default/keydefs.v3.tmpl:32
+msgid "+"
+msgstr "+"
+
+#: fbreader/data/default/keydefs.n516.tmpl:9
+#: fbreader/data/default/keydefs.v3.tmpl:9
+msgid "5"
+msgstr "5"
+
+#: fbreader/data/default/keydefs.n516.tmpl:8
+#: fbreader/data/default/keydefs.v3.tmpl:8
+msgid "4"
+msgstr "4"
+
+#: fbreader/data/default/keydefs.n516.tmpl:5
+#: fbreader/data/default/keydefs.v3.tmpl:5
+msgid "1"
+msgstr "1"
+
+#: fbreader/data/default/keydefs.n516.tmpl:4
+#: fbreader/data/default/keydefs.v3.tmpl:4
+msgid "0"
+msgstr "0"
+
+#: fbreader/data/default/keydefs.n516.tmpl:7
+#: fbreader/data/default/keydefs.v3.tmpl:7
+msgid "3"
+msgstr "3"
+
+#: fbreader/data/default/keydefs.n516.tmpl:6
+#: fbreader/data/default/keydefs.v3.tmpl:6
+msgid "2"
+msgstr "2"
+
+#: fbreader/data/default/keydefs.v3.tmpl:25
+msgid "LP OK"
+msgstr "Appui-long OK"
+
+#: fbreader/data/default/keydefs.v3.tmpl:26
+msgid "C"
+msgstr "C"
+
+#: fbreader/data/default/keydefs.v3.tmpl:22
+msgid "LP 8"
+msgstr "Appui-long 8"
+
+#: fbreader/data/default/keydefs.v3.tmpl:23
+msgid "LP 9"
+msgstr "Appui-long 9"
+
+#: fbreader/data/default/keydefs.v3.tmpl:20
+msgid "LP 6"
+msgstr "Appui-long 6"
+
+#: fbreader/data/default/keydefs.v3.tmpl:21
+msgid "LP 7"
+msgstr "Appui-long 7"
+
+#: fbreader/data/default/keydefs.v3.tmpl:18
+msgid "LP 4"
+msgstr "Appui-long 4"
+
+#: fbreader/data/default/keydefs.v3.tmpl:19
+msgid "LP 5"
+msgstr "Appui-long 5"
+
+#: fbreader/data/default/keydefs.v3.tmpl:29
+msgid "LP Right"
+msgstr "Appui-long droit"
+
+#: fbreader/data/default/keydefs.v3.tmpl:31
+msgid "LP Left"
+msgstr "Appui-long gauche"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
+msgid "Cancel/Quit"
+msgstr "Quitter"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:105
+msgid "Show Local Menu"
+msgstr "Afficher le menu local"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
+msgid "Show font size dialog"
+msgstr "Afficher le dialogue Polices de caractères"
+
 #~ msgid "Menu"
 #~ msgstr "Menu du livre"
 
