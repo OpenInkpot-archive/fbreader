@@ -111,11 +111,6 @@ msgstr "Activer/Désactiver l'indicateur de position"
 msgid "Show Settings"
 msgstr "Réglages du livre"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
-#, fuzzy
-msgid "Show Help"
-msgstr "Afficher l'heure"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
 msgid "Arabic"
 msgstr "Arabe"
@@ -381,11 +376,6 @@ msgstr "Langue du livre"
 msgid "Break Paragraph At"
 msgstr "Couper le paragraphe à"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1072
-#, fuzzy, c-format
-msgid "Key %s"
-msgstr "Touche %d"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1101
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1348
 msgid "Format & Style"
@@ -502,11 +492,6 @@ msgstr "Active"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:213
 msgid "Off"
 msgstr "Inactif"
-
-#: fbreader/data/default/keydefs.n516.tmpl:14
-#, fuzzy
-msgid "M/Bookmark"
-msgstr "Marque-pages"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
 msgid "Previous Page"
@@ -688,6 +673,19 @@ msgstr "Afficher le menu local"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
 msgid "Show font size dialog"
 msgstr "Afficher le dialogue Polices de caractères"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1072
+#, c-format
+msgid "Key %s"
+msgstr "Touche %s"
+
+#: fbreader/data/default/keydefs.n516.tmpl:14
+msgid "M/Bookmark"
+msgstr "M/Bookmark"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
+msgid "Show Help"
+msgstr "Afficher l'aide"
 
 #~ msgid "Menu"
 #~ msgstr "Menu du livre"
