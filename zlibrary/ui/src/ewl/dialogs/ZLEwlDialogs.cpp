@@ -138,7 +138,6 @@ static const struct _language {
 
 static const char *const alignments[] = { _("undefined"), _("left"), _("right"), _("center"), _("justify") };
 static const char *const para_break_type[] = { _("New Line"), _("Empty Line"), _("Line With Indent") };
-static int curBreakType = 0;
 static bool reopen_file = false;
 static int do_refresh = -1;
 
@@ -1245,7 +1244,7 @@ void options_dialog_handler(int idx, bool is_alt)
 					}
 				}
 
-//				int curBreakType;
+				int curBreakType;
 				switch (myFormat.BreakTypeOption.value()) {
 					case PlainTextFormat::BREAK_PARAGRAPH_AT_NEW_LINE:
 						curBreakType = 0;
