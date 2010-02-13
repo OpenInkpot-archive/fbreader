@@ -962,23 +962,12 @@ void book_para_break_handler(int idx, bool is_alt)
 				}
 			}
 
-			idx << 1;
-			idx++;
-			idx %= 5;
-
-			myFormat.BreakTypeOption.setValue(idx);
-
-			switch (myFormat.BreakTypeOption.value()) {
-				case PlainTextFormat::BREAK_PARAGRAPH_AT_NEW_LINE:
-					idx = 0;
-					break;
-				case PlainTextFormat::BREAK_PARAGRAPH_AT_EMPTY_LINE:
-					idx = 1;
-					break;
-				case PlainTextFormat::BREAK_PARAGRAPH_AT_EMPTY_LINE | PlainTextFormat::BREAK_PARAGRAPH_AT_LINE_WITH_INDENT:
-				default:
-					idx = 2;
-			}
+			static const int breakTypes[] = {
+				PlainTextFormat::BREAK_PARAGRAPH_AT_NEW_LINE,
+				PlainTextFormat::BREAK_PARAGRAPH_AT_EMPTY_LINE,
+				PlainTextFormat::BREAK_PARAGRAPH_AT_EMPTY_LINE | PlainTextFormat::BREAK_PARAGRAPH_AT_LINE_WITH_INDENT,
+			};
+			myFormat.BreakTypeOption.setValue(breakTypes[idx]);
 
 			cb_item_value &iv = olists.back()->items.at(vlist->parent_item_idx).current_value;
 			iv.text = para_break_type[idx];
