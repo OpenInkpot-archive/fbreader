@@ -73,7 +73,7 @@ class GettextInitializer {
 
 GettextInitializer locale_init_hack;
 
-static struct _action {
+static const struct _action {
 	const char *actionId;
 	const char *actionName;
 } actions[] = {
@@ -108,7 +108,7 @@ static struct _action {
 	{ NULL,					NULL }
 };
 
-static struct _language {
+static const struct _language {
 	const char *langId;
 	const char *langName;
 } languages[] = {
@@ -136,8 +136,8 @@ static struct _language {
 	{ NULL, NULL }
 };
 
-static char *alignments[] = { _("undefined"), _("left"), _("right"), _("center"), _("justify") };
-static char *para_break_type[] = { _("New Line"), _("Empty Line"), _("Line With Indent") };
+static const char *const alignments[] = { _("undefined"), _("left"), _("right"), _("center"), _("justify") };
+static const char *const para_break_type[] = { _("New Line"), _("Empty Line"), _("Line With Indent") };
 static int curBreakType = 0;
 static bool reopen_file = false;
 static int do_refresh = -1;
@@ -1074,7 +1074,7 @@ void keys_handler(int idx, bool is_alt)
 	INIT_VLIST(k, single_key_handler);
 	free(k);
 
-	for(struct _action *a = actions; a->actionName; a++)
+	for(const struct _action *a = actions; a->actionName; a++)
 		ADD_VALUE_STRING(a->actionName);
 
 	cb_rcb_new();
@@ -1275,7 +1275,7 @@ void options_dialog_handler(int idx, bool is_alt)
 
 		cb_olist_item i;
 
-		struct _action *a;
+		const struct _action *a;
 		ZLKeyBindings *kb = &(*myFbreader->myBindings0);
 
 		efreet_init();
@@ -1292,7 +1292,7 @@ void options_dialog_handler(int idx, bool is_alt)
 
 		efreet_ini_section_set(ini, "keynames");
 
-		char *p = strtok(keys, " ,");
+		const char *p = strtok(keys, " ,");
 		while(p) {
 			char *keyname = gettext(efreet_ini_string_get(ini, p));
 
