@@ -28,6 +28,7 @@ build-stamp:
 
 install: install-stamp
 install-stamp: DEB_DIR = $(CURDIR)/debian
+install-stamp: THEME_DIR = $(DEB_DIR)/fbreader/usr/share/eoi/themes/default
 install-stamp: build
 		dh_testdir
 		dh_testroot
@@ -38,12 +39,14 @@ install-stamp: build
 		$(MAKE) -C zlibrary/ui TARGET_ARCH=desktop UI_TYPE=ewl DESTDIR=$(DEB_DIR)/fbreader do_install
 		$(MAKE) -C fbreader TARGET_ARCH=desktop UI_TYPE=ewl DESTDIR=$(DEB_DIR)/fbreader do_install
 		$(MAKE) -C po TARGET_ARCH=desktop UI_TYPE=ewl DEST_DIR=$(DEB_DIR)/fbreader do_install
+		$(MAKE) -C themes
 		install -D -m 644 fbreader/desktop/desktop $(DEB_DIR)/fbreader/usr/share/applications/FBReader.desktop
+		mkdir -p $(THEME_DIR)
+		install -m 644 themes/fbreader_oitheme.edj $(THEME_DIR)
+		install -m 644 themes/fbreader_cb_header_footer.edj $(THEME_DIR)
+		install -m 644 themes/fbreader_messagebox.edj $(THEME_DIR)
+		install -m 644 themes/fbreader_entrybox.edj $(THEME_DIR)
 		mkdir $(DEB_DIR)/fbreader/usr/share/FBReader/themes
-		install -m 644 themes/oitheme.edj $(DEB_DIR)/fbreader/usr/share/FBReader/themes
-		install -m 644 themes/cb_header_footer.edj $(DEB_DIR)/fbreader/usr/share/FBReader/themes
-		install -m 644 themes/messagebox.edj $(DEB_DIR)/fbreader/usr/share/FBReader/themes
-		install -m 644 themes/entrybox.edj $(DEB_DIR)/fbreader/usr/share/FBReader/themes
 		install -m 644 themes/virtktheme.edj $(DEB_DIR)/fbreader/usr/share/FBReader/themes
 		install -m 644 themes/virtk_layout $(DEB_DIR)/fbreader/usr/share/FBReader/themes
 		mkdir -p $(DEB_DIR)/fbreader/usr/share/keys/help

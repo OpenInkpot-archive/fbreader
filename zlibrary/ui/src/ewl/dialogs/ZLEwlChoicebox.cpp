@@ -46,6 +46,7 @@ extern "C" {
 
 #include <libchoicebox.h>
 #include <libeoi.h>
+#include <libeoi_themes.h>
 }
 
 #define _(x) x
@@ -430,8 +431,6 @@ static int lcb_screen_change_handler(void *data, int type, void *event)
 	else
 		ecore_evas_resize(win, w/2, h);
 
-    eoi_process_resize(NULL);
-
 	return 0;
 }
 
@@ -493,28 +492,24 @@ void cb_lcb_new(int select_item)
 	evas_object_resize(bg, w, h);
 	evas_object_show(bg);
 
-	Evas_Object* header = edje_object_add(main_canvas);
+	Evas_Object* header = eoi_create_themed_edje(main_canvas, "fbreader_cb_header_footer", "header");
 	evas_object_name_set(header, "lcb_header");
-	edje_object_file_set(header, "/usr/share/FBReader/themes/cb_header_footer.edj",
-			"header");
 	edje_object_part_text_set(header, "text", olists.empty() ? "" : olists.back()->name.c_str());
 	evas_object_move(header, 0, 0);
 	evas_object_resize(header, w/2, header_h);
 	evas_object_show(header);
 
-	Evas_Object* footer = edje_object_add(main_canvas);
+	Evas_Object* footer = eoi_create_themed_edje(main_canvas, "fbreader_cb_header_footer", "footer");
 	evas_object_name_set(footer, "lcb_footer");
-	edje_object_file_set(footer, "/usr/share/FBReader/themes/cb_header_footer.edj",
-			"footer");
 	evas_object_move(footer, 0, h - footer_h);
 	evas_object_resize(footer, w/2, footer_h);
 	evas_object_show(footer);
 
     choicebox_info_t info = {
         NULL,
-        "/usr/share/choicebox/choicebox.edj",
+        "choicebox",
         "settings-left",
-        "/usr/share/choicebox/choicebox.edj",
+		"choicebox",
         "item-settings",
         lcb_handler,
         lcb_draw_handler,
@@ -685,28 +680,24 @@ void cb_rcb_new()
 	evas_output_size_get(main_canvas, &w, &h);
 	ecore_evas_resize(lcb_win, w * 2, h);
 
-	Evas_Object* header = edje_object_add(main_canvas);
+	Evas_Object* header = eoi_create_themed_edje(main_canvas, "fbreader_cb_header_footer", "header");
 	evas_object_name_set(header, "rcb_header");
-	edje_object_file_set(header, "/usr/share/FBReader/themes/cb_header_footer.edj",
-			"header");
 	edje_object_part_text_set(header, "text", vlist->name.c_str());
 	evas_object_move(header, w, 0);
 	evas_object_resize(header, w, header_h);
 	evas_object_show(header);
 
-	Evas_Object* footer = edje_object_add(main_canvas);
+	Evas_Object* footer = eoi_create_themed_edje(main_canvas, "fbreader_cb_header_footer", "footer");
 	evas_object_name_set(footer, "rcb_footer");
-	edje_object_file_set(footer, "/usr/share/FBReader/themes/cb_header_footer.edj",
-			"footer");
 	evas_object_move(footer, w, h - footer_h);
 	evas_object_resize(footer, w, footer_h);
 	evas_object_show(footer);
 
     choicebox_info_t info = {
         NULL,
-        "/usr/share/choicebox/choicebox.edj",
+        "choicebox",
         "settings-right",
-        "/usr/share/choicebox/choicebox.edj",
+        "choicebox",
         "item-settings",
         rcb_handler,
         rcb_draw_handler,
@@ -820,8 +811,6 @@ static int fcb_screen_change_handler(void *data, int type, void *event)
 	}
 
     ecore_evas_resize(win, w, h);
-
-    eoi_process_resize(NULL);
 
 	return 0;
 }
@@ -970,19 +959,15 @@ void cb_fcb_new(cb_list *list, int select_item)
 		evas_object_resize(bg, 600, 800);
 		evas_object_show(bg);
 
-		Evas_Object* header = edje_object_add(main_canvas);
+		Evas_Object* header = eoi_create_themed_edje(main_canvas, "fbreader_cb_header_footer", "header");
 		evas_object_name_set(header, "header");
-		edje_object_file_set(header, "/usr/share/FBReader/themes/cb_header_footer.edj",
-				"header");
 		edje_object_part_text_set(header, "text", list->name.c_str());
 		evas_object_move(header, 0, 0);
 		evas_object_resize(header, 600, header_h);
 		evas_object_show(header);
 
-		Evas_Object* footer = edje_object_add(main_canvas);
+		Evas_Object* footer = eoi_create_themed_edje(main_canvas, "fbreader_cb_header_footer", "footer");
 		evas_object_name_set(footer, "footer");
-		edje_object_file_set(footer, "/usr/share/FBReader/themes/cb_header_footer.edj",
-				"footer");
 		edje_object_part_text_set(footer, "alt", list->alt_text.c_str());
 		evas_object_move(footer, 0, 800 - footer_h);
 		evas_object_resize(footer, 600, footer_h);
@@ -990,9 +975,9 @@ void cb_fcb_new(cb_list *list, int select_item)
 
         choicebox_info_t info = {
             NULL,
-            "/usr/share/choicebox/choicebox.edj",
+			"choicebox",
             "full",
-            "/usr/share/FBReader/themes/cb_header_footer.edj",
+			"fbreader_cb_header_footer",
             "item",
             fcb_handler,
             fcb_draw_handler,
