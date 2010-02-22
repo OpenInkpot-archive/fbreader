@@ -1,3 +1,40 @@
+fbreader (0.12.1-5) zelazny; urgency=low
+
+  [ Tomasz Długosz ]
+  * l10n: Updates to Polish (pl) translation
+
+  [ Hideki Yoshida ]
+  * l10n: Updates to Japanese (ja) translation
+
+  [ Vasil Badev ]
+  * l10n: Updates to Bulgarian (bg) translation
+  * l10n: Updates to Russian (ru) translation
+
+  [ lifanxi ]
+  * l10n: Updates to Chinese (simplified) (zh_CN) translation
+
+  [ lozhkinet ]
+  * l10n: Updates to Ukrainian (uk) translation
+
+  [ lifanxi ]
+  * l10n: Updates to Chinese (simplified) (zh_CN) translation
+
+  [ Mirek ]
+  * l10n: Updates to Czech (cs) translation
+
+  [ Pclent ]
+  * l10n: Updates to French (fr) translation
+
+  [ Alan Jenkins ]
+  * more const
+  * curBreakType is a local variable
+  * fix "paragraph break at line with indent" option
+
+  [ Alexander Kerner ]
+  * Adopt libeoi1 -> libeoi2 transition
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Mon, 22 Feb 2010 22:19:27 +0100
+
 fbreader (0.12.1-4) zelazny; urgency=low
 
   * l10n: Updates to Russian (ru) translation
