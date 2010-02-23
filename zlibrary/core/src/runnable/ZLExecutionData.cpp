@@ -19,6 +19,8 @@
 
 #include <ZLExecutionData.h>
 
+const ZLTypeId ZLExecutionData::TYPE_ID(ZLObjectWithRTTI::TYPE_ID);
+
 std::set<ZLExecutionData::Runner*> ZLExecutionData::ourRunners;
 
 std::string ZLExecutionData::perform(shared_ptr<ZLExecutionData> data) {
@@ -72,6 +74,12 @@ ZLExecutionData::Runner::Runner() {
 
 ZLExecutionData::Runner::~Runner() {
 	ourRunners.erase(this);
+}
+
+std::string ZLExecutionData::Runner::perform(shared_ptr<ZLExecutionData> data) const {
+	Vector dataVector;
+	dataVector.push_back(data);
+	return perform(dataVector);
 }
 
 ZLExecutionData::Listener::Listener() {

@@ -67,6 +67,8 @@ private:
 
 	const std::vector<std::string> &externalDTDs() const;
 
+	bool processNamespaces() const;
+
 	void beginParagraph();
 	void endParagraph();
 	void addStyleEntry(const std::string tag, const std::string aClass);
@@ -75,6 +77,7 @@ private:
 	BookReader &myModelReader;
 	std::string myPathPrefix;
 	std::string myReferenceName;
+	std::string myReferenceDirName;
 	bool myPreformatted;
 	bool myNewParagraphInProgress;
 	StyleSheetTable myStyleSheetTable;
@@ -84,9 +87,15 @@ private:
 	std::vector<bool> myDoPageBreakAfterStack;
 	bool myCurrentParagraphIsEmpty;
 	StyleSheetSingleStyleParser myStyleParser;
-	bool myInsideBody;
+	shared_ptr<StyleSheetTableParser> myTableParser;
+	enum {
+		READ_NOTHING,
+		READ_STYLE,
+		READ_BODY
+	} myReadState;
 
 	friend class XHTMLTagAction;
+	friend class XHTMLTagStyleAction;
 	friend class XHTMLTagLinkAction;
 	friend class XHTMLTagHyperlinkAction;
 	friend class XHTMLTagPreAction;

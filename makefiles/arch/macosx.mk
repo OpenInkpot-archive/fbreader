@@ -1,16 +1,16 @@
 include $(ROOTDIR)/makefiles/arch/unix.mk
 
-ifeq "$(INSTALLDIR)" ""
-  INSTALLDIR=$(ROOTDIR)/FBReader.app
-endif
+DESTDIR ?= /Applications
+
+INSTALLDIR = /FBReader.app
 BINDIR = $(INSTALLDIR)/Contents/MacOS
 SHAREDIR = $(INSTALLDIR)/Contents/Share
 IMAGEDIR = $(SHAREDIR)/icons
-APPIMAGEDIR = $(SHAREDIR)/icons/%APPLICATION_NAME%
+APPIMAGEDIR = $(SHAREDIR)/icons
 
 SHAREDIR_MACRO = ~~/Contents/Share
 IMAGEDIR_MACRO = $(SHAREDIR_MACRO)/icons
-APPIMAGEDIR_MACRO = $(SHAREDIR_MACRO)/icons/%APPLICATION_NAME%
+APPIMAGEDIR_MACRO = $(SHAREDIR_MACRO)/icons
 
 ZLSHARED = no
 
@@ -21,7 +21,8 @@ LD = $(TOOLSPATH)/g++-4.2
 
 MACOS_VERSION = 10.5
 
-ARCH_FLAGS = -arch x86_64 -arch i386 -arch ppc7400 -arch ppc64
+#ARCH_FLAGS = -arch x86_64 -arch i386 -arch ppc7400 -arch ppc64
+ARCH_FLAGS = -arch i386 -arch ppc7400
 CFLAGS_NOARCH = \
 	-fmessage-length=0 -pipe -fpascal-strings -fasm-blocks \
 	-mdynamic-no-pic -W -Wall \

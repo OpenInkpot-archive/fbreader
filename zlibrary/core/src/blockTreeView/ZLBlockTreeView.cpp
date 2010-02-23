@@ -23,9 +23,9 @@
 
 #include "ZLBlockTreeView.h"
 
-const std::string ZLBlockTreeView::TYPE_ID = "ZLBlockTreeView";
+const ZLTypeId ZLBlockTreeView::TYPE_ID(ZLView::TYPE_ID);
 
-const std::string &ZLBlockTreeView::typeId() const {
+const ZLTypeId &ZLBlockTreeView::typeId() const {
 	return TYPE_ID;
 }
 
@@ -277,10 +277,16 @@ void ZLBlockTreeView::ensureVisible(ZLBlockTreeNode *node) {
 	}
 }
 
+const ZLTypeId ZLBlockTreeView::RootNode::TYPE_ID(ZLBlockTreeNode::TYPE_ID);
+
 ZLBlockTreeView::RootNode::RootNode(ZLBlockTreeView &view) : ZLBlockTreeNode(view) {
 }
 
 void ZLBlockTreeView::RootNode::paint(ZLPaintContext&, int) {
+}
+
+const ZLTypeId &ZLBlockTreeView::RootNode::typeId() const {
+	return TYPE_ID;
 }
 
 int ZLBlockTreeView::RootNode::height(ZLPaintContext&) const {

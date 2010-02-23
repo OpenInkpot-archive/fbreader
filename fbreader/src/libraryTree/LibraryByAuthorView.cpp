@@ -36,7 +36,15 @@ void LibraryByAuthorView::fillAuthorSubtree(AuthorNode *authorNode, const std::s
 	const BookList &books = Library::Instance().books(authorNode->author());
 	SeriesNode *seriesNode = 0;
 	for (BookList::const_iterator it = books.begin(); it != books.end(); ++it) {
-		const std::string &series = (*it)->seriesTitle();
+		std::string series = (*it)->seriesTitle();
+
+		if (!series.empty() && (seriesNode == 0 || seriesNode->book()->seriesTitle() != series)) {
+			BookList::const_iterator jt = it + 1;
+			if (jt == books.end() || (*jt)->seriesTitle() != series) {
+				series.clear();
+			}
+		}
+
 		if (series.empty()) {
 			seriesNode = 0;
 			new BookNode(authorNode, *it);
@@ -59,13 +67,13 @@ bool LibraryByAuthorView::isSubtreeUpToDate(AuthorNode *authorNode) {
 	const ZLBlockTreeNode::List &nodes = authorNode->children();
 	for (ZLBlockTreeNode::List::const_iterator nIt = nodes.begin(); nIt != nodes.end(); ++nIt) {
 		FBReaderNode &node = *(FBReaderNode*)*nIt;
-		if (node.typeId() == BookNode::TYPE_ID) {
+		if (node.isInstanceOf(BookNode::TYPE_ID)) {
 			shared_ptr<Book> book = ((BookNode&)node).book();
 			if (it == books.end() || *it != book || !book->seriesTitle().empty()) {
 				return false;
 			}
 			++it;
-		} else /* if (node.typeId() == SeriesNode::TYPE_ID) */ {
+		} else /* if (node.isInstanceOf(SeriesNode::TYPE_ID)) */ {
 			const ZLBlockTreeNode::List &bNodes = node.children();
 			for (ZLBlockTreeNode::List::const_iterator bookIt = bNodes.begin(); bookIt != bNodes.end(); ++bookIt) {
 				shared_ptr<Book> book = ((BookNode*)*bookIt)->book();
@@ -85,7 +93,7 @@ void LibraryByAuthorView::updateAuthorSubtree(AuthorNode *authorNode) {
 	const ZLBlockTreeNode::List &nodes = authorNode->children();
 	for (ZLBlockTreeNode::List::const_iterator nIt = nodes.begin(); nIt != nodes.end(); ++nIt) {
 		FBReaderNode &node = *(FBReaderNode*)*nIt;
-		if (node.typeId() == BookNode::TYPE_ID) {
+		if (node.isInstanceOf(BookNode::TYPE_ID)) {
 			visibleBooks.insert(((BookNode&)node).book());
 		} else if (node.isOpen()) {
 			const ZLBlockTreeNode::List &bNodes = node.children();
@@ -104,7 +112,7 @@ void LibraryByAuthorView::makeUpToDate() {
 	AuthorNode *topAuthorNode = 0;
 	if (topNode != &rootNode()) {
 		FBReaderNode *lNode = (FBReaderNode*)topNode;
-		while (lNode->typeId() != AuthorNode::TYPE_ID) {
+		while (!lNode->isInstanceOf(AuthorNode::TYPE_ID)) {
 			lNode = (FBReaderNode*)lNode->parent();
 		}
 		topAuthorNode = (AuthorNode*)lNode;

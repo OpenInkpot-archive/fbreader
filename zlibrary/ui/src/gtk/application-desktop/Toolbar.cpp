@@ -123,6 +123,7 @@ void ZLGtkApplicationWindow::Toolbar::addToolbarItem(ZLToolbar::ItemPtr item) {
 	switch (item->type()) {
 		case ZLToolbar::Item::TEXT_FIELD:
 		case ZLToolbar::Item::COMBO_BOX:
+		case ZLToolbar::Item::SEARCH_FIELD:
 			{
 				const ZLToolbar::ParameterItem &parameterItem = (const ZLToolbar::ParameterItem&)*item;
 				GtkEntryParameter *parameter =
@@ -139,6 +140,11 @@ void ZLGtkApplicationWindow::Toolbar::addToolbarItem(ZLToolbar::ItemPtr item) {
 			break;
 		case ZLToolbar::Item::SEPARATOR:
 			gtkItem = gtk_separator_tool_item_new();
+			break;
+		case ZLToolbar::Item::FILL_SEPARATOR:
+			gtkItem = gtk_separator_tool_item_new();
+			gtk_separator_tool_item_set_draw(GTK_SEPARATOR_TOOL_ITEM(gtkItem), false);
+			gtk_tool_item_set_expand(gtkItem, true);
 			break;
 	}
 	if (gtkItem != 0) {

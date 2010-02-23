@@ -20,68 +20,82 @@
 #include <map>
 #include <set>
 
+#include <curl/curl.h>
+
 #include <ZLStringUtil.h>
 #include <ZLNetworkUtil.h>
 #include <ZLResource.h>
 #include <ZLOutputStream.h>
 #include <ZLXMLReader.h>
+#include <ZLNetworkRequest.h>
 
 #include "ZLCurlNetworkManager.h"
-#include "ZLCurlNetworkNoActionData.h"
-#include "ZLCurlNetworkReadToStringData.h"
-#include "ZLCurlNetworkDownloadData.h"
-#include "ZLCurlNetworkXMLParserData.h"
-#include "ZLCurlNetworkPostFormData.h"
+
+
+
+class PostData : public ZLUserData {
+
+public:
+	PostData();
+	~PostData();
+
+	bool addItem(const std::string &name, const std::string &content);
+
+	const curl_httppost *postItem() const;
+
+private:
+	curl_httppost *myPostItem;
+	curl_httppost *myLastItem;
+
+private: // disable copying
+	PostData(const PostData &);
+	const PostData &operator = (const PostData &);
+};
+
+PostData::PostData() : myPostItem(0), myLastItem(0) {
+}
+
+PostData::~PostData() {
+	if (myPostItem != 0) {
+		curl_formfree(myPostItem);
+	}
+}
+
+bool PostData::addItem(const std::string &name, const std::string &content) {
+	// TODO: url-encode content???
+	return curl_formadd(&myPostItem, &myLastItem,
+		CURLFORM_COPYNAME, name.c_str(),
+		CURLFORM_COPYCONTENTS, content.c_str(),
+		CURLFORM_END) == 0;
+}
+
+inline const curl_httppost *PostData::postItem() const {
+	return myPostItem;
+}
+
+
+
+static size_t handleHeader(void *ptr, size_t size, size_t nmemb, ZLNetworkRequest *request) {
+	const size_t dataSize = size * nmemb;
+	return (request->handleHeader(ptr, dataSize)) ? dataSize : 0;
+}
+
+static size_t handleContent(void *ptr, size_t size, size_t nmemb, ZLNetworkRequest *request) {
+	const size_t dataSize = size * nmemb;
+	return (request->handleContent(ptr, dataSize)) ? dataSize : 0;
+}
+
+
 
 void ZLCurlNetworkManager::createInstance() {
 	ourInstance = new ZLCurlNetworkManager();
 }
 
-shared_ptr<ZLExecutionData> ZLCurlNetworkManager::createNoActionData(const std::string &url, const std::string &sslCertificate) const {
-	return new ZLCurlNetworkNoActionData(url, sslCertificate);
-}
-
-shared_ptr<ZLExecutionData> ZLCurlNetworkManager::createNoActionData(const std::string &url) const {
-	return new ZLCurlNetworkNoActionData(url);
-}
-
-shared_ptr<ZLExecutionData> ZLCurlNetworkManager::createReadToStringData(const std::string &url, std::string &dataString, const std::string &sslCertificate) const {
-	return new ZLCurlNetworkReadToStringData(url, dataString, sslCertificate);
-}
-
-shared_ptr<ZLExecutionData> ZLCurlNetworkManager::createReadToStringData(const std::string &url, std::string &dataString) const {
-	return new ZLCurlNetworkReadToStringData(url, dataString);
-}
-
-shared_ptr<ZLExecutionData> ZLCurlNetworkManager::createDownloadData(const std::string &url, const std::string &fileName, const std::string &sslCertificate, shared_ptr<ZLOutputStream> stream) const {
-	return new ZLCurlNetworkDownloadData(url, fileName, sslCertificate, stream);
-}
-
-shared_ptr<ZLExecutionData> ZLCurlNetworkManager::createDownloadData(const std::string &url, const std::string &fileName, shared_ptr<ZLOutputStream> stream) const {
-	return new ZLCurlNetworkDownloadData(url, fileName, stream);
-}
-
-shared_ptr<ZLExecutionData> ZLCurlNetworkManager::createXMLParserData(const std::string &url, const std::string &sslCertificate, shared_ptr<ZLXMLReader> reader) const {
-	return new ZLCurlNetworkXMLParserData(url, sslCertificate, reader);
-}
-
-shared_ptr<ZLExecutionData> ZLCurlNetworkManager::createXMLParserData(const std::string &url, shared_ptr<ZLXMLReader> reader) const {
-	return new ZLCurlNetworkXMLParserData(url, reader);
-}
-
-shared_ptr<ZLExecutionData> ZLCurlNetworkManager::createPostFormData(const std::string &url, const std::string &sslCertificate, const std::vector<std::pair<std::string, std::string> > &formData) const {
-	return new ZLCurlNetworkPostFormData(url, sslCertificate, formData);
-}
-
-shared_ptr<ZLExecutionData> ZLCurlNetworkManager::createPostFormData(const std::string &url, const std::vector<std::pair<std::string, std::string> > &formData) const {
-	return new ZLCurlNetworkPostFormData(url, formData);
-}
 
 void ZLCurlNetworkManager::setStandardOptions(CURL *handle, const std::string &proxy) const {
-	static const char *AGENT_NAME = "FBReader";
+	static const std::string AGENT_NAME = std::string("FBReader/") + VERSION;
 
-	curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, true);
-	curl_easy_setopt(handle, CURLOPT_USERAGENT, AGENT_NAME);
+	curl_easy_setopt(handle, CURLOPT_USERAGENT, AGENT_NAME.c_str());
 	if (useProxy()) {
 		curl_easy_setopt(handle, CURLOPT_PROXY, proxy.c_str());
 	}
@@ -96,6 +110,90 @@ void ZLCurlNetworkManager::setStandardOptions(CURL *handle, const std::string &p
 	curl_easy_setopt(handle, CURLOPT_COOKIEJAR, cookies.c_str());
 }
 
+
+std::string ZLCurlNetworkManager::doBeforeRequest(ZLNetworkRequest &request) const {
+	const ZLResource &errorResource = ZLResource::resource("dialog")["networkError"];
+
+	if (!request.doBefore()) {
+		const std::string &err = request.errorMessage();
+		if (!err.empty()) {
+			return err;
+		}
+		return ZLStringUtil::printf(errorResource["somethingWrongMessage"].value(), ZLNetworkUtil::hostFromUrl(request.url()));
+	}
+
+	if (request.isInstanceOf(ZLNetworkPostRequest::TYPE_ID)) {
+		return doBeforePostRequest((ZLNetworkPostRequest &) request);
+	}
+	return "";
+}
+
+std::string ZLCurlNetworkManager::doBeforePostRequest(ZLNetworkPostRequest &request) const {
+	shared_ptr<ZLUserData> postDataPtr = new PostData;
+	PostData &postData = (PostData&)*postDataPtr;
+
+	const std::vector<std::pair<std::string, std::string> > &data = request.postData();
+	for (size_t i = 0; i < data.size(); ++i) {
+		if (!postData.addItem(data[i].first, data[i].second)) {
+			return "Invalid form data for " + ZLNetworkUtil::hostFromUrl(request.url()); // TODO: localize
+		}
+	}
+
+	request.addUserData("postData", postDataPtr);
+	return "";
+}
+
+
+void ZLCurlNetworkManager::setRequestOptions(CURL *handle, const ZLNetworkRequest &request) const {
+	curl_easy_setopt(handle, CURLOPT_URL, request.url().c_str());
+	if (!request.sslCertificate().Path.empty()) {
+		curl_easy_setopt(handle, CURLOPT_CAINFO, request.sslCertificate().Path.c_str());
+	}
+
+	curl_easy_setopt(handle, CURLOPT_HEADERFUNCTION, handleHeader);
+	curl_easy_setopt(handle, CURLOPT_WRITEHEADER, &request);
+	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, handleContent);
+	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &request);
+
+	switch (request.authenticationMethod()) {
+	case ZLNetworkRequest::NO_AUTH:
+		break;
+
+	case ZLNetworkRequest::BASIC:
+#if LIBCURL_VERSION_NUM >= 0x071301
+		curl_easy_setopt(handle, CURLOPT_USERNAME, request.userName().c_str());
+		curl_easy_setopt(handle, CURLOPT_PASSWORD, request.password().c_str());
+#else
+		curl_easy_setopt(
+			handle, CURLOPT_USERPWD,
+			(request.userName() + ':' + request.password()).c_str()
+		);
+#endif
+		curl_easy_setopt(handle, CURLOPT_HTTPAUTH, (long) CURLAUTH_BASIC);
+		break;
+	}
+
+	curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, request.isRedirectionSupported());
+
+	if (request.isInstanceOf(ZLNetworkPostRequest::TYPE_ID)) {
+		shared_ptr<ZLUserData> postDataPtr = request.getUserData("postData");
+		PostData &postData = (PostData&)*postDataPtr;
+
+		if (postData.postItem() != 0) {
+			curl_easy_setopt(handle, CURLOPT_HTTPPOST, postData.postItem());
+		}
+	}
+}
+
+
+void ZLCurlNetworkManager::clearRequestOptions(ZLNetworkRequest &request) const {
+	if (request.isInstanceOf(ZLNetworkPostRequest::TYPE_ID)) {
+		request.removeUserData("postData");
+	}
+}
+
+
+
 std::string ZLCurlNetworkManager::perform(const ZLExecutionData::Vector &dataList) const {
 	const ZLResource &errorResource = ZLResource::resource("dialog")["networkError"];
 
@@ -107,23 +205,24 @@ std::string ZLCurlNetworkManager::perform(const ZLExecutionData::Vector &dataLis
 
 	const std::string proxy = proxyHost() + ':' + proxyPort();
 	CURLM *handle = curl_multi_init();
-	std::map<CURL*,shared_ptr<ZLExecutionData> > handleToData; 
+
+	std::map<CURL*,shared_ptr<ZLExecutionData> > handleToRequest;
+
 	for (ZLExecutionData::Vector::const_iterator it = dataList.begin(); it != dataList.end(); ++it) {
-		if (it->isNull() || (*it)->type() != ZLNetworkData::TYPE_ID) {
+		if (it->isNull() || !(*it)->isInstanceOf(ZLNetworkRequest::TYPE_ID)) {
 			continue;
 		}
-		ZLCurlNetworkData &nData = (ZLCurlNetworkData&)**it;
-		if (!nData.doBefore()) {
-			const std::string &err = nData.errorMessage();
-			if (!err.empty()) {
-				errors.insert(err);
-			}
+		ZLNetworkRequest &request = (ZLNetworkRequest&)**it;
+		const std::string err = doBeforeRequest(request);
+		if (!err.empty()) {
+			errors.insert(err);
 			continue;
 		}
-		CURL *easyHandle = nData.handle();
+		CURL *easyHandle = curl_easy_init();
 		if (easyHandle != 0) {
-			handleToData[easyHandle] = *it;
+			handleToRequest[easyHandle] = *it;
 			setStandardOptions(easyHandle, proxy);
+			setRequestOptions(easyHandle, request);
 			curl_multi_add_handle(handle, easyHandle);
 		}
 	}
@@ -139,15 +238,21 @@ std::string ZLCurlNetworkManager::perform(const ZLExecutionData::Vector &dataLis
 		int queueSize;
 		message = curl_multi_info_read(handle, &queueSize);
 		if ((message != 0) && (message->msg == CURLMSG_DONE)) {
-			ZLNetworkData &nData = (ZLNetworkData&)*handleToData[message->easy_handle];
-			nData.doAfter(message->data.result == CURLE_OK);
-			const std::string &url = nData.url();
-			switch (message->data.result) {
+			ZLNetworkRequest &request = (ZLNetworkRequest&)*handleToRequest[message->easy_handle];
+			const std::string &url = request.url();
+
+			CURLcode result = message->data.result;
+			bool doAfterResult = request.doAfter(result == CURLE_OK);
+			if (result == CURLE_OK && !doAfterResult) {
+				result = CURLE_WRITE_ERROR;
+			}
+
+			switch (result) {
 				case CURLE_OK:
 					break;
 				case CURLE_WRITE_ERROR:
-					if (!nData.errorMessage().empty()) {
-						errors.insert(nData.errorMessage());
+					if (!request.errorMessage().empty()) {
+						errors.insert(request.errorMessage());
 					} else {
 						errors.insert(ZLStringUtil::printf(errorResource["somethingWrongMessage"].value(), ZLNetworkUtil::hostFromUrl(url)));
 					}
@@ -181,7 +286,7 @@ std::string ZLCurlNetworkManager::perform(const ZLExecutionData::Vector &dataLis
 					errors.insert(ZLStringUtil::printf(errorResource["sslCertificateAuthorityMessage"].value(), ZLNetworkUtil::hostFromUrl(url)));
 					break;
 				case CURLE_SSL_CACERT_BADFILE:
-					errors.insert(ZLStringUtil::printf(errorResource["sslBadCertificateFileMessage"].value(), nData.sslCertificate()));
+					errors.insert(ZLStringUtil::printf(errorResource["sslBadCertificateFileMessage"].value(), request.sslCertificate().Path));
 					break;
 				case CURLE_SSL_SHUTDOWN_FAILED:
 					errors.insert(ZLStringUtil::printf(errorResource["sslShutdownFailedMessage"].value(), ZLNetworkUtil::hostFromUrl(url)));
@@ -190,6 +295,15 @@ std::string ZLCurlNetworkManager::perform(const ZLExecutionData::Vector &dataLis
 		}
 	} while ((message != 0) && (errors.size() < 3));
 
+	for (std::map<CURL*,shared_ptr<ZLExecutionData> >::const_iterator jt = handleToRequest.begin(); jt != handleToRequest.end(); ++jt) {
+		CURL *easyHandle = jt->first;
+		curl_multi_remove_handle(handle, easyHandle);
+		curl_easy_cleanup(easyHandle);
+
+		ZLNetworkRequest &request = (ZLNetworkRequest&)*jt->second;
+		clearRequestOptions(request);
+	}
+	handleToRequest.clear();
 	curl_multi_cleanup(handle);
 
 	std::string result;

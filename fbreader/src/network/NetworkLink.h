@@ -26,7 +26,7 @@
 #include <shared_ptr.h>
 #include <ZLOptions.h>
 
-#include "NetworkLibraryItems.h"
+#include "NetworkItems.h"
 
 class ZLExecutionData;
 
@@ -51,13 +51,14 @@ public:
 	ZLBooleanOption OnOption;
 
 public:
-	virtual shared_ptr<ZLExecutionData> simpleSearchData(NetworkOperationData &data, const std::string &pattern) = 0;
-	virtual shared_ptr<ZLExecutionData> advancedSearchData(NetworkOperationData &data, const std::string &titleAndSeries, const std::string &author, const std::string &tag, const std::string &annotation) = 0;
-	virtual shared_ptr<ZLExecutionData> resume(NetworkOperationData &data);
+	virtual shared_ptr<ZLExecutionData> simpleSearchData(NetworkOperationData &data, const std::string &pattern) const = 0;
+	virtual shared_ptr<ZLExecutionData> advancedSearchData(NetworkOperationData &data, const std::string &titleAndSeries, const std::string &author, const std::string &tag, const std::string &annotation) const = 0;
+	virtual shared_ptr<ZLExecutionData> resume(NetworkOperationData &data) const;
 
-public:
-	virtual shared_ptr<NetworkAuthenticationManager> authenticationManager();
-	virtual shared_ptr<NetworkLibraryItem> libraryItem() = 0;
+	virtual shared_ptr<NetworkAuthenticationManager> authenticationManager() const = 0;
+	virtual shared_ptr<NetworkItem> libraryItem() const = 0;
+
+	virtual void rewriteUrl(std::string &url, bool isUrlExternal = false) const = 0;
 
 private: // disable copying
 	NetworkLink(const NetworkLink &);

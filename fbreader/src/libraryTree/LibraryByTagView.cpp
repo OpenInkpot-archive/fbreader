@@ -32,7 +32,7 @@ LibraryByTagView::LibraryByTagView(ZLPaintContext &context) : LibraryView(contex
 void LibraryByTagView::collectTagNodes(const ZLBlockTreeNode &root, std::map<shared_ptr<Tag>,TagNode*,TagComparator> &nodeMap) {
 	const ZLBlockTreeNode::List &children = root.children();
 	for (ZLBlockTreeNode::List::const_iterator it = children.begin(); it != children.end(); ++it) {
-		if (((FBReaderNode*)*it)->typeId() == TagNode::TYPE_ID) {
+		if ((*it)->isInstanceOf(TagNode::TYPE_ID)) {
 			TagNode *tagNode = (TagNode*)*it;
 			nodeMap[tagNode->tag()] = tagNode;
 			collectTagNodes(*tagNode, nodeMap);
@@ -46,19 +46,18 @@ void LibraryByTagView::updateBookList(TagNode *tagNode) {
 	BookList::const_iterator jt = books.begin();
 	ZLBlockTreeNode::List::const_iterator kt = subNodes.begin();
 	for (; jt != books.end() && kt != subNodes.end(); ++jt, ++kt) {
-		FBReaderNode *bookNode = (FBReaderNode*)*kt;
-		if (bookNode->typeId() != BookNode::TYPE_ID) {
+		if (!(*kt)->isInstanceOf(BookNode::TYPE_ID)) {
 			break;
 		}
-		if (((BookNode*)bookNode)->book()->filePath() != (*jt)->filePath()) {
+		if (((BookNode*)(*kt))->book()->filePath() != (*jt)->filePath()) {
 			break;
 		}
 	}
 
 	size_t index = jt - books.begin();
 	while (tagNode->children().size() > index) {
-		FBReaderNode *bookNode = (FBReaderNode*)tagNode->children()[index];
-		if (bookNode->typeId() != BookNode::TYPE_ID) {
+		ZLBlockTreeNode *bookNode = tagNode->children()[index];
+		if (!bookNode->isInstanceOf(BookNode::TYPE_ID)) {
 			break;
 		}
 		delete bookNode;

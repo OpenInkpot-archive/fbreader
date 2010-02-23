@@ -17,7 +17,6 @@
  * 02110-1301, USA.
  */
 
-#include <iostream>
 #include <algorithm>
 
 #include <ZLResource.h>
@@ -33,7 +32,7 @@
 
 #include "../fbreader/FBReader.h"
 
-#include "../network/NetworkLibraryItems.h"
+#include "../network/NetworkItems.h"
 #include "../network/NetworkBookCollection.h"
 #include "../network/NetworkLink.h"
 #include "../network/NetworkAuthenticationManager.h"
@@ -68,15 +67,14 @@ private:
 	NetworkCatalogNode &myNode;
 };
 
-const std::string NetworkCatalogNode::TYPE_ID = "LibraryItemNode";
+const ZLTypeId NetworkCatalogNode::TYPE_ID(NetworkContainerNode::TYPE_ID);
 
-
-NetworkCatalogNode::NetworkCatalogNode(ZLBlockTreeView::RootNode *parent, shared_ptr<NetworkLibraryItem> item, size_t atPosition) : 
+NetworkCatalogNode::NetworkCatalogNode(ZLBlockTreeView::RootNode *parent, shared_ptr<NetworkItem> item, size_t atPosition) : 
 	NetworkContainerNode(parent, atPosition), 
 	myItem(item) {
 }
 
-NetworkCatalogNode::NetworkCatalogNode(NetworkCatalogNode *parent, shared_ptr<NetworkLibraryItem> item, size_t atPosition) : 
+NetworkCatalogNode::NetworkCatalogNode(NetworkCatalogNode *parent, shared_ptr<NetworkItem> item, size_t atPosition) : 
 	NetworkContainerNode(parent, atPosition), 
 	myItem(item) {
 }
@@ -90,7 +88,7 @@ shared_ptr<ZLRunnable> NetworkCatalogNode::expandCatalogAction() {
 
 shared_ptr<ZLRunnable> NetworkCatalogNode::openInBrowserAction() {
 	if (myOpenInBrowserAction.isNull()) {
-		myOpenInBrowserAction = new OpenInBrowserAction(item().htmlURL());
+		myOpenInBrowserAction = new OpenInBrowserAction(item().URLByType[NetworkItem::URL_HTML_PAGE]);
 	}
 	return myOpenInBrowserAction;
 }
@@ -102,24 +100,24 @@ shared_ptr<ZLRunnable> NetworkCatalogNode::reloadAction() {
 	return myReloadAction;
 }
 
-NetworkLibraryCatalogItem &NetworkCatalogNode::item() {
-	return (NetworkLibraryCatalogItem&)*myItem;
+NetworkCatalogItem &NetworkCatalogNode::item() {
+	return (NetworkCatalogItem&)*myItem;
 }
 
-const NetworkLibraryItemList &NetworkCatalogNode::childrenItems() {
+const NetworkItem::List &NetworkCatalogNode::childrenItems() {
 	return myChildrenItems;
 }
 
-const std::string &NetworkCatalogNode::typeId() const {
+const ZLTypeId &NetworkCatalogNode::typeId() const {
 	return TYPE_ID;
 }
 
 std::string NetworkCatalogNode::title() const {
-	return myItem->title();
+	return myItem->Title;
 }
 
 std::string NetworkCatalogNode::summary() const {
-	return ((const NetworkLibraryCatalogItem&)*myItem).summary();
+	return ((const NetworkCatalogItem&)*myItem).Summary;
 }
 
 void NetworkCatalogNode::paint(ZLPaintContext &context, int vOffset) {
@@ -137,13 +135,13 @@ void NetworkCatalogNode::paintHyperlinks(ZLPaintContext &context, int vOffset) {
 		ZLResource::resource("networkView")["libraryItemNode"];
 
 	int left = 0;
-	if (!item().url().empty()) {
+	if (!item().URLByType[NetworkItem::URL_CATALOG].empty()) {
 		drawHyperlink(context, left, vOffset,
 			resource[isOpen() ? "collapseTree" : "expandTree"].value(),
 			expandCatalogAction()
 		);
 	}
-	if (!item().htmlURL().empty()) {
+	if (!item().URLByType[NetworkItem::URL_HTML_PAGE].empty()) {
 		drawHyperlink(context, left, vOffset,
 			resource["openInBrowser"].value(),
 			openInBrowserAction()
@@ -155,12 +153,12 @@ void NetworkCatalogNode::paintHyperlinks(ZLPaintContext &context, int vOffset) {
 }
 
 shared_ptr<ZLImage> NetworkCatalogNode::extractCoverImage() const {
-	const std::string &url = myItem->coverURL();
+	const std::string &url = myItem->URLByType[NetworkItem::URL_COVER];
 
 	if (url.empty()) {
 		return lastResortCoverImage();
 	}
-	
+
 	shared_ptr<ZLImage> image = NetworkCatalogUtil::getImageByUrl(url);
 	if (!image.isNull()) {
 		return image;
@@ -194,15 +192,15 @@ void NetworkCatalogNode::updateChildren() {
 	}
 
 	bool hasSubcatalogs = false;
-	for (NetworkLibraryItemList::iterator it = myChildrenItems.begin(); it != myChildrenItems.end(); ++it) {
-		if ((*it)->typeId() == NetworkLibraryCatalogItem::TYPE_ID) {
+	for (NetworkItem::List::iterator it = myChildrenItems.begin(); it != myChildrenItems.end(); ++it) {
+		if ((*it)->typeId() == NetworkCatalogItem::TYPE_ID) {
 			hasSubcatalogs = true;
 			break;
 		}
 	}
 
 	if (hasSubcatalogs) {
-		for (NetworkLibraryItemList::iterator it = myChildrenItems.begin(); it != myChildrenItems.end(); ++it) {
+		for (NetworkItem::List::iterator it = myChildrenItems.begin(); it != myChildrenItems.end(); ++it) {
 			NetworkNodesFactory::createNetworkNode(this, *it);
 		}
 	} else {
@@ -219,12 +217,11 @@ void NetworkCatalogNode::ExpandCatalogAction::run() {
 		return;
 	}
 
-	NetworkLink &link = myNode.item().link();
+	const NetworkLink &link = myNode.item().Link;
 	if (!link.authenticationManager().isNull()) {
 		NetworkAuthenticationManager &mgr = *link.authenticationManager();
 		IsAuthorisedRunnable checker(mgr);
 		checker.executeWithUI();
-		std::cerr << "authState == " << checker.result() << std::endl;
 		if (checker.hasErrors()) {
 			checker.showErrorMessage();
 			return;
@@ -233,7 +230,8 @@ void NetworkCatalogNode::ExpandCatalogAction::run() {
 			InitializeAuthenticationManagerRunnable initializer(mgr);
 			initializer.executeWithUI();
 			if (initializer.hasErrors()) {
-				mgr.logOut();
+				LogOutRunnable logout(mgr);
+				logout.executeWithUI();
 			}
 		}
 	}

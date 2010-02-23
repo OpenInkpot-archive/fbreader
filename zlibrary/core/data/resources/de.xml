@@ -61,9 +61,11 @@
 		<node name="fi" value="Finnisch"/>
 		<node name="fr" value="Französisch"/>
 		<node name="he" value="Hebräisch"/>
+		<node name="hu" value="Ungarisch"/>
 		<node name="id" value="Indonesisch"/>
 		<node name="it" value="Italienisch"/>
 		<node name="lt" value="Litauisch"/>
+		<node name="nl" value="Niederländisch"/>
 		<node name="no" value="Norwegisch"/>
 		<node name="pt" value="Portugiesisch"/>
 		<node name="ru" value="Russisch"/>

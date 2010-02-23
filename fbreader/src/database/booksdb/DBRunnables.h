@@ -34,9 +34,6 @@
 #include "../../library/Lists.h"
 
 class FindFileIdRunnable;
-class LoadAuthorsRunnable;
-class LoadTagsRunnable;
-class LoadSeriesRunnable;
 class LoadFileEntriesRunnable;
 class DeleteFileEntriesRunnable;
 
@@ -123,7 +120,7 @@ private:
 	shared_ptr<DBCommand> myFindTagId;
 	shared_ptr<DBCommand> myAddTag;
 
-	shared_ptr<LoadTagsRunnable> myLoadTags;
+	shared_ptr<DBCommand> myLoadBookTags;
 };
 
 
@@ -277,65 +274,9 @@ private:
 };
 
 
-inline void FindFileIdRunnable::setFileName(const std::string &fileName, bool add) {
-	myFileName = fileName;
-	myAdd = add;
-	myFileId = 0;
-}
-
-inline int FindFileIdRunnable::fileId() const { return myFileId; }
-
-
 /*
  * Load Runnables
  */
-
-class LoadAuthorsRunnable : public DBRunnable {
-
-public:
-	LoadAuthorsRunnable(DBConnection &connection);
-	bool run();
-	void setBookId(int bookId);
-	void collectAuthors(AuthorList &authors);
-
-private:
-	int myBookId;
-	AuthorList myAuthors;
-
-	shared_ptr<DBCommand> myLoadAuthors;
-};
-
-class LoadTagsRunnable {
-
-public:
-	LoadTagsRunnable(DBConnection &connection);
-	bool run(int bookId, TagList &tags);
-	bool run(Book &book);
-
-private:
-	shared_ptr<Tag> getTag(int id);
-
-private:
-	shared_ptr<DBCommand> myLoadBookTags;
-	shared_ptr<DBCommand> myLoadSingleTag;
-};
-
-class LoadSeriesRunnable : public DBRunnable {
-
-public:
-	LoadSeriesRunnable(DBConnection &connection);
-	bool run();
-	void setBookId(int bookId);
-	const std::string &seriesTitle() const;
-	int indexInSeries() const;
-
-private:
-	int myBookId;
-	std::string mySeriesTitle;
-	int myIndexInSeries;
-
-	shared_ptr<DBCommand> myLoadSeries;
-};
 
 class LoadFileEntriesRunnable : public DBRunnable {
 

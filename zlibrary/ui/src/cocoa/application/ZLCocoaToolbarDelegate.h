@@ -27,7 +27,9 @@
 	NSMutableArray *mySelectableItems;
 }
 
-- (void)addItemWithIdentifier:(NSString*)identifier label:(NSString*)label tooltip:(NSString*)tooltip;
+- (void)addButtonItemWithIdentifier:(NSString*)identifier label:(NSString*)label tooltip:(NSString*)tooltip;
+- (void)addTextItemWithIdentifier:(NSString*)identifier label:(NSString*)label tooltip:(NSString*)tooltip;
+- (void)addSearchItemWithIdentifier:(NSString*)identifier label:(NSString*)label tooltip:(NSString*)tooltip;
 
 @end
 

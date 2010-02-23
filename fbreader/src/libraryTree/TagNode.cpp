@@ -102,9 +102,9 @@ private:
 	bool myValue;
 };
 
-const std::string TagNode::TYPE_ID = "TagNode";
+const ZLTypeId TagNode::TYPE_ID(FBReaderNode::TYPE_ID);
 
-const std::string &TagNode::typeId() const {
+const ZLTypeId &TagNode::typeId() const {
 	return TYPE_ID;
 }
 
@@ -112,9 +112,8 @@ size_t TagNode::positionToInsert(ZLBlockTreeNode *parent, shared_ptr<Tag> tag) {
 	const ZLBlockTreeNode::List &children = parent->children();
 	ZLBlockTreeNode::List::const_reverse_iterator it = children.rbegin();
 	for (; it != children.rend(); ++it) {
-		const FBReaderNode *node = (const FBReaderNode*)*it;
-		if (node->typeId() != TagNode::TYPE_ID ||
-				TagComparator()(((TagNode*)node)->tag(), tag)) {
+		if (!(*it)->isInstanceOf(TagNode::TYPE_ID) ||
+				TagComparator()(((TagNode*)*it)->tag(), tag)) {
 			break;
 		}
 	}
@@ -199,8 +198,8 @@ void TagNode::EditOrCloneAction::run() {
 	const ZLBlockTreeNode::List &children = myTagNode.children();
 	IncludeSubtagsEntry *includeSubtagsEntry = new IncludeSubtagsEntry();
 	if (!children.empty() &&
-			((FBReaderNode*)children.back())->typeId() == TagNode::TYPE_ID) {
-		if (((FBReaderNode*)children.front())->typeId() != BookNode::TYPE_ID) {
+			children.back()->isInstanceOf(TagNode::TYPE_ID)) {
+		if (!children.front()->isInstanceOf(BookNode::TYPE_ID)) {
 			includeSubtagsEntry->setActive(false);
 		}
 		dialog->addOption(ZLResourceKey("includeSubtags"), includeSubtagsEntry);

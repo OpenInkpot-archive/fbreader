@@ -21,47 +21,16 @@
 #define __LITRESUTIL_H__
 
 #include <string>
-#include <map>
 
-#include <shared_ptr.h>
-
-class LitResGenre;
+class NetworkLink;
 
 class LitResUtil {
 
 public:
-	static const std::string LFROM;
-	static const std::string CURRENCY_SUFFIX;
+	static std::string url(const NetworkLink &link, const std::string &path);
 
 private:
-	static shared_ptr<LitResUtil> ourInstance;
-
 	LitResUtil();
-
-public:
-	static LitResUtil &Instance();
-
-public:
-	static std::string appendLFrom(const std::string &url);
-	static std::string litresLink(const std::string &path);
-	static void makeDemoUrl(std::string &url, const std::string &bookId);
-
-	const std::map<std::string, shared_ptr<LitResGenre> > &genresMap();
-	const std::vector<shared_ptr<LitResGenre> > &genresTree();
-	const std::map<shared_ptr<LitResGenre>, std::string> &genresTitles();
-
-	void fillGenreIds(const std::string &tag, std::vector<std::string> &ids);
-
-private:
-	void validateGenres();
-	bool loadGenres();
-	void buildGenresTitles(const std::vector<shared_ptr<LitResGenre> > &genres, const std::string &titlePrefix = "");
-
-private:
-	std::vector<shared_ptr<LitResGenre> > myGenresTree;
-	std::map<std::string, shared_ptr<LitResGenre> > myGenresMap;
-	std::map<shared_ptr<LitResGenre>, std::string> myGenresTitles;
-	bool myGenresValid;
 };
 
 #endif /* __LITRESUTIL_H__ */

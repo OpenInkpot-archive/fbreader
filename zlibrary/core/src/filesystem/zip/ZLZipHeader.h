@@ -23,6 +23,9 @@
 class ZLInputStream;
 
 struct ZLZipHeader {
+	static const int SignatureLocalFile;
+	static const int SignatureData;
+
 	unsigned long Signature;
 	unsigned short Version;
 	unsigned short Flags;
@@ -36,7 +39,7 @@ struct ZLZipHeader {
 	unsigned short ExtraLength;
 
 	bool readFrom(ZLInputStream &stream);
-	static void skipEntry(ZLInputStream &stream, const ZLZipHeader &header);
+	static void skipEntry(ZLInputStream &stream, ZLZipHeader &header);
 
 private:
 	unsigned short readShort(ZLInputStream &stream);

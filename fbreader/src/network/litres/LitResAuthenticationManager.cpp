@@ -21,30 +21,26 @@
 #include <ZLNetworkManager.h>
 
 #include "LitResAuthenticationManager.h"
-
 #include "LitResDataParser.h"
 #include "LitResAuthenticationDataParser.h"
-
 #include "LitResUtil.h"
+#include "LitResLink.h"
 
 #include "../NetworkErrors.h"
-#include "../NetworkLibraryItems.h"
-
+#include "../NetworkItems.h"
 #include "../NetworkLink.h"
 #include "../NetworkLinkCollection.h"
 
-
-LitResAuthenticationManager::LitResAuthenticationManager(const std::string &siteName) :
-	NetworkAuthenticationManager(siteName), 
+LitResAuthenticationManager::LitResAuthenticationManager(const NetworkLink &link) :
+	NetworkAuthenticationManager(link.SiteName), 
+	myLink(link),
 	mySidChecked(false), 
-	mySidUserNameOption(ZLCategoryKey::NETWORK, siteName, "sidUserName", ""), 
-	mySidOption(ZLCategoryKey::NETWORK, siteName, "sid", "") {
+	mySidUserNameOption(ZLCategoryKey::NETWORK, link.SiteName, "sidUserName", ""), 
+	mySidOption(ZLCategoryKey::NETWORK, link.SiteName, "sid", ""),
+	myCertificate(NetworkLink::CertificatesPathPrefix() + "litres.ru.crt") {
 }
 
-const std::string &LitResAuthenticationManager::certificate() {
-	if (myCertificate.empty()) {
-		myCertificate = NetworkLink::CertificatesPathPrefix() + "litres.ru.crt";
-	}
+const ZLNetworkSSLCertificate &LitResAuthenticationManager::certificate() {
 	return myCertificate;
 }
 
@@ -65,15 +61,14 @@ NetworkAuthenticationManager::AuthenticationStatus LitResAuthenticationManager::
 	shared_ptr<ZLXMLReader> xmlReader = new LitResLoginDataParser(firstName, lastName, newSid);
 
 	std::string query;
-	ZLNetworkUtil::addParameter(query, "sid", mySidOption.value());
+	ZLNetworkUtil::appendParameter(query, "sid", mySidOption.value());
 
-	ZLExecutionData::Vector dataList;
-	dataList.push_back(ZLNetworkManager::Instance().createXMLParserData(
-		LitResUtil::litresLink("pages/catalit_authorise/" + query),
+	shared_ptr<ZLExecutionData> networkData = ZLNetworkManager::Instance().createXMLParserRequest(
+		LitResUtil::url(myLink, "pages/catalit_authorise/" + query),
 		certificate(),
 		xmlReader
-	));
-	std::string error = ZLNetworkManager::Instance().perform(dataList);
+	);
+	std::string error = ZLNetworkManager::Instance().perform(networkData);
 
 	if (!error.empty()) {
 		if (error != NetworkErrors::errorMessage(NetworkErrors::ERROR_AUTHENTICATION_FAILED)) {
@@ -94,19 +89,18 @@ std::string LitResAuthenticationManager::authorise(const std::string &pwd) {
 	shared_ptr<ZLXMLReader> xmlReader = new LitResLoginDataParser(firstName, lastName, newSid);
 
 	std::string query;
-	ZLNetworkUtil::addParameter(query, "login", UserNameOption.value());
-	ZLNetworkUtil::addParameter(query, "pwd", pwd);
+	ZLNetworkUtil::appendParameter(query, "login", UserNameOption.value());
+	ZLNetworkUtil::appendParameter(query, "pwd", pwd);
 	if (SkipIPOption.value()) {
-		ZLNetworkUtil::addParameter(query, "skip_ip", "1");
+		ZLNetworkUtil::appendParameter(query, "skip_ip", "1");
 	}
 
-	ZLExecutionData::Vector dataList;
-	dataList.push_back(ZLNetworkManager::Instance().createXMLParserData(
-		LitResUtil::litresLink("pages/catalit_authorise/" + query),
+	shared_ptr<ZLExecutionData> networkData = ZLNetworkManager::Instance().createXMLParserRequest(
+		LitResUtil::url(myLink, "pages/catalit_authorise/" + query),
 		certificate(),
 		xmlReader
-	));
-	std::string error = ZLNetworkManager::Instance().perform(dataList);
+	);
+	std::string error = ZLNetworkManager::Instance().perform(networkData);
 
 	mySidChecked = true;
 	if (!error.empty()) {
@@ -125,23 +119,23 @@ void LitResAuthenticationManager::logOut() {
 	mySidOption.setValue("");
 }
 
-std::string LitResAuthenticationManager::networkBookId(const NetworkLibraryBookItem &book) {
-	return "http://robot.litres.ru/pages/catalit_download_book/?art=" + book.id();
+std::string LitResAuthenticationManager::networkBookId(const NetworkBookItem &book) {
+	return "http://robot.litres.ru/pages/catalit_download_book/?art=" + book.Id;
 }
 
-NetworkLibraryBookItem::URLType LitResAuthenticationManager::downloadLinkType(const NetworkLibraryBookItem &) {
-	return NetworkLibraryBookItem::BOOK_FB2_ZIP;
+NetworkItem::URLType LitResAuthenticationManager::downloadLinkType(const NetworkBookItem &) {
+	return NetworkItem::URL_BOOK_FB2_ZIP;
 }
 
 const std::string &LitResAuthenticationManager::currentUserName() {
 	return mySidUserNameOption.value();
 }
 
-bool LitResAuthenticationManager::needPurchase(const NetworkLibraryBookItem &book) {
-	return myPurchasedBooksIds.count(book.id()) == 0;
+bool LitResAuthenticationManager::needPurchase(const NetworkBookItem &book) {
+	return myPurchasedBooksIds.count(book.Id) == 0;
 }
 
-std::string LitResAuthenticationManager::purchaseBook(NetworkLibraryBookItem &book) {
+std::string LitResAuthenticationManager::purchaseBook(NetworkBookItem &book) {
 	const std::string &sid = mySidOption.value();
 	if (sid.empty()) {
 		return NetworkErrors::errorMessage(NetworkErrors::ERROR_AUTHENTICATION_FAILED);
@@ -151,20 +145,19 @@ std::string LitResAuthenticationManager::purchaseBook(NetworkLibraryBookItem &bo
 	shared_ptr<ZLXMLReader> xmlReader = new LitResPurchaseDataParser(account, bookId);
 
 	std::string query;
-	ZLNetworkUtil::addParameter(query, "sid", sid);
-	ZLNetworkUtil::addParameter(query, "art", book.id());
+	ZLNetworkUtil::appendParameter(query, "sid", sid);
+	ZLNetworkUtil::appendParameter(query, "art", book.Id);
 
-	ZLExecutionData::Vector dataList;
-	dataList.push_back(ZLNetworkManager::Instance().createXMLParserData(
-		LitResUtil::litresLink("pages/purchase_book/" + query),
+	shared_ptr<ZLExecutionData> networkData = ZLNetworkManager::Instance().createXMLParserRequest(
+		LitResUtil::url(myLink, "pages/purchase_book/" + query),
 		certificate(),
 		xmlReader
-	));
-	std::string error = ZLNetworkManager::Instance().perform(dataList);
+	);
+	std::string error = ZLNetworkManager::Instance().perform(networkData);
 
 	if (!account.empty()) {
 		myAccount = account;
-		myAccount.append(LitResUtil::CURRENCY_SUFFIX);
+		myAccount.append(LitResLink::CURRENCY_SUFFIX);
 	}
 	if (error == NetworkErrors::errorMessage(NetworkErrors::ERROR_AUTHENTICATION_FAILED)) {
 		mySidChecked = true;
@@ -176,29 +169,27 @@ std::string LitResAuthenticationManager::purchaseBook(NetworkLibraryBookItem &bo
 		if (!error.empty()) {
 			return error;
 		}
-		if (bookId != book.id()) {
+		if (bookId != book.Id) {
 			return NetworkErrors::errorMessage(NetworkErrors::ERROR_SOMETHING_WRONG, SiteName);
 		}
 	}
-	myPurchasedBooksIds.insert(book.id());
-	NetworkLibraryBookItem *bookCopy = new NetworkLibraryBookItem(book);
-	bookCopy->setIndex(0);
-	myPurchasedBooksList.push_back(bookCopy);
+	myPurchasedBooksIds.insert(book.Id);
+	myPurchasedBooksList.push_back(new NetworkBookItem(book, 0));
 	return error;
 }
 
-std::string LitResAuthenticationManager::downloadLink(const NetworkLibraryBookItem &book) {
+std::string LitResAuthenticationManager::downloadLink(const NetworkBookItem &book) {
 	const std::string &sid = mySidOption.value();
 	if (sid.empty()) {
 		return "";
 	}
 	std::string query;
-	ZLNetworkUtil::addParameter(query, "sid", sid);
-	ZLNetworkUtil::addParameter(query, "art", book.id());
-	return LitResUtil::litresLink("pages/catalit_download_book/" + query);
+	ZLNetworkUtil::appendParameter(query, "sid", sid);
+	ZLNetworkUtil::appendParameter(query, "art", book.Id);
+	return LitResUtil::url(myLink, "pages/catalit_download_book/" + query);
 }
 
-void LitResAuthenticationManager::collectPurchasedBooks(NetworkLibraryItemList &list) {
+void LitResAuthenticationManager::collectPurchasedBooks(NetworkItem::List &list) {
 	list.assign(myPurchasedBooksList.begin(), myPurchasedBooksList.end());
 }
 
@@ -207,7 +198,10 @@ std::string LitResAuthenticationManager::refillAccountLink() {
 	if (sid.empty()) {
 		return "";
 	}
-	return LitResUtil::appendLFrom("https://www.litres.ru/pages/put_money_on_account/?sid=" + sid);
+	std::string url =
+		"https://www.litres.ru/pages/put_money_on_account/?sid=" + sid;
+	myLink.rewriteUrl(url);
+	return url;
 }
 
 std::string LitResAuthenticationManager::currentAccount() {
@@ -252,14 +246,14 @@ std::string LitResAuthenticationManager::initialize() {
 	return "";
 }
 
-shared_ptr<ZLExecutionData> LitResAuthenticationManager::loadPurchasedBooks(std::set<std::string> &purchasedBooksIds, NetworkLibraryItemList &purchasedBooksList) {
+shared_ptr<ZLExecutionData> LitResAuthenticationManager::loadPurchasedBooks(std::set<std::string> &purchasedBooksIds, NetworkItem::List &purchasedBooksList) {
 	const std::string &sid = mySidOption.value();
 	purchasedBooksIds.clear();
 	purchasedBooksList.clear();
 
 	std::string query;
-	ZLNetworkUtil::addParameter(query, "my", "1");
-	ZLNetworkUtil::addParameter(query, "sid", sid);
+	ZLNetworkUtil::appendParameter(query, "my", "1");
+	ZLNetworkUtil::appendParameter(query, "sid", sid);
 
 	shared_ptr<NetworkAuthenticationManager> mgr;
 	NetworkLinkCollection &collection = NetworkLinkCollection::Instance();
@@ -271,23 +265,23 @@ shared_ptr<ZLExecutionData> LitResAuthenticationManager::loadPurchasedBooks(std:
 		}
 	}
 
-	return ZLNetworkManager::Instance().createXMLParserData(
-		LitResUtil::litresLink("pages/catalit_browser/" + query), 
+	return ZLNetworkManager::Instance().createXMLParserRequest(
+		LitResUtil::url(myLink, "pages/catalit_browser/" + query), 
 		certificate(),
-		new LitResDataParser(purchasedBooksList, mgr)
+		new LitResDataParser((LitResLink&)myLink, purchasedBooksList)
 	);
 }
 
-void LitResAuthenticationManager::loadPurchasedBooksOnError(std::set<std::string> &purchasedBooksIds, NetworkLibraryItemList &purchasedBooksList) {
+void LitResAuthenticationManager::loadPurchasedBooksOnError(std::set<std::string> &purchasedBooksIds, NetworkItem::List &purchasedBooksList) {
 	purchasedBooksIds.clear();
 	purchasedBooksList.clear();
 }
 
-void LitResAuthenticationManager::loadPurchasedBooksOnSuccess(std::set<std::string> &purchasedBooksIds, NetworkLibraryItemList &purchasedBooksList) {
-	for (NetworkLibraryItemList::iterator it = purchasedBooksList.begin(); it != purchasedBooksList.end(); ++it) {
-		NetworkLibraryBookItem &book = (NetworkLibraryBookItem &) **it;
-		book.setIndex(0);
-		purchasedBooksIds.insert(book.id());
+void LitResAuthenticationManager::loadPurchasedBooksOnSuccess(std::set<std::string> &purchasedBooksIds, NetworkItem::List &purchasedBooksList) {
+	for (NetworkItem::List::iterator it = purchasedBooksList.begin(); it != purchasedBooksList.end(); ++it) {
+		NetworkBookItem &book = (NetworkBookItem&)**it;
+		book.Index = 0;
+		purchasedBooksIds.insert(book.Id);
 	}
 }
 
@@ -297,11 +291,11 @@ shared_ptr<ZLExecutionData> LitResAuthenticationManager::loadAccount(std::string
 	myAccount.clear();
 
 	std::string query;
-	ZLNetworkUtil::addParameter(query, "sid", sid);
-	ZLNetworkUtil::addParameter(query, "art", "0");
+	ZLNetworkUtil::appendParameter(query, "sid", sid);
+	ZLNetworkUtil::appendParameter(query, "art", "0");
 
-	return ZLNetworkManager::Instance().createXMLParserData(
-		LitResUtil::litresLink("pages/purchase_book/" + query),
+	return ZLNetworkManager::Instance().createXMLParserRequest(
+		LitResUtil::url(myLink, "pages/purchase_book/" + query),
 		certificate(),
 		new LitResPurchaseDataParser(myAccount, dummy1)
 	);
@@ -313,7 +307,7 @@ void LitResAuthenticationManager::loadAccountOnError() {
 
 void LitResAuthenticationManager::loadAccountOnSuccess() {
 	if (!myAccount.empty()) {
-		myAccount.append(LitResUtil::CURRENCY_SUFFIX);
+		myAccount.append(LitResLink::CURRENCY_SUFFIX);
 	}
 }
 
@@ -330,17 +324,16 @@ std::string LitResAuthenticationManager::registerUser(const std::string &login, 
 	shared_ptr<ZLXMLReader> xmlReader = new LitResRegisterUserDataParser(newSid);
 
 	std::string query;
-	ZLNetworkUtil::addParameter(query, "new_login", login);
-	ZLNetworkUtil::addParameter(query, "new_pwd1", password);
-	ZLNetworkUtil::addParameter(query, "mail", email);
+	ZLNetworkUtil::appendParameter(query, "new_login", login);
+	ZLNetworkUtil::appendParameter(query, "new_pwd1", password);
+	ZLNetworkUtil::appendParameter(query, "mail", email);
 
-	ZLExecutionData::Vector dataList;
-	dataList.push_back(ZLNetworkManager::Instance().createXMLParserData(
-		LitResUtil::litresLink("pages/catalit_register_user/" + query),
+	shared_ptr<ZLExecutionData> networkData = ZLNetworkManager::Instance().createXMLParserRequest(
+		LitResUtil::url(myLink, "pages/catalit_register_user/" + query),
 		certificate(),
 		xmlReader
-	));
-	std::string error = ZLNetworkManager::Instance().perform(dataList);
+	);
+	std::string error = ZLNetworkManager::Instance().perform(networkData);
 
 	mySidChecked = true;
 	if (!error.empty()) {
@@ -362,15 +355,14 @@ std::string LitResAuthenticationManager::recoverPassword(const std::string &emai
 	shared_ptr<ZLXMLReader> xmlReader = new LitResPasswordRecoveryDataParser();
 
 	std::string query;
-	ZLNetworkUtil::addParameter(query, "mail", email);
+	ZLNetworkUtil::appendParameter(query, "mail", email);
 
-	ZLExecutionData::Vector dataList;
-	dataList.push_back(ZLNetworkManager::Instance().createXMLParserData(
-		LitResUtil::litresLink("pages/catalit_recover_pass/" + query),
+	shared_ptr<ZLExecutionData> networkData = ZLNetworkManager::Instance().createXMLParserRequest(
+		LitResUtil::url(myLink, "pages/catalit_recover_pass/" + query),
 		certificate(),
 		xmlReader
-	));
-	return ZLNetworkManager::Instance().perform(dataList);
+	);
+	return ZLNetworkManager::Instance().perform(networkData);
 }
 
 std::string LitResAuthenticationManager::reloadPurchasedBooks() {
@@ -386,12 +378,11 @@ std::string LitResAuthenticationManager::reloadPurchasedBooks() {
 	}
 
 	std::set<std::string> purchasedBooksIds;
-	NetworkLibraryItemList purchasedBooksList;
+	NetworkItem::List purchasedBooksList;
 
-	ZLExecutionData::Vector dataList;
-	dataList.push_back(loadPurchasedBooks(purchasedBooksIds, purchasedBooksList));
+	shared_ptr<ZLExecutionData> networkData = loadPurchasedBooks(purchasedBooksIds, purchasedBooksList);
 
-	std::string error = ZLNetworkManager::Instance().perform(dataList);
+	std::string error = ZLNetworkManager::Instance().perform(networkData);
 	if (!error.empty()) {
 		//loadPurchasedBooksOnError(purchasedBooksIds, purchasedBooksList);
 		if (error == NetworkErrors::errorMessage(NetworkErrors::ERROR_AUTHENTICATION_FAILED)) {

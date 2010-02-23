@@ -26,9 +26,8 @@
 #include <ZLFile.h>
 #include <ZLFileImage.h>
 
-#include <ZLOutputStream.h>
-
 #include "ZLNetworkImage.h"
+
 
 ZLNetworkImage::ZLNetworkImage(const std::string &mimeType, const std::string &url) : ZLSingleImage(mimeType), myURL(url), myIsSynchronized(false) {
 	static const std::string directoryPath = ZLNetworkManager::CacheDirectory();
@@ -56,8 +55,13 @@ ZLNetworkImage::ZLNetworkImage(const std::string &mimeType, const std::string &u
 
 	ZLFile imageFile(myFileName);
 	if (imageFile.exists()) {
-		myIsSynchronized = true;
 		myCachedImage = new ZLFileImage("image/auto", myFileName, 0);
+		if (myCachedImage->good()) {
+			myIsSynchronized = true;
+		} else {
+			myCachedImage.reset();
+			imageFile.remove();
+		}
 	}
 }
 
@@ -66,8 +70,7 @@ shared_ptr<ZLExecutionData> ZLNetworkImage::synchronizationData() const {
 		return 0;
 	}
 	myIsSynchronized = true;
-
-	return ZLNetworkManager::Instance().createDownloadData(myURL, myFileName);
+	return ZLNetworkManager::Instance().createDownloadRequest(myURL, myFileName);
 }
 
 const shared_ptr<std::string> ZLNetworkImage::stringData() const {
@@ -75,6 +78,10 @@ const shared_ptr<std::string> ZLNetworkImage::stringData() const {
 		ZLFile imageFile(myFileName);
 		if (imageFile.exists()) {
 			myCachedImage = new ZLFileImage("image/auto", myFileName, 0);
+			if (!myCachedImage->good()) {
+				myCachedImage.reset();
+				imageFile.remove();
+			}
 		}
 	}
 	return myCachedImage.isNull() ? 0 : myCachedImage->stringData();

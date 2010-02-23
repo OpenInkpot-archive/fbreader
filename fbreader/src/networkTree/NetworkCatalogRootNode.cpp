@@ -30,7 +30,7 @@
 
 #include "../fbreader/FBReader.h"
 
-#include "../network/NetworkLibraryItems.h"
+#include "../network/NetworkItems.h"
 #include "../network/NetworkLinkCollection.h"
 #include "../network/NetworkLink.h"
 #include "../network/NetworkAuthenticationManager.h"
@@ -55,6 +55,8 @@ private:
 	NetworkAuthenticationManager &myManager;
 };
 
+const ZLTypeId NetworkCatalogRootNode::TYPE_ID(NetworkCatalogNode::TYPE_ID);
+
 NetworkCatalogRootNode::NetworkCatalogRootNode(ZLBlockTreeView::RootNode *parent, NetworkLink &link, size_t atPosition) : NetworkCatalogNode(parent, link.libraryItem(), atPosition), myLink(link) {
 	shared_ptr<NetworkAuthenticationManager> mgr = myLink.authenticationManager();
 	if (!mgr.isNull()) {
@@ -71,13 +73,20 @@ NetworkCatalogRootNode::NetworkCatalogRootNode(ZLBlockTreeView::RootNode *parent
 	myDontShowAction = new DontShowAction(myLink);
 }
 
+const ZLTypeId &NetworkCatalogRootNode::typeId() const {
+	return TYPE_ID;
+}
+
 const NetworkLink &NetworkCatalogRootNode::link() const {
 	return myLink;
 }
 
 bool NetworkCatalogRootNode::hasAuxHyperlink() const {
 	shared_ptr<NetworkAuthenticationManager> mgr = myLink.authenticationManager();
-	return !mgr.isNull() && mgr->isAuthorised(false).Status == B3_FALSE;
+	if (mgr.isNull() || mgr->isAuthorised(false).Status != B3_FALSE) {
+		return false;
+	}
+	return !myRegisterUserAction.isNull() || !myPasswordRecoveryAction.isNull();
 }
 
 void NetworkCatalogRootNode::paintHyperlinks(ZLPaintContext &context, int vOffset) {
@@ -138,7 +147,8 @@ NetworkCatalogRootNode::LogoutAction::LogoutAction(NetworkAuthenticationManager 
 }
 
 void NetworkCatalogRootNode::LogoutAction::run() {
-	myManager.logOut();
+	LogOutRunnable logout(myManager);
+	logout.executeWithUI();
 	FBReader::Instance().invalidateAccountDependents();
 	FBReader::Instance().refreshWindow();
 }

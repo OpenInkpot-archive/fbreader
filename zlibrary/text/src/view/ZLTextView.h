@@ -47,13 +47,10 @@ class ZLTextSelectionModel;
 class ZLTextView : public ZLView, public ZLTextArea::Properties {
 
 public:
-	static const int DOUBLE_CLICK_DELAY;
-
-public:
 	class PositionIndicator;
 
 public:
-	static const std::string TYPE_ID;
+	static const ZLTypeId TYPE_ID;
 
 protected:
 	ZLTextView(ZLPaintContext &context);
@@ -61,7 +58,7 @@ protected:
 	virtual shared_ptr<ZLTextPositionIndicatorInfo> indicatorInfo() const = 0;
 
 private:
-	const std::string &typeId() const;
+	const ZLTypeId &typeId() const;
 
 public:
 	const ZLTextArea &textArea() const;
@@ -99,6 +96,8 @@ protected:
 	bool onStylusMovePressed(int x, int y);
 	bool onStylusRelease(int x, int y);
 	virtual bool onStylusClick(int x, int y, int count);
+	virtual int doubleClickDelay() const = 0;
+
 	void onScrollbarMoved(Direction direction, size_t full, size_t from, size_t to);
 	void onScrollbarStep(Direction direction, int steps);
 	void onScrollbarPageStep(Direction direction, int steps);
@@ -141,13 +140,16 @@ private:
 	bool myDoUpdateScrollbar;
 
 	struct DoubleClickInfo {
-		DoubleClickInfo();
+		DoubleClickInfo(const ZLTextView &view);
 		void update(int x, int y, bool press);
 
 		int Count;
 		ZLTime Time;
 		int X;
 		int Y;
+
+	private:
+		const ZLTextView &myView;
 	} myDoubleClickInfo;
 };
 

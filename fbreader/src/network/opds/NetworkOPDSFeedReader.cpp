@@ -17,7 +17,6 @@
  * 02110-1301, USA.
  */
 
-//#include <iostream>
 #include <algorithm>
 
 #include <ZLStringUtil.h>
@@ -25,18 +24,19 @@
 #include <ZLNetworkUtil.h>
 
 #include "NetworkOPDSFeedReader.h"
+#include "OPDSLink.h"
+#include "OPDSCatalogItem.h"
 
 #include "../NetworkOperationData.h"
-#include "../NetworkLibraryItems.h"
-#include "../NetworkAuthenticationManager.h"
-#include "../opdsLink/OPDSLink.h"
-#include "../opdsLink/OPDSCatalogItem.h"
+#include "../NetworkItems.h"
 
-NetworkOPDSFeedReader::NetworkOPDSFeedReader(const std::string &baseURL, NetworkOperationData &result, const std::set<std::string> &ignoredFeeds) : 
+NetworkOPDSFeedReader::NetworkOPDSFeedReader(const std::string &baseURL, NetworkOperationData &result, 
+		const std::set<std::string> &ignoredFeeds, const std::set<std::string> &accountDependentFeeds) : 
 	myBaseURL(baseURL), 
 	myData(result), 
 	myIndex(0), 
-	myIgnoredFeeds(ignoredFeeds) {
+	myIgnoredFeeds(ignoredFeeds),
+	myAccountDependentFeeds(accountDependentFeeds) {
 }
 
 void NetworkOPDSFeedReader::processFeedStart() {
@@ -78,16 +78,18 @@ void NetworkOPDSFeedReader::processFeedEntry(shared_ptr<OPDSEntry> entry) {
 		ATOMLink &link = *(e.links()[i]);
 		const std::string &rel = link.rel();
 		const std::string &type = link.type();
-		if (rel == OPDSConstants::REL_ACQUISITION || rel.empty()) {
-			if (type == OPDSConstants::MIME_APP_EPUB
-				|| type == OPDSConstants::MIME_APP_MOBI) {
-				hasBookLink = true;
-				break;
-			}
+		if ((rel == OPDSConstants::REL_ACQUISITION ||
+				 rel == OPDSConstants::REL_ACQUISITION_SAMPLE ||
+				 rel.empty()) &&
+				(type == OPDSConstants::MIME_APP_EPUB ||
+				 type == OPDSConstants::MIME_APP_MOBI ||
+				 type == OPDSConstants::MIME_APP_FB2ZIP)) {
+			hasBookLink = true;
+			break;
 		}
 	}
 
-	shared_ptr<NetworkLibraryItem> item;
+	shared_ptr<NetworkItem> item;
 	if (hasBookLink) {
 		item = readBookItem(e);
 	} else {
@@ -98,24 +100,19 @@ void NetworkOPDSFeedReader::processFeedEntry(shared_ptr<OPDSEntry> entry) {
 	}
 }
 
-shared_ptr<NetworkLibraryItem> NetworkOPDSFeedReader::readBookItem(OPDSEntry &entry) {
-	shared_ptr<NetworkLibraryItem> bookPtr = new NetworkLibraryBookItem(entry.id()->uri(), myIndex++);
-	NetworkLibraryBookItem &book = (NetworkLibraryBookItem &) *bookPtr;
-	
-	book.setAuthenticationManager(myData.Link.authenticationManager());
-
-	book.setTitle(entry.title());
-	book.setLanguage(entry.dcLanguage());
+shared_ptr<NetworkItem> NetworkOPDSFeedReader::readBookItem(OPDSEntry &entry) {
+	std::string date;
 	if (!entry.dcIssued().isNull()) {
-		book.setDate(entry.dcIssued()->getDateTime(true));
+		date = entry.dcIssued()->getDateTime(true);
 	}
-	book.setAnnotation(entry.summary());
 
+	std::vector<std::string> tags;
 	for (size_t i = 0; i < entry.categories().size(); ++i) {
 		ATOMCategory &category = *(entry.categories()[i]);
-		book.tags().push_back(category.term());
+		tags.push_back(category.term());
 	}
 
+	std::map<NetworkItem::URLType,std::string> urlMap;
 	for (size_t i = 0; i < entry.links().size(); ++i) {
 		ATOMLink &link = *(entry.links()[i]);
 		const std::string &href = link.href();
@@ -123,31 +120,38 @@ shared_ptr<NetworkLibraryItem> NetworkOPDSFeedReader::readBookItem(OPDSEntry &en
 		const std::string &type = link.type();
 		if (rel == OPDSConstants::REL_COVER ||
 				rel == OPDSConstants::REL_STANZA_COVER) {
-			if (book.coverURL().empty() && 
+			if (urlMap[NetworkItem::URL_COVER].empty() && 
 					(type == OPDSConstants::MIME_IMG_PNG ||
 					 type == OPDSConstants::MIME_IMG_JPEG)) {
-				book.setCoverURL(href);
+				urlMap[NetworkItem::URL_COVER] = href;
 			}
 		} else if (rel == OPDSConstants::REL_THUMBNAIL ||
 							 rel == OPDSConstants::REL_STANZA_THUMBNAIL) {
 			if (type == OPDSConstants::MIME_IMG_PNG ||
 					type == OPDSConstants::MIME_IMG_JPEG) {
-				book.setCoverURL(href);
+				urlMap[NetworkItem::URL_COVER] = href;
 			}
 		} else if (rel == OPDSConstants::REL_ACQUISITION || rel.empty()) {
-			if (type == OPDSConstants::MIME_APP_EPUB) {
-				book.urlByType()[NetworkLibraryBookItem::BOOK_EPUB] = href;
+			if (type == OPDSConstants::MIME_APP_FB2ZIP) {
+				urlMap[NetworkItem::URL_BOOK_FB2_ZIP] = href;
+			} else if (type == OPDSConstants::MIME_APP_EPUB) {
+				urlMap[NetworkItem::URL_BOOK_EPUB] = href;
 			} else if (type == OPDSConstants::MIME_APP_MOBI) {
-				book.urlByType()[NetworkLibraryBookItem::BOOK_MOBIPOCKET] = href;
-			//} else if (type == OPDSConstants::MIME_APP_PDF) {
-				//book.urlByType()[NetworkLibraryBookItem::BOOK_PDF] = href;
+				urlMap[NetworkItem::URL_BOOK_MOBIPOCKET] = href;
+			} else if (type == OPDSConstants::MIME_APP_PDF) {
+				urlMap[NetworkItem::URL_BOOK_PDF] = href;
+			}
+		} else if (rel == OPDSConstants::REL_ACQUISITION_SAMPLE) {
+			if (type == OPDSConstants::MIME_APP_FB2ZIP) {
+				urlMap[NetworkItem::URL_BOOK_DEMO_FB2_ZIP] = href;
 			}
 		}
 	}
 
+	std::vector<NetworkBookItem::AuthorData> authors;
 	for (size_t i = 0; i < entry.authors().size(); ++i) {
 		ATOMAuthor &author = *(entry.authors()[i]);
-		NetworkLibraryBookItem::AuthorData authorData;
+		NetworkBookItem::AuthorData authorData;
 		std::string name = author.name();
 		std::string lowerCased = ZLUnicodeUtil::toLower(name);
 		static const std::string authorPrefix = "author:";
@@ -175,7 +179,7 @@ shared_ptr<NetworkLibraryItem> NetworkOPDSFeedReader::readBookItem(OPDSEntry &en
 			authorData.SortKey = name.substr(index + 1);
 			authorData.DisplayName = name;
 		}
-		book.authors().push_back(authorData);
+		authors.push_back(authorData);
 	}
 
 	//entry.dcPublisher();
@@ -191,10 +195,26 @@ shared_ptr<NetworkLibraryItem> NetworkOPDSFeedReader::readBookItem(OPDSEntry &en
 	}*/
 	//entry.rights();
 
-	return bookPtr;
+	NetworkBookItem *book = new NetworkBookItem(
+		myData.Link,
+		entry.id()->uri(),
+		myIndex++,
+		entry.title(),
+		entry.summary(),
+		entry.dcLanguage(),
+		date,
+		std::string(), // price
+		authors,
+		tags,
+		std::string(), // series
+		0, // index in series
+		urlMap
+	);
+
+	return book;
 }
 
-shared_ptr<NetworkLibraryItem> NetworkOPDSFeedReader::readCatalogItem(OPDSEntry &entry) {
+shared_ptr<NetworkItem> NetworkOPDSFeedReader::readCatalogItem(OPDSEntry &entry) {
 	std::string coverURL;
 	std::string url;
 	bool urlIsAlternate = false;
@@ -243,15 +263,20 @@ shared_ptr<NetworkLibraryItem> NetworkOPDSFeedReader::readCatalogItem(OPDSEntry 
 		htmlURL.erase();
 	}
 
+	bool dependsOnAccount = myAccountDependentFeeds.count(entry.id()->uri()) > 0;
+
 	std::string annotation = entry.summary();
 	annotation.erase(std::remove(annotation.begin(), annotation.end(), 0x09), annotation.end());
 	annotation.erase(std::remove(annotation.begin(), annotation.end(), 0x0A), annotation.end());
+	std::map<NetworkItem::URLType,std::string> urlMap;
+	urlMap[NetworkItem::URL_COVER] = coverURL;
+	urlMap[NetworkItem::URL_CATALOG] = ZLNetworkUtil::url(myBaseURL, url);
+	urlMap[NetworkItem::URL_HTML_PAGE] = ZLNetworkUtil::url(myBaseURL, htmlURL);
 	return new OPDSCatalogItem(
 		(OPDSLink&)myData.Link,
-		ZLNetworkUtil::url(myBaseURL, url),
-		ZLNetworkUtil::url(myBaseURL, htmlURL),
 		entry.title(),
 		annotation,
-		coverURL
+		urlMap,
+		dependsOnAccount ? OPDSCatalogItem::LoggedUsers : OPDSCatalogItem::Always
 	);
 }

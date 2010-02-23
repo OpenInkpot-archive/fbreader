@@ -26,14 +26,13 @@
 #include "ZLCocoaApplicationWindow.h"
 
 #import "ZLCocoaToolbarDelegate.h"
-#import "../view/CocoaView.h"
 
 //#include "../util/ZLCocoaKeyUtil.h"
 //#include "../util/ZLCocoaSignalUtil.h"
 //#include "../dialogs/ZLCocoaDialogManager.h"
 #include "../view/ZLCocoaViewWidget.h"
 
-ZLCocoaApplicationWindow::ZLCocoaApplicationWindow(ZLApplication *application) : ZLApplicationWindow(application) {
+ZLCocoaApplicationWindow::ZLCocoaApplicationWindow(ZLApplication *application) : ZLApplicationWindow(application), myWindow(0) {
 }
 
 void ZLCocoaApplicationWindow::init() {
@@ -86,8 +85,35 @@ void ZLCocoaApplicationWindow::addToolbarItem(ZLToolbar::ItemPtr item, int index
 
 	switch (item->type()) {
 		case ZLToolbar::Item::TEXT_FIELD:
+		{
+			const ZLToolbar::ParameterItem &parameterItem =
+				(const ZLToolbar::ParameterItem&)*item;
+			identifier = [NSString stringWithUTF8String:parameterItem.actionId().c_str()];
+			if (index == -1) {
+				ZLCocoaToolbarDelegate *delegate =
+					(ZLCocoaToolbarDelegate*)[toolbar delegate];
+				NSString *label = [NSString stringWithUTF8String:parameterItem.label().c_str()];
+				NSString *tooltip = [NSString stringWithUTF8String:parameterItem.tooltip().c_str()];
+				[delegate addTextItemWithIdentifier:identifier label:label tooltip:tooltip];
+			}
+			break;
+		}
 		case ZLToolbar::Item::COMBO_BOX:
 			break;
+		case ZLToolbar::Item::SEARCH_FIELD:
+		{
+			const ZLToolbar::ParameterItem &parameterItem =
+				(const ZLToolbar::ParameterItem&)*item;
+			identifier = [NSString stringWithUTF8String:parameterItem.actionId().c_str()];
+			if (index == -1) {
+				ZLCocoaToolbarDelegate *delegate =
+					(ZLCocoaToolbarDelegate*)[toolbar delegate];
+				NSString *label = [NSString stringWithUTF8String:parameterItem.label().c_str()];
+				NSString *tooltip = [NSString stringWithUTF8String:parameterItem.tooltip().c_str()];
+				[delegate addSearchItemWithIdentifier:identifier label:label tooltip:tooltip];
+			}
+			break;
+		}
 		case ZLToolbar::Item::PLAIN_BUTTON:
 		case ZLToolbar::Item::TOGGLE_BUTTON:
 		case ZLToolbar::Item::MENU_BUTTON:
@@ -100,12 +126,15 @@ void ZLCocoaApplicationWindow::addToolbarItem(ZLToolbar::ItemPtr item, int index
 					(ZLCocoaToolbarDelegate*)[toolbar delegate];
 				NSString *label = [NSString stringWithUTF8String:button.label().c_str()];
 				NSString *tooltip = [NSString stringWithUTF8String:button.tooltip().c_str()];
-				[delegate addItemWithIdentifier:identifier label:label tooltip:tooltip];
+				[delegate addButtonItemWithIdentifier:identifier label:label tooltip:tooltip];
 			}
 			break;
 		}
 		case ZLToolbar::Item::SEPARATOR:
 			identifier = NSToolbarSeparatorItemIdentifier;
+			break;
+		case ZLToolbar::Item::FILL_SEPARATOR:
+			identifier = NSToolbarFlexibleSpaceItemIdentifier;
 			break;
 	}
 
@@ -165,4 +194,5 @@ void ZLCocoaApplicationWindow::setHyperlinkCursor(bool hyperlink) {
 }
 
 void ZLCocoaApplicationWindow::setCaption(const std::string &caption) {
+	[(NSWindow*)myWindow setTitle:[NSString stringWithUTF8String:caption.c_str()]];
 }

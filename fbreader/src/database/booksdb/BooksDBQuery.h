@@ -27,9 +27,6 @@ class BooksDBQuery {
 public:
 	static const std::string ArchiveEntryDelimiter;
 
-	static const std::string OtherLanguage;
-	static const std::string AutoEncoding;
-
 public:
 	static const std::string PREINIT_DATABASE;
 	static const std::string INIT_DATABASE;
@@ -37,16 +34,6 @@ public:
 	static const std::string CLEAR_DATABASE;
 
 	static const std::string LOAD_BOOK;
-	static const std::string LOAD_SERIES;
-	static const std::string LOAD_AUTHORS;
-	
-	static const std::string ADD_BOOKTAG;
-	static const std::string DELETE_BOOKTAG;
-	static const std::string FIND_TAG_ID;
-	static const std::string ADD_TAG;
-
-	static const std::string FIND_FILE_ID;
-	static const std::string ADD_FILE;
 
 	static const std::string ADD_BOOK;
 	static const std::string UPDATE_BOOK;

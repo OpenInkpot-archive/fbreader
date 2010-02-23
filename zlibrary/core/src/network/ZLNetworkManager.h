@@ -31,6 +31,8 @@ class ZLNetworkData;
 class ZLOutputStream;
 class ZLXMLReader;
 
+struct ZLNetworkSSLCertificate;
+
 class ZLNetworkManager : public ZLExecutionData::Runner {
 
 public:
@@ -68,23 +70,22 @@ protected:
 public:
 	// returns error message
 	std::string downloadFile(const std::string &url, const std::string &fileName, shared_ptr<ZLExecutionData::Listener> listener = 0) const;
-	std::string downloadFile(const std::string &url, const std::string &fileName, const std::string &sslCertificate, shared_ptr<ZLExecutionData::Listener> listener = 0) const;
+	std::string downloadFile(const std::string &url, const ZLNetworkSSLCertificate &sslCertificate, const std::string &fileName, shared_ptr<ZLExecutionData::Listener> listener = 0) const;
 
-public:
-	virtual shared_ptr<ZLExecutionData> createNoActionData(const std::string &url, const std::string &sslCertificate) const = 0;
-	virtual shared_ptr<ZLExecutionData> createNoActionData(const std::string &url) const = 0;
+public: 
+	shared_ptr<ZLExecutionData> createDownloadRequest(const std::string &url, const std::string &fileName) const;
+	shared_ptr<ZLExecutionData> createDownloadRequest(const std::string &url, shared_ptr<ZLOutputStream> stream) const;
+	shared_ptr<ZLExecutionData> createDownloadRequest(const std::string &url, const ZLNetworkSSLCertificate &sslCertificate, const std::string &fileName) const;
+	shared_ptr<ZLExecutionData> createDownloadRequest(const std::string &url, const ZLNetworkSSLCertificate &sslCertificate, shared_ptr<ZLOutputStream> stream) const;
 
-	virtual shared_ptr<ZLExecutionData> createReadToStringData(const std::string &url, std::string &dataString, const std::string &sslCertificate) const = 0;
-	virtual shared_ptr<ZLExecutionData> createReadToStringData(const std::string &url, std::string &dataString) const = 0;
+	shared_ptr<ZLExecutionData> createNoActionRequest(const std::string &url) const;
+	shared_ptr<ZLExecutionData> createNoActionRequest(const std::string &url, const ZLNetworkSSLCertificate &sslCertificate) const;
 
-	virtual shared_ptr<ZLExecutionData> createDownloadData(const std::string &url, const std::string &fileName, const std::string &sslCertificate, shared_ptr<ZLOutputStream> stream = 0) const = 0;
-	virtual shared_ptr<ZLExecutionData> createDownloadData(const std::string &url, const std::string &fileName, shared_ptr<ZLOutputStream> stream = 0) const = 0;
+	shared_ptr<ZLExecutionData> createReadToStringRequest(const std::string &url, std::string &buffer) const;
+	shared_ptr<ZLExecutionData> createReadToStringRequest(const std::string &url, const ZLNetworkSSLCertificate &sslCertificate, std::string &buffer) const;
 
-	virtual shared_ptr<ZLExecutionData> createXMLParserData(const std::string &url, const std::string &sslCertificate, shared_ptr<ZLXMLReader> reader) const = 0;
-	virtual shared_ptr<ZLExecutionData> createXMLParserData(const std::string &url, shared_ptr<ZLXMLReader> reader) const = 0;
-
-	virtual shared_ptr<ZLExecutionData> createPostFormData(const std::string &url, const std::string &sslCertificate, const std::vector<std::pair<std::string, std::string> > &formData) const = 0;
-	virtual shared_ptr<ZLExecutionData> createPostFormData(const std::string &url, const std::vector<std::pair<std::string, std::string> > &formData) const = 0;
+	shared_ptr<ZLExecutionData> createXMLParserRequest(const std::string &url, shared_ptr<ZLXMLReader> reader) const;
+	shared_ptr<ZLExecutionData> createXMLParserRequest(const std::string &url, const ZLNetworkSSLCertificate &sslCertificate, shared_ptr<ZLXMLReader> reader) const;
 
 private:
 	mutable shared_ptr<ZLIntegerRangeOption> myConnectTimeoutOption;

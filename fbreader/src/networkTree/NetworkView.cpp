@@ -26,7 +26,7 @@
 #include "NetworkNodes.h"
 #include "NetworkNodesFactory.h"
 
-#include "../network/NetworkLibraryItems.h"
+#include "../network/NetworkItems.h"
 
 #include "../network/NetworkLinkCollection.h"
 #include "../network/NetworkLink.h"
@@ -172,7 +172,8 @@ void NetworkView::makeUpToDate() {
 			continue;
 		}
 		bool processed = false;
-		while (nodeIt != rootChildren.end() && ((FBReaderNode*)*nodeIt)->typeId() == NetworkCatalogNode::TYPE_ID) {
+		while (nodeIt != rootChildren.end() &&
+					 (*nodeIt)->isInstanceOf(NetworkCatalogNode::TYPE_ID)) {
 			const NetworkLink &nodeLink = ((NetworkCatalogRootNode*)*nodeIt)->link();
 			if (&nodeLink == &link) {
 				++nodeIt;
@@ -204,10 +205,10 @@ void NetworkView::makeUpToDate() {
 	SearchResultNode *srNode = 0;
 
 	while (nodeIt != rootChildren.end()) {
-		FBReaderNode *node = (FBReaderNode *) *nodeIt++;
+		ZLBlockTreeNode *node = *nodeIt++;
 		++nodeCount;
-		if (node->typeId() == SearchResultNode::TYPE_ID) {
-			srNode = (SearchResultNode *) node;
+		if (node->isInstanceOf(SearchResultNode::TYPE_ID)) {
+			srNode = (SearchResultNode*)node;
 		} else {
 			nodesToDelete.insert(node);
 		}
@@ -241,7 +242,7 @@ void NetworkView::updateAccountDependents() {
 	ZLBlockTreeNode::List rootChildren = rootNode().children();
 
 	ZLBlockTreeNode::List::iterator nodeIt = rootChildren.begin();
-	while (nodeIt != rootChildren.end() && ((FBReaderNode*)*nodeIt)->typeId() == NetworkCatalogNode::TYPE_ID) {
+	while (nodeIt != rootChildren.end() && (*nodeIt)->isInstanceOf(NetworkCatalogNode::TYPE_ID)) {
 		NetworkCatalogNode &node = (NetworkCatalogNode &) **nodeIt;
 		updateAccountDependents(node);
 		++nodeIt;
@@ -251,29 +252,29 @@ void NetworkView::updateAccountDependents() {
 void NetworkView::updateAccountDependents(NetworkCatalogNode &node) {
 	std::set<ZLBlockTreeNode*> nodesToDelete;
 
-	const NetworkLibraryItemList &nodeItems = node.childrenItems();
+	const NetworkItem::List &nodeItems = node.childrenItems();
 
 	ZLBlockTreeNode::List nodeChildren = node.children();
 	ZLBlockTreeNode::List::iterator nodeIt = nodeChildren.begin();
 
 	size_t nodeCount = 0;
 	for (size_t i = 0; i < nodeItems.size(); ++i) {
-		shared_ptr<NetworkLibraryItem> currentItemPtr = nodeItems[i];
-		NetworkLibraryItem &currentItem = *currentItemPtr;
+		shared_ptr<NetworkItem> currentItemPtr = nodeItems[i];
+		NetworkItem &currentItem = *currentItemPtr;
 
-		if (currentItem.typeId() != NetworkLibraryCatalogItem::TYPE_ID) {
+		if (currentItem.typeId() != NetworkCatalogItem::TYPE_ID) {
 			continue;
 		}
 
 		bool processed = false;
 		while (nodeIt != nodeChildren.end()) {
-			if (((FBReaderNode*)*nodeIt)->typeId() != NetworkCatalogNode::TYPE_ID) {
+			if (!(*nodeIt)->isInstanceOf(NetworkCatalogNode::TYPE_ID)) {
 				++nodeIt;
 				++nodeCount;
 				continue;
 			}
 			NetworkCatalogNode &child = (NetworkCatalogNode &) **nodeIt;
-			NetworkLibraryCatalogItem &childItem = child.item();
+			NetworkCatalogItem &childItem = child.item();
 			if (&childItem == &currentItem) {
 				if (processAccountDependent(child.item())) {
 					updateAccountDependents(child);
@@ -300,14 +301,14 @@ void NetworkView::updateAccountDependents(NetworkCatalogNode &node) {
 				}
 			}
 		}
-		if (!processed && processAccountDependent((NetworkLibraryCatalogItem &) currentItem)) {
+		if (!processed && processAccountDependent((NetworkCatalogItem &) currentItem)) {
 			NetworkNodesFactory::createNetworkNode(&node, currentItemPtr, nodeCount++);
 		}
 	}
 
 	while (nodeIt != nodeChildren.end()) {
-		FBReaderNode *node = (FBReaderNode *) *nodeIt++;
-		if (node->typeId() == NetworkCatalogNode::TYPE_ID) {
+		ZLBlockTreeNode *node = *nodeIt++;
+		if (node->isInstanceOf(NetworkCatalogNode::TYPE_ID)) {
 			nodesToDelete.insert(node);
 		}
 	}
@@ -317,13 +318,13 @@ void NetworkView::updateAccountDependents(NetworkCatalogNode &node) {
 	}
 }
 
-bool NetworkView::processAccountDependent(NetworkLibraryCatalogItem &item) {
-	if (!item.dependsOnAccount()) {
+bool NetworkView::processAccountDependent(NetworkCatalogItem &item) {
+	if (item.Visibility == NetworkCatalogItem::Always) {
 		return true;
 	}
-	NetworkLink &link = item.link();
+	const NetworkLink &link = item.Link;
 	if (link.authenticationManager().isNull()) {
-		return true;
+		return false;
 	}
 	return link.authenticationManager()->isAuthorised().Status != B3_FALSE;
 }

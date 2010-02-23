@@ -23,9 +23,10 @@
 #include <ZLFile.h>
 #include <ZLDir.h>
 #include <ZLStringUtil.h>
+#include <ZLUnicodeUtil.h>
 #include <ZLResource.h>
 #include <ZLNetworkManager.h>
-#include <ZLNetworkData.h>
+#include <ZLNetworkUtil.h>
 
 #include "NetworkLinkCollection.h"
 
@@ -38,7 +39,8 @@
 #include "NetworkAuthenticationManager.h"
 
 #include "litres/LitResLink.h"
-#include "opdsLink/OPDSLinkReader.h"
+#include "opds/OPDSLinkReader.h"
+#include "opds/URLRewritingRule.h"
 
 NetworkLinkCollection *NetworkLinkCollection::ourInstance = 0;
 
@@ -123,12 +125,12 @@ static std::string normalize(const std::string &url) {
 	return nURL;
 }
 
-std::string NetworkLinkCollection::makeBookFileName(const std::string &url, NetworkLibraryBookItem::URLType format) {
+std::string NetworkLinkCollection::makeBookFileName(const std::string &url, NetworkItem::URLType format) {
 	myErrorMessage.clear();
 	return makeBookFileName(url, format, false);
 }
 
-std::string NetworkLinkCollection::makeBookFileName(const std::string &url, NetworkLibraryBookItem::URLType format, bool createDirectories) {
+std::string NetworkLinkCollection::makeBookFileName(const std::string &url, NetworkItem::URLType format, bool createDirectories) {
 	const ZLResource &errorResource = ZLResource::resource("dialog")["networkError"];
 	size_t index = url.find("://");
 	std::string suburl = url.substr(index + 3);
@@ -171,21 +173,26 @@ std::string NetworkLinkCollection::makeBookFileName(const std::string &url, Netw
 	std::string ext;
 	std::string suffix;
 	switch (format) {
-		case NetworkLibraryBookItem::BOOK_EPUB:
+		case NetworkItem::URL_BOOK_EPUB:
 			ext = ".epub";
 			break;
-		case NetworkLibraryBookItem::BOOK_MOBIPOCKET:
+		case NetworkItem::URL_BOOK_MOBIPOCKET:
 			ext = ".mobi";
 			break;
-		case NetworkLibraryBookItem::BOOK_FB2_ZIP:
+		case NetworkItem::URL_BOOK_FB2_ZIP:
 			ext = ".fb2.zip";
 			break;
-		case NetworkLibraryBookItem::BOOK_DEMO_FB2_ZIP:
+		case NetworkItem::URL_BOOK_PDF:
+			ext = ".pdf";
+			break;
+		case NetworkItem::URL_BOOK_DEMO_FB2_ZIP:
 			suffix = ".trial";
 			ext = ".fb2.zip";
 			break;
-		case NetworkLibraryBookItem::NONE:
-		case NetworkLibraryBookItem::LINK_HTTP:
+		case NetworkItem::URL_NONE:
+		case NetworkItem::URL_HTML_PAGE:
+		case NetworkItem::URL_CATALOG:
+		case NetworkItem::URL_COVER:
 			break;
 	}
 
@@ -227,7 +234,7 @@ std::string NetworkLinkCollection::bookFileName(const std::string &networkBookId
 	return BooksDB::Instance().getNetFile(::normalize(networkBookId));
 }
 
-bool NetworkLinkCollection::downloadBook(const std::string &url, const std::string &networkBookId, NetworkLibraryBookItem::URLType format, std::string &fileName, const std::string &sslCertificate, shared_ptr<ZLExecutionData::Listener> listener) {
+bool NetworkLinkCollection::downloadBook(const std::string &url, const std::string &networkBookId, NetworkItem::URLType format, std::string &fileName, const ZLNetworkSSLCertificate &sslCertificate, shared_ptr<ZLExecutionData::Listener> listener) {
 	const std::string nURL = ::normalize(url);
 	const std::string nNetworkBookId = ::normalize(networkBookId);
 	const ZLResource &errorResource = ZLResource::resource("dialog")["networkError"];
@@ -253,7 +260,7 @@ bool NetworkLinkCollection::downloadBook(const std::string &url, const std::stri
 		ZLFile(fileName).remove();
 	}
 	BooksDB::Instance().setNetFile(nNetworkBookId, fileName);
-	myErrorMessage = ZLNetworkManager::Instance().downloadFile(nURL, fileName, sslCertificate, listener);
+	myErrorMessage = ZLNetworkManager::Instance().downloadFile(nURL, sslCertificate, fileName, listener);
 	return myErrorMessage.empty();
 }
 
@@ -284,7 +291,7 @@ shared_ptr<NetworkBookCollection> NetworkLinkCollection::simpleSearch(const std:
 			if (!searchData.Items.empty() && result.isNull()) {
 				result = new NetworkBookCollection();
 			}
-			for (NetworkLibraryItemList::const_iterator kt = searchData.Items.begin(); kt != searchData.Items.end(); ++kt) {
+			for (NetworkItem::List::const_iterator kt = searchData.Items.begin(); kt != searchData.Items.end(); ++kt) {
 				result->addBook(*kt);
 			}
 		}
@@ -293,7 +300,7 @@ shared_ptr<NetworkBookCollection> NetworkLinkCollection::simpleSearch(const std:
 
 		for (std::vector<shared_ptr<NetworkOperationData> >::const_iterator jt = searchDatas.begin(); jt != searchDatas.end(); ++jt) {
 			NetworkOperationData &searchData = **jt;
-			NetworkLink &link = searchData.Link;
+			const NetworkLink &link = searchData.Link;
 			if (link.OnOption.value()) {
 				shared_ptr<ZLExecutionData> data = link.resume(searchData);
 				if (!data.isNull()) {
@@ -333,7 +340,7 @@ shared_ptr<NetworkBookCollection> NetworkLinkCollection::advancedSearch(const st
 			if (!searchData.Items.empty() && result.isNull()) {
 				result = new NetworkBookCollection();
 			}
-			for (NetworkLibraryItemList::const_iterator kt = searchData.Items.begin(); kt != searchData.Items.end(); ++kt) {
+			for (NetworkItem::List::const_iterator kt = searchData.Items.begin(); kt != searchData.Items.end(); ++kt) {
 				result->addBook(*kt);
 			}
 		}
@@ -342,7 +349,7 @@ shared_ptr<NetworkBookCollection> NetworkLinkCollection::advancedSearch(const st
 
 		for (std::vector<shared_ptr<NetworkOperationData> >::const_iterator jt = searchDatas.begin(); jt != searchDatas.end(); ++jt) {
 			NetworkOperationData &searchData = **jt;
-			NetworkLink &link = searchData.Link;
+			const NetworkLink &link = searchData.Link;
 			if (link.OnOption.value()) {
 				shared_ptr<ZLExecutionData> data = link.resume(searchData);
 				if (!data.isNull()) {
@@ -371,4 +378,14 @@ size_t NetworkLinkCollection::numberOfEnabledLinks() const {
 		}
 	}
 	return count;
+}
+
+void NetworkLinkCollection::rewriteUrl(std::string &url, bool externalUrl) const {
+	const std::string host =
+		ZLUnicodeUtil::toLower(ZLNetworkUtil::hostFromUrl(url));
+	for (LinkVector::const_iterator it = myLinks.begin(); it != myLinks.end(); ++it) {
+		if (host.find((*it)->SiteName) != std::string::npos) {
+			(*it)->rewriteUrl(url, externalUrl);
+		}
+	}
 }

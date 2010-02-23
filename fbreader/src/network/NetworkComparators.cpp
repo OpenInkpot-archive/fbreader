@@ -19,24 +19,24 @@
 
 #include "NetworkComparators.h"
 
-bool NetworkBookItemComparator::operator () (const shared_ptr<NetworkLibraryItem> &bookPtr0, const shared_ptr<NetworkLibraryItem> &bookPtr1) {
-	std::string book0Type = bookPtr0->typeId();
-	std::string book1Type = bookPtr1->typeId();
+bool NetworkBookItemComparator::operator () (const shared_ptr<NetworkItem> &bookPtr0, const shared_ptr<NetworkItem> &bookPtr1) {
+	const bool book0isABook =
+		bookPtr0->isInstanceOf(NetworkBookItem::TYPE_ID);
+	const bool book1isABook =
+		bookPtr1->isInstanceOf(NetworkBookItem::TYPE_ID);
 
-	if (book0Type != NetworkLibraryBookItem::TYPE_ID && book1Type != NetworkLibraryBookItem::TYPE_ID) {
-		return bookPtr0->title() < bookPtr1->title();
+	if (!book0isABook && !book1isABook) {
+		return bookPtr0->Title < bookPtr1->Title;
 	}
-	if (book0Type != NetworkLibraryBookItem::TYPE_ID || book1Type != NetworkLibraryBookItem::TYPE_ID) {
-		return book0Type != NetworkLibraryBookItem::TYPE_ID;
+	if (!book0isABook || !book1isABook) {
+		return !book0isABook;
 	}
 
-	const NetworkLibraryBookItem &book0 = (NetworkLibraryBookItem &) *bookPtr0;
-	const NetworkLibraryBookItem &book1 = (NetworkLibraryBookItem &) *bookPtr1;
+	const NetworkBookItem &book0 = (NetworkBookItem &) *bookPtr0;
+	const NetworkBookItem &book1 = (NetworkBookItem &) *bookPtr1;
 
-	const std::vector<NetworkLibraryBookItem::AuthorData> &authors0 =
-		book0.authors();
-	const std::vector<NetworkLibraryBookItem::AuthorData> &authors1 =
-		book1.authors();
+	const std::vector<NetworkBookItem::AuthorData> &authors0 = book0.Authors;
+	const std::vector<NetworkBookItem::AuthorData> &authors1 = book1.Authors;
 	if (authors0.empty() && !authors1.empty()) {
 		return true;
 	}
@@ -53,23 +53,23 @@ bool NetworkBookItemComparator::operator () (const shared_ptr<NetworkLibraryItem
 		return book0.Index < book1.Index;
 	}*/
 
-	const bool book0HasSeriesTitle = !book0.seriesTitle().empty();
-	const bool book1HasSeriesTitle = !book1.seriesTitle().empty();
+	const bool book0HasSeriesTitle = !book0.SeriesTitle.empty();
+	const bool book1HasSeriesTitle = !book1.SeriesTitle.empty();
 	if (book0HasSeriesTitle && book1HasSeriesTitle) {
-		const int comp = book0.seriesTitle().compare(book1.seriesTitle());
+		const int comp = book0.SeriesTitle.compare(book1.SeriesTitle);
 		if (comp != 0) {
 			return comp < 0;
 		} else {
-			int diff = book0.indexInSeries() - book1.indexInSeries();
+			int diff = book0.IndexInSeries - book1.IndexInSeries;
 			if (diff != 0) {
 				return diff < 0;
 			}
 		}
-		return book0.title() < book1.title();
+		return book0.Title < book1.Title;
 	}
 
-	const std::string &book0Key = book0HasSeriesTitle ? book0.seriesTitle() : book0.title();
-	const std::string &book1Key = book1HasSeriesTitle ? book1.seriesTitle() : book1.title();
+	const std::string &book0Key = book0HasSeriesTitle ? book0.SeriesTitle : book0.Title;
+	const std::string &book1Key = book1HasSeriesTitle ? book1.SeriesTitle : book1.Title;
 	const int comp = book0Key.compare(book1Key);
 	if (comp != 0) {
 		return comp < 0;
@@ -78,12 +78,12 @@ bool NetworkBookItemComparator::operator () (const shared_ptr<NetworkLibraryItem
 }
 
 
-NetworkAuthorComparator::NetworkAuthorComparator(const std::map<NetworkLibraryBookItem::AuthorData, unsigned int> &rates) : myRates(rates) {
+NetworkAuthorComparator::NetworkAuthorComparator(const std::map<NetworkBookItem::AuthorData, unsigned int> &rates) : myRates(rates) {
 }
 
-bool NetworkAuthorComparator::operator () (const NetworkLibraryBookItem::AuthorData &author0, const NetworkLibraryBookItem::AuthorData &author1) {
-	std::map<NetworkLibraryBookItem::AuthorData, unsigned int>::const_iterator it1 = myRates.find(author0);
-	std::map<NetworkLibraryBookItem::AuthorData, unsigned int>::const_iterator it2 = myRates.find(author1);
+bool NetworkAuthorComparator::operator () (const NetworkBookItem::AuthorData &author0, const NetworkBookItem::AuthorData &author1) {
+	std::map<NetworkBookItem::AuthorData, unsigned int>::const_iterator it1 = myRates.find(author0);
+	std::map<NetworkBookItem::AuthorData, unsigned int>::const_iterator it2 = myRates.find(author1);
 	if (it1 == myRates.end() && it2 == myRates.end()) {
 		return author0 < author1;
 	}

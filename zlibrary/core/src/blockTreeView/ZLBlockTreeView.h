@@ -30,19 +30,23 @@ public:
 	class RootNode : public ZLBlockTreeNode {
 
 	public:
+		static const ZLTypeId TYPE_ID;
+ 
+	public:
 		RootNode(ZLBlockTreeView &view);
 
 	private:
+		const ZLTypeId &typeId() const;
 		void paint(ZLPaintContext &context, int vOffset);
 		int height(ZLPaintContext &context) const;
 	};
 
 public:
-	static const std::string TYPE_ID;
-	const std::string &typeId() const;
+	static const ZLTypeId TYPE_ID;
 
 protected:
 	ZLBlockTreeView(ZLPaintContext &context);
+	const ZLTypeId &typeId() const;
 
 	RootNode &rootNode();
 	void clear();

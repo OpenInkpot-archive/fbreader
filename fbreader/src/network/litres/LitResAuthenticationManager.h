@@ -22,13 +22,17 @@
 
 #include <set>
 
+#include <ZLNetworkSSLCertificate.h>
+
 #include "../NetworkAuthenticationManager.h"
-#include "../NetworkLibraryItems.h"
+#include "../NetworkItems.h"
+
+class NetworkLink;
 
 class LitResAuthenticationManager : public NetworkAuthenticationManager {
 
 public:
-	LitResAuthenticationManager(const std::string &siteName);
+	LitResAuthenticationManager(const NetworkLink &link);
 
 public:
 	AuthenticationStatus isAuthorised(bool useNetwork = true);
@@ -36,32 +40,32 @@ public:
 	void logOut();
 	bool skipIPSupported();
 
-	std::string networkBookId(const NetworkLibraryBookItem &book); 
-	NetworkLibraryBookItem::URLType downloadLinkType(const NetworkLibraryBookItem &book);
+	std::string networkBookId(const NetworkBookItem &book); 
+	NetworkItem::URLType downloadLinkType(const NetworkBookItem &book);
 
 	const std::string &currentUserName();
 	bool needsInitialization();
 	std::string initialize();
-	bool needPurchase(const NetworkLibraryBookItem &book);
-	std::string purchaseBook(NetworkLibraryBookItem &book);
-	std::string downloadLink(const NetworkLibraryBookItem &book);
+	bool needPurchase(const NetworkBookItem &book);
+	std::string purchaseBook(NetworkBookItem &book);
+	std::string downloadLink(const NetworkBookItem &book);
 
 	std::string refillAccountLink();
 	std::string currentAccount();
 
 	std::string reloadPurchasedBooks();
-	void collectPurchasedBooks(NetworkLibraryItemList &list);
+	void collectPurchasedBooks(NetworkItem::List &list);
 
 private:
-	shared_ptr<ZLExecutionData> loadPurchasedBooks(std::set<std::string> &purchasedBooksIds, NetworkLibraryItemList &purchasedBooksList);
-	void loadPurchasedBooksOnError(std::set<std::string> &purchasedBooksIds, NetworkLibraryItemList &purchasedBooksList);
-	void loadPurchasedBooksOnSuccess(std::set<std::string> &purchasedBooksIds, NetworkLibraryItemList &purchasedBooksList);
+	shared_ptr<ZLExecutionData> loadPurchasedBooks(std::set<std::string> &purchasedBooksIds, NetworkItem::List &purchasedBooksList);
+	void loadPurchasedBooksOnError(std::set<std::string> &purchasedBooksIds, NetworkItem::List &purchasedBooksList);
+	void loadPurchasedBooksOnSuccess(std::set<std::string> &purchasedBooksIds, NetworkItem::List &purchasedBooksList);
 
 	shared_ptr<ZLExecutionData> loadAccount(std::string &dummy1);
 	void loadAccountOnError();
 	void loadAccountOnSuccess();
 
-	const std::string &certificate();
+	const ZLNetworkSSLCertificate &certificate();
 
 public: // new User Registration
 	bool registrationSupported();
@@ -72,6 +76,8 @@ public: // Password Recovery
 	std::string recoverPassword(const std::string &email);
 
 private:
+	const NetworkLink &myLink;
+
 	bool mySidChecked;
 
 	ZLStringOption mySidUserNameOption;
@@ -79,10 +85,10 @@ private:
 
 	std::string myInitializedDataSid;
 	std::set<std::string> myPurchasedBooksIds;
-	NetworkLibraryItemList myPurchasedBooksList;
+	NetworkItem::List myPurchasedBooksList;
 	std::string myAccount;
 
-	std::string myCertificate;
+	ZLNetworkSSLCertificate myCertificate;
 };
 
 #endif /* __LITRESAUTHENTICATIONMANAGER_H__ */

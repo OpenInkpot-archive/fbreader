@@ -27,11 +27,11 @@
 
 #include "NetworkOperationRunnable.h"
 
-#include "../network/NetworkLibraryItems.h"
+#include "../network/NetworkItems.h"
 
 class NetworkAuthorNode;
 class NetworkCatalogNode;
-class NetworkLibraryItem;
+class NetworkItem;
 class FBReaderNode;
 
 class NetworkView : public ZLBlockTreeView {
@@ -57,7 +57,7 @@ private:
 	void makeUpToDate();
 	void updateAccountDependents();
 	void updateAccountDependents(NetworkCatalogNode &node);
-	bool processAccountDependent(NetworkLibraryCatalogItem &item);
+	bool processAccountDependent(NetworkCatalogItem &item);
 
 private:
 	bool myUpdateChildren;

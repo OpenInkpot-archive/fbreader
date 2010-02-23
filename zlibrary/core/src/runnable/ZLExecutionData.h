@@ -26,10 +26,16 @@
 
 #include <shared_ptr.h>
 
-class ZLExecutionData {
+#include <ZLTypeId.h>
+#include <ZLUserData.h>
+
+class ZLExecutionData : public ZLUserDataHolder, public ZLObjectWithRTTI {
 
 public:
 	typedef std::vector<shared_ptr<ZLExecutionData> > Vector;
+
+public:
+	static const ZLTypeId TYPE_ID;
 
 public:
 	class Runner {
@@ -40,6 +46,7 @@ public:
 
 	public:
 		virtual std::string perform(const Vector &dataVector) const = 0;
+		std::string perform(shared_ptr<ZLExecutionData> data) const;
 	};
 
 public:
@@ -72,7 +79,6 @@ protected:
 
 public:
 	virtual ~ZLExecutionData();
-	virtual const std::string &type() const = 0;
 
 	void setListener(shared_ptr<Listener> listener);
 	virtual void onCancel();

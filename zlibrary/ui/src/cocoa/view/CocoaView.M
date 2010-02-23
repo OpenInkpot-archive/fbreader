@@ -26,6 +26,47 @@
 
 @implementation CocoaView
 
+- (id)init {
+	self = [super init];
+	if (self) {
+		[self registerForDraggedTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]];
+	}
+	return self;
+}
+
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender {
+	NSPasteboard *pboard = [sender draggingPasteboard];
+	NSDragOperation sourceDragMask = [sender draggingSourceOperationMask];
+
+	if ([[pboard types] containsObject:NSFilenamesPboardType] &&
+			(sourceDragMask & NSDragOperationGeneric)) {
+		std::vector<std::string> filePaths;
+		for (NSString *path in [pboard propertyListForType:NSFilenamesPboardType]) {
+			filePaths.push_back([path UTF8String]);
+		}
+		if (ZLApplication::Instance().canDragFiles(filePaths)) {
+			return NSDragOperationGeneric;
+		}
+	}
+	return NSDragOperationNone;
+}
+
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender {
+	NSDragOperation sourceDragMask = [sender draggingSourceOperationMask];
+	NSPasteboard *pboard = [sender draggingPasteboard];
+
+	if ([[pboard types] containsObject:NSFilenamesPboardType] &&
+			(sourceDragMask & NSDragOperationGeneric)) {
+		std::vector<std::string> filePaths;
+		for (NSString *path in [pboard propertyListForType:NSFilenamesPboardType]) {
+			filePaths.push_back([path UTF8String]);
+		}
+		ZLApplication::Instance().dragFiles(filePaths);
+		[self display];
+	}
+	return YES;
+}
+
 - (void)drawRect:(NSRect)dirtyRect {
 	shared_ptr<ZLView> view = ZLApplication::Instance().currentView();
 	if (view.isNull()) {

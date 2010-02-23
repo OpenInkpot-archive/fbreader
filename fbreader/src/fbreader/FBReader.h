@@ -83,6 +83,8 @@ public:
 
 	shared_ptr<Book> currentBook() const;
 
+	void refreshWindow();
+
 private:
 	void initWindow();
 
@@ -92,7 +94,10 @@ private:
 
 	bool closeView();
 	std::string helpFileName(const std::string &language) const;
-	void openFile(const std::string &fileName);
+
+	void openFile(const std::string &filePath);
+	bool canDragFiles(const std::vector<std::string> &filePaths) const;
+	void dragFiles(const std::vector<std::string> &filePaths);
 
 	bool isViewFinal() const;
 
@@ -113,9 +118,6 @@ public:
 	void showBookTextView();
 	void openBook(shared_ptr<Book> book);
 
-	RecentBooks &recentBooks();
-	const RecentBooks &recentBooks() const;
-
 	void invalidateNetworkView();
 	void invalidateAccountDependents();
 
@@ -127,8 +129,6 @@ private:
 	void rebuildCollectionInternal();
 	friend class RebuildCollectionRunnable;
 	friend class OptionsApplyRunnable;
-
-	void transformUrl(std::string &url) const;
 
 private:
 	ViewMode myMode;
@@ -157,8 +157,6 @@ private:
 	ProgramCollectionMap myProgramCollectionMap;
 
 	shared_ptr<ZLMessageHandler> myOpenFileHandler;
-
-	RecentBooks myRecentBooks;
 
 	enum {
 		RETURN_TO_TEXT_MODE,

@@ -23,9 +23,10 @@
 
 #include "NetworkOperationRunnable.h"
 
+#include "../network/NetworkLink.h"
 #include "../network/NetworkLinkCollection.h"
 #include "../network/NetworkAuthenticationManager.h"
-#include "../network/NetworkLibraryItems.h"
+#include "../network/NetworkItems.h"
 
 NetworkOperationRunnable::NetworkOperationRunnable(const std::string &uiMessageKey) {
 	myDialog =
@@ -68,28 +69,35 @@ void NetworkOperationRunnable::showErrorMessage() const {
 	}
 }
 
-DownloadBookRunnable::DownloadBookRunnable(const NetworkLibraryBookItem &book, NetworkLibraryBookItem::URLType format) : NetworkOperationRunnable("downloadBook") {
-	const std::map<NetworkLibraryBookItem::URLType, std::string>::const_iterator it = book.urlByType().find(format);
-	if (it != book.urlByType().end()) {
+DownloadBookRunnable::DownloadBookRunnable(const NetworkBookItem &book, NetworkItem::URLType format) : NetworkOperationRunnable("downloadBook") {
+	const std::map<NetworkItem::URLType, std::string>::const_iterator it = book.URLByType.find(format);
+	if (it != book.URLByType.end()) {
 		myURL = it->second;
 		myNetworkBookId = myURL;
 		myFormat = format;
-	} else if (!book.authenticationManager().isNull()) {
-		NetworkAuthenticationManager &mgr = *book.authenticationManager();
-		if (!mgr.needPurchase(book)) {
-			myURL = mgr.downloadLink(book);
-			mySSLCertificate = mgr.certificate();
-			myNetworkBookId = mgr.networkBookId(book);
-			myFormat = mgr.downloadLinkType(book);
+	} else {
+		myAuthManager = book.Link.authenticationManager();
+		if (!myAuthManager.isNull() && !myAuthManager->needPurchase(book)) {
+			myURL = myAuthManager->downloadLink(book);
+			myNetworkBookId = myAuthManager->networkBookId(book);
+			myFormat = myAuthManager->downloadLinkType(book);
 		}
 	}
 }
 
-DownloadBookRunnable::DownloadBookRunnable(const std::string &url) : NetworkOperationRunnable("downloadBook"), myURL(url), myNetworkBookId(url), myFormat(NetworkLibraryBookItem::NONE) {
+DownloadBookRunnable::DownloadBookRunnable(const std::string &url) : NetworkOperationRunnable("downloadBook"), myURL(url), myNetworkBookId(url), myFormat(NetworkItem::URL_NONE) {
+}
+
+DownloadBookRunnable::~DownloadBookRunnable() {
 }
 
 void DownloadBookRunnable::run() {
-	NetworkLinkCollection::Instance().downloadBook(myURL, myNetworkBookId, myFormat, myFileName, mySSLCertificate, myDialog->listener());
+	NetworkLinkCollection::Instance().rewriteUrl(myURL);
+	NetworkLinkCollection::Instance().downloadBook(
+		myURL, myNetworkBookId, myFormat, myFileName,
+		myAuthManager.isNull() ? ZLNetworkSSLCertificate::NULL_CERTIFICATE : myAuthManager->certificate(),
+		myDialog->listener()
+	);
 	myErrorMessage = NetworkLinkCollection::Instance().errorMessage();
 }
 
@@ -136,7 +144,19 @@ void InitializeAuthenticationManagerRunnable::run() {
 }
 
 
-PurchaseBookRunnable::PurchaseBookRunnable(NetworkAuthenticationManager &mgr, NetworkLibraryBookItem &book) : 
+LogOutRunnable::LogOutRunnable(NetworkAuthenticationManager &mgr) :
+	NetworkOperationRunnable("signOut"), 
+	myManager(mgr) {
+}
+
+void LogOutRunnable::run() {
+	if (myManager.isAuthorised(false).Status != B3_FALSE) {
+		myManager.logOut();
+	}
+}
+
+
+PurchaseBookRunnable::PurchaseBookRunnable(NetworkAuthenticationManager &mgr, NetworkBookItem &book) : 
 	NetworkOperationRunnable("purchaseBook"), 
 	myManager(mgr), 
 	myBook(book) {
@@ -191,7 +211,7 @@ void AdvancedSearchRunnable::run() {
 }
 
 
-LoadSubCatalogRunnable::LoadSubCatalogRunnable(NetworkLibraryCatalogItem &item, NetworkLibraryItemList &children) : 
+LoadSubCatalogRunnable::LoadSubCatalogRunnable(NetworkCatalogItem &item, NetworkItem::List &children) : 
 	NetworkOperationRunnable("loadSubCatalog"), 
 	myItem(item), 
 	myChildren(children) {

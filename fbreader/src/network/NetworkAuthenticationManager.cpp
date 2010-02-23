@@ -17,9 +17,11 @@
  * 02110-1301, USA.
  */
 
+#include <ZLNetworkSSLCertificate.h>
+
 #include "NetworkAuthenticationManager.h"
 
-#include "NetworkLibraryItems.h"
+#include "NetworkItems.h"
 #include "NetworkErrors.h"
 
 
@@ -32,12 +34,12 @@ NetworkAuthenticationManager::NetworkAuthenticationManager(const std::string &si
 NetworkAuthenticationManager::~NetworkAuthenticationManager() {
 }
 
-std::string NetworkAuthenticationManager::networkBookId(const NetworkLibraryBookItem &) {
+std::string NetworkAuthenticationManager::networkBookId(const NetworkBookItem &) {
 	return "";
 }
 
-NetworkLibraryBookItem::URLType NetworkAuthenticationManager::downloadLinkType(const NetworkLibraryBookItem &) {
-	return NetworkLibraryBookItem::NONE;
+NetworkItem::URLType NetworkAuthenticationManager::downloadLinkType(const NetworkBookItem &) {
+	return NetworkItem::URL_NONE;
 }
 
 bool NetworkAuthenticationManager::needsInitialization() {
@@ -48,15 +50,15 @@ std::string NetworkAuthenticationManager::initialize() {
 	return NetworkErrors::errorMessage(NetworkErrors::ERROR_UNSUPPORTED_OPERATION);
 }
 
-bool NetworkAuthenticationManager::needPurchase(const NetworkLibraryBookItem &) {
-	return false;
+bool NetworkAuthenticationManager::needPurchase(const NetworkBookItem &) {
+	return true;
 }
 
-std::string NetworkAuthenticationManager::purchaseBook(NetworkLibraryBookItem &) {
+std::string NetworkAuthenticationManager::purchaseBook(NetworkBookItem &) {
 	return NetworkErrors::errorMessage(NetworkErrors::ERROR_UNSUPPORTED_OPERATION);
 }
 
-std::string NetworkAuthenticationManager::downloadLink(const NetworkLibraryBookItem &) {
+std::string NetworkAuthenticationManager::downloadLink(const NetworkBookItem &) {
 	return "";
 }
 
@@ -88,7 +90,6 @@ std::string NetworkAuthenticationManager::recoverPassword(const std::string &) {
 	return NetworkErrors::errorMessage(NetworkErrors::ERROR_UNSUPPORTED_OPERATION);
 }
 
-const std::string &NetworkAuthenticationManager::certificate() {
-	static const std::string _empty = "";
-	return _empty;
+const ZLNetworkSSLCertificate &NetworkAuthenticationManager::certificate() {
+	return ZLNetworkSSLCertificate::NULL_CERTIFICATE;
 }

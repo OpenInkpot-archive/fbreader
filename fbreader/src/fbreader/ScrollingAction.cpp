@@ -51,10 +51,10 @@ void ScrollingAction::run() {
 		return;
 	}
 
-	if (view->typeId() == ZLTextView::TYPE_ID) {
+	if (view->isInstanceOf(ZLTextView::TYPE_ID)) {
 		((ZLTextView&)*view).scrollPage(myForward, myTextScrollingMode, textOptionValue());
 		FBReader::Instance().refreshWindow();
-	} else if (view->typeId() == ZLBlockTreeView::TYPE_ID) {
+	} else if (view->isInstanceOf(ZLBlockTreeView::TYPE_ID)) {
 		((ZLBlockTreeView&)*view).scroll(myBlockScrollingMode, !myForward);
 	}
 	fbreader.myLastScrollingTime = ZLTime();

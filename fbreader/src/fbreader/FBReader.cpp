@@ -43,6 +43,7 @@
 #include "TimeUpdater.h"
 
 #include "../libraryTree/LibraryView.h"
+#include "../network/NetworkLinkCollection.h"
 #include "../networkTree/NetworkView.h"
 #include "../networkTree/NetworkOperationRunnable.h"
 
@@ -55,8 +56,6 @@
 #include "../database/booksdb/BooksDB.h"
 #include "../database/booksdb/BooksDBUtil.h"
 #include "../library/Book.h"
-
-#include "../network/litres/LitResUtil.h"
 
 static const std::string OPTIONS = "Options";
 
@@ -150,11 +149,12 @@ FBReader::FBReader(const std::string &bookToOpen) :
 	addAction(ActionCode::COPY_SELECTED_TEXT_TO_CLIPBOARD, new CopySelectedTextAction());
 	addAction(ActionCode::OPEN_SELECTED_TEXT_IN_DICTIONARY, new OpenSelectedTextInDictionaryAction());
 	addAction(ActionCode::CLEAR_SELECTION, new ClearSelectionAction());
-	addAction(ActionCode::GOTO_PAGE_NUMBER, new GotoPageNumber(std::string()));
-	addAction(ActionCode::GOTO_PAGE_NUMBER_WITH_PARAMETER, new GotoPageNumber(PageIndexParameter));
+	addAction(ActionCode::GOTO_PAGE_NUMBER, new GotoPageNumberAction(std::string()));
+	addAction(ActionCode::GOTO_PAGE_NUMBER_WITH_PARAMETER, new GotoPageNumberAction(PageIndexParameter));
 	shared_ptr<Action> booksOrderAction = new BooksOrderAction();
 	addAction(ActionCode::ORGANIZE_BOOKS_BY_AUTHOR, booksOrderAction);
 	addAction(ActionCode::ORGANIZE_BOOKS_BY_TAG, booksOrderAction);
+	addAction(ActionCode::FILTER_LIBRARY, new FilterLibraryAction());
 
 	myOpenFileHandler = new OpenFileHandler();
 	ZLCommunicationManager::Instance().registerHandler("openFile", myOpenFileHandler);
@@ -173,7 +173,6 @@ void FBReader::initWindow() {
 	MigrationRunnable migration;
 	if (migration.shouldMigrate()) {
 		ZLDialogManager::Instance().wait(ZLResourceKey("migrate"), migration);
-		myRecentBooks.reload();
 	}
 
 	if (!myBookAlreadyOpen) {
@@ -182,7 +181,7 @@ void FBReader::initWindow() {
 			createBook(myBookToOpen, book);
 		}
 		if (book.isNull()) {
-			const BookList &books = myRecentBooks.books();
+			const BookList &books = Library::Instance().recentBooks();
 			if (!books.empty()) {
 				book = books[0];
 			}
@@ -198,6 +197,11 @@ void FBReader::initWindow() {
 	refreshWindow();
 
 	ZLTimeManager::Instance().addTask(new TimeUpdater(), 1000);
+}
+
+void FBReader::refreshWindow() {
+	ZLApplication::refreshWindow();
+	((RecentBooksPopupData&)*myRecentBooksPopupData).updateId();
 }
 
 bool FBReader::createBook(const std::string& fileName, shared_ptr<Book> &book) {
@@ -290,8 +294,10 @@ void FBReader::openBookInternal(shared_ptr<Book> book) {
 		contentsView.setModel(myModel->contentsModel());
 		contentsView.setCaption(book->title());
 
-		myRecentBooks.addBook(book);
+		Library::Instance().addBook(book);
+		Library::Instance().addBookToRecentList(book);
 		((RecentBooksPopupData&)*myRecentBooksPopupData).updateId();
+		showBookTextView();
 	}
 }
 
@@ -308,7 +314,7 @@ void FBReader::openLinkInBrowser(const std::string &url) const {
 		return;
 	}
 	std::string copy = url;
-	transformUrl(copy);
+	NetworkLinkCollection::Instance().rewriteUrl(copy, true);
 	program->run("openLink", copy);
 }
 
@@ -436,12 +442,43 @@ std::string FBReader::helpFileName(const std::string &language) const {
 	return ZLibrary::ApplicationDirectory() + ZLibrary::FileNameDelimiter + "help" + ZLibrary::FileNameDelimiter + "MiniHelp." + language + ".fb2";
 }
 
-void FBReader::openFile(const std::string &fileName) {
+void FBReader::openFile(const std::string &filePath) {
 	shared_ptr<Book> book;
-	createBook(fileName, book);
+	createBook(filePath, book);
 	if (!book.isNull()) {
 		openBook(book);
 		refreshWindow();
+	}
+}
+
+bool FBReader::canDragFiles(const std::vector<std::string> &filePaths) const {
+	switch (myMode) {
+		case BOOK_TEXT_MODE:
+		case FOOTNOTE_MODE:
+		case CONTENTS_MODE:
+		case LIBRARY_MODE:
+			return filePaths.size() > 0;
+		default:
+			return false;
+	}
+}
+
+void FBReader::dragFiles(const std::vector<std::string> &filePaths) {
+	switch (myMode) {
+		case BOOK_TEXT_MODE:
+		case FOOTNOTE_MODE:
+		case CONTENTS_MODE:
+			if (filePaths.size() > 0) {
+				openFile(filePaths[0]);
+			}
+			break;
+		case LIBRARY_MODE:
+			if (filePaths.size() > 0) {
+				openFile(filePaths[0]);
+			}
+			break;
+		default:
+			break;
 	}
 }
 
@@ -489,32 +526,8 @@ shared_ptr<ProgramCollection> FBReader::webBrowserCollection() const {
 	return myProgramCollectionMap.collection("Web Browser");
 }
 
-RecentBooks &FBReader::recentBooks() {
-	return myRecentBooks;
-}
-
-const RecentBooks &FBReader::recentBooks() const {
-	return myRecentBooks;
-}
-
 shared_ptr<Book> FBReader::currentBook() const {
 	return myModel->book();
-}
-
-void FBReader::transformUrl(std::string &url) const {
-	static const std::string LFROM_PREFIX = "lfrom=";
-	if (url.find("litres.ru") != std::string::npos) {
-		size_t index = url.find(LFROM_PREFIX);
-		if (index == std::string::npos) {
-			url = LitResUtil::appendLFrom(url);
-		} else {
-			size_t index2 = index + LFROM_PREFIX.size();
-			while (index2 < url.size() && url[index2] != '&') {
-				++index2;
-			}
-			url.replace(index, index2 - index, LitResUtil::LFROM);
-		}
-	}
 }
 
 void FBReader::invalidateNetworkView() {

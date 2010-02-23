@@ -34,7 +34,6 @@
 #include "FBReaderActions.h"
 #include "BookTextView.h"
 #include "ContentsView.h"
-#include "FBFileHandler.h"
 #include "BookInfoDialog.h"
 
 #include "../bookmodel/BookModel.h"
@@ -43,6 +42,7 @@
 
 #include "../database/booksdb/BooksDBUtil.h"
 #include "../database/booksdb/BooksDB.h"
+#include "../library/Library.h"
 #include "../library/Book.h"
 
 ModeDependentAction::ModeDependentAction(int visibleInModes) : myVisibleInModes(visibleInModes) {
@@ -83,29 +83,6 @@ ShowContentsAction::ShowContentsAction() : SetModeAction(FBReader::CONTENTS_MODE
 
 bool ShowContentsAction::isVisible() const {
 	return ModeDependentAction::isVisible() && !((ContentsView&)*FBReader::Instance().myContentsView).isEmpty();
-}
-
-AddBookAction::AddBookAction(int visibleInModes) : ModeDependentAction(visibleInModes) {
-}
-
-void AddBookAction::run() {
-	FBReader &fbreader = FBReader::Instance();
-
-	const ZLResourceKey dialogKey("addFileDialog");
-	FBFileHandler handler;
-	if (ZLDialogManager::Instance().selectionDialog(dialogKey, handler)) {
-		shared_ptr<Book> book = handler.description();
-		if (!book.isNull()) {
-			if (BookInfoDialog(book).dialog().run()) {
-				Library::Instance().addBook(book);
-				fbreader.openBook(book);
-				fbreader.setMode(FBReader::BOOK_TEXT_MODE);
-			} else {
-				Library::Instance().removeBook(book);
-			}
-			fbreader.refreshWindow();
-		}
-	}
 }
 
 ScrollToHomeAction::ScrollToHomeAction() : ModeDependentAction(FBReader::BOOK_TEXT_MODE) {
@@ -220,12 +197,12 @@ bool OpenPreviousBookAction::isVisible() const {
 			(fbreader.mode() != FBReader::CONTENTS_MODE)) {
 		return false;
 	}
-	return fbreader.recentBooks().books().size() > 1;
+	return Library::Instance().recentBooks().size() > 1;
 }
 
 void OpenPreviousBookAction::run() {
 	FBReader &fbreader = FBReader::Instance();
-	BookList books = fbreader.recentBooks().books();
+	const BookList &books = Library::Instance().recentBooks();
 	fbreader.openBook(books[1]);
 	fbreader.refreshWindow();
 	fbreader.resetWindowCaption();
@@ -385,20 +362,20 @@ void GotoPreviousTOCSectionAction::run() {
 	}
 }
 
-GotoPageNumber::GotoPageNumber(const std::string &parameter) : ModeDependentAction(FBReader::BOOK_TEXT_MODE), myParameter(parameter) {
+GotoPageNumberAction::GotoPageNumberAction(const std::string &parameter) : ModeDependentAction(FBReader::BOOK_TEXT_MODE), myParameter(parameter) {
 }
 
-bool GotoPageNumber::isVisible() const {
+bool GotoPageNumberAction::isVisible() const {
 	return
 		ModeDependentAction::isVisible() &&
 		!FBReader::Instance().bookTextView().hasMultiSectionModel();
 }
 
-bool GotoPageNumber::isEnabled() const {
+bool GotoPageNumberAction::isEnabled() const {
 	return ModeDependentAction::isEnabled() && (FBReader::Instance().bookTextView().pageNumber() > 1);
 }
 
-void GotoPageNumber::run() {
+void GotoPageNumberAction::run() {
 	FBReader &fbreader = FBReader::Instance();
 	int pageIndex = 0;
 	const int pageNumber = fbreader.bookTextView().pageNumber();
@@ -430,7 +407,7 @@ void GotoPageNumber::run() {
 
 bool SelectionAction::isVisible() const {
 	shared_ptr<ZLView> view = FBReader::Instance().currentView();
-	return !view.isNull() && view->typeId() == ZLTextView::TYPE_ID;
+	return !view.isNull() && view->isInstanceOf(ZLTextView::TYPE_ID);
 }
 
 bool SelectionAction::isEnabled() const {
@@ -472,4 +449,10 @@ void FBFullscreenAction::run() {
 		fbreader.myActionOnCancel = FBReader::UNFULLSCREEN;
 	}
 	FullscreenAction::run();
+}
+
+FilterLibraryAction::FilterLibraryAction() : ModeDependentAction(FBReader::LIBRARY_MODE) {
+}
+
+void FilterLibraryAction::run() {
 }
