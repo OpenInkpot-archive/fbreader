@@ -1,3 +1,9 @@
+fbreader (0.12.1-6) zelazny; urgency=low
+
+  * Rearrange menus
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Wed, 24 Feb 2010 10:02:52 +0100
+
 fbreader (0.12.1-5) zelazny; urgency=low
 
   [ Tomasz Długosz ]
