@@ -57,6 +57,8 @@
 
 extern bool emergency_exit;
 
+void book_settings_handler(int idx, bool is_alt);
+
 #define FONT_SIZE_MIN	6
 #define FONT_SIZE_MAX	24 - FONT_SIZE_MIN
 #define FONT_SIZE(i) ((i)+FONT_SIZE_MIN)
@@ -726,6 +728,82 @@ void format_style_handler(int idx, bool is_alt)
 			ADD_VALUE_INT(i);
 		
 		cb_rcb_new();
+	} else if(7 == idx) {
+	} else if(8 == idx) {
+		shared_ptr<Book> book = myFbreader->myModel->book();
+		const std::string &fileName = book->filePath();
+
+		cb_olist *options = new cb_olist;
+		olists.push_back(options);
+
+		options->name = _("Book Settings");
+		options->parent = current_olist;
+		options->parent_item_idx = idx;
+		options->item_handler = book_settings_handler;
+		options->destroy_handler = NULL;
+		options->fsize_list = false;
+
+		cb_olist_item i;
+
+		const char *l;
+		for(unsigned int j = 0; j < sizeof(languages) / sizeof(struct _language) && languages[j].langId; j++) {
+			l = languages[j].langName;
+			if(!book->language().compare(languages[j].langId))
+				break;
+		}
+
+		ADD_OPTION_STRING(_("Language"), l);
+
+		if(book->encoding() == "auto") {
+			ADD_OPTION_STRING(_("Encoding"), book->encoding().c_str());
+		} else {
+			bool found = false;
+			const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::Instance().sets();
+			for (std::vector<shared_ptr<ZLEncodingSet> >::const_iterator it = sets.begin(); !found && (it != sets.end()); ++it) {
+				const std::vector<ZLEncodingConverterInfoPtr> &infos = (*it)->infos();
+
+				for (std::vector<ZLEncodingConverterInfoPtr>::const_iterator jt = infos.begin(); !found && (jt != infos.end()); ++jt) {
+					if ((*jt)->name() == book->encoding()) {
+						ADD_OPTION_STRING(_("Encoding Set"), (*it)->name().c_str());
+						ADD_OPTION_STRING(_("Encoding"), (*jt)->name().c_str());
+
+						found =true;
+						break;
+					}
+				}
+			}
+		}
+
+		FormatPlugin *plugin = &*PluginCollection::Instance().plugin(ZLFile(fileName), false);
+		if (plugin != 0) {
+			TxtPlugin *test = dynamic_cast<TxtPlugin*>(plugin);
+			if(test != NULL) {
+				PlainTextFormat myFormat(fileName);
+				if (!myFormat.initialized()) {
+					PlainTextFormatDetector detector;
+					shared_ptr<ZLInputStream> stream = ZLFile(fileName).inputStream();
+					if (!stream.isNull()) {
+						detector.detect(*stream, myFormat);
+					}
+				}
+
+				int curBreakType;
+				switch (myFormat.BreakTypeOption.value()) {
+					case PlainTextFormat::BREAK_PARAGRAPH_AT_NEW_LINE:
+						curBreakType = 0;
+						break;
+					case PlainTextFormat::BREAK_PARAGRAPH_AT_EMPTY_LINE:
+						curBreakType = 1;
+						break;
+					case PlainTextFormat::BREAK_PARAGRAPH_AT_EMPTY_LINE | PlainTextFormat::BREAK_PARAGRAPH_AT_LINE_WITH_INDENT:
+					default:
+						curBreakType = 2;
+				}
+
+				ADD_OPTION_INT_T(_("Break Paragraph at"), curBreakType, para_break_type[curBreakType]);
+			}
+		}
+		cb_lcb_redraw();
 	}
 }
 
@@ -1068,7 +1146,7 @@ void keys_handler(int idx, bool is_alt)
 	cb_rcb_new();
 }
 
-void options_dialog_handler(int idx, bool is_alt)
+void settings_dialog_handler(int idx, bool is_alt)
 {
 	shared_ptr<Book> book = myFbreader->myModel->book();
 //	fprintf(stderr, "options_dialog_handler: %d\n", idx);
@@ -1175,7 +1253,7 @@ void options_dialog_handler(int idx, bool is_alt)
 		//ADD_OPTION_BOOL_H(_("iso-8859-1 -> win-1251"), ZLEncodingCollection::useWindows1252HackOption().value(), ZLBooleanOption_handler, &ZLEncodingCollection::useWindows1252HackOption());
 
 		cb_lcb_redraw();
-	} else if(3 == idx) {
+/*	} else if(3 == idx) {
 		shared_ptr<Book> book = myFbreader->myModel->book();
 		const std::string &fileName = book->filePath();
 
@@ -1251,6 +1329,8 @@ void options_dialog_handler(int idx, bool is_alt)
 		}
 		cb_lcb_redraw();
 	} else if(4 == idx) {
+*/
+	} else if(3 == idx) {
 		cb_olist *options = new cb_olist;
 		olists.push_back(options);
 
@@ -1321,6 +1401,7 @@ void ZLEwlOptionsDialog(FBReader &f)
 	myFbreader = &f;
 	myContext = &(*f.context());
 
+	/*
 	cb_olist *options = new cb_olist;
 	olists.push_back(options);
 
@@ -1336,7 +1417,61 @@ void ZLEwlOptionsDialog(FBReader &f)
 	ADD_SUBMENU_ITEM(_("Format & Style"));
 	ADD_SUBMENU_ITEM(_("Indicator"));
 	ADD_SUBMENU_ITEM(_("Language"));
-	ADD_SUBMENU_ITEM(_("Book settings"));
+	ADD_SUBMENU_ITEM(_("Keys"));
+*/
+
+	shared_ptr<Book> book = myFbreader->myModel->book();
+	myContext = &(*myFbreader->context());
+	FBTextStyle &baseStyle = FBTextStyle::Instance();
+
+	ZLTextStyleCollection &collection = ZLTextStyleCollection::Instance();
+	ZLTextFullStyleDecoration *decoration = (ZLTextFullStyleDecoration*)collection.decoration(/*REGULAR*/0);
+
+	cb_olist *options = new cb_olist;
+	olists.push_back(options);
+
+	options->name = _("Format & Style");
+	options->parent = NULL;
+	options->parent_item_idx = -1;
+	options->item_handler = format_style_handler;
+	options->destroy_handler = settings_close_handler;
+	options->fsize_list = false;
+
+	cb_olist_item i;
+
+	ADD_OPTION_STRING(	_("Font Family"), baseStyle.FontFamilyOption.value());
+	ADD_OPTION_INT_F(	_("Font Size"), baseStyle.FontSizeOption.value(), _("%dpt"));
+	ADD_OPTION_BOOL_H(	_("Bold"), baseStyle.BoldOption.value(), ZLBooleanOption_handler, &baseStyle.BoldOption);
+	ADD_OPTION_INT_F(	_("Line Spacing"), baseStyle.LineSpacePercentOption.value(), _("%d%%"));
+	ADD_OPTION_INT_T(	_("Alignment"), baseStyle.AlignmentOption.value(), alignments[baseStyle.AlignmentOption.value()]);
+	ADD_OPTION_STRING(	_("Margins"), "");
+	ADD_OPTION_INT(		_("First Line Indent"), decoration->FirstLineIndentDeltaOption.value());
+	ADD_OPTION_BOOL_H(	_("Auto Hyphenations"), collection.AutoHyphenationOption.value(), ZLBooleanOption_handler, &collection.AutoHyphenationOption);
+	ADD_OPTION_STRING(  _("Book settings"), "");
+
+	cb_lcb_new();
+}
+
+void ZLEwlSettingsDialog(FBReader &f)
+{
+	myFbreader = &f;
+	myContext = &(*f.context());
+
+	cb_olist *options = new cb_olist;
+	olists.push_back(options);
+
+	options->name = _("Settings");
+	options->parent = NULL;
+	options->parent_item_idx = -1;
+	options->item_handler = settings_dialog_handler;
+	options->destroy_handler = settings_close_handler;
+	options->fsize_list = false;
+
+	cb_olist_item i;
+
+	ADD_SUBMENU_ITEM(_("Format & Style"));
+	ADD_SUBMENU_ITEM(_("Indicator"));
+	ADD_SUBMENU_ITEM(_("Language"));
 	ADD_SUBMENU_ITEM(_("Keys"));
 
 	cb_lcb_new();
@@ -1416,10 +1551,9 @@ int mmenu_handler(int idx, bool is_alt)
 			next_gui = ZLEwlBMKDialog;
 			return 2;
 			break;
-/*		case 5:
-			next_gui = ZLEwlOptionsDialog;
+		case 5:
+			next_gui = ZLEwlSettingsDialog;
 			return 1;
-*/			
 		default:
 			return 0;
 	}
@@ -1455,7 +1589,8 @@ void ZLEwlMainMenu(FBReader &f)
 	list->items.push_back(item);
 	item.text = _("Bookmarks");
 	list->items.push_back(item);
-//	list->items.push_back("Settings");
+	item.text = _("Settings");
+	list->items.push_back(item);
 
 	cb_fcb_new(list);
 
