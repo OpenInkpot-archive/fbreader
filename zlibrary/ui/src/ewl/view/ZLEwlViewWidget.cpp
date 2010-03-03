@@ -209,18 +209,28 @@ ZLEwlViewWidget::ZLEwlViewWidget(ZLApplication *application, ZLView::Angle initi
 	free(rep);
 */
 
+	xcb_alloc_color_cookie_t color_rq[256];
 	xcb_pal_colours = 1;
-	for(int i = 0; i < 256; i++) {
-		// FIXME: workaround for broken palitre on n516
-		if(i < 8) {
+
+	for (int i = 0; i < 256; i++) {
+		// FIXME: workaround for broken palette on n516
+		if (i < 8)
+			continue;
+
+		color_rq[i] = xcb_alloc_color(connection, colormap, i<<8, i<<8, i<<8);
+	}
+
+	for (int i = 0; i < 256; i++) {
+		// FIXME: workaround for broken palette on n516
+		if (i < 8) {
 			pal_[i] = 0;
 			continue;
 		}
 
-		rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, i<<8, i<<8, i<<8), NULL);
+		rep = xcb_alloc_color_reply(connection, color_rq[i], NULL);
 		pal_[i] = rep->pixel;
 
-		if(pal_[i] != pal_[i - 1])
+		if (pal_[i] != pal_[i - 1])
 			xcb_pal_colours++;
 
 		free(rep);
