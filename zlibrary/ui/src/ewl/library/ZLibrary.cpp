@@ -387,6 +387,7 @@ void main_loop(ZLApplication *application)
 						ZLEwlViewWidget *view = (ZLEwlViewWidget*)application->myViewWidget;
 						if(view->width() != conf->width || view->height() != conf->height) {
 							view->resize(conf->width, conf->height);
+							((FBReader*)application)->showBookTextView();
 						}
 
 						break;
