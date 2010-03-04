@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
 "Report-Msgid-Bugs-To: @PACKAGE_BUGREPORT@\n"
-"POT-Creation-Date: 2010-02-04 02:17+0100\n"
+"POT-Creation-Date: 2010-03-04 10:45+0100\n"
 "PO-Revision-Date: 2010-02-04 15:30+0300\n"
 "Last-Translator: Васил Бадев <vbadev@gmail.com>\n"
 "Language-Team: Bulgarian <openinkpot-l10n@googlegroups.com>\n"
@@ -21,489 +21,507 @@ msgstr ""
 msgid "FBReader: Help"
 msgstr "FBReader: Помощ"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:80
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
 msgid "None"
 msgstr "Нищо"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:81
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
 msgid "Add Bookmark"
 msgstr "Добавяне на отметка"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
 msgid "Show Bookmarks"
 msgstr "Отметки"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
 msgid "Hyperlinks mode"
 msgstr "Режим с хипервръзки"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
 msgid "Show Footnotes"
 msgstr "Показване на бележките под линия"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:157
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1462
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:159
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1595
 msgid "Go To Page"
 msgstr "Към страница"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
 msgid "Show Table of Contents"
 msgstr "Съдържание"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1599
+msgid "Dictionary"
+msgstr ""
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
 msgid "Go to Home"
 msgstr "Към началото"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
 msgid "Go to Start of Section"
 msgstr "Към началото на секция"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
 msgid "Go to End of Section"
 msgstr "Към края на секция"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
 msgid "Go to Next TOC Section"
 msgstr "Към следващата глава"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
 msgid "Go to Previous TOC Section"
 msgstr "Към предишната глава"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
 msgid "Next Page"
 msgstr "Следваща страница"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
 msgid "Previous Page"
 msgstr "Предишна страница"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
 msgid "Undo"
 msgstr "Отмяна"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:98
 msgid "Redo"
 msgstr "Възстановяване"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:358
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:384
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:407
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1466
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:99
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:360
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:386
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:415
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1601
 msgid "Search"
 msgstr "Търсене"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:100
 msgid "Increase Font Size"
 msgstr "Увеличаване размера на шрифта"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:98
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
 msgid "Decrease Font Size"
 msgstr "Намаляване размера на шрифта"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:99
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:102
 msgid "Toggle Bold Font"
 msgstr "Удебеляване на шрифта"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:100
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
 msgid "Toggle Position Indicator"
 msgstr "Показване/скриване на индикатора"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
 msgid "Show Settings"
 msgstr "Настройки"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
 msgid "Cancel/Quit"
 msgstr "Отказ/Изход"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:105
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
 msgid "Show Local Menu"
 msgstr "Меню"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
 msgid "Show Help"
 msgstr "Помощ"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
 msgid "Show font size dialog"
 msgstr "Размер на шрифта"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "Arabic"
 msgstr "Арабски"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:116
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
 msgid "Czech"
 msgstr "Чешки"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:117
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
 msgid "German"
 msgstr "Немски"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
 msgid "German (traditional orthography)"
 msgstr "Немски (традиционен правопис)"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
 msgid "Greek"
 msgstr "Гръцки"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
 msgid "English"
 msgstr "Английски"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
 msgid "Esperanto"
 msgstr "Есперанто"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
 msgid "Spanish"
 msgstr "Испански"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
 msgid "Finnish"
 msgstr "Финландски"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:127
 msgid "French"
 msgstr "Френски"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:128
 msgid "Hebrew"
 msgstr "Иврит"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:129
 msgid "Indonesian"
 msgstr "Индонезийски"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:127
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
 msgid "Italian"
 msgstr "Италиански"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:128
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
 msgid "Norwegian"
 msgstr "Норвежки"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:129
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
 msgid "Portuguese"
 msgstr "Португалски"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:133
 msgid "Russian"
 msgstr "Руски"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:134
 msgid "Swedish"
 msgstr "Шведски"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
 msgid "Turkish"
 msgstr "Турски"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:133
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:136
 msgid "Ukrainian"
 msgstr "Украински"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:134
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:137
 msgid "Chinese"
 msgstr "Китайски"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:138
 msgid "Other"
 msgstr "Друг"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:142
 msgid "undefined"
 msgstr "неопределен"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:142
 msgid "left"
 msgstr "ляво"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:142
 msgid "right"
 msgstr "дясно"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:142
 msgid "center"
 msgstr "центрирано"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:142
 msgid "justify"
 msgstr "двустранно"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:140
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:143
 msgid "New Line"
 msgstr "Нов ред"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:140
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:143
 msgid "Empty Line"
 msgstr "Празен ред"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:140
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:143
 msgid "Line With Indent"
 msgstr "Ред с отстъп"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:235
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1464
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:237
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1597
 msgid "Table Of Contents"
 msgstr "Съдържание"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:300
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1468
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:302
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1603
 msgid "Bookmarks"
 msgstr "Отметки"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:301
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:303
 msgid "Delete"
 msgstr "Изтриване"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:309
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:311
 msgid "Page "
 msgstr "Страница "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:323
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:325
 msgid "Bookmark added"
 msgstr "Отметката е добавена"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:352
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:378
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:354
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:380
 msgid "<- Search ->"
 msgstr "<- Търсене ->"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:354
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:380
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:356
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:382
 msgid "Search ->"
 msgstr "Търсене ->"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:356
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:382
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:358
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:384
 msgid "<- Search"
 msgstr "<- Търсене"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:365
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:367
 msgid "Text not found"
 msgstr "Текстът не е намерен"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:493
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:692
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1113
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:501
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:700
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1186
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1452
 #, c-format
 msgid "%d%%"
 msgstr "%d%%"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:512
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:568
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:685
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:768
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1111
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1142
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:520
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:576
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:693
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:852
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1184
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1215
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1450
 #, c-format
 msgid "%dpt"
 msgstr "%dpt"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:631
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:717
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:639
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:725
 msgid "Left Margin"
 msgstr "Бяло поле отляво"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:634
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:718
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:642
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:726
 msgid "Right Margin"
 msgstr "Бяло поле отдясно"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:637
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:719
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:645
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:727
 msgid "Top Margin"
 msgstr "Бяло поле отгоре"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:640
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:720
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:648
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:728
 msgid "Bottom Margin"
 msgstr "Бяло поле отдолу"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:673
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1110
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:681
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1183
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1449
 msgid "Font Family"
 msgstr "Шрифт"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:681
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1111
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1142
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1553
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:689
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1184
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1215
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1450
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1689
 msgid "Font Size"
 msgstr "Размер на шрифта"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:689
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1113
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:697
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1186
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1452
 msgid "Line Spacing"
 msgstr "Разстояние м/у редовете"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:696
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1114
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:704
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1187
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1453
 msgid "Alignment"
 msgstr "Подравняване"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:706
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1115
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:714
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1188
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1454
 msgid "Margins"
 msgstr "Бели полета"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:724
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1116
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:732
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1189
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1455
 msgid "First Line Indent"
 msgstr "Отстъп на първият ред"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:750
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1140
-msgid "Indicator Height"
-msgstr "Височина на индикатора"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:757
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1141
-msgid "Offset From Text"
-msgstr "Разстояние до текста"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:764
-msgid "Indicator Font Size"
-msgstr "Размер на шрифта на индикатора"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:839
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1170
-msgid "Default Language"
-msgstr "Език по подразбиране"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:847
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1011
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1179
-msgid "Default Encoding Set"
-msgstr "Кодировки по подразбиране"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:854
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1018
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1180
-msgid "Default Encoding"
-msgstr "Кодировка по подразбиране"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1000
-msgid "Book Language"
-msgstr "Език на книгата"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1044
-msgid "Break Paragraph At"
-msgstr "Край на параграф при"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1072
-msgid "Key %s"
-msgstr "Клавиш %s"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1101
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1348
-msgid "Format & Style"
-msgstr "Формат и стил"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1112
-msgid "Bold"
-msgstr "Удебелен"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1117
-msgid "Auto Hyphenations"
-msgstr "Автоматично сричкопренасяне"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1126
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1349
-msgid "Indicator"
-msgstr "Индикатор"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1135
-msgid "Show Indicator"
-msgstr "Показване на индикатора"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1136
-msgid "Show TOC Marks"
-msgstr "Показване на маркери за главите"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1137
-msgid "Show Position"
-msgstr "Показване на позицията"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1138
-msgid "Show Time"
-msgstr "Показване на часа"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1139
-msgid "Show Battery"
-msgstr "Показване на заряда"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1149
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1213
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1350
-msgid "Language"
-msgstr "Език"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1161
-msgid "Detect Language and Encoding"
-msgstr "Откриване на език и кодировка"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1197
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:746
 msgid "Book Settings"
 msgstr "Настройки на книгата"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1216
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1226
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:762
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1222
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1481
+msgid "Language"
+msgstr "Език"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:765
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:775
 msgid "Encoding"
 msgstr "Кодировка"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1225
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:774
 msgid "Encoding Set"
 msgstr "Кодировки"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1261
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:810
 msgid "Break Paragraph at"
 msgstr "Край на параграф при"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1269
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1352
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:834
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1213
+msgid "Indicator Height"
+msgstr "Височина на индикатора"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:841
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1214
+msgid "Offset From Text"
+msgstr "Разстояние до текста"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:848
+msgid "Indicator Font Size"
+msgstr "Размер на шрифта на индикатора"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:923
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1243
+msgid "Default Language"
+msgstr "Език по подразбиране"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:931
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1084
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1252
+msgid "Default Encoding Set"
+msgstr "Кодировки по подразбиране"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:938
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1091
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1253
+msgid "Default Encoding"
+msgstr "Кодировка по подразбиране"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1073
+msgid "Book Language"
+msgstr "Език на книгата"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1117
+msgid "Break Paragraph At"
+msgstr "Край на параграф при"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1145
+#, c-format
+msgid "Key %s"
+msgstr "Клавиш %s"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1174
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1440
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1479
+msgid "Format & Style"
+msgstr "Формат и стил"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1185
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1451
+msgid "Bold"
+msgstr "Удебелен"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1190
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1456
+msgid "Auto Hyphenations"
+msgstr "Автоматично сричкопренасяне"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1199
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1480
+msgid "Indicator"
+msgstr "Индикатор"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1208
+msgid "Show Indicator"
+msgstr "Показване на индикатора"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1209
+msgid "Show TOC Marks"
+msgstr "Показване на маркери за главите"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1210
+msgid "Show Position"
+msgstr "Показване на позицията"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1211
+msgid "Show Time"
+msgstr "Показване на часа"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1212
+msgid "Show Battery"
+msgstr "Показване на заряда"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1234
+msgid "Detect Language and Encoding"
+msgstr "Откриване на език и кодировка"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1344
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1482
 msgid "Keys"
 msgstr "Клавиши"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1339
-msgid "Settings"
-msgstr "Настройки"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1351
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1457
 msgid "Book settings"
 msgstr "Настройки на книгата"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1366
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1460
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1470
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1605
+msgid "Settings"
+msgstr "Настройки"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1496
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1593
 msgid "Book Info"
 msgstr "Информация за книгата"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1381
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1511
 msgid "File: "
 msgstr "Файл: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1383
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1513
 msgid "Title: "
 msgstr "Заглавие: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1392
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1522
 msgid "Author: "
 msgstr "Автор: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1395
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1525
 msgid "Series: "
 msgstr "Серия: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1398
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1528
 msgid "Book number: "
 msgstr "Номер на книга: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1455
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1588
 msgid "Book Menu"
 msgstr "Книжно меню"
 

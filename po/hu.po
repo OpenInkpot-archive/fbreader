@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
 "Report-Msgid-Bugs-To: @PACKAGE_BUGREPORT@\n"
-"POT-Creation-Date: 2010-02-04 02:17+0100\n"
+"POT-Creation-Date: 2010-03-04 10:45+0100\n"
 "PO-Revision-Date: 2009-06-26 10:44+0200\n"
 "Last-Translator: Anrdás Csehi <acsehi@gmail.com>\n"
 "Language-Team: Hungarian\n"
@@ -22,492 +22,509 @@ msgstr ""
 msgid "FBReader: Help"
 msgstr "FBReader: Segítség"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:80
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
 msgid "None"
 msgstr "Nincs"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:81
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
 msgid "Add Bookmark"
 msgstr "Könyvjelző hozzáadása"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:82
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
 msgid "Show Bookmarks"
 msgstr "Könyvjelzők megjelenítése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
 msgid "Hyperlinks mode"
 msgstr "Hiperlink mód"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
 msgid "Show Footnotes"
 msgstr "Lábjegyzetek megjelenítése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:157
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1462
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:159
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1595
 msgid "Go To Page"
 msgstr "Adott lapra lapozás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
 msgid "Show Table of Contents"
 msgstr "Tartalomjegyzékre lapozás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1599
+msgid "Dictionary"
+msgstr ""
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
 msgid "Go to Home"
 msgstr "Elejére lapozás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
 msgid "Go to Start of Section"
 msgstr "Fejezet elejére lapozás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
 msgid "Go to End of Section"
 msgstr "Fejezet végére lapozás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
 msgid "Go to Next TOC Section"
 msgstr "Következő TJ címre lapozás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
 msgid "Go to Previous TOC Section"
 msgstr "Előző TJ címre lapozás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
 msgid "Next Page"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
 msgid "Previous Page"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
 msgid "Undo"
 msgstr "Visszavonás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:98
 msgid "Redo"
 msgstr "Ismét"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:358
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:384
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:407
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1466
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:99
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:360
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:386
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:415
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1601
 msgid "Search"
 msgstr "Keresés"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:100
 msgid "Increase Font Size"
 msgstr "Betűméret növelése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:98
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
 msgid "Decrease Font Size"
 msgstr "Betűméret csökkentése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:99
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:102
 msgid "Toggle Bold Font"
 msgstr "Félkövér betűtípus be/ki"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:100
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
 msgid "Toggle Position Indicator"
 msgstr "Pozíciójelző be/kikapcsolása"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
 #, fuzzy
 msgid "Show Settings"
 msgstr "Könyv beállításai"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
 msgid "Cancel/Quit"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:105
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
 msgid "Show Local Menu"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
 #, fuzzy
 msgid "Show Help"
 msgstr "Idő megjelenítése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
 msgid "Show font size dialog"
 msgstr ""
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "Arabic"
 msgstr "Arab"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:116
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
 msgid "Czech"
 msgstr "Cseh"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:117
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
 msgid "German"
 msgstr "Német"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
 msgid "German (traditional orthography)"
 msgstr "Német (tradícionális ortográfia)"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
 msgid "Greek"
 msgstr "Görög"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
 msgid "English"
 msgstr "Angol"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
 msgid "Esperanto"
 msgstr "Eszperantó"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
 msgid "Spanish"
 msgstr "Spanyol"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
 msgid "Finnish"
 msgstr "Finn"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:127
 msgid "French"
 msgstr "Francia"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:128
 msgid "Hebrew"
 msgstr "Héber"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:129
 msgid "Indonesian"
 msgstr "Indonéz"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:127
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
 msgid "Italian"
 msgstr "Olasz"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:128
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
 msgid "Norwegian"
 msgstr "Norvég"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:129
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
 msgid "Portuguese"
 msgstr "Portugál"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:133
 msgid "Russian"
 msgstr "Orosz"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:134
 msgid "Swedish"
 msgstr "Svéd"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
 msgid "Turkish"
 msgstr "Török"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:133
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:136
 msgid "Ukrainian"
 msgstr "Ukrán"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:134
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:137
 msgid "Chinese"
 msgstr "Kínai"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:138
 msgid "Other"
 msgstr "Egyéb"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:142
 msgid "undefined"
 msgstr "nem-definiált"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:142
 msgid "left"
 msgstr "bal"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:142
 msgid "right"
 msgstr "jobb"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:142
 msgid "center"
 msgstr "közép"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:142
 msgid "justify"
 msgstr "sorkizárás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:140
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:143
 msgid "New Line"
 msgstr "Új sor"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:140
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:143
 msgid "Empty Line"
 msgstr "Üres sor"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:140
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:143
 msgid "Line With Indent"
 msgstr "Sor behúzással"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:235
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1464
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:237
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1597
 msgid "Table Of Contents"
 msgstr "Tartalomjegyzék"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:300
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1468
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:302
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1603
 msgid "Bookmarks"
 msgstr "Könyvjelzők"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:301
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:303
 msgid "Delete"
 msgstr "Törlés"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:309
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:311
 msgid "Page "
 msgstr "Lap "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:323
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:325
 msgid "Bookmark added"
 msgstr "Könyvjelző hozzáadva"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:352
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:378
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:354
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:380
 msgid "<- Search ->"
 msgstr "<- Keresés ->"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:354
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:380
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:356
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:382
 msgid "Search ->"
 msgstr "Keresés ->"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:356
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:382
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:358
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:384
 msgid "<- Search"
 msgstr "<- Keresés"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:365
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:367
 msgid "Text not found"
 msgstr "Szöveg nem található"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:493
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:692
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1113
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:501
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:700
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1186
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1452
 #, c-format
 msgid "%d%%"
 msgstr "%d%%"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:512
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:568
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:685
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:768
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1111
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1142
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:520
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:576
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:693
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:852
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1184
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1215
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1450
 #, c-format
 msgid "%dpt"
 msgstr "%d pont"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:631
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:717
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:639
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:725
 msgid "Left Margin"
 msgstr "Bal margó"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:634
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:718
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:642
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:726
 msgid "Right Margin"
 msgstr "Jobb margó"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:637
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:719
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:645
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:727
 msgid "Top Margin"
 msgstr "Felső margó"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:640
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:720
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:648
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:728
 msgid "Bottom Margin"
 msgstr "Alsó margó"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:673
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1110
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:681
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1183
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1449
 msgid "Font Family"
 msgstr "Betűtípus"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:681
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1111
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1142
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1553
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:689
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1184
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1215
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1450
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1689
 msgid "Font Size"
 msgstr "Betűméret"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:689
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1113
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:697
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1186
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1452
 msgid "Line Spacing"
 msgstr "Sortávolság"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:696
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1114
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:704
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1187
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1453
 msgid "Alignment"
 msgstr "Igazítás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:706
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1115
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:714
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1188
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1454
 msgid "Margins"
 msgstr "Margók"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:724
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1116
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:732
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1189
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1455
 msgid "First Line Indent"
 msgstr "Első sor behúzás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:750
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1140
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:746
+msgid "Book Settings"
+msgstr "Könyv beállításai"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:762
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1222
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1481
+msgid "Language"
+msgstr "Nyelv"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:765
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:775
+msgid "Encoding"
+msgstr "Kódolás"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:774
+msgid "Encoding Set"
+msgstr "Kódolási család"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:810
+msgid "Break Paragraph at"
+msgstr "Új bekezdés kezdete"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:834
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1213
 msgid "Indicator Height"
 msgstr "Státuszsor magasság"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:757
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1141
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:841
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1214
 msgid "Offset From Text"
 msgstr "Szövegtől való távolság"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:764
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:848
 msgid "Indicator Font Size"
 msgstr "Státuszsor betűméret"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:839
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1170
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:923
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1243
 msgid "Default Language"
 msgstr "Alapértelmezett nyelv"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:847
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1011
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1179
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:931
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1084
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1252
 msgid "Default Encoding Set"
 msgstr "Alapértelmezett kódolási család"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:854
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1018
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1180
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:938
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1091
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1253
 msgid "Default Encoding"
 msgstr "Alapértelmezett kódolás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1000
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1073
 msgid "Book Language"
 msgstr "Könyv nyelve"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1044
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1117
 msgid "Break Paragraph At"
 msgstr "Új bekezdés kezdete"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1072
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1145
 #, fuzzy, c-format
 msgid "Key %s"
 msgstr "Billentyű %d"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1101
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1348
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1174
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1440
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1479
 msgid "Format & Style"
 msgstr "Formátum és stílus"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1112
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1185
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1451
 msgid "Bold"
 msgstr "Félkövér"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1117
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1190
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1456
 msgid "Auto Hyphenations"
 msgstr "Automatikus elválasztás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1126
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1349
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1199
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1480
 msgid "Indicator"
 msgstr "Státuszsor"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1135
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1208
 msgid "Show Indicator"
 msgstr "Státuszsor megjelenítése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1136
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1209
 msgid "Show TOC Marks"
 msgstr "Tartalomjegyzék jelek megjelenítése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1137
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1210
 msgid "Show Position"
 msgstr "Pozíció megjelenítése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1138
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1211
 msgid "Show Time"
 msgstr "Idő megjelenítése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1139
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1212
 msgid "Show Battery"
 msgstr "Akku töltöttség megjelenítése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1149
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1213
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1350
-msgid "Language"
-msgstr "Nyelv"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1161
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1234
 msgid "Detect Language and Encoding"
 msgstr "Nyelv és kódolás felismerése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1197
-msgid "Book Settings"
-msgstr "Könyv beállításai"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1216
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1226
-msgid "Encoding"
-msgstr "Kódolás"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1225
-msgid "Encoding Set"
-msgstr "Kódolási család"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1261
-msgid "Break Paragraph at"
-msgstr "Új bekezdés kezdete"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1269
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1352
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1344
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1482
 msgid "Keys"
 msgstr "Billentyűkiosztás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1339
-msgid "Settings"
-msgstr "Beállítások"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1351
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1457
 msgid "Book settings"
 msgstr "Könyv beállításai"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1366
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1460
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1470
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1605
+msgid "Settings"
+msgstr "Beállítások"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1496
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1593
 msgid "Book Info"
 msgstr "Könyv tulajdonságai"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1381
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1511
 msgid "File: "
 msgstr "Fájl: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1383
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1513
 msgid "Title: "
 msgstr "Cím: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1392
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1522
 msgid "Author: "
 msgstr "Szerző: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1395
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1525
 msgid "Series: "
 msgstr "Sorozat: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1398
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1528
 msgid "Book number: "
 msgstr "Könyv száma: "
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1455
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1588
 msgid "Book Menu"
 msgstr "Könyv menü"
 
