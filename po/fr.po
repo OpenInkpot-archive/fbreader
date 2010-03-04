@@ -106,11 +106,6 @@ msgstr "Activer/désactiver les caractères gras"
 msgid "Toggle Position Indicator"
 msgstr "Activer/Désactiver l'indicateur de position"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
-#, fuzzy
-msgid "Show Settings"
-msgstr "Réglages du livre"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:115
 msgid "Arabic"
 msgstr "Arabe"
@@ -686,6 +681,10 @@ msgstr "M/Bookmark"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
 msgid "Show Help"
 msgstr "Afficher l'aide"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
+msgid "Show Settings"
+msgstr "Paramètres linguistiques"
 
 #~ msgid "Menu"
 #~ msgstr "Menu du livre"
