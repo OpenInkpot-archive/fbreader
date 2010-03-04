@@ -86,6 +86,7 @@ static const struct _action {
 	{ "showFootnotes",		_("Show Footnotes") },
 	{ "gotoPageNumber",		_("Go To Page") },
 	{ "toc",					_("Show Table of Contents") },
+	{ "dictionary",			_("Dictionary") },
 	{ "gotoHome",				_("Go to Home") },
 	{ "gotoSectionStart",		_("Go to Start of Section") },
 	{ "gotoSectionEnd",		_("Go to End of Section") },
@@ -396,6 +397,12 @@ void search_input_handler(char *text)
 		else
 			next_gui = search_not_found_message;
 	}
+}
+
+void ZLEwlDict(FBReader &f)
+{
+	f.highlightFirstWord();
+	next_gui = NULL;
 }
 
 void ZLEwlSearchDialog(FBReader &f)
@@ -1544,14 +1551,18 @@ int mmenu_handler(int idx, bool is_alt)
 			return 2;
 			break;
 		case 3:
-			next_gui = ZLEwlSearchDialog;
+			next_gui = ZLEwlDict;
 			return 1;
 			break;
 		case 4:
+			next_gui = ZLEwlSearchDialog;
+			return 1;
+			break;
+		case 5:
 			next_gui = ZLEwlBMKDialog;
 			return 2;
 			break;
-		case 5:
+		case 6:
 			next_gui = ZLEwlSettingsDialog;
 			return 1;
 		default:
@@ -1584,6 +1595,8 @@ void ZLEwlMainMenu(FBReader &f)
 	item.text = _("Go To Page");
 	list->items.push_back(item);
 	item.text = _("Table Of Contents");
+	list->items.push_back(item);
+	item.text = _("Dictionary");
 	list->items.push_back(item);
 	item.text = _("Search");
 	list->items.push_back(item);

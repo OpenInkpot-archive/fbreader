@@ -73,7 +73,8 @@ void ScrollingAction::run() {
 	}
 
 	if (view->typeId() == ZLTextView::TYPE_ID) {
-		if(fbreader.mode() == FBReader::HYPERLINK_NAV_MODE) {
+		if(fbreader.mode() == FBReader::HYPERLINK_NAV_MODE
+				|| fbreader.mode() == FBReader::DICT_MODE) {
 			if(buffer != 0) {
 				int x;
 				x = open("/dev/fb0", O_NONBLOCK);
@@ -82,11 +83,21 @@ void ScrollingAction::run() {
 				close(x);
 				buffer = 0;
 			}
+		}
 
+		if(fbreader.mode() == FBReader::HYPERLINK_NAV_MODE) {
 			if(myForward)
 				fbreader.highlightNextLink();
 			else
 				fbreader.highlightPrevLink();
+			return;
+		}
+
+		if(fbreader.mode() == FBReader::DICT_MODE) {
+			if(myForward)
+				fbreader.highlightNextWord();
+			else
+				fbreader.highlightPrevWord();
 			return;
 		}
 

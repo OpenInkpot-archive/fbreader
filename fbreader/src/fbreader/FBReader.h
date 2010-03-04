@@ -29,6 +29,7 @@
 #include <ZLView.h>
 #include <ZLApplication.h>
 #include <ZLKeyBindings.h>
+#include "BookTextView.h"
 
 #include "../library/Library.h"
 #include "../external/ProgramCollection.h"
@@ -38,6 +39,7 @@ class ZLMessageHandler;
 class Book;
 class BookModel;
 class BookTextView;
+class ZLTextElementArea;
 
 class FBReader : public ZLApplication {
 
@@ -60,6 +62,7 @@ public:
 		LIBRARY_MODE = 1 << 4,
 		NETWORK_LIBRARY_MODE = 1 << 5,
 		HYPERLINK_NAV_MODE = 1 << 6,
+		DICT_MODE = 1 << 7,
 		ALL_MODES = 0xFF
 	};
 
@@ -86,6 +89,7 @@ public:
 	void clearTextCaches();
 	shared_ptr<Book> currentBook() const;
 
+	void _refreshWindow();
 private:
 	void initWindow();
 
@@ -129,10 +133,19 @@ public:
 
 	void startNavigationMode();
 	void invertRegion(HyperlinkCoord link, bool flush);
+	void invertRegion(const ZLTextElementArea &e);
 	void highlightCurrentLink();
 	void highlightNextLink();
 	void highlightPrevLink();
 	void openHyperlink();
+
+	inline bool isword(ZLTextElementIterator e);
+	void highlightFirstWord();
+	void highlightNextWord();
+	void highlightNextLineWord();
+	void highlightPrevWord();
+	void highlightPrevLineWord();
+	void openDict();
 
 	RecentBooks &recentBooks();
 	const RecentBooks &recentBooks() const;
@@ -141,6 +154,8 @@ public:
 	void invalidateAccountDependents();
 
 private:
+	ZLTextElementIterator word_it;
+
 	shared_ptr<ProgramCollection> dictionaryCollection() const;
 
 	void openBookInternal(shared_ptr<Book> book);
@@ -220,6 +235,7 @@ friend class GotoPreviousTOCSectionAction;
 friend class SelectionAction;
 friend class ShowFootnotes;
 friend class HyperlinkNavStart;
+friend class Dict;
 friend class SearchOnNetworkAction;
 friend class AdvancedSearchOnNetworkAction;
 friend class FBFullscreenAction;

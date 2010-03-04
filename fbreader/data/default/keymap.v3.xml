@@ -11,6 +11,7 @@
 	<binding key="5" action="nextTOCSection"/>
 	<binding key="Alt+5" action="gotoSectionEnd"/>
 	<binding key="6" action="showFootnotes"/>
+	<binding key="Alt+6" action="dictionary"/>
 	<binding key="7" action="toc"/>
 	<binding key="Alt+7" action="toggleTurbo"/>
 	<binding key="8" action="hyperlinkNavStart"/>

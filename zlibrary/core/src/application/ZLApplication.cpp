@@ -316,6 +316,21 @@ void ZLApplication::doActionByKey(const std::string &key) {
 		a->checkAndRun();
 		myLastKeyActionTime = ZLTime();
 	}
+
+	a.reset();
+	if(key == "Return")
+		a = action("okAction");
+	else if(key == "Down")
+		a = action("downAction");
+	else if(key == "Up")
+		a = action("upAction");
+
+	if (!a.isNull() &&
+			(!a->useKeyDelay() ||
+			 (myLastKeyActionTime.millisecondsTo(ZLTime()) >= KeyDelayOption.value()))) {
+		a->checkAndRun();
+		myLastKeyActionTime = ZLTime();
+	}
 }
 
 void ZLApplication::grabAllKeys(bool grab) {

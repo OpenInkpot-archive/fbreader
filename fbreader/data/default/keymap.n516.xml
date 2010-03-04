@@ -9,7 +9,7 @@
 	<binding key="6" action="showFootnotes"/>
 	<binding key="7" action="toc"/>
 	<binding key="8" action="hyperlinkNavStart"/>
-	<binding key="9" action="increaseFont"/>
+	<binding key="9" action="dictionary"/>
 	<binding key=" " action="menu"/>
 	<binding key="XF86RotateWindows" action="showBookmarks"/>
 

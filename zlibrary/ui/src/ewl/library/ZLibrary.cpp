@@ -373,7 +373,7 @@ void main_loop(ZLApplication *application)
 						xcb_expose_event_t *expose = (xcb_expose_event_t *)e;
 
 						if(visibility != XCB_VISIBILITY_FULLY_OBSCURED) {
-							application->refreshWindow();
+							((FBReader*)application)->_refreshWindow();
 						}
 						
 						break;

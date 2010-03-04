@@ -160,6 +160,10 @@ FBReader::FBReader(const std::string &bookToOpen) :
 
 	addAction(ActionCode::SHOW_FOOTNOTES, new ShowFootnotes());
 	addAction(ActionCode::HYPERLINK_NAV_START, new HyperlinkNavStart());
+	addAction(ActionCode::OK_ACTION, new OkAction());
+	addAction(ActionCode::UP_ACTION, new UpAction());
+	addAction(ActionCode::DOWN_ACTION, new DownAction());
+	addAction(ActionCode::DICT, new Dict());
 	addAction(ActionCode::BMK_ADD, new BookmarkAdd());
 	addAction(ActionCode::BMK_SHOW, new BookmarksShow());
 
@@ -372,6 +376,166 @@ void FBReader::invertRegion(HyperlinkCoord link, bool flush)
 	((ZLApplication*)this)->invertRegion(link.x0, link.y0, link.x1, link.y1, flush);
 }
 
+void FBReader::invertRegion(const ZLTextElementArea &e)
+{
+	((ZLApplication*)this)->invertRegion(
+			e.XStart,
+			e.YStart,
+			e.XEnd,
+			e.YEnd,
+			true);
+}
+
+
+inline bool FBReader::isword(ZLTextElementIterator e)
+{
+	bool ret = false;
+	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
+
+	if (e->Kind == ZLTextElement::WORD_ELEMENT) {
+		sm.selectWord(e->XStart, e->YStart);
+		if (!sm.text().empty())
+			ret = true;
+		sm.clear();
+	}
+
+	return ret;
+}
+
+void FBReader::highlightFirstWord()
+{
+	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
+	ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).myTextElementMap;
+
+	for (word_it = elementMap.begin(); word_it != elementMap.end(); ++word_it) {
+		if(isword(word_it)) {
+			setMode(DICT_MODE);
+			invertRegion(*word_it);
+			return;
+		}
+	}
+}
+
+void FBReader::highlightNextWord()
+{
+	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
+	ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).myTextElementMap;
+
+	ZLTextElementIterator w = word_it;
+
+	do {
+		if(w == elementMap.end())
+			w = elementMap.begin();
+		else
+			w++;
+
+		if (isword(w)) {
+			invertRegion(*word_it);
+			invertRegion(*w);
+			word_it = w;
+			return;
+		}
+	} while (w != word_it);
+}
+
+void FBReader::highlightNextLineWord()
+{
+	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
+	ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).myTextElementMap;
+	int y = word_it->YStart;
+	bool cycle = false;
+
+	ZLTextElementIterator w = word_it;
+
+	do {
+		if(w == elementMap.end()) {
+			w = elementMap.begin();
+			cycle = true;
+		} else
+			w++;
+
+		if ((cycle || w->YStart > word_it->YStart) && isword(w)) {
+
+			invertRegion(*word_it);
+			invertRegion(*w);
+			word_it = w;
+
+			return;
+		}
+	} while (w != word_it);
+}
+
+void FBReader::highlightPrevWord()
+{
+	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
+	ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).myTextElementMap;
+
+	ZLTextElementIterator w = word_it;
+
+	do {
+		if(w == elementMap.begin())
+			w = elementMap.end();
+		else
+			w--;
+
+		if (isword(w)) {
+			invertRegion(*word_it);
+			invertRegion(*w);
+			word_it = w;
+			return;
+		}
+	} while (w != word_it);
+}
+
+void FBReader::highlightPrevLineWord()
+{
+	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
+	ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).myTextElementMap;
+	int y = word_it->YStart;
+	bool cycle = false;
+
+	ZLTextElementIterator w = word_it;
+
+	// find a word on previous line
+	do {
+		if(w == elementMap.begin()) {
+			w = elementMap.end();
+			cycle = true;
+		} else
+			w--;
+
+		if ((cycle || w->YStart < word_it->YStart) && isword(w))
+			break;
+	} while (w != word_it);
+
+	if(w == word_it)
+		return;
+
+	// find first word on current line
+	ZLTextElementIterator w2 = w;
+	while(w2->YStart == w->YStart) {
+		w2--;
+		if(w2->YStart != w->YStart)
+			break;
+
+		if (isword(w2))
+			w = w2;
+	}
+
+	invertRegion(*word_it);
+	invertRegion(*w);
+	word_it = w;
+}
+
+void FBReader::openDict()
+{
+	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
+	sm.selectWord(word_it->XStart, word_it->YStart);
+	fprintf(stderr, "invoke dictionary %s\n", sm.text().c_str());
+	sm.clear();
+	restorePreviousMode();
+}
+
 void FBReader::highlightCurrentLink()
 {
 	for(int i = currentLinkIdx; (i >= 0) && (i < pageLinks.size()); i++) {
@@ -466,6 +630,12 @@ void FBReader::showLibraryView() {
 	}
 }
 
+void FBReader::_refreshWindow() {
+	ZLApplication::refreshWindow();
+	if(myMode == DICT_MODE)
+		invertRegion(*word_it);
+}
+
 void FBReader::setMode(ViewMode mode) {
 	if (mode == myMode) {
 		return;
@@ -479,6 +649,7 @@ void FBReader::setMode(ViewMode mode) {
 	myMode = mode;
 
 	switch (myMode) {
+		case DICT_MODE:
 		case HYPERLINK_NAV_MODE:
 		case BOOK_TEXT_MODE:
 			setHyperlinkCursor(false);
@@ -524,6 +695,8 @@ void FBReader::restorePreviousMode() {
 	if(myMode == HYPERLINK_NAV_MODE) {
 		invertRegion(pageLinks.at(currentLinkIdx), true);
 	}
+	if(myMode == DICT_MODE)
+		invertRegion(*word_it);
 
 	setMode(myPreviousMode);
 	myPreviousMode = BOOK_TEXT_MODE;

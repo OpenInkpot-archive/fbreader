@@ -78,6 +78,10 @@ public:
 
 	static const std::string SHOW_FOOTNOTES;
 	static const std::string HYPERLINK_NAV_START;
+	static const std::string OK_ACTION;
+	static const std::string UP_ACTION;
+	static const std::string DOWN_ACTION;
+	static const std::string DICT;
 	static const std::string BMK_ADD;
 	static const std::string BMK_SHOW;
 	static const std::string HELP;
@@ -377,6 +381,30 @@ public:
 };
 
 class HyperlinkNavStart : public ZLApplication::Action {
+
+public:
+	void run();
+};
+
+class OkAction : public ZLApplication::Action {
+
+public:
+	void run();
+};
+
+class UpAction : public ZLApplication::Action {
+
+public:
+	void run();
+};
+
+class DownAction : public ZLApplication::Action {
+
+public:
+	void run();
+};
+
+class Dict : public ZLApplication::Action {
 
 public:
 	void run();

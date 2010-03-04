@@ -84,7 +84,8 @@ void ShowHelpAction::run() {
 
 void ShowOptionsDialogAction::run() {
 	FBReader &fbreader = FBReader::Instance();
-	if(fbreader.mode() != FBReader::HYPERLINK_NAV_MODE)
+	if(fbreader.mode() != FBReader::HYPERLINK_NAV_MODE
+		&& fbreader.mode() != FBReader::DICT_MODE)
 		ZLEwlOptionsDialog(fbreader);
 }
 
@@ -93,7 +94,8 @@ ShowMenuDialogAction::ShowMenuDialogAction() {
 
 void ShowMenuDialogAction::run() {
 	FBReader &fbreader = FBReader::Instance();
-	if(fbreader.mode() != FBReader::HYPERLINK_NAV_MODE)
+	if(fbreader.mode() != FBReader::HYPERLINK_NAV_MODE
+		&& fbreader.mode() != FBReader::DICT_MODE)
 		ZLEwlMainMenu(fbreader);
 }
 
@@ -500,6 +502,34 @@ void HyperlinkNavStart::run() {
 		fbreader.openHyperlink();
 	else
 		fbreader.startNavigationMode();
+}
+
+void OkAction::run() {
+	FBReader &fbreader = FBReader::Instance();
+	if(fbreader.mode() == FBReader::HYPERLINK_NAV_MODE)
+		fbreader.openHyperlink();
+	else if (fbreader.mode() == FBReader::DICT_MODE)
+		fbreader.openDict();
+}
+
+void UpAction::run() {
+	FBReader &fbreader = FBReader::Instance();
+	if (fbreader.mode() == FBReader::DICT_MODE)
+		fbreader.highlightPrevLineWord();
+}
+
+void DownAction::run() {
+	FBReader &fbreader = FBReader::Instance();
+	if (fbreader.mode() == FBReader::DICT_MODE)
+		fbreader.highlightNextLineWord();
+}
+
+void Dict::run() {
+	FBReader &fbreader = FBReader::Instance();
+	if (fbreader.mode() == FBReader::DICT_MODE)
+		fbreader.openDict();
+	else
+		fbreader.highlightFirstWord();
 }
 
 void BookmarkAdd::run() {
