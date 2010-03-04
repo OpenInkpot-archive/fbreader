@@ -160,12 +160,15 @@ void ZLTextView::drawSelectionRectangle(int left, int top, int right, int bottom
 	left = std::max(left, lineStartMargin());
 	right = std::min(right, viewWidth() + lineStartMargin() - 1);
 	if (left < right) {
-		context().setFillColor(color(ZLTextStyle::SELECTION_BACKGROUND));
-		context().fillRectangle(visualX(left), top, visualX(right), bottom);
+//		context().setFillColor(color(ZLTextStyle::SELECTION_BACKGROUND));
+//		context().fillRectangle(visualX(left), top, visualX(right), bottom);
+		context().invertRegion(visualX(left), top, visualX(right), bottom);
 	}
 }
 
 void ZLTextView::drawTextLine(const ZLTextLineInfo &info, int y, size_t from, size_t to) {
+	std::vector<std::vector<int> > selections;
+
 	FBReader &fbreader = FBReader::Instance();
 	const ZLTextParagraphCursor &paragraph = info.RealStart.paragraphCursor();
 
@@ -205,7 +208,14 @@ void ZLTextView::drawTextLine(const ZLTextLineInfo &info, int y, size_t from, si
 					}
 				} else {
 					if (rt != ranges.end()) {
-						drawSelectionRectangle(left, top, right, bottom);
+				//		drawSelectionRectangle(left, top, right, bottom);
+						std::vector<int> s;
+						s.push_back(left);
+						s.push_back(top);
+						s.push_back(right);
+						s.push_back(bottom);
+						selections.push_back(s);
+
 						left = viewWidth() + lineStartMargin() - 1;
 						right = lineStartMargin();
 					}
@@ -245,7 +255,13 @@ void ZLTextView::drawTextLine(const ZLTextLineInfo &info, int y, size_t from, si
 						strongContains(*rt, info.End)) {
 					right = viewWidth() + lineStartMargin() - 1;
 				}
-				drawSelectionRectangle(left, top, right, bottom);
+				//drawSelectionRectangle(left, top, right, bottom);
+				std::vector<int> s;
+				s.push_back(left);
+				s.push_back(top);
+				s.push_back(right);
+				s.push_back(bottom);
+				selections.push_back(s);
 			}
 		}
 	}
@@ -394,6 +410,11 @@ void ZLTextView::drawTextLine(const ZLTextLineInfo &info, int y, size_t from, si
 		const int x = myStyle.baseIsRtl() ? context().width() - it->XEnd : it->XStart;
 		const int y = it->YEnd - myStyle.elementDescent(word) - myStyle.textStyle()->verticalShift();
 		drawWord(x, y, word, start, len, it->AddHyphenationSign);
+	}
+
+	for(unsigned int i = 0; i < selections.size(); i++) {
+		std::vector<int> s = selections.at(i);
+		drawSelectionRectangle(s.at(0), s.at(1), s.at(2), s.at(3));
 	}
 }
 

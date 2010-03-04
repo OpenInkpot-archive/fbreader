@@ -59,6 +59,7 @@ public:
 	virtual int stringHeight() const = 0;
 	virtual int descent() const = 0;
 	virtual void drawString(int x, int y, const char *str, int len, bool rtl) = 0;
+	virtual void invertRegion(int x0, int y0, int x1, int y1) = 0;
 
 	enum ScalingType {
 		SCALE_FIT_TO_SIZE,

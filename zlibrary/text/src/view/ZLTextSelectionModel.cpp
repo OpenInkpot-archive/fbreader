@@ -517,6 +517,14 @@ bool ZLTextSelectionModel::selectWord(int x, int y) {
 				}
 				endIndex = startIndex + 1;
 				ZLUnicodeUtil::Ucs4Char ch = ucs4string[startIndex];
+				if (!(ZLUnicodeUtil::isLetter(ch) || (('0' <= ch) && (ch <= '9')))) {
+					while (++startIndex < word.Length) {
+						ch = ucs4string[startIndex];
+						if (ZLUnicodeUtil::isLetter(ch) && ((ch < '0') || (ch > '9'))) {
+							break;
+						}
+					}
+				}
 				if (ZLUnicodeUtil::isLetter(ch) || (('0' <= ch) && (ch <= '9'))) {
 					while (--startIndex >= 0) {
 						ch = ucs4string[startIndex];
