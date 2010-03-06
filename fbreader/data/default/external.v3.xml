@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalPrograms>
+	<section name="Dictionary">
+		<program name="edict" protocol="execute">
+			<action name="showWord" command="%command"/>
+            <option name="command" defaultValue="edict %1 &amp;"/>
+		</program>
+	</section>
+</ExternalPrograms>

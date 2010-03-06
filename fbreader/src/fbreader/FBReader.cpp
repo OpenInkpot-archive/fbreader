@@ -531,7 +531,8 @@ void FBReader::openDict()
 {
 	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
 	sm.selectWord(word_it->XStart, word_it->YStart);
-	fprintf(stderr, "invoke dictionary %s\n", sm.text().c_str());
+	if(isDictionarySupported())
+		openInDictionary(sm.text());
 	sm.clear();
 	restorePreviousMode();
 }
