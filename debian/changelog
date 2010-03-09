@@ -1,3 +1,9 @@
+fbreader (0.12.1-8) zelazny; urgency=low
+
+  * Fix navigation in dict mode
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 09 Mar 2010 23:47:27 +0100
+
 fbreader (0.12.1-7) zelazny; urgency=low
 
   [ Tomasz Długosz ]
