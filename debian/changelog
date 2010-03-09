@@ -1,3 +1,22 @@
+fbreader (0.12.1-7) zelazny; urgency=low
+
+  [ Tomasz Długosz ]
+  * l10n: Updates to Polish (pl) translation
+
+  [ Alan Jenkins ]
+  * ewl: optimize palette building
+
+  [ Alexander Kerner ]
+  * proper dictionary invocation
+  * Save current position in book in state.xml
+  * l10n: Updates to French (fr) translation
+  * change selection handling
+  * switch to default mode on resize
+  * add dictionary mode
+  * update .po files
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 09 Mar 2010 19:31:36 +0100
+
 fbreader (0.12.1-6) zelazny; urgency=low
 
   * Rearrange menus
