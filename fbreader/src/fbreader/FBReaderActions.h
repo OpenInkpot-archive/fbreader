@@ -81,6 +81,8 @@ public:
 	static const std::string OK_ACTION;
 	static const std::string UP_ACTION;
 	static const std::string DOWN_ACTION;
+	static const std::string LEFT_ACTION;
+	static const std::string RIGHT_ACTION;
 	static const std::string DICT;
 	static const std::string BMK_ADD;
 	static const std::string BMK_SHOW;
@@ -399,6 +401,18 @@ public:
 };
 
 class DownAction : public ZLApplication::Action {
+
+public:
+	void run();
+};
+
+class LeftAction : public ZLApplication::Action {
+
+public:
+	void run();
+};
+
+class RightAction : public ZLApplication::Action {
 
 public:
 	void run();

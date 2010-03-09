@@ -324,6 +324,10 @@ void ZLApplication::doActionByKey(const std::string &key) {
 		a = action("downAction");
 	else if(key == "Up")
 		a = action("upAction");
+	else if(key == "Left")
+		a = action("leftAction");
+	else if(key == "Right")
+		a = action("rightAction");
 
 	if (!a.isNull() &&
 			(!a->useKeyDelay() ||

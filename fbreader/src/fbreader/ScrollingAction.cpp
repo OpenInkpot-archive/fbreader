@@ -93,13 +93,8 @@ void ScrollingAction::run() {
 			return;
 		}
 
-		if(fbreader.mode() == FBReader::DICT_MODE) {
-			if(myForward)
-				fbreader.highlightNextWord();
-			else
-				fbreader.highlightPrevWord();
+		if(fbreader.mode() == FBReader::DICT_MODE)
 			return;
-		}
 
 		if(turbo && myForward && (buffer != 0)) {
 			int x;

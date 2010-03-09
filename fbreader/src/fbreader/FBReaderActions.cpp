@@ -524,6 +524,18 @@ void DownAction::run() {
 		fbreader.highlightNextLineWord();
 }
 
+void LeftAction::run() {
+	FBReader &fbreader = FBReader::Instance();
+	if (fbreader.mode() == FBReader::DICT_MODE)
+		fbreader.highlightPrevWord();
+}
+
+void RightAction::run() {
+	FBReader &fbreader = FBReader::Instance();
+	if (fbreader.mode() == FBReader::DICT_MODE)
+		fbreader.highlightNextWord();
+}
+
 void Dict::run() {
 	FBReader &fbreader = FBReader::Instance();
 	if (fbreader.mode() == FBReader::DICT_MODE)

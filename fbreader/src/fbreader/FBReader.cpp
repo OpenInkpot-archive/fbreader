@@ -163,6 +163,8 @@ FBReader::FBReader(const std::string &bookToOpen) :
 	addAction(ActionCode::OK_ACTION, new OkAction());
 	addAction(ActionCode::UP_ACTION, new UpAction());
 	addAction(ActionCode::DOWN_ACTION, new DownAction());
+	addAction(ActionCode::LEFT_ACTION, new LeftAction());
+	addAction(ActionCode::RIGHT_ACTION, new RightAction());
 	addAction(ActionCode::DICT, new Dict());
 	addAction(ActionCode::BMK_ADD, new BookmarkAdd());
 	addAction(ActionCode::BMK_SHOW, new BookmarksShow());
