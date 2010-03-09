@@ -3,7 +3,7 @@
 	<section name="Dictionary">
 		<program name="edict" protocol="execute">
 			<action name="showWord" command="%command"/>
-            <option name="command" defaultValue="edict %1 &amp;"/>
+            <option name="command" defaultValue="edict_launcher %1 &amp;"/>
 		</program>
 	</section>
 </ExternalPrograms>
