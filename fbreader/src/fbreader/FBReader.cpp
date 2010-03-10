@@ -426,7 +426,7 @@ void FBReader::highlightNextWord()
 	ZLTextElementIterator w = word_it;
 
 	do {
-		if(w == elementMap.end())
+		if(w == elementMap.end() || w+1 == elementMap.end())
 			w = elementMap.begin();
 		else
 			w++;
@@ -450,7 +450,7 @@ void FBReader::highlightNextLineWord()
 	ZLTextElementIterator w = word_it;
 
 	do {
-		if(w == elementMap.end()) {
+		if(w == elementMap.end() || w+1 == elementMap.end()) {
 			w = elementMap.begin();
 			cycle = true;
 		} else
@@ -477,8 +477,8 @@ void FBReader::highlightPrevWord()
 	do {
 		if(w == elementMap.begin())
 			w = elementMap.end();
-		else
-			w--;
+
+		w--;
 
 		if (isword(w)) {
 			invertRegion(*word_it);
@@ -503,8 +503,9 @@ void FBReader::highlightPrevLineWord()
 		if(w == elementMap.begin()) {
 			w = elementMap.end();
 			cycle = true;
-		} else
-			w--;
+		}
+
+		w--;
 
 		if ((cycle || w->YStart < word_it->YStart) && isword(w))
 			break;
