@@ -1,3 +1,10 @@
+fbreader (0.12.1-9) zelazny; urgency=low
+
+  * Fix word selection
+  * prepare help files for transifex
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Thu, 11 Mar 2010 22:03:09 +0100
+
 fbreader (0.12.1-8) zelazny; urgency=low
 
   * Fix navigation in dict mode
