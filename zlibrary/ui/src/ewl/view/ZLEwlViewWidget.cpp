@@ -389,7 +389,7 @@ void ZLEwlViewWidget::invertRegion(int x0, int y0, int x1, int y1, bool flush)
 
 	xcb_image_shm_put (connection, window, gc,
 			im, shminfo,
-			x0, y0, x0, y0, x1 - x0, y1 - y0, send_event);
+			x0, y0, x0, y0, x1 - x0 + 1, y1 - y0 + 1, send_event);
 
 	if(flush)
 		xcb_flush(connection);
