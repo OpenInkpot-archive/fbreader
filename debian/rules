@@ -51,7 +51,8 @@ install-stamp: build
 		install -m 644 themes/virtk_layout $(DEB_DIR)/fbreader/usr/share/FBReader/themes
 		mkdir -p $(DEB_DIR)/fbreader/usr/share/keys/help
 		install -m 644 fbreader_help.ini $(DEB_DIR)/fbreader/usr/share/keys/help/fbreader.ini
-		cp -a help $(DEB_DIR)/fbreader/usr/share
+		mkdir -p ${DEB_DIR}/fbreader/usr/share/help/fbreader
+		oi-help-compiler -u help ${DEB_DIR}/fbreader/usr/share/help/fbreader
 		for FLAVOUR in $(flavours); do \
 			DEFAULT_DIR=$(DEB_DIR)/fbreader-settings-$$FLAVOUR/usr/share/FBReader/default; \
 			mkdir -p $$DEFAULT_DIR; \

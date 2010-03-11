@@ -1,0 +1,68 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-03-11 09:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.1\n"
+
+msgid "index"
+msgstr ""
+"<h1>阅读电子书的程序 – FBReader</h1>\n"
+"\n"
+"<br>\n"
+"1) 阅读\n"
+"<br>\n"
+"2) 配置\n"
+"<br>\n"
+"3) 书籍菜单\n"
+"<br>\n"
+"4) 关于FBReader\n"
+
+msgid "fbreader1"
+msgstr ""
+"<h2>阅读：</h2>\n"
+"\n"
+"<p>使用左/右和5/6数字键进行翻页浏览。可配置的按键功能可以在“配置”菜单的“按键”当中更改。</p> \n"
+"<p>按“Rotate”键更改页面朝向。朝向改变之后上下左右键也会相应变化。</p> \n"
+"<p>按OK然后选择“Settings”查看和修改FBReader的配置。</p>\n"
+"<p>按“Search/Zoom”在内容当中搜索，同时显示虚拟键盘。可以通过按对应的行/列的数字输入要搜索的内容。按左/右键开始搜索，按OK键退出搜索。</p>"
+"\n"
+"<p>按“M”到“Book Menu”当中修改该文件的配置。</p>\n"
+"<p>按“0”调出帮助。</p> \n"
+"<p>用设备右下角的“播放/暂停”按钮在阅读时控制音频播放。</p>\n"
+
+msgid "fbreader4"
+msgstr ""
+"<h2>关于FBReader：</h2>\n"
+"\n"
+"<p>FBReader – 阅读电子书的软件。支持格式：fb2, html, xhtml, docbook。</p>\n"
+
+msgid "fbreader3"
+msgstr ""
+"<h2>书籍菜单:</h2>\n"
+"\n"
+"<p>你可以显示书籍信息，跳转到页面，显示目录，在内容当中搜索文字，在书本当中设置书签。</p>\n"
+
+msgid "fbreader2"
+msgstr ""
+"<h2>配置：</h2>\n"
+"\n"
+"<p>再此菜单中可以查看和更改：</p>\n"
+"<p>样式和格式 – 配置书籍当中文本的显示方式；</p>\n"
+"<p>状态条 – 设置状态条；</p>\n"
+"<p>语言 – 设置书本当中文字的默认语言；</p>\n"
+"<p>书籍设置 – 设置书本当中文字的默认编码和语言；</p>\n"
+"<p>按键 – 设置1-9按键的作用。</p>\n"
+
