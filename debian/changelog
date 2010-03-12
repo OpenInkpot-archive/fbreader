@@ -1,3 +1,9 @@
+fbreader (0.12.1-10) zelazny; urgency=low
+
+  * adjust 'Depends' and 'Conflicts' fields in debian/control
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Fri, 12 Mar 2010 22:52:23 +0100
+
 fbreader (0.12.1-9) zelazny; urgency=low
 
   * Fix word selection
