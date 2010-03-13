@@ -587,16 +587,6 @@ msgstr "C"
 msgid "LP OK"
 msgstr "LP OK"
 
-#: fbreader/data/default/keydefs.v3.tmpl:33
-#, fuzzy
-msgid "-"
-msgstr "-"
-
-#: fbreader/data/default/keydefs.v3.tmpl:32
-#, fuzzy
-msgid "+"
-msgstr "+"
-
 #: fbreader/data/default/keydefs.v3.tmpl:14
 msgid "LP 0"
 msgstr "LP 0"
@@ -696,6 +686,14 @@ msgstr "Toon instellingen"
 #: fbreader/data/default/keydefs.n516.tmpl:14
 msgid "M/Bookmark"
 msgstr "Bladwijzers"
+
+#: fbreader/data/default/keydefs.v3.tmpl:33
+msgid "-"
+msgstr "-"
+
+#: fbreader/data/default/keydefs.v3.tmpl:32
+msgid "+"
+msgstr "+"
 
 #~ msgid "Menu"
 #~ msgstr "Boek menu:"
