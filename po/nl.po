@@ -98,11 +98,6 @@ msgstr "Font Bold aan/uit"
 msgid "Toggle Position Indicator"
 msgstr "Positie Indicator aan/uit"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
-#, fuzzy
-msgid "Show Settings"
-msgstr "Boek Instellingen"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "Arabic"
 msgstr "Arabisch"
@@ -399,11 +394,6 @@ msgstr "Taal Boek"
 msgid "Break Paragraph At"
 msgstr "Breek Paragaaf af op"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1145
-#, fuzzy, c-format
-msgid "Key %s"
-msgstr "Toets %d"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1174
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1440
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1479
@@ -502,125 +492,6 @@ msgstr "Aan"
 msgid "Off"
 msgstr "Uit"
 
-#: fbreader/data/default/keydefs.n516.tmpl:14
-#, fuzzy
-msgid "M/Bookmark"
-msgstr "Bladwijzers"
-
-#: fbreader/data/default/keydefs.n516.tmpl:17
-#: fbreader/data/default/keydefs.v3.tmpl:24
-msgid "OK"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:18
-msgid "Back"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:19
-msgid "Next"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:20
-msgid "Prior"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:21
-msgid "LP Next"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:22
-msgid "LP Prior"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:23
-msgid "Down"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:24
-msgid "Up"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:25
-#: fbreader/data/default/keydefs.v3.tmpl:28
-#, fuzzy
-msgid "Right"
-msgstr "rechts"
-
-#: fbreader/data/default/keydefs.n516.tmpl:26
-#: fbreader/data/default/keydefs.v3.tmpl:30
-#, fuzzy
-msgid "Left"
-msgstr "links"
-
-#: fbreader/data/default/keydefs.n516.tmpl:28
-msgid "Zoom"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:14
-msgid "LP 0"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:15
-msgid "LP 1"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:16
-msgid "LP 2"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:17
-msgid "LP 3"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:18
-msgid "LP 4"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:19
-msgid "LP 5"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:20
-msgid "LP 6"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:21
-msgid "LP 7"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:22
-msgid "LP 8"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:23
-msgid "LP 9"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:25
-msgid "LP OK"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:26
-msgid "C"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:29
-#, fuzzy
-msgid "LP Right"
-msgstr "rechts"
-
-#: fbreader/data/default/keydefs.v3.tmpl:31
-msgid "LP Left"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:32
-msgid "+"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:33
-msgid "-"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
 msgid "Next Page"
 msgstr "Volgende Pagina"
@@ -699,6 +570,132 @@ msgstr "Toon tijd"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
 msgid "Show font size dialog"
 msgstr "Toon font grote menu "
+
+#: fbreader/data/default/keydefs.v3.tmpl:31
+msgid "LP Left"
+msgstr "LP links"
+
+#: fbreader/data/default/keydefs.v3.tmpl:29
+msgid "LP Right"
+msgstr "LP rechts"
+
+#: fbreader/data/default/keydefs.v3.tmpl:26
+msgid "C"
+msgstr "C"
+
+#: fbreader/data/default/keydefs.v3.tmpl:25
+msgid "LP OK"
+msgstr "LP OK"
+
+#: fbreader/data/default/keydefs.v3.tmpl:33
+#, fuzzy
+msgid "-"
+msgstr "-"
+
+#: fbreader/data/default/keydefs.v3.tmpl:32
+#, fuzzy
+msgid "+"
+msgstr "+"
+
+#: fbreader/data/default/keydefs.v3.tmpl:14
+msgid "LP 0"
+msgstr "LP 0"
+
+#: fbreader/data/default/keydefs.v3.tmpl:15
+msgid "LP 1"
+msgstr "LP 1"
+
+#: fbreader/data/default/keydefs.v3.tmpl:16
+msgid "LP 2"
+msgstr "LP 2"
+
+#: fbreader/data/default/keydefs.v3.tmpl:17
+msgid "LP 3"
+msgstr "LP 3"
+
+#: fbreader/data/default/keydefs.v3.tmpl:18
+msgid "LP 4"
+msgstr "LP 4"
+
+#: fbreader/data/default/keydefs.v3.tmpl:19
+msgid "LP 5"
+msgstr "LP 5"
+
+#: fbreader/data/default/keydefs.v3.tmpl:20
+msgid "LP 6"
+msgstr "LP 6"
+
+#: fbreader/data/default/keydefs.v3.tmpl:21
+msgid "LP 7"
+msgstr "LP 7"
+
+#: fbreader/data/default/keydefs.v3.tmpl:22
+msgid "LP 8"
+msgstr "LP 8"
+
+#: fbreader/data/default/keydefs.v3.tmpl:23
+msgid "LP 9"
+msgstr "LP 9"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1145
+#, c-format
+msgid "Key %s"
+msgstr "Toets %s"
+
+#: fbreader/data/default/keydefs.n516.tmpl:28
+msgid "Zoom"
+msgstr "Zoom"
+
+#: fbreader/data/default/keydefs.n516.tmpl:26
+#: fbreader/data/default/keydefs.v3.tmpl:30
+msgid "Left"
+msgstr "Links"
+
+#: fbreader/data/default/keydefs.n516.tmpl:23
+msgid "Down"
+msgstr "Omlaag"
+
+#: fbreader/data/default/keydefs.n516.tmpl:22
+msgid "LP Prior"
+msgstr "LP vorige"
+
+#: fbreader/data/default/keydefs.n516.tmpl:25
+#: fbreader/data/default/keydefs.v3.tmpl:28
+msgid "Right"
+msgstr "Rechts"
+
+#: fbreader/data/default/keydefs.n516.tmpl:24
+msgid "Up"
+msgstr "Omhoog"
+
+#: fbreader/data/default/keydefs.n516.tmpl:19
+msgid "Next"
+msgstr "Volgende"
+
+#: fbreader/data/default/keydefs.n516.tmpl:18
+msgid "Back"
+msgstr "Terug"
+
+#: fbreader/data/default/keydefs.n516.tmpl:21
+msgid "LP Next"
+msgstr "LP volgende"
+
+#: fbreader/data/default/keydefs.n516.tmpl:20
+msgid "Prior"
+msgstr "Vorige"
+
+#: fbreader/data/default/keydefs.n516.tmpl:17
+#: fbreader/data/default/keydefs.v3.tmpl:24
+msgid "OK"
+msgstr "OK"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
+msgid "Show Settings"
+msgstr "Toon instellingen"
+
+#: fbreader/data/default/keydefs.n516.tmpl:14
+msgid "M/Bookmark"
+msgstr "Bladwijzers"
 
 #~ msgid "Menu"
 #~ msgstr "Boek menu:"
