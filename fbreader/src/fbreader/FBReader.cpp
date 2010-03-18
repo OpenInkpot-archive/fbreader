@@ -137,8 +137,8 @@ FBReader::FBReader(const std::string &bookToOpen) :
 	addAction(ActionCode::MOUSE_SCROLL_BACKWARD, new MouseWheelScrollingAction(false));
 	addAction(ActionCode::TAP_SCROLL_FORWARD, new TapScrollingAction(true));
 	addAction(ActionCode::TAP_SCROLL_BACKWARD, new TapScrollingAction(false));
-	addAction(ActionCode::INCREASE_FONT, new ChangeFontSizeAction(2));
-	addAction(ActionCode::DECREASE_FONT, new ChangeFontSizeAction(-2));
+	addAction(ActionCode::INCREASE_FONT, new ChangeFontSizeAction(1));
+	addAction(ActionCode::DECREASE_FONT, new ChangeFontSizeAction(-1));
 	addAction(ActionCode::ROTATE_SCREEN, new RotationAction());
 	addAction(ActionCode::TOGGLE_FULLSCREEN, new FBFullscreenAction());
 	addAction(ActionCode::FULLSCREEN_ON, new FBFullscreenAction());
