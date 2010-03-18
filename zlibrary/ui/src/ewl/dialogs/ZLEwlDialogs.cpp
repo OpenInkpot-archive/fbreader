@@ -993,7 +993,7 @@ void book_encoding_handler(int idx, bool is_alt)
 		pinfos = &(*it)->infos();
 
 		for (std::vector<ZLEncodingConverterInfoPtr>::const_iterator jt = pinfos->begin(); !found && (jt != pinfos->end()); ++jt)
-			if ((*jt)->name() == book->encoding());
+			if ((*jt)->name() == book->encoding())
 				found = true;
 	}
 
