@@ -65,6 +65,7 @@ bool BooksDBUtil::getRecentBooks(BookList &books) {
 		shared_ptr<Book> book = getBook(*it /*, true OR false ? */); // TODO: check file ???
 		if (!book.isNull()) {
 			books.push_back(book);
+			return true;
 		}
 	}
 	return true;
