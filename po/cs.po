@@ -1,9 +1,9 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 ben1981 <ben1981@centrum.cz>
 # This file is distributed under the same license as the FBReader package.
 # ben1981 <ben1981@centrum.cz>, 2010.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
@@ -50,11 +50,6 @@ msgstr "Jít na stránku"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
 msgid "Show Table of Contents"
 msgstr "Zobrazit Obsah"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1599
-msgid "Dictionary"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
 msgid "Go to Home"
@@ -699,6 +694,11 @@ msgstr "+"
 #: fbreader/data/default/keydefs.v3.tmpl:33
 msgid "-"
 msgstr "-"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1599
+msgid "Dictionary"
+msgstr "Slovník"
 
 #~ msgid "Menu"
 #~ msgstr "Menu"
