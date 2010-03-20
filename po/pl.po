@@ -120,17 +120,9 @@ msgstr "Pokaż ustawienia"
 msgid "Cancel/Quit"
 msgstr "Anuluj/Wyjście"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
-msgid "Show Local Menu"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
 msgid "Show Help"
 msgstr "Pokaż pomoc"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
-msgid "Show font size dialog"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "Arabic"
@@ -590,18 +582,6 @@ msgstr "M/Zakładka"
 msgid "OK"
 msgstr "OK"
 
-#: fbreader/data/default/keydefs.n516.tmpl:18
-msgid "Back"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:19
-msgid "Next"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:20
-msgid "Prior"
-msgstr ""
-
 #: fbreader/data/default/keydefs.n516.tmpl:21
 msgid "LP Next"
 msgstr ""
@@ -627,10 +607,6 @@ msgstr "prawo"
 #: fbreader/data/default/keydefs.v3.tmpl:30
 msgid "Left"
 msgstr "lewo"
-
-#: fbreader/data/default/keydefs.n516.tmpl:28
-msgid "Zoom"
-msgstr ""
 
 #: fbreader/data/default/keydefs.v3.tmpl:14
 msgid "LP 0"
@@ -676,10 +652,6 @@ msgstr "9"
 msgid "LP OK"
 msgstr "OK"
 
-#: fbreader/data/default/keydefs.v3.tmpl:26
-msgid "C"
-msgstr ""
-
 #: fbreader/data/default/keydefs.v3.tmpl:29
 msgid "LP Right"
 msgstr "prawo"
@@ -700,6 +672,34 @@ msgstr "-"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1599
 msgid "Dictionary"
 msgstr "Słownik"
+
+#: fbreader/data/default/keydefs.n516.tmpl:28
+msgid "Zoom"
+msgstr "Lupa"
+
+#: fbreader/data/default/keydefs.n516.tmpl:18
+msgid "Back"
+msgstr "Wstecz"
+
+#: fbreader/data/default/keydefs.n516.tmpl:19
+msgid "Next"
+msgstr "Do przodu"
+
+#: fbreader/data/default/keydefs.n516.tmpl:20
+msgid "Prior"
+msgstr "Poprzedni"
+
+#: fbreader/data/default/keydefs.v3.tmpl:26
+msgid "C"
+msgstr "C"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
+msgid "Show Local Menu"
+msgstr "Pokaż lokalne menu"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
+msgid "Show font size dialog"
+msgstr "Pokaż okienko rozmiaru czcionki"
 
 #~ msgid "Menu"
 #~ msgstr "Menu książki"
