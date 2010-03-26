@@ -1,9 +1,9 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
@@ -50,11 +50,6 @@ msgstr "Към страница"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
 msgid "Show Table of Contents"
 msgstr "Съдържание"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1599
-msgid "Dictionary"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
 msgid "Go to Home"
@@ -699,3 +694,8 @@ msgstr "+"
 #: fbreader/data/default/keydefs.v3.tmpl:33
 msgid "-"
 msgstr "-"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1599
+msgid "Dictionary"
+msgstr "Речник"
