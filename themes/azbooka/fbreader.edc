@@ -1,0 +1,97 @@
+images {
+    image: "del_icon.png" COMP;
+}
+
+styles {
+    style {
+        name, "titles";
+        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=22 color=#000 align=left valign=top wrap=word";
+        tag, "inactive" "+color=#888";
+        tag, "/inactive" "-";
+    };
+    style {
+        name, "values";
+        base, "font=DejaVu\\ Sans\\ Condensed font_size=18 color=#000 align=right valign=bottom ellipsis=right";
+        tag, "inactive" "+color=#888";
+        tag, "/inactive" "-";
+    }
+
+    style {
+        name, "item-texts";
+        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=22 color=#000 align=left valign=middle wrap=word";
+        tag, "inactive" "+color=#888";
+        tag, "/inactive" "-";
+    }
+}
+
+collections {
+    group {
+        name, "del_icon";
+        parts {
+            part {
+                name, "del_icon";
+                type, IMAGE;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    min, 32 32;
+                    max, 32 32;
+                    rel1 { relative, 0.0 1.0; offset, 9 -40; }
+                    rel2 { relative, 0.0 1.0; offset, 39 -10; }
+                    image { normal, "del_icon.png"; }
+                }
+            }
+        }
+    }
+   group {
+      name, "item";
+      parts {
+         part {
+            name, "text";
+            type, TEXTBLOCK;
+            multiline, 1;
+            description {
+               state, "default" 0.0;
+               color, 0 0 0 255;
+               text {
+                  style, "item-texts";
+                  max, 0 1;
+               }
+               align, 0 0.5;
+               rel1 { relative, 0.0 0.0; offset, 3 0; }
+               rel2 { relative, 1.0 1.0; offset, -4 -1; }
+            }
+         }
+         part {
+            name, "title";
+            type, TEXTBLOCK;
+            multiline, 1;
+            description {
+               state, "default" 0.0;
+               text {
+                  style, "titles";
+                  min, 0 1;
+               }
+               align, 0.0 0.0;
+               rel1 { relative, 0.0 0.0; offset, 3 0; }
+               rel2 { relative, 1.0 0.0; offset, -4 0; }
+            }
+         }
+         part {
+            name, "value";
+            type, TEXTBLOCK;
+            multiline, 1;
+            description {
+               state, "default" 0.0;
+               text {
+                  style, "values";
+                  min, 0 1;
+               }
+               align, 1.0 1.0;
+               rel1 { relative, 0.0 1.0; offset, 3 -1; }
+               rel2 { relative, 1.0 1.0; offset, -4 -1; }
+            }
+         }
+      }
+   }
+}

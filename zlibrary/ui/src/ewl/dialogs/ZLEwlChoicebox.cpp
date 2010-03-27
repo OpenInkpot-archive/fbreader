@@ -85,7 +85,6 @@ static int exit_handler(void* param, int ev_type, void* event)
 
 static void lcb_win_close_handler(Ecore_Evas* main_win)
 {
-//	fprintf(stderr, "main_win_close_handler\n");
 	ecore_main_loop_quit();
 }
 
@@ -95,9 +94,8 @@ static void lcb_page_updated_handler(Evas_Object* choicebox,
 		void* param)
 {
     Evas* canvas = evas_object_evas_get(choicebox);
-    Evas_Object* footer = evas_object_name_find(canvas, "lcb_footer");
-
-	choicebox_aux_edje_footer_handler(footer, "text", cur_page, total_pages);
+	Evas_Object *settings_window = evas_object_name_find(canvas, "settings-left-window");
+	choicebox_aux_edje_footer_handler(settings_window, "footer", cur_page, total_pages);
 }
 
 static void textblock_style_add_font(Evas_Object *item, string font)
@@ -232,50 +230,19 @@ static void lcb_handler(Evas_Object* choicebox,
 		l->item_handler(item_num, is_alt);
 }
 
-static void lcb_win_resize_handler(Ecore_Evas* main_win)
+static void lcb_win_resized(Ecore_Evas *ee, Evas_Object *object, int w, int h,
+             void *param)
 {
-	Evas* canvas = ecore_evas_get(main_win);
-	int w, h;
-	evas_output_size_get(canvas, &w, &h);
+	evas_object_resize(object, w, h);
+}
 
-	Evas_Object* main_canvas_edje = evas_object_name_find(canvas, "main_canvas_edje");
-	evas_object_resize(main_canvas_edje, w, h);
-
-	Evas_Object *l_choicebox = evas_object_name_find(canvas, SETTINGS_LEFT_NAME);
-	Evas_Object *r_choicebox = evas_object_name_find(canvas, SETTINGS_RIGHT_NAME);
-
-	Evas_Object *bg = evas_object_name_find(canvas, "bg");
-	evas_object_resize(bg, w, h);
-
-	Evas_Object* header = evas_object_name_find(canvas, "lcb_header");
-	evas_object_move(header, 0, 0);
-	evas_object_resize(header, r_choicebox ? w/2 : w, header_h);
-
-	Evas_Object* footer = evas_object_name_find(canvas, "lcb_footer");
-	evas_object_move(footer, 0, h - footer_h);
-	evas_object_resize(footer, r_choicebox ? w/2 : w, footer_h);
-
-	header = evas_object_name_find(canvas, "rcb_header");
-	if(header) {
-		evas_object_move(header, w/2, 0);
-		evas_object_resize(header, w/2, header_h);
-	}
-
-	footer = evas_object_name_find(canvas, "rcb_footer");
-	if(footer) {
-		evas_object_move(footer, w/2, h - footer_h);
-		evas_object_resize(footer, w/2, footer_h);
-	}
-
-	if(l_choicebox) {
-		evas_object_resize(l_choicebox, r_choicebox ? w/2 : w, h - header_h - footer_h);
-		evas_object_move(l_choicebox, 0, header_h);
-	}
-
-	if(r_choicebox) {
-		evas_object_resize(r_choicebox, w/2, h - header_h - footer_h);
-		evas_object_move(r_choicebox, w/2, header_h);
-	}
+static void lcb_win_resized_2(Ecore_Evas *ee, Evas_Object *object, int w, int h,
+             void *param)
+{
+	if(edje_object_part_swallow_get(evas_object_name_find(ecore_evas_get(ee), "main-window"), "right-overlay"))
+		evas_object_resize(object, w/2, h);
+	else
+		evas_object_resize(object, w, h);
 }
 
 static void lcb_win_signal_handler(void* param, Evas_Object* o, const char* emission, const char* source)
@@ -426,10 +393,12 @@ static int lcb_screen_change_handler(void *data, int type, void *event)
 		h = e->height;
 	}
 
-	if(evas_object_name_find(ecore_evas_get(win), SETTINGS_RIGHT_NAME))
+	ecore_evas_move(win, 0, 0);
+	if(edje_object_part_swallow_get(evas_object_name_find(ecore_evas_get(win), "main-window"), "right-overlay")) {
 		ecore_evas_resize(win, w, h);
-	else
+	} else {
 		ecore_evas_resize(win, w/2, h);
+	}
 
 	return 0;
 }
@@ -485,25 +454,11 @@ void cb_lcb_new(int select_item)
 
 	ecore_evas_callback_delete_request_set(lcb_win, lcb_win_close_handler);
 
-	Evas_Object* bg = evas_object_rectangle_add(main_canvas);
-	evas_object_name_set(bg, "bg");
-	evas_object_color_set(bg, 255, 255, 255, 255);
-	evas_object_move(bg, 0, 0);
-	evas_object_resize(bg, w, h);
-	evas_object_show(bg);
+	Evas_Object *settings_window = eoi_settings_left_create(main_canvas);
+	evas_object_name_set(settings_window, "settings-left-window");
+	evas_object_show(settings_window);
 
-	Evas_Object* header = eoi_create_themed_edje(main_canvas, "fbreader_cb_header_footer", "header");
-	evas_object_name_set(header, "lcb_header");
-	edje_object_part_text_set(header, "text", olists.empty() ? "" : olists.back()->name.c_str());
-	evas_object_move(header, 0, 0);
-	evas_object_resize(header, w/2, header_h);
-	evas_object_show(header);
-
-	Evas_Object* footer = eoi_create_themed_edje(main_canvas, "fbreader_cb_header_footer", "footer");
-	evas_object_name_set(footer, "lcb_footer");
-	evas_object_move(footer, 0, h - footer_h);
-	evas_object_resize(footer, w/2, footer_h);
-	evas_object_show(footer);
+	edje_object_part_text_set(settings_window, "title", olists.empty() ? "" : olists.back()->name.c_str()); 
 
     choicebox_info_t info = {
         NULL,
@@ -516,12 +471,15 @@ void cb_lcb_new(int select_item)
         lcb_page_updated_handler,
         lcb_close_handler,
     };
+
 	Evas_Object* choicebox = choicebox_new(main_canvas, &info, NULL);
 	choicebox_set_size(choicebox, olists.empty() ? 0 : olists.back()->items.size());
 	evas_object_name_set(choicebox, SETTINGS_LEFT_NAME);
-	evas_object_resize(choicebox, w/2, h - header_h - footer_h);
-	evas_object_move(choicebox, 0, header_h);
 	evas_object_show(choicebox);
+    eoi_register_fullscreen_choicebox(choicebox);
+
+	edje_object_part_swallow(settings_window, "contents", choicebox);
+	eoi_resize_object_register(lcb_win, settings_window, lcb_win_resized_2, NULL);
 
 	if(select_item >= 0) {
 		choicebox_scroll_to(choicebox, select_item);
@@ -535,8 +493,6 @@ void cb_lcb_new(int select_item)
 			EVAS_CALLBACK_KEY_UP,
 			&lcb_win_key_up_handler,
 			NULL);
-
-	ecore_evas_callback_resize_set(lcb_win, lcb_win_resize_handler);
 
 	ecore_evas_show(lcb_win);
 
@@ -562,9 +518,8 @@ static void rcb_page_updated_handler(Evas_Object* choicebox,
 		void* param)
 {
     Evas* canvas = evas_object_evas_get(choicebox);
-    Evas_Object* footer = evas_object_name_find(canvas, "rcb_footer");
-
-	choicebox_aux_edje_footer_handler(footer, "text", cur_page, total_pages);
+	Evas_Object *settings_window = evas_object_name_find(canvas, "settings-right-window");
+	choicebox_aux_edje_footer_handler(settings_window, "footer", cur_page, total_pages);
 }
 
 static void rcb_draw_handler(Evas_Object* choicebox,
@@ -637,17 +592,29 @@ static void cb_rcb_destroy()
 {
 	Evas* e = ecore_evas_get(lcb_win);
 
-	Evas_Object *o = evas_object_name_find(e, SETTINGS_RIGHT_NAME);
-	evas_object_hide(o);
-	evas_object_del(o);
+	Evas_Object *wm = evas_object_name_find(e, "main-window");
+	if(wm) {
+		Evas_Object *o = edje_object_part_swallow_get(wm, "right-overlay");
+		if(o) {
+			edje_object_part_unswallow(wm, o);
 
-	o = evas_object_name_find(e, "rcb_header");
-	evas_object_hide(o);
-	evas_object_del(o);
+			Evas_Object *o2 = edje_object_part_swallow_get(o, "contents");
+			if(o2) {
+				evas_object_hide(o2);
+				evas_object_del(o2);
+			}
 
-	o = evas_object_name_find(e, "rcb_footer");
-	evas_object_hide(o);
-	evas_object_del(o);
+			evas_object_hide(o);
+			evas_object_del(o);
+		}
+
+		o = edje_object_part_swallow_get(wm, "left-overlay");
+		if(o)
+			edje_object_part_unswallow(wm, o);
+
+		evas_object_hide(wm);
+		evas_object_del(wm);
+	}
 
 	int w, h;
 	evas_output_size_get(ecore_evas_get(lcb_win), &w, &h);
@@ -680,18 +647,12 @@ void cb_rcb_new()
 	evas_output_size_get(main_canvas, &w, &h);
 	ecore_evas_resize(lcb_win, w * 2, h);
 
-	Evas_Object* header = eoi_create_themed_edje(main_canvas, "fbreader_cb_header_footer", "header");
-	evas_object_name_set(header, "rcb_header");
-	edje_object_part_text_set(header, "text", vlist->name.c_str());
-	evas_object_move(header, w, 0);
-	evas_object_resize(header, w, header_h);
-	evas_object_show(header);
+	//new
+	Evas_Object *settings_window = eoi_settings_right_create(main_canvas);
+	evas_object_name_set(settings_window, "settings-right-window");
+	evas_object_show(settings_window);
 
-	Evas_Object* footer = eoi_create_themed_edje(main_canvas, "fbreader_cb_header_footer", "footer");
-	evas_object_name_set(footer, "rcb_footer");
-	evas_object_move(footer, w, h - footer_h);
-	evas_object_resize(footer, w, footer_h);
-	evas_object_show(footer);
+	edje_object_part_text_set(settings_window, "title", vlist->name.c_str());
 
     choicebox_info_t info = {
         NULL,
@@ -709,9 +670,18 @@ void cb_rcb_new()
 
 	choicebox_set_size(choicebox, vlist->values.size());
 	evas_object_name_set(choicebox, SETTINGS_RIGHT_NAME);
-	evas_object_resize(choicebox, w, h - header_h - footer_h);
-	evas_object_move(choicebox, w, header_h);
 	evas_object_show(choicebox);
+
+	edje_object_part_swallow(settings_window, "contents", choicebox);
+
+	Evas_Object *wm = eoi_main_window_create(main_canvas);
+	evas_object_name_set(wm, "main-window");
+	eoi_resize_object_register(lcb_win, wm, lcb_win_resized, NULL);
+	evas_object_move(wm, 0, 0);
+	evas_object_resize(wm, w, h);
+	evas_object_show(wm);
+    edje_object_part_swallow(wm, "right-overlay", settings_window);
+	edje_object_part_swallow(wm, "left-overlay", evas_object_name_find(main_canvas, "settings-left-window"));
 
     eoi_register_fullscreen_choicebox(choicebox);
 
@@ -734,9 +704,8 @@ static void fcb_page_updated_handler(Evas_Object* choicebox,
 		void* param)
 {
     Evas* canvas = evas_object_evas_get(choicebox);
-    Evas_Object* footer = evas_object_name_find(canvas, "footer");
-
-	choicebox_aux_edje_footer_handler(footer, "text", cur_page, total_pages);
+    Evas_Object* main_canvas_edje = evas_object_name_find(canvas, "fcb-window");
+	choicebox_aux_edje_footer_handler(main_canvas_edje, "footer", cur_page, total_pages);
 }
 
 static void fcb_draw_handler(Evas_Object* choicebox,
@@ -810,36 +779,10 @@ static int fcb_screen_change_handler(void *data, int type, void *event)
 		h = e->height;
 	}
 
+	ecore_evas_move(win, 0, 0);
     ecore_evas_resize(win, w, h);
 
 	return 0;
-}
-
-static void fcb_win_resize_handler(Ecore_Evas* main_win)
-{
-	Evas* canvas = ecore_evas_get(main_win);
-	int w, h;
-	evas_output_size_get(canvas, &w, &h);
-
-	Evas_Object* main_canvas_edje = evas_object_name_find(canvas, "main_canvas_edje");
-	evas_object_resize(main_canvas_edje, w, h);
-
-	Evas_Object *bg = evas_object_name_find(canvas, "bg");
-	evas_object_resize(bg, w, h);
-
-	Evas_Object* header = evas_object_name_find(canvas, "header");
-	evas_object_move(header, 0, 0);
-	evas_object_resize(header, w, header_h);
-
-	Evas_Object* choicebox = evas_object_name_find(canvas, "cb_full");
-	if(choicebox) {
-		evas_object_resize(choicebox, w, h - header_h - footer_h);
-		evas_object_move(choicebox, 0, header_h);
-	}
-
-	Evas_Object* footer = evas_object_name_find(canvas, "footer");
-	evas_object_move(footer, 0, h - footer_h);
-	evas_object_resize(footer, w, footer_h);
 }
 
 static void fcb_win_signal_handler(void* param, Evas_Object* o, const char* emission, const char* source)
@@ -867,7 +810,26 @@ static void fcb_win_key_up_handler(void* param, Evas* e, Evas_Object* o, void* e
     /* FIXME: in far future this should be made configurable */
 	if(!strcmp(k, "space")) {
 		bookmark_delete_mode = !bookmark_delete_mode;
-		edje_object_signal_emit(evas_object_name_find(e, "footer"), bookmark_delete_mode ? "alt_on" : "alt_off", "");
+
+		cb_list *list = (cb_list*)param;
+		if(!list->alt_text.empty()) {
+			Evas_Object *del_icon = evas_object_name_find(e, "del-icon");
+
+			if(!del_icon && bookmark_delete_mode) {
+				del_icon = eoi_create_themed_edje(e, "fbreader", "del_icon");
+				evas_object_name_set(del_icon, "del-icon");
+				edje_object_part_swallow(evas_object_name_find(e, "fcb-window"), "state-icons", del_icon);
+			}
+
+			if(!del_icon)
+				return;
+
+			if(bookmark_delete_mode)
+				evas_object_show(del_icon);
+			else
+				evas_object_hide(del_icon);
+		}
+
         return;
 	}
 
@@ -906,22 +868,23 @@ void cb_fcb_redraw(int newsize)
 		choicebox_set_selection(choicebox, -1);
 	}
 
-	bookmark_delete_mode = false;
+	//bookmark_delete_mode = false;
 }
 
 void cb_fcb_new(cb_list *list, int select_item)
 {
-	Evas_Object *bg;
+	Evas_Object *main_canvas_edje;
+	Ecore_Event_Handler *sc_handler;
 
 	if(reuse_fcb_win && fcb_win) {
-
 		Evas* main_canvas = ecore_evas_get(fcb_win);
 		Evas_Object *choicebox = evas_object_name_find(main_canvas, "cb_full");
 
-		edje_object_part_text_set(evas_object_name_find(main_canvas, "header"),
-				"text", list->name.c_str());
-		edje_object_part_text_set(evas_object_name_find(main_canvas, "footer"),
-				"alt", list->alt_text.c_str());
+		main_canvas_edje = evas_object_name_find(main_canvas, "fcb-window");
+		edje_object_part_text_set(main_canvas_edje, "title", list->name.c_str());
+		edje_object_part_text_set(main_canvas_edje, "footer", list->alt_text.c_str());
+		evas_object_show(main_canvas_edje);
+
 		choicebox_set_size(choicebox, list->items.size());
 
 		choicebox_invalidate_interval(choicebox, 0, list->items.size());
@@ -929,10 +892,7 @@ void cb_fcb_new(cb_list *list, int select_item)
 			choicebox_scroll_to(choicebox, 0);
 			choicebox_set_selection(choicebox, -1);
 		}
-
-		evas_object_show(evas_object_name_find(main_canvas, "bg"));
 	} else {
-
 		ee_init();
 
 		fcb_win = ecore_evas_software_x11_new(0, 0, 0, 0, 600, 800);
@@ -950,34 +910,26 @@ void cb_fcb_new(cb_list *list, int select_item)
                 window);
 
         ecore_x_randr_events_select(ecore_evas_software_x11_window_get(fcb_win), 1);
-        Ecore_Event_Handler *sc_handler = ecore_event_handler_add(ECORE_X_EVENT_SCREEN_CHANGE, fcb_screen_change_handler, fcb_win);
+        sc_handler = ecore_event_handler_add(ECORE_X_EVENT_SCREEN_CHANGE, fcb_screen_change_handler, fcb_win);
+		main_canvas_edje = eoi_main_window_create(main_canvas);
+		fprintf(stderr, "main_canvas_edje: %p\n", main_canvas_edje);
+		evas_object_name_set(main_canvas_edje, "fcb-window");
+		eoi_fullwindow_object_register(ecore_evas_ecore_evas_get(main_canvas),
+				main_canvas_edje);
 
-		bg = evas_object_rectangle_add(main_canvas);
-		evas_object_name_set(bg, "bg");
-		evas_object_color_set(bg, 255, 255, 255, 255);
-		evas_object_move(bg, 0, 0);
-		evas_object_resize(bg, 600, 800);
-		evas_object_show(bg);
+		edje_object_part_text_set(main_canvas_edje, "title", list->name.c_str());
 
-		Evas_Object* header = eoi_create_themed_edje(main_canvas, "fbreader_cb_header_footer", "header");
-		evas_object_name_set(header, "header");
-		edje_object_part_text_set(header, "text", list->name.c_str());
-		evas_object_move(header, 0, 0);
-		evas_object_resize(header, 600, header_h);
-		evas_object_show(header);
-
-		Evas_Object* footer = eoi_create_themed_edje(main_canvas, "fbreader_cb_header_footer", "footer");
-		evas_object_name_set(footer, "footer");
-		edje_object_part_text_set(footer, "alt", list->alt_text.c_str());
-		evas_object_move(footer, 0, 800 - footer_h);
-		evas_object_resize(footer, 600, footer_h);
-		evas_object_show(footer);
+		evas_object_move(main_canvas_edje, 0, 0);
+		int w, h;
+		evas_output_size_get(main_canvas, &w, &h);
+		evas_object_resize(main_canvas_edje, w, h);
+		evas_object_show(main_canvas_edje);
 
         choicebox_info_t info = {
             NULL,
 			"choicebox",
             "full",
-			"fbreader_cb_header_footer",
+            "fbreader",
             "item",
             fcb_handler,
             fcb_draw_handler,
@@ -988,19 +940,17 @@ void cb_fcb_new(cb_list *list, int select_item)
 		Evas_Object* choicebox = choicebox_new(main_canvas, &info, list);
 		choicebox_set_size(choicebox, list->items.size());
 		evas_object_name_set(choicebox, "cb_full");
-		evas_object_resize(choicebox, 600, 800 - header_h - footer_h);
-		evas_object_move(choicebox, 0, header_h);
-		evas_object_show(choicebox);
 
+		edje_object_part_swallow(main_canvas_edje, "contents", choicebox);
+		evas_object_show(choicebox);
+		
         eoi_register_fullscreen_choicebox(choicebox);
 
 		evas_object_focus_set(choicebox, true);
 		evas_object_event_callback_add(choicebox,
 				EVAS_CALLBACK_KEY_UP,
 				&fcb_win_key_up_handler,
-				NULL);
-
-		ecore_evas_callback_resize_set(fcb_win, fcb_win_resize_handler);
+				(void*)list);
 
 		if(select_item >= 0) {
 			choicebox_scroll_to(choicebox, select_item);
@@ -1018,8 +968,9 @@ void cb_fcb_new(cb_list *list, int select_item)
 	if(emergency_exit)
 		return;
 
+	ecore_event_handler_del(sc_handler);
 	if(fcb_win) {
-		evas_object_hide(bg);
+		evas_object_hide(main_canvas_edje);
 		if(!reuse_fcb_win) {
 			ecore_evas_hide(fcb_win);
 			ecore_evas_free(fcb_win);

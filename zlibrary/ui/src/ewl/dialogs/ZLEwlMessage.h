@@ -21,9 +21,12 @@
 #define ZLEWLMESSAGE_H
 
 #include <stdio.h>
+#include <Ecore_Evas.h>
 
 void show_message(char *text, void *handler = NULL);
 
 long read_number(char *text);
+
+Ecore_Evas *text_entry(char *text, void (*handler)(const char*));
 
 #endif

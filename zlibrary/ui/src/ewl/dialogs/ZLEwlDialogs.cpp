@@ -23,7 +23,6 @@
 #include "ZLEwlChoicebox.h"
 #include "ZLEwlMessage.h"
 #include "ZLEwlHelp.h"
-#include "virtk.h"
 
 #include <ewl/Ewl.h>
 #include <Evas.h>
@@ -386,7 +385,7 @@ void search_found_message(FBReader &f)
 		show_message(_("Search"));
 }
 
-void search_input_handler(char *text)
+void search_input_handler(const char *text)
 {
 	if(text && strlen(text)) {
 		myFbreader->clearTextCaches();
@@ -407,19 +406,19 @@ void ZLEwlDict(FBReader &f)
 
 void ZLEwlSearchDialog(FBReader &f)
 {
-	Ewl_Widget *w;
 	myFbreader = &f;
 
 	next_gui = NULL;
 
-	ewl_widget_show(w = init_virtk(NULL, _("Search"), search_input_handler));
+	Ecore_Evas *ee = text_entry(_("Search"), search_input_handler);
+
 	ecore_main_loop_begin();
 	if(emergency_exit)
 		return;
 
-	if(w) {
-		ewl_widget_hide(w);
-		ewl_widget_destroy(w);
+	if(ee) {
+		ecore_evas_hide(ee);
+		ecore_evas_free(ee);
 	}
 
 	// run next gui window

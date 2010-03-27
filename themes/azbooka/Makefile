@@ -1,8 +1,8 @@
 EDC = \
-fbreader_cb_header_footer.edc \
+fbreader.edc \
 fbreader_entrybox.edc \
-fbreader_messagebox.edc \
-fbreader_oitheme.edc
+fbreader_messagebox.edc
+
 EDJ = $(EDC:%.edc=%.edj)
 
 all: $(EDJ)

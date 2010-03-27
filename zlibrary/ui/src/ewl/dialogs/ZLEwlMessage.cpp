@@ -23,6 +23,7 @@
 extern "C" {
 #include <xcb/xcb.h>
 #include <libeoi_themes.h>
+#include <libeoi_entry.h>
 }
 
 #include "ZLEwlMessage.h"
@@ -265,4 +266,68 @@ long read_number(char *text)
 	ecore_evas_free(main_win);
 
 	return number.number;
+}
+
+static void
+entry_handler(Evas_Object *entry,
+        const char *text,
+        void* param)
+{
+	if(param) {
+		void (*handler)(const char *) = (void(*)(const char*))param;
+		handler(text);
+	}
+
+	ecore_main_loop_quit();
+}
+
+static void text_entry_resized(Ecore_Evas *ee, Evas_Object *object, int w, int h,
+             void *param)
+{
+	evas_object_resize(object, w, h);
+}
+
+static void evas_object_callback_del(void *data, Evas *e, Evas_Object *obj, void *event_info)
+{
+	ecore_main_loop_quit();
+}
+
+Ecore_Evas *text_entry(char *text, void (*handler)(const char*))
+{
+	ee_init();
+
+	Ecore_Evas* main_win = ecore_evas_software_x11_new(0, 0, 0, 0, 600, 800);
+	ecore_evas_title_set(main_win, "TE");
+	ecore_evas_name_class_set(main_win, "TE", "TE");
+
+	extern xcb_window_t window;
+	ecore_x_icccm_transient_for_set(
+			ecore_evas_software_x11_window_get(main_win),
+			window);
+
+	Evas* main_canvas = ecore_evas_get(main_win);
+
+	ecore_evas_callback_delete_request_set(main_win, main_win_close_handler);
+
+	/*
+	Evas_Object *wm = eoi_main_window_create(main_canvas);
+	evas_object_name_set(wm, "main-window");
+	eoi_resize_object_register(lcb_win, wm, lcb_win_resized, NULL);
+	evas_object_move(wm, 0, 0);
+	evas_object_resize(wm, w, h);
+	evas_object_show(wm);
+	*/
+
+	Evas_Object *e = entry_new(main_canvas, entry_handler, "entry",
+			text, (void*)handler);
+
+	evas_object_event_callback_add(e, EVAS_CALLBACK_DEL, evas_object_callback_del, NULL);
+
+	//eoi_resize_object_register(main_win, wm, text_entry_resized, NULL);
+
+	ecore_evas_show(main_win);
+
+	ecore_main_loop_iterate();
+
+	return main_win;
 }
