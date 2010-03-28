@@ -22,8 +22,6 @@
 
 #include <stack>
 
-#include <glib.h>
-
 #include <ZLDialogManager.h>
 
 class ZLEwlDialogManager : public ZLDialogManager {
@@ -57,7 +55,7 @@ public:
 
 
 private:
-	int internalBox(const gchar *icon, const ZLResourceKey &key, const std::string &message, const ZLResourceKey &button0 = OK_BUTTON, const ZLResourceKey &button1 = ZLResourceKey(), const ZLResourceKey &button2 = ZLResourceKey()) const;
+	int internalBox(const char *icon, const ZLResourceKey &key, const std::string &message, const ZLResourceKey &button0 = OK_BUTTON, const ZLResourceKey &button1 = ZLResourceKey(), const ZLResourceKey &button2 = ZLResourceKey()) const;
 
 private:
 	mutable void *myWindow;

@@ -34,7 +34,7 @@ void ZLEwlDialogManager::errorBox(const ZLResourceKey &key, const std::string &m
 int ZLEwlDialogManager::questionBox(const ZLResourceKey &key, const std::string &message, const ZLResourceKey &button0, const ZLResourceKey &button1, const ZLResourceKey &button2) const {
 }
 
-int ZLEwlDialogManager::internalBox(const gchar *icon, const ZLResourceKey &key, const std::string &message, const ZLResourceKey &button0, const ZLResourceKey &button1, const ZLResourceKey &button2) const {
+int ZLEwlDialogManager::internalBox(const char *icon, const ZLResourceKey &key, const std::string &message, const ZLResourceKey &button0, const ZLResourceKey &button1, const ZLResourceKey &button2) const {
 }
 
 bool ZLEwlDialogManager::selectionDialog(const ZLResourceKey &key, ZLTreeHandler &handler) const {
