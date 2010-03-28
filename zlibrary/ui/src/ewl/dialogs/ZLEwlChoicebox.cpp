@@ -362,6 +362,8 @@ void ee_init()
 			return;
 		if(!ecore_init())
 			return;
+		if(!ecore_x_init(NULL))
+			return;
 		if(!ecore_evas_init())
 			return;
 		if(!edje_init())
