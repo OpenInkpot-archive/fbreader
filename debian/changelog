@@ -1,3 +1,32 @@
+fbreader (0.12.1-11) zelazny; urgency=low
+
+  [ Rob ]
+  * l10n: Updates to Dutch (Flemish) (nl) translation
+
+  [ Alexander Kerner ]
+  * check only one recently opened book and not all
+  * adjust font change step
+  * new theme
+
+  [ jerry.tk ]
+  * Fix #824
+
+  [ Fanxi Li ]
+  * l10n: Updates to Chinese (simplified) (zh_CN) translation
+
+  [ Tomasz Długosz ]
+  * l10n: Updates to Polish (pl) translation
+
+  [ idle ]
+  * l10n: Updates to Czech (cs) translation
+
+  [ Tomasz Długosz ]
+
+  [ Vasil Badev ]
+  * l10n: Updates to Bulgarian (bg) translation
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sun, 28 Mar 2010 00:58:02 +0100
+
 fbreader (0.12.1-10) zelazny; urgency=low
 
   * adjust 'Depends' and 'Conflicts' fields in debian/control
