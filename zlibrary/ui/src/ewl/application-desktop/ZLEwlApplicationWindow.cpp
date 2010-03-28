@@ -30,7 +30,7 @@
 extern bool _fbreader_closed;
 
 void ZLEwlDialogManager::createApplicationWindow(ZLApplication *application) const {
-	myWindow = EWL_WINDOW((new ZLEwlApplicationWindow(application))->getMainWindow());
+	myWindow = (new ZLEwlApplicationWindow(application))->getMainWindow();
 }
 
 static const std::string OPTIONS = "Options";

@@ -17,12 +17,12 @@
  * 02110-1301, USA.
  */
 
-#include <ewl/Ewl.h>
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <signal.h>
 #include <errno.h>
+
+#include <Ecore.h>
 
 #include <ZLApplication.h>
 #include <ZLibrary.h>
@@ -190,10 +190,6 @@ void ZLEwlLibraryImplementation::init(int &argc, char **&argv) {
 		fprintf(pidfile, "%d", getpid());
 		fclose(pidfile);
 	}
-
-	if(!ewl_init(&argc, argv)) {
-		fprintf(stderr, "Unable to init EWL.\n");
-	}		
 
 	ZLibrary::parseArguments(argc, argv);
 

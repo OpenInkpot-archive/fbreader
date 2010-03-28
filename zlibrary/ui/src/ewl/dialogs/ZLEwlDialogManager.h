@@ -20,8 +20,6 @@
 #ifndef __ZLEWLDIALOGMANAGER_H__
 #define __ZLEWLDIALOGMANAGER_H__
 
-#include <ewl/Ewl.h>
-
 #include <stack>
 
 #include <glib.h>
@@ -62,8 +60,8 @@ private:
 	int internalBox(const gchar *icon, const ZLResourceKey &key, const std::string &message, const ZLResourceKey &button0 = OK_BUTTON, const ZLResourceKey &button1 = ZLResourceKey(), const ZLResourceKey &button2 = ZLResourceKey()) const;
 
 private:
-	mutable Ewl_Window *myWindow;
-	mutable std::stack<Ewl_Window*> myDialogs;
+	mutable void *myWindow;
+	mutable std::stack<void*> myDialogs;
 	bool myIsKeyboardGrabbed;
 
 //friend EwlDialog *createEwlDialog(const std::string& title);

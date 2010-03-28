@@ -24,7 +24,7 @@
 #include "ZLEwlMessage.h"
 #include "ZLEwlHelp.h"
 
-#include <ewl/Ewl.h>
+#include <Ecore.h>
 #include <Evas.h>
 #include <Edje.h>
 #include <Efreet.h>
