@@ -46,11 +46,11 @@ install-stamp: build
 		install -m 644 themes/default/fbreader.edj $(THEME_DIR)
 		install -m 644 themes/default/fbreader_messagebox.edj $(THEME_DIR)
 		install -m 644 themes/default/fbreader_entrybox.edj $(THEME_DIR)
-		mkdir -p $(DEB_DIR)/fbreader/usr/share/eoi/themes/azbooka
-		install -m 644 themes/default/fbreader.edj \
-			themes/default/fbreader_messagebox.edj \
-			themes/default/fbreader_entrybox.edj \
-			$(DEB_DIR)/fbreader/usr/share/eoi/themes/azbooka
+		mkdir -p $(DEB_DIR)/fbreader-settings-azbooka/usr/share/eoi/themes/azbooka
+		install -m 644 themes/azbooka/fbreader.edj \
+			themes/azbooka/fbreader_messagebox.edj \
+			themes/azbooka/fbreader_entrybox.edj \
+			$(DEB_DIR)/fbreader-settings-azbooka/usr/share/eoi/themes/azbooka
 		mkdir -p $(DEB_DIR)/fbreader/usr/share/keys/help
 		install -m 644 fbreader_help.ini $(DEB_DIR)/fbreader/usr/share/keys/help/fbreader.ini
 		mkdir -p ${DEB_DIR}/fbreader/usr/share/help/fbreader
