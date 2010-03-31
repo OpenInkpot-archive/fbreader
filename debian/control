@@ -53,10 +53,10 @@ Replaces: fbreader-settings
 Description: n516 specific settings
  This package contains n516 specific settings: keybindings, styles, etc.
 
-Package: fbreader-settings-azbooka
+Package: fbreader-theme-azbooka
 Priority: optional
 Architecture: all
-Depends: fbreader (>= 0.12.1-9)
-Conflicts: fbreader (< 0.12.1-9)
+Depends: fbreader (>= 0.12.1-12)
+Conflicts: fbreader (< 0.12.1-12)
 Description: azbooka specific settings
  This package contains gui theme for azbooka
