@@ -437,11 +437,6 @@ msgstr "Akku töltöttség megjelenítése"
 msgid "Detect Language and Encoding"
 msgstr "Nyelv és kódolás felismerése"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1344
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1482
-msgid "Keys"
-msgstr "Billentyűkiosztás"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1457
 msgid "Book settings"
 msgstr "Könyv beállításai"
@@ -700,6 +695,11 @@ msgstr "Lapozás előző TJ címre"
 #, c-format
 msgid "Key %s"
 msgstr "%s gomb"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1344
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1482
+msgid "Keys"
+msgstr "Gombok"
 
 #~ msgid "Menu"
 #~ msgstr "Könyv menü"
