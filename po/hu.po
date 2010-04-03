@@ -72,14 +72,6 @@ msgstr "Következő TJ címre lapozás"
 msgid "Go to Previous TOC Section"
 msgstr "Előző TJ címre lapozás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
-msgid "Next Page"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
-msgid "Previous Page"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
 msgid "Undo"
 msgstr "Visszavonás"
@@ -111,28 +103,6 @@ msgstr "Félkövér betűtípus be/ki"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
 msgid "Toggle Position Indicator"
 msgstr "Pozíciójelző be/kikapcsolása"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
-#, fuzzy
-msgid "Show Settings"
-msgstr "Könyv beállításai"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
-msgid "Cancel/Quit"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
-msgid "Show Local Menu"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
-#, fuzzy
-msgid "Show Help"
-msgstr "Idő megjelenítése"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
-msgid "Show font size dialog"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "Arabic"
@@ -706,6 +676,34 @@ msgstr ""
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1599
 msgid "Dictionary"
 msgstr "Szótár"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
+msgid "Previous Page"
+msgstr "Előző oldal"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
+msgid "Next Page"
+msgstr "Következő oldal"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
+msgid "Cancel/Quit"
+msgstr "Mégsem/Kilépés"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
+msgid "Show Local Menu"
+msgstr "Helyi menü megjelenítése"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
+msgid "Show Help"
+msgstr "Segítség megjelenítése"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
+msgid "Show font size dialog"
+msgstr "Betűméret dialógus megjelenítése"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
+msgid "Show Settings"
+msgstr "Beállítások megjelenítése"
 
 #~ msgid "Menu"
 #~ msgstr "Könyv menü"
