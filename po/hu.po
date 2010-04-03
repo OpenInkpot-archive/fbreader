@@ -519,14 +519,6 @@ msgstr "jobb"
 msgid "Left"
 msgstr "bal"
 
-#: fbreader/data/default/keydefs.n516.tmpl:28
-msgid "Zoom"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:14
-msgid "LP 0"
-msgstr ""
-
 #: fbreader/data/default/keydefs.v3.tmpl:15
 msgid "LP 1"
 msgstr ""
@@ -578,10 +570,6 @@ msgstr "jobb"
 
 #: fbreader/data/default/keydefs.v3.tmpl:31
 msgid "LP Left"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:32
-msgid "+"
 msgstr ""
 
 #: fbreader/data/default/keydefs.v3.tmpl:33
@@ -703,6 +691,18 @@ msgstr "1"
 #: fbreader/data/default/keydefs.v3.tmpl:4
 msgid "0"
 msgstr "0"
+
+#: fbreader/data/default/keydefs.v3.tmpl:32
+msgid "+"
+msgstr "+"
+
+#: fbreader/data/default/keydefs.v3.tmpl:14
+msgid "LP 0"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:28
+msgid "Zoom"
+msgstr "nagyítás"
 
 #~ msgid "Menu"
 #~ msgstr "Könyv menü"
