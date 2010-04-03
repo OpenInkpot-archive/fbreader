@@ -688,11 +688,6 @@ msgstr "Bal"
 msgid "Right"
 msgstr "Jobb"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1145
-#, c-format
-msgid "Key %s"
-msgstr "Billentyű %s"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
 msgid "Go to Next TOC Section"
 msgstr "Lapozás következő TJ címre"
@@ -700,6 +695,11 @@ msgstr "Lapozás következő TJ címre"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
 msgid "Go to Previous TOC Section"
 msgstr "Lapozás előző TJ címre"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1145
+#, c-format
+msgid "Key %s"
+msgstr "%s gomb"
 
 #~ msgid "Menu"
 #~ msgstr "Könyv menü"
