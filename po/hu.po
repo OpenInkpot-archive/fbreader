@@ -503,92 +503,8 @@ msgstr "Be"
 msgid "Off"
 msgstr "Ki"
 
-#: fbreader/data/default/keydefs.n516.tmpl:4
-#: fbreader/data/default/keydefs.v3.tmpl:4
-msgid "0"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:5
-#: fbreader/data/default/keydefs.v3.tmpl:5
-msgid "1"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:6
-#: fbreader/data/default/keydefs.v3.tmpl:6
-msgid "2"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:7
-#: fbreader/data/default/keydefs.v3.tmpl:7
-msgid "3"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:8
-#: fbreader/data/default/keydefs.v3.tmpl:8
-msgid "4"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:9
-#: fbreader/data/default/keydefs.v3.tmpl:9
-msgid "5"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:10
-#: fbreader/data/default/keydefs.v3.tmpl:10
-msgid "6"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:11
-#: fbreader/data/default/keydefs.v3.tmpl:11
-msgid "7"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:12
-#: fbreader/data/default/keydefs.v3.tmpl:12
-msgid "8"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:13
-#: fbreader/data/default/keydefs.v3.tmpl:13
-msgid "9"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:14
-#, fuzzy
-msgid "M/Bookmark"
-msgstr "Könyvjelzők"
-
-#: fbreader/data/default/keydefs.n516.tmpl:17
-#: fbreader/data/default/keydefs.v3.tmpl:24
-msgid "OK"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:18
-msgid "Back"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:19
-msgid "Next"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:20
-msgid "Prior"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:21
-msgid "LP Next"
-msgstr ""
-
 #: fbreader/data/default/keydefs.n516.tmpl:22
 msgid "LP Prior"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:23
-msgid "Down"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:24
-msgid "Up"
 msgstr ""
 
 #: fbreader/data/default/keydefs.n516.tmpl:25
@@ -704,6 +620,89 @@ msgstr "Betűméret dialógus megjelenítése"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
 msgid "Show Settings"
 msgstr "Beállítások megjelenítése"
+
+#: fbreader/data/default/keydefs.n516.tmpl:19
+msgid "Next"
+msgstr "Következő"
+
+#: fbreader/data/default/keydefs.n516.tmpl:20
+msgid "Prior"
+msgstr "Előző"
+
+#: fbreader/data/default/keydefs.n516.tmpl:21
+msgid "LP Next"
+msgstr ""
+
+#: fbreader/data/default/keydefs.n516.tmpl:23
+msgid "Down"
+msgstr "Le"
+
+#: fbreader/data/default/keydefs.n516.tmpl:24
+msgid "Up"
+msgstr "Fel"
+
+#: fbreader/data/default/keydefs.n516.tmpl:18
+msgid "Back"
+msgstr "Vissza"
+
+#: fbreader/data/default/keydefs.n516.tmpl:17
+#: fbreader/data/default/keydefs.v3.tmpl:24
+msgid "OK"
+msgstr "OK"
+
+#: fbreader/data/default/keydefs.n516.tmpl:12
+#: fbreader/data/default/keydefs.v3.tmpl:12
+msgid "8"
+msgstr "8"
+
+#: fbreader/data/default/keydefs.n516.tmpl:11
+#: fbreader/data/default/keydefs.v3.tmpl:11
+msgid "7"
+msgstr "7"
+
+#: fbreader/data/default/keydefs.n516.tmpl:14
+msgid "M/Bookmark"
+msgstr "M/Könyvjelzők"
+
+#: fbreader/data/default/keydefs.n516.tmpl:13
+#: fbreader/data/default/keydefs.v3.tmpl:13
+msgid "9"
+msgstr "9"
+
+#: fbreader/data/default/keydefs.n516.tmpl:8
+#: fbreader/data/default/keydefs.v3.tmpl:8
+msgid "4"
+msgstr "4"
+
+#: fbreader/data/default/keydefs.n516.tmpl:7
+#: fbreader/data/default/keydefs.v3.tmpl:7
+msgid "3"
+msgstr "3"
+
+#: fbreader/data/default/keydefs.n516.tmpl:10
+#: fbreader/data/default/keydefs.v3.tmpl:10
+msgid "6"
+msgstr "6"
+
+#: fbreader/data/default/keydefs.n516.tmpl:9
+#: fbreader/data/default/keydefs.v3.tmpl:9
+msgid "5"
+msgstr "5"
+
+#: fbreader/data/default/keydefs.n516.tmpl:6
+#: fbreader/data/default/keydefs.v3.tmpl:6
+msgid "2"
+msgstr "2"
+
+#: fbreader/data/default/keydefs.n516.tmpl:5
+#: fbreader/data/default/keydefs.v3.tmpl:5
+msgid "1"
+msgstr "1"
+
+#: fbreader/data/default/keydefs.n516.tmpl:4
+#: fbreader/data/default/keydefs.v3.tmpl:4
+msgid "0"
+msgstr "0"
 
 #~ msgid "Menu"
 #~ msgstr "Könyv menü"
