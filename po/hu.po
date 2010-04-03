@@ -64,14 +64,6 @@ msgstr "Fejezet elejére lapozás"
 msgid "Go to End of Section"
 msgstr "Fejezet végére lapozás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
-msgid "Go to Next TOC Section"
-msgstr "Következő TJ címre lapozás"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
-msgid "Go to Previous TOC Section"
-msgstr "Előző TJ címre lapozás"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
 msgid "Undo"
 msgstr "Visszavonás"
@@ -700,6 +692,14 @@ msgstr "Jobb"
 #, c-format
 msgid "Key %s"
 msgstr "Billentyű %s"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
+msgid "Go to Next TOC Section"
+msgstr "Lapozás következő TJ címre"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+msgid "Go to Previous TOC Section"
+msgstr "Lapozás előző TJ címre"
 
 #~ msgid "Menu"
 #~ msgstr "Könyv menü"
