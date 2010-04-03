@@ -400,11 +400,6 @@ msgstr "Könyv nyelve"
 msgid "Break Paragraph At"
 msgstr "Új bekezdés kezdete"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1145
-#, fuzzy, c-format
-msgid "Key %s"
-msgstr "Billentyű %d"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1174
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1440
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1479
@@ -700,6 +695,11 @@ msgstr "Bal"
 #: fbreader/data/default/keydefs.v3.tmpl:28
 msgid "Right"
 msgstr "Jobb"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1145
+#, c-format
+msgid "Key %s"
+msgstr "Billentyű %s"
 
 #~ msgid "Menu"
 #~ msgstr "Könyv menü"
