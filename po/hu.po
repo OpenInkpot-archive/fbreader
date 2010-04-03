@@ -507,18 +507,6 @@ msgstr "Ki"
 msgid "LP Prior"
 msgstr ""
 
-#: fbreader/data/default/keydefs.n516.tmpl:25
-#: fbreader/data/default/keydefs.v3.tmpl:28
-#, fuzzy
-msgid "Right"
-msgstr "jobb"
-
-#: fbreader/data/default/keydefs.n516.tmpl:26
-#: fbreader/data/default/keydefs.v3.tmpl:30
-#, fuzzy
-msgid "Left"
-msgstr "bal"
-
 #: fbreader/data/default/keydefs.v3.tmpl:15
 msgid "LP 1"
 msgstr ""
@@ -559,21 +547,8 @@ msgstr ""
 msgid "LP OK"
 msgstr ""
 
-#: fbreader/data/default/keydefs.v3.tmpl:26
-msgid "C"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:29
-#, fuzzy
-msgid "LP Right"
-msgstr "jobb"
-
 #: fbreader/data/default/keydefs.v3.tmpl:31
 msgid "LP Left"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:33
-msgid "-"
 msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
@@ -703,6 +678,28 @@ msgstr ""
 #: fbreader/data/default/keydefs.n516.tmpl:28
 msgid "Zoom"
 msgstr "nagyítás"
+
+#: fbreader/data/default/keydefs.v3.tmpl:26
+msgid "C"
+msgstr "C"
+
+#: fbreader/data/default/keydefs.v3.tmpl:29
+msgid "LP Right"
+msgstr ""
+
+#: fbreader/data/default/keydefs.v3.tmpl:33
+msgid "-"
+msgstr "-"
+
+#: fbreader/data/default/keydefs.n516.tmpl:26
+#: fbreader/data/default/keydefs.v3.tmpl:30
+msgid "Left"
+msgstr "Bal"
+
+#: fbreader/data/default/keydefs.n516.tmpl:25
+#: fbreader/data/default/keydefs.v3.tmpl:28
+msgid "Right"
+msgstr "Jobb"
 
 #~ msgid "Menu"
 #~ msgstr "Könyv menü"
