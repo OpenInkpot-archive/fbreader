@@ -485,54 +485,6 @@ msgstr "Be"
 msgid "Off"
 msgstr "Ki"
 
-#: fbreader/data/default/keydefs.n516.tmpl:22
-msgid "LP Prior"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:15
-msgid "LP 1"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:16
-msgid "LP 2"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:17
-msgid "LP 3"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:18
-msgid "LP 4"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:19
-msgid "LP 5"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:20
-msgid "LP 6"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:21
-msgid "LP 7"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:22
-msgid "LP 8"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:23
-msgid "LP 9"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:25
-msgid "LP OK"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:31
-msgid "LP Left"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1599
 msgid "Dictionary"
@@ -573,10 +525,6 @@ msgstr "Következő"
 #: fbreader/data/default/keydefs.n516.tmpl:20
 msgid "Prior"
 msgstr "Előző"
-
-#: fbreader/data/default/keydefs.n516.tmpl:21
-msgid "LP Next"
-msgstr ""
 
 #: fbreader/data/default/keydefs.n516.tmpl:23
 msgid "Down"
@@ -653,10 +601,6 @@ msgstr "0"
 msgid "+"
 msgstr "+"
 
-#: fbreader/data/default/keydefs.v3.tmpl:14
-msgid "LP 0"
-msgstr ""
-
 #: fbreader/data/default/keydefs.n516.tmpl:28
 msgid "Zoom"
 msgstr "nagyítás"
@@ -664,10 +608,6 @@ msgstr "nagyítás"
 #: fbreader/data/default/keydefs.v3.tmpl:26
 msgid "C"
 msgstr "C"
-
-#: fbreader/data/default/keydefs.v3.tmpl:29
-msgid "LP Right"
-msgstr ""
 
 #: fbreader/data/default/keydefs.v3.tmpl:33
 msgid "-"
@@ -700,6 +640,66 @@ msgstr "%s gomb"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1482
 msgid "Keys"
 msgstr "Gombok"
+
+#: fbreader/data/default/keydefs.n516.tmpl:21
+msgid "LP Next"
+msgstr "HN Következő"
+
+#: fbreader/data/default/keydefs.v3.tmpl:31
+msgid "LP Left"
+msgstr "HN Bal"
+
+#: fbreader/data/default/keydefs.v3.tmpl:22
+msgid "LP 8"
+msgstr "HN 8"
+
+#: fbreader/data/default/keydefs.v3.tmpl:21
+msgid "LP 7"
+msgstr "HN 7"
+
+#: fbreader/data/default/keydefs.v3.tmpl:25
+msgid "LP OK"
+msgstr "HN OK"
+
+#: fbreader/data/default/keydefs.v3.tmpl:23
+msgid "LP 9"
+msgstr "HN 9"
+
+#: fbreader/data/default/keydefs.v3.tmpl:20
+msgid "LP 6"
+msgstr "HN 6"
+
+#: fbreader/data/default/keydefs.v3.tmpl:29
+msgid "LP Right"
+msgstr "HM Jobb"
+
+#: fbreader/data/default/keydefs.v3.tmpl:14
+msgid "LP 0"
+msgstr "HM 0"
+
+#: fbreader/data/default/keydefs.v3.tmpl:19
+msgid "LP 5"
+msgstr "HN 5"
+
+#: fbreader/data/default/keydefs.n516.tmpl:22
+msgid "LP Prior"
+msgstr "HN Előző"
+
+#: fbreader/data/default/keydefs.v3.tmpl:17
+msgid "LP 3"
+msgstr "HN 3"
+
+#: fbreader/data/default/keydefs.v3.tmpl:18
+msgid "LP 4"
+msgstr "HN 4"
+
+#: fbreader/data/default/keydefs.v3.tmpl:15
+msgid "LP 1"
+msgstr "HN 1"
+
+#: fbreader/data/default/keydefs.v3.tmpl:16
+msgid "LP 2"
+msgstr "HN 2"
 
 #~ msgid "Menu"
 #~ msgstr "Könyv menü"
