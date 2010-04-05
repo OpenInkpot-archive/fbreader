@@ -1,3 +1,23 @@
+fbreader (0.12.1-13) zelazny; urgency=low
+
+  [ Alexander Kerner ]
+  * add icons to book menu
+  * package proper azbooka theme
+  * rename package -settings-azbooka to -theme-azbooka
+
+  [ Rob ]
+  * l10n: Dutch
+  * l10n: Updates to Dutch (Flemish) (nl) translation
+
+  [ lozhkinet ]
+  * l10n: Updates to Russian (ru) translation
+  * l10n: Updates to Ukrainian (uk) translation
+
+  [ András Csehi ]
+  * l10n: Updates to Hungarian (hu) translation
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Mon, 05 Apr 2010 02:06:59 +0200
+
 fbreader (0.12.1-12) zelazny; urgency=low
 
   * Fix segfault: add ecore_x_init()
