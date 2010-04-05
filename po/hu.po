@@ -1,9 +1,9 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
@@ -52,11 +52,6 @@ msgstr "Adott lapra lapozás"
 msgid "Show Table of Contents"
 msgstr "Tartalomjegyzékre lapozás"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1599
-msgid "Dictionary"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
 msgid "Go to Home"
 msgstr "Elejére lapozás"
@@ -68,22 +63,6 @@ msgstr "Fejezet elejére lapozás"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
 msgid "Go to End of Section"
 msgstr "Fejezet végére lapozás"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
-msgid "Go to Next TOC Section"
-msgstr "Következő TJ címre lapozás"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
-msgid "Go to Previous TOC Section"
-msgstr "Előző TJ címre lapozás"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
-msgid "Next Page"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
-msgid "Previous Page"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
 msgid "Undo"
@@ -116,28 +95,6 @@ msgstr "Félkövér betűtípus be/ki"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
 msgid "Toggle Position Indicator"
 msgstr "Pozíciójelző be/kikapcsolása"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
-#, fuzzy
-msgid "Show Settings"
-msgstr "Könyv beállításai"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
-msgid "Cancel/Quit"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
-msgid "Show Local Menu"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
-#, fuzzy
-msgid "Show Help"
-msgstr "Idő megjelenítése"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
-msgid "Show font size dialog"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "Arabic"
@@ -435,11 +392,6 @@ msgstr "Könyv nyelve"
 msgid "Break Paragraph At"
 msgstr "Új bekezdés kezdete"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1145
-#, fuzzy, c-format
-msgid "Key %s"
-msgstr "Billentyű %d"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1174
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1440
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1479
@@ -484,11 +436,6 @@ msgstr "Akku töltöttség megjelenítése"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1234
 msgid "Detect Language and Encoding"
 msgstr "Nyelv és kódolás felismerése"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1344
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1482
-msgid "Keys"
-msgstr "Billentyűkiosztás"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1457
 msgid "Book settings"
@@ -538,176 +485,222 @@ msgstr "Be"
 msgid "Off"
 msgstr "Ki"
 
-#: fbreader/data/default/keydefs.n516.tmpl:4
-#: fbreader/data/default/keydefs.v3.tmpl:4
-msgid "0"
-msgstr ""
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1599
+msgid "Dictionary"
+msgstr "Szótár"
 
-#: fbreader/data/default/keydefs.n516.tmpl:5
-#: fbreader/data/default/keydefs.v3.tmpl:5
-msgid "1"
-msgstr ""
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
+msgid "Previous Page"
+msgstr "Előző oldal"
 
-#: fbreader/data/default/keydefs.n516.tmpl:6
-#: fbreader/data/default/keydefs.v3.tmpl:6
-msgid "2"
-msgstr ""
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
+msgid "Next Page"
+msgstr "Következő oldal"
 
-#: fbreader/data/default/keydefs.n516.tmpl:7
-#: fbreader/data/default/keydefs.v3.tmpl:7
-msgid "3"
-msgstr ""
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
+msgid "Cancel/Quit"
+msgstr "Mégsem/Kilépés"
 
-#: fbreader/data/default/keydefs.n516.tmpl:8
-#: fbreader/data/default/keydefs.v3.tmpl:8
-msgid "4"
-msgstr ""
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
+msgid "Show Local Menu"
+msgstr "Helyi menü megjelenítése"
 
-#: fbreader/data/default/keydefs.n516.tmpl:9
-#: fbreader/data/default/keydefs.v3.tmpl:9
-msgid "5"
-msgstr ""
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
+msgid "Show Help"
+msgstr "Segítség megjelenítése"
 
-#: fbreader/data/default/keydefs.n516.tmpl:10
-#: fbreader/data/default/keydefs.v3.tmpl:10
-msgid "6"
-msgstr ""
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
+msgid "Show font size dialog"
+msgstr "Betűméret dialógus megjelenítése"
 
-#: fbreader/data/default/keydefs.n516.tmpl:11
-#: fbreader/data/default/keydefs.v3.tmpl:11
-msgid "7"
-msgstr ""
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
+msgid "Show Settings"
+msgstr "Beállítások megjelenítése"
 
-#: fbreader/data/default/keydefs.n516.tmpl:12
-#: fbreader/data/default/keydefs.v3.tmpl:12
-msgid "8"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:19
+msgid "Next"
+msgstr "Következő"
 
-#: fbreader/data/default/keydefs.n516.tmpl:13
-#: fbreader/data/default/keydefs.v3.tmpl:13
-msgid "9"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:20
+msgid "Prior"
+msgstr "Előző"
 
-#: fbreader/data/default/keydefs.n516.tmpl:14
-#, fuzzy
-msgid "M/Bookmark"
-msgstr "Könyvjelzők"
+#: fbreader/data/default/keydefs.n516.tmpl:23
+msgid "Down"
+msgstr "Le"
+
+#: fbreader/data/default/keydefs.n516.tmpl:24
+msgid "Up"
+msgstr "Fel"
+
+#: fbreader/data/default/keydefs.n516.tmpl:18
+msgid "Back"
+msgstr "Vissza"
 
 #: fbreader/data/default/keydefs.n516.tmpl:17
 #: fbreader/data/default/keydefs.v3.tmpl:24
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
-#: fbreader/data/default/keydefs.n516.tmpl:18
-msgid "Back"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:12
+#: fbreader/data/default/keydefs.v3.tmpl:12
+msgid "8"
+msgstr "8"
 
-#: fbreader/data/default/keydefs.n516.tmpl:19
-msgid "Next"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:11
+#: fbreader/data/default/keydefs.v3.tmpl:11
+msgid "7"
+msgstr "7"
 
-#: fbreader/data/default/keydefs.n516.tmpl:20
-msgid "Prior"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:14
+msgid "M/Bookmark"
+msgstr "M/Könyvjelzők"
 
-#: fbreader/data/default/keydefs.n516.tmpl:21
-msgid "LP Next"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:13
+#: fbreader/data/default/keydefs.v3.tmpl:13
+msgid "9"
+msgstr "9"
 
-#: fbreader/data/default/keydefs.n516.tmpl:22
-msgid "LP Prior"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:8
+#: fbreader/data/default/keydefs.v3.tmpl:8
+msgid "4"
+msgstr "4"
 
-#: fbreader/data/default/keydefs.n516.tmpl:23
-msgid "Down"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:7
+#: fbreader/data/default/keydefs.v3.tmpl:7
+msgid "3"
+msgstr "3"
 
-#: fbreader/data/default/keydefs.n516.tmpl:24
-msgid "Up"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:10
+#: fbreader/data/default/keydefs.v3.tmpl:10
+msgid "6"
+msgstr "6"
 
-#: fbreader/data/default/keydefs.n516.tmpl:25
-#: fbreader/data/default/keydefs.v3.tmpl:28
-#, fuzzy
-msgid "Right"
-msgstr "jobb"
+#: fbreader/data/default/keydefs.n516.tmpl:9
+#: fbreader/data/default/keydefs.v3.tmpl:9
+msgid "5"
+msgstr "5"
 
-#: fbreader/data/default/keydefs.n516.tmpl:26
-#: fbreader/data/default/keydefs.v3.tmpl:30
-#, fuzzy
-msgid "Left"
-msgstr "bal"
+#: fbreader/data/default/keydefs.n516.tmpl:6
+#: fbreader/data/default/keydefs.v3.tmpl:6
+msgid "2"
+msgstr "2"
 
-#: fbreader/data/default/keydefs.n516.tmpl:28
-msgid "Zoom"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:5
+#: fbreader/data/default/keydefs.v3.tmpl:5
+msgid "1"
+msgstr "1"
 
-#: fbreader/data/default/keydefs.v3.tmpl:14
-msgid "LP 0"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:15
-msgid "LP 1"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:16
-msgid "LP 2"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:17
-msgid "LP 3"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:18
-msgid "LP 4"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:19
-msgid "LP 5"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:20
-msgid "LP 6"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:21
-msgid "LP 7"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:22
-msgid "LP 8"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:23
-msgid "LP 9"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:25
-msgid "LP OK"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:26
-msgid "C"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:29
-#, fuzzy
-msgid "LP Right"
-msgstr "jobb"
-
-#: fbreader/data/default/keydefs.v3.tmpl:31
-msgid "LP Left"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:4
+#: fbreader/data/default/keydefs.v3.tmpl:4
+msgid "0"
+msgstr "0"
 
 #: fbreader/data/default/keydefs.v3.tmpl:32
 msgid "+"
-msgstr ""
+msgstr "+"
+
+#: fbreader/data/default/keydefs.n516.tmpl:28
+msgid "Zoom"
+msgstr "nagyítás"
+
+#: fbreader/data/default/keydefs.v3.tmpl:26
+msgid "C"
+msgstr "C"
 
 #: fbreader/data/default/keydefs.v3.tmpl:33
 msgid "-"
-msgstr ""
+msgstr "-"
 
-#, fuzzy
+#: fbreader/data/default/keydefs.n516.tmpl:26
+#: fbreader/data/default/keydefs.v3.tmpl:30
+msgid "Left"
+msgstr "Bal"
+
+#: fbreader/data/default/keydefs.n516.tmpl:25
+#: fbreader/data/default/keydefs.v3.tmpl:28
+msgid "Right"
+msgstr "Jobb"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
+msgid "Go to Next TOC Section"
+msgstr "Lapozás következő TJ címre"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
+msgid "Go to Previous TOC Section"
+msgstr "Lapozás előző TJ címre"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1145
+#, c-format
+msgid "Key %s"
+msgstr "%s gomb"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1344
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1482
+msgid "Keys"
+msgstr "Gombok"
+
+#: fbreader/data/default/keydefs.n516.tmpl:21
+msgid "LP Next"
+msgstr "HN Következő"
+
+#: fbreader/data/default/keydefs.v3.tmpl:31
+msgid "LP Left"
+msgstr "HN Bal"
+
+#: fbreader/data/default/keydefs.v3.tmpl:22
+msgid "LP 8"
+msgstr "HN 8"
+
+#: fbreader/data/default/keydefs.v3.tmpl:21
+msgid "LP 7"
+msgstr "HN 7"
+
+#: fbreader/data/default/keydefs.v3.tmpl:25
+msgid "LP OK"
+msgstr "HN OK"
+
+#: fbreader/data/default/keydefs.v3.tmpl:23
+msgid "LP 9"
+msgstr "HN 9"
+
+#: fbreader/data/default/keydefs.v3.tmpl:20
+msgid "LP 6"
+msgstr "HN 6"
+
+#: fbreader/data/default/keydefs.v3.tmpl:29
+msgid "LP Right"
+msgstr "HM Jobb"
+
+#: fbreader/data/default/keydefs.v3.tmpl:14
+msgid "LP 0"
+msgstr "HM 0"
+
+#: fbreader/data/default/keydefs.v3.tmpl:19
+msgid "LP 5"
+msgstr "HN 5"
+
+#: fbreader/data/default/keydefs.n516.tmpl:22
+msgid "LP Prior"
+msgstr "HN Előző"
+
+#: fbreader/data/default/keydefs.v3.tmpl:17
+msgid "LP 3"
+msgstr "HN 3"
+
+#: fbreader/data/default/keydefs.v3.tmpl:18
+msgid "LP 4"
+msgstr "HN 4"
+
+#: fbreader/data/default/keydefs.v3.tmpl:15
+msgid "LP 1"
+msgstr "HN 1"
+
+#: fbreader/data/default/keydefs.v3.tmpl:16
+msgid "LP 2"
+msgstr "HN 2"
+
 #~ msgid "Menu"
 #~ msgstr "Könyv menü"
 
