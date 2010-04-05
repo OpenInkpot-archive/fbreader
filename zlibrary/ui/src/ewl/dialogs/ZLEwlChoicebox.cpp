@@ -456,6 +456,13 @@ void cb_lcb_new(int select_item)
 
 	ecore_evas_callback_delete_request_set(lcb_win, lcb_win_close_handler);
 
+	Evas_Object *bg = evas_object_rectangle_add(main_canvas);
+	evas_object_move(bg, 0, 0);
+	evas_object_resize(bg, w/2, h);
+	evas_object_color_set(bg, 255, 255, 255, 255);
+	evas_object_show(bg);
+	eoi_resize_object_register(lcb_win, bg, lcb_win_resized_2, NULL);
+
 	Evas_Object *settings_window = eoi_settings_left_create(main_canvas);
 	evas_object_name_set(settings_window, "settings-left-window");
 	evas_object_show(settings_window);
@@ -596,7 +603,15 @@ static void cb_rcb_destroy()
 
 	Evas_Object *wm = evas_object_name_find(e, "main-window");
 	if(wm) {
-		Evas_Object *o = edje_object_part_swallow_get(wm, "right-overlay");
+		Evas_Object *o;
+		o = edje_object_part_swallow_get(wm, "contents");
+		if(o) {
+			edje_object_part_unswallow(wm, o);
+			evas_object_hide(o);
+			evas_object_del(o);
+		}
+
+		o = edje_object_part_swallow_get(wm, "right-overlay");
 		if(o) {
 			edje_object_part_unswallow(wm, o);
 
@@ -676,13 +691,20 @@ void cb_rcb_new()
 
 	edje_object_part_swallow(settings_window, "contents", choicebox);
 
+	Evas_Object *bg = evas_object_rectangle_add(main_canvas);
+	evas_object_color_set(bg, 255, 255, 255, 255);
+	evas_object_show(bg);
+
 	Evas_Object *wm = eoi_main_window_create(main_canvas);
 	evas_object_name_set(wm, "main-window");
 	eoi_resize_object_register(lcb_win, wm, lcb_win_resized, NULL);
 	evas_object_move(wm, 0, 0);
 	evas_object_resize(wm, w, h);
 	evas_object_show(wm);
-    edje_object_part_swallow(wm, "right-overlay", settings_window);
+
+
+	edje_object_part_swallow(wm, "contents", bg);
+	edje_object_part_swallow(wm, "right-overlay", settings_window);
 	edje_object_part_swallow(wm, "left-overlay", evas_object_name_find(main_canvas, "settings-left-window"));
 
     eoi_register_fullscreen_choicebox(choicebox);
