@@ -1590,18 +1590,25 @@ void ZLEwlMainMenu(FBReader &f)
 
 	cb_list_item item;
 	item.text = _("Book Info");
+	item.icon = "info";
 	list->items.push_back(item);
 	item.text = _("Go To Page");
+	item.icon = "goto_page";
 	list->items.push_back(item);
 	item.text = _("Table Of Contents");
+	item.icon = "contents";
 	list->items.push_back(item);
 	item.text = _("Dictionary");
+	item.icon = "dictionary";
 	list->items.push_back(item);
 	item.text = _("Search");
+	item.icon = "search";
 	list->items.push_back(item);
 	item.text = _("Bookmarks");
+	item.icon = "bookmark";
 	list->items.push_back(item);
 	item.text = _("Settings");
+	item.icon = "settings";
 	list->items.push_back(item);
 
 	cb_fcb_new(list);

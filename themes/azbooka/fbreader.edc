@@ -1,97 +1,176 @@
-images {
-    image: "del_icon.png" COMP;
-}
+#define ICON_IMAGE(state_, image_)                              \
+	description {                                               \
+		state, state_ 0.0;                                      \
+		inherit, "default" 0.0;                                 \
+		image { normal, image_; }                               \
+	}
+
+#define ICON_PROGRAM(name_, state_)                                     \
+	program {                                                           \
+		name, name_;                                                    \
+		signal, name_;                                                  \
+		script {                                                        \
+			set_state(PART:"icon", state_, 0.0);                        \
+			set_state(PART:"icon-margin", "icon", 0.0);				\
+		}                                                               \
+	}
+
 
 styles {
-    style {
-        name, "titles";
-        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=22 color=#000 align=left valign=top wrap=word";
-        tag, "inactive" "+color=#888";
-        tag, "/inactive" "-";
-    };
-    style {
-        name, "values";
-        base, "font=DejaVu\\ Sans\\ Condensed font_size=18 color=#000 align=right valign=bottom ellipsis=right";
-        tag, "inactive" "+color=#888";
-        tag, "/inactive" "-";
-    }
+	style {
+		name, "titles";
+		base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=22 color=#000 align=left valign=top wrap=word";
+		tag, "inactive" "+color=#888";
+		tag, "/inactive" "-";
+	};
+	style {
+		name, "values";
+		base, "font=DejaVu\\ Sans\\ Condensed font_size=18 color=#000 align=right valign=bottom ellipsis=right";
+		tag, "inactive" "+color=#888";
+		tag, "/inactive" "-";
+	}
 
-    style {
-        name, "item-texts";
-        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=22 color=#000 align=left valign=middle wrap=word";
-        tag, "inactive" "+color=#888";
-        tag, "/inactive" "-";
-    }
+	style {
+		name, "item-texts";
+		base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=22 color=#000 align=left valign=middle wrap=word";
+		tag, "inactive" "+color=#888";
+		tag, "/inactive" "-";
+	}
 }
 
 collections {
-    group {
-        name, "del_icon";
-        parts {
-            part {
-                name, "del_icon";
-                type, IMAGE;
-                mouse_events, 0;
-                description {
-                    state, "default" 0.0;
-                    min, 32 32;
-                    max, 32 32;
-                    rel1 { relative, 0.0 1.0; offset, 9 -40; }
-                    rel2 { relative, 0.0 1.0; offset, 39 -10; }
-                    image { normal, "del_icon.png"; }
-                }
-            }
-        }
-    }
-   group {
-      name, "item";
-      parts {
-         part {
-            name, "text";
-            type, TEXTBLOCK;
-            multiline, 1;
-            description {
-               state, "default" 0.0;
-               color, 0 0 0 255;
-               text {
-                  style, "item-texts";
-                  max, 0 1;
-               }
-               align, 0 0.5;
-               rel1 { relative, 0.0 0.0; offset, 3 0; }
-               rel2 { relative, 1.0 1.0; offset, -4 -1; }
-            }
-         }
-         part {
-            name, "title";
-            type, TEXTBLOCK;
-            multiline, 1;
-            description {
-               state, "default" 0.0;
-               text {
-                  style, "titles";
-                  min, 0 1;
-               }
-               align, 0.0 0.0;
-               rel1 { relative, 0.0 0.0; offset, 3 0; }
-               rel2 { relative, 1.0 0.0; offset, -4 0; }
-            }
-         }
-         part {
-            name, "value";
-            type, TEXTBLOCK;
-            multiline, 1;
-            description {
-               state, "default" 0.0;
-               text {
-                  style, "values";
-                  min, 0 1;
-               }
-               align, 1.0 1.0;
-               rel1 { relative, 0.0 1.0; offset, 3 -1; }
-               rel2 { relative, 1.0 1.0; offset, -4 -1; }
-            }
-         }
-      }
-   }
+	group {
+		name, "del_icon";
+		parts {
+			part {
+				images {
+					image: "del_icon.png" COMP;
+				}
+				name, "del_icon";
+				type, IMAGE;
+				mouse_events, 0;
+				description {
+					state, "default" 0.0;
+					min, 32 32;
+					max, 32 32;
+					rel1 { relative, 0.0 1.0; offset, 9 -40; }
+					rel2 { relative, 0.0 1.0; offset, 39 -10; }
+					image { normal, "del_icon.png"; }
+				}
+			}
+		}
+	}
+	group {
+		name, "item";
+		parts {
+			part {
+				/* This rect is resized when icon is hidden/shown */
+				name, "icon-margin";
+				type, RECT;
+				description {
+					state, "default" 0.0;
+					color, 0 0 0 0;
+					rel2 { relative, 0.0 0.0; }
+				}
+				description {
+					state, "icon" 0.0;
+					inherit, "default" 0.0;
+					rel2 { offset, 50 0; }
+				}
+			}
+			part {
+				name, "text";
+				type, TEXTBLOCK;
+				multiline, 1;
+				description {
+					state, "default" 0.0;
+					color, 0 0 0 255;
+					text {
+						style, "item-texts";
+						max, 0 1;
+					}
+					align, 0 0.5;
+					rel1 { to, "icon-margin"; relative, 1.0 0.0; }
+				}
+			}
+			part {
+				name, "icon";
+				images {
+					image: "icon-bookmark.png" COMP;
+					image: "icon-contents.png" COMP;
+					image: "icon-dictionary.png" COMP;
+					image: "icon-goto_page.png" COMP;
+					image: "icon-info.png" COMP;
+					image: "icon-quote.png" COMP;
+					image: "icon-search.png" COMP;
+					image: "icon-settings.png" COMP;
+					image: "none.png" COMP;
+				}
+				description {
+					state, "default" 0.0;
+					min, 36 36;
+					max, 36 36;
+					rel1 { offset, 0 20; }
+					rel2 { relative, 0.0 0.0; offset, 36 56; }
+					image { normal, "none.png"; }
+				}
+				ICON_IMAGE("icon-bookmark", "icon-bookmark.png");
+				ICON_IMAGE("icon-contents", "icon-contents.png");
+				ICON_IMAGE("icon-dictionary", "icon-dictionary.png");
+				ICON_IMAGE("icon-goto_page", "icon-goto_page.png");
+				ICON_IMAGE("icon-info", "icon-info.png");
+				ICON_IMAGE("icon-quote", "icon-quote.png");
+				ICON_IMAGE("icon-search", "icon-search.png");
+				ICON_IMAGE("icon-settings", "icon-settings.png");
+			}
+			programs {
+				program {
+					name, "no-icon";
+					signal, "no-icon";
+					script {
+						set_state(PART:"icon", "default", 0.0);
+						set_state(PART:"icon-margin", "default", 0.0);
+					}
+				}
+				ICON_PROGRAM("bookmark", "icon-bookmark");
+				ICON_PROGRAM("contents", "icon-contents");
+				ICON_PROGRAM("dictionary", "icon-dictionary");
+				ICON_PROGRAM("goto_page", "icon-goto_page");
+				ICON_PROGRAM("info", "icon-info");
+				ICON_PROGRAM("quote", "icon-quote");
+				ICON_PROGRAM("search", "icon-search");
+				ICON_PROGRAM("settings", "icon-settings");
+			}
+			part {
+				name, "title";
+				type, TEXTBLOCK;
+				multiline, 1;
+				description {
+					state, "default" 0.0;
+					text {
+						style, "titles";
+						min, 0 1;
+					}
+					align, 0.0 0.0;
+					rel1 { relative, 0.0 0.0; offset, 3 0; }
+					rel2 { relative, 1.0 0.0; offset, -4 0; }
+				}
+			}
+			part {
+				name, "value";
+				type, TEXTBLOCK;
+				multiline, 1;
+				description {
+					state, "default" 0.0;
+					text {
+						style, "values";
+						min, 0 1;
+					}
+					align, 1.0 1.0;
+					rel1 { relative, 0.0 1.0; offset, 3 -1; }
+					rel2 { relative, 1.0 1.0; offset, -4 -1; }
+				}
+			}
+		}
+	}
 }

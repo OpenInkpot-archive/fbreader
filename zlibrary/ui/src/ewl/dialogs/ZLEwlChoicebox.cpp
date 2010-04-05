@@ -726,10 +726,15 @@ static void fcb_draw_handler(Evas_Object* choicebox,
 		edje_object_part_text_set(item, "text", i->text.c_str());
 		edje_object_part_text_set(item, "title", "");
 		edje_object_part_text_set(item, "value", "");
+		if(i->icon.empty())
+			edje_object_signal_emit(item, "no-icon", "");
+		else
+			edje_object_signal_emit(item, i->icon.c_str(), "");
 	} else {
 		edje_object_part_text_set(item, "text", "");
 		edje_object_part_text_set(item, "title", i->title.c_str());
 		edje_object_part_text_set(item, "value", i->value.c_str());
+		edje_object_signal_emit(item, "no-icon", "");
 	}
 
 //	fprintf(stderr, "handle: choicebox: %p, item: %p, item_num: %d, page_position: %d, param: %p\n",

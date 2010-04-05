@@ -46,6 +46,7 @@ struct _cb_list_item {
 	string text;
 	string title;
 	string value;
+	string icon;
 };
 
 struct _cb_list {
