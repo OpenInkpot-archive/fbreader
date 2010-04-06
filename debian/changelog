@@ -1,3 +1,10 @@
+fbreader (0.12.1-14) zelazny; urgency=low
+
+  * Fix choicebox background
+  * Fix background in search dialog
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 06 Apr 2010 23:30:22 +0200
+
 fbreader (0.12.1-13) zelazny; urgency=low
 
   [ Alexander Kerner ]
