@@ -22,6 +22,7 @@
 #include <cstring>
 extern "C" {
 #include <xcb/xcb.h>
+#include <libeoi.h>
 #include <libeoi_themes.h>
 #include <libeoi_entry.h>
 }
@@ -317,6 +318,13 @@ Ecore_Evas *text_entry(char *text, void (*handler)(const char*))
 	evas_object_resize(wm, w, h);
 	evas_object_show(wm);
 	*/
+
+	Evas_Object *bg = evas_object_rectangle_add(main_canvas);
+	evas_object_move(bg, 0, 0);
+	evas_object_resize(bg, 600, 800);
+	evas_object_color_set(bg, 255, 255, 255, 255);
+	evas_object_show(bg);
+	eoi_resize_object_register(main_win, bg, text_entry_resized, NULL);
 
 	Evas_Object *e = entry_new(main_canvas, entry_handler, "entry",
 			text, (void*)handler);
