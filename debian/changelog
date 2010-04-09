@@ -1,3 +1,9 @@
+fbreader (0.12.1-16) zelazny; urgency=low
+
+  * busy cursor
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Fri, 09 Apr 2010 23:44:33 +0200
+
 fbreader (0.12.1-15) zelazny; urgency=low
 
   [ Mikhail Gusarov ]
