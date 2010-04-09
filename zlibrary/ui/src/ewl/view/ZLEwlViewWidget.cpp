@@ -40,6 +40,8 @@ xcb_gcontext_t		gc;
 unsigned int *pal;
 int xcb_pal_colours;
 
+extern void set_busy_cursor(bool set);
+
 static
 xcb_atom_t
 get_atom(const char *name)
@@ -275,8 +277,9 @@ ZLEwlViewWidget::ZLEwlViewWidget(ZLApplication *application, ZLView::Angle initi
 		free (rep_shm);
 	}
 
+	set_busy_cursor(true);
 	xcb_flush(connection);
-    wprop_set_active_win_id(screen->root, window);
+	wprop_set_active_win_id(screen->root, window);
 }
 
 ZLEwlViewWidget::~ZLEwlViewWidget() {

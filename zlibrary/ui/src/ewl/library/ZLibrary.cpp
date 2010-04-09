@@ -73,6 +73,38 @@ static void init_properties();
 static void set_properties();
 static void delete_properties();
 
+void set_busy_cursor(bool set)
+{
+	xcb_cursor_t cursor = 0;
+
+	if(set) {
+		int shape = 26;
+
+		xcb_font_t font = xcb_generate_id(connection);
+		xcb_open_font(connection, font, strlen("cursor"), "cursor");
+
+		cursor = xcb_generate_id(connection);
+		xcb_create_glyph_cursor (connection,
+				cursor,
+				font,
+				font,
+				shape,
+				shape + 1,
+				0, 0, 0,
+				65535, 65535, 65535);
+
+		xcb_close_font(connection, font);
+	}
+
+	uint32_t value_list = cursor;
+
+	xcb_change_window_attributes(connection, window,
+			XCB_CW_CURSOR, &value_list);
+
+	if(cursor)
+		xcb_free_cursor(connection, cursor);
+}
+
 char *get_rotated_key(char **keys)
 {
 	xcb_randr_get_screen_info_cookie_t cookie;
@@ -610,6 +642,7 @@ void ZLEwlLibraryImplementation::run(ZLApplication *application) {
 
 	myapplication = application;
 	application->initWindow();
+	set_busy_cursor(true);
 
 	act.sa_handler = sigint_handler;
 	sigemptyset(&act.sa_mask);
@@ -623,6 +656,8 @@ void ZLEwlLibraryImplementation::run(ZLApplication *application) {
 
 	init_properties();
 	set_properties();
+
+	set_busy_cursor(false);
 	main_loop(application);
 	unlink(PIDFILE);
 	delete_properties();
