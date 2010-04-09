@@ -955,7 +955,6 @@ void cb_fcb_new(cb_list *list, int select_item)
 		edje_object_part_text_set(main_canvas_edje, "title", list->name.c_str());
 
 		evas_object_move(main_canvas_edje, 0, 0);
-		int w, h;
 		evas_output_size_get(main_canvas, &w, &h);
 		evas_object_resize(main_canvas_edje, w, h);
 		evas_object_show(main_canvas_edje);
