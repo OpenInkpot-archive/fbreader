@@ -1,9 +1,9 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
@@ -448,11 +448,6 @@ msgstr "Формат и стиль"
 msgid "Bold"
 msgstr "Полужирный"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1190
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1456
-msgid "Auto Hyphenations"
-msgstr "Автоматический перенос слов"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1199
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1480
 msgid "Indicator"
@@ -699,3 +694,8 @@ msgstr "Кнопка +"
 #: fbreader/data/default/keydefs.v3.tmpl:33
 msgid "-"
 msgstr "Кнопка -"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1190
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1456
+msgid "Auto Hyphenations"
+msgstr "Перенос слов"
