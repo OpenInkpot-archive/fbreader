@@ -924,7 +924,13 @@ void cb_fcb_new(cb_list *list, int select_item)
 	} else {
 		ee_init();
 
-		fcb_win = ecore_evas_software_x11_new(0, 0, 0, 0, 600, 800);
+		int w, h;
+		extern xcb_window_t window;
+		ecore_x_drawable_geometry_get_prefetch(window);
+		ecore_x_drawable_geometry_get_fetch();
+		ecore_x_window_size_get(window, &w, &h);
+
+		fcb_win = ecore_evas_software_x11_new(0, 0, 0, 0, w, h);
 
 		ecore_evas_title_set(fcb_win, "FCB");
 		ecore_evas_name_class_set(fcb_win, "FCB", "FCB");
