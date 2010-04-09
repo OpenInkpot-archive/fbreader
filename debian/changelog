@@ -1,3 +1,13 @@
+fbreader (0.12.1-15) zelazny; urgency=low
+
+  [ Mikhail Gusarov ]
+  * l10n: Updates to Russian (ru) translation
+
+  [ Alexander Kerner ]
+  * properly set fullscreen choicebox window size
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Fri, 09 Apr 2010 22:41:42 +0200
+
 fbreader (0.12.1-14) zelazny; urgency=low
 
   * Fix choicebox background
