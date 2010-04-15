@@ -1,3 +1,9 @@
+fbreader (0.12.1-17) zelazny; urgency=low
+
+  * reset signal handlers on window unmap
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Thu, 15 Apr 2010 22:47:27 +0200
+
 fbreader (0.12.1-16) zelazny; urgency=low
 
   * busy cursor
