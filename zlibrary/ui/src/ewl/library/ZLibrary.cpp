@@ -292,6 +292,58 @@ bool isExpose(xcb_generic_event_t *e) {
 	return (e->response_type & ~0x80) == XCB_EXPOSE;
 }
 
+void sigint_handler(int)
+{
+	exit(1);
+}
+
+void sigusr1_handler(int)
+{
+	if(!(window && connection))
+		return;
+
+	if(!in_main_loop)
+		ecore_main_loop_quit();
+
+	// raise window
+	uint32_t value_list = XCB_STACK_MODE_ABOVE;
+	xcb_configure_window(connection, window, XCB_CONFIG_WINDOW_STACK_MODE, &value_list);
+	xcb_flush(connection);
+
+	int fifo = open(FBR_FIFO, O_RDONLY);
+	if(!fifo)
+		return;
+
+	char buf[NAME_MAX];
+	char *p = buf;
+	int ret;
+	int len = NAME_MAX - 1;
+	while(len > 0 && (ret = read(fifo, p, len)) > 0) {
+		len -= ret;
+		p += ret;
+	}
+	*p = '\0';
+	close(fifo);
+
+	std::string filename(buf);
+	if(filename.empty())
+		return;
+
+	FBReader *f = (FBReader*)myapplication;
+	if(!f->myModel->book()->filePath().compare(filename))
+		return;
+
+	shared_ptr<Book> book;
+	f->createBook(filename, book);
+	if (!book.isNull()) {
+		cover_image_file = "";
+
+		f->openBook(book);
+		f->refreshWindow();
+		set_properties();
+	}
+}
+
 void main_loop(ZLApplication *application)
 {
 	xcb_generic_event_t  *e;
@@ -428,64 +480,29 @@ void main_loop(ZLApplication *application)
 								(msg->data.data32[0] == (uint32_t)wm_delete_window_atom)) {
 							_fbreader_closed = true;
 						}
+                        break;
 					}
+                case XCB_UNMAP_WINDOW:
+                    {
+                        struct sigaction act;
+
+                        act.sa_handler = sigint_handler;
+                        sigemptyset(&act.sa_mask);
+                        act.sa_flags = 0;
+                        sigaction(SIGINT, &act, NULL);
+
+                        act.sa_handler = sigusr1_handler;
+                        sigemptyset(&act.sa_mask);
+                        act.sa_flags = 0;
+                        sigaction(SIGUSR1, &act, NULL);
+
+                        break;
+                    }
 			}
 			free (e);
 		}
 	}
 	//delete_timer();
-}
-
-void sigint_handler(int)
-{
-	exit(1);
-}
-
-void sigusr1_handler(int)
-{
-	if(!(window && connection))
-		return;
-
-	if(!in_main_loop)
-		ecore_main_loop_quit();
-
-	// raise window
-	uint32_t value_list = XCB_STACK_MODE_ABOVE;
-	xcb_configure_window(connection, window, XCB_CONFIG_WINDOW_STACK_MODE, &value_list);
-	xcb_flush(connection);
-
-	int fifo = open(FBR_FIFO, O_RDONLY);
-	if(!fifo)
-		return;
-
-	char buf[NAME_MAX];
-	char *p = buf;
-	int ret;
-	int len = NAME_MAX - 1;
-	while(len > 0 && (ret = read(fifo, p, len)) > 0) {
-		len -= ret;
-		p += ret;
-	}
-	*p = '\0';
-	close(fifo);
-
-	std::string filename(buf);
-	if(filename.empty())
-		return;
-
-	FBReader *f = (FBReader*)myapplication;
-	if(!f->myModel->book()->filePath().compare(filename))
-		return;
-
-	shared_ptr<Book> book;
-	f->createBook(filename, book);
-	if (!book.isNull()) {
-		cover_image_file = "";
-
-		f->openBook(book);
-		f->refreshWindow();
-		set_properties();
-	}
 }
 
 static struct atom {
