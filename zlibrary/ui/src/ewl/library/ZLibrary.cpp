@@ -67,7 +67,6 @@ extern const xcb_atom_t INTEGER;
 extern xcb_connection_t *connection;
 extern xcb_window_t window;
 extern xcb_screen_t *screen;
-extern xcb_gcontext_t gc;
 extern xcb_drawable_t rect;
 ZLApplication *myapplication;
 static bool in_main_loop;
@@ -112,7 +111,7 @@ void set_busy_cursor(bool set)
 				1,
 				0,
 				65535,
-				&gc);
+				NULL);
 
 		xcb_pixmap_t cursor_mask =
 			xcb_create_pixmap_from_bitmap_data(
@@ -124,7 +123,7 @@ void set_busy_cursor(bool set)
 				1,
 				0,
 				65535,
-				&gc);
+				NULL);
 
 		cursor = xcb_generate_id(connection);
 		xcb_create_cursor (connection,
@@ -133,7 +132,8 @@ void set_busy_cursor(bool set)
 				cursor_mask,
 				0, 0, 0,
 				65535, 65535, 65535,
-				0, 0);
+				wait_mask_width/2,
+				wait_mask_height/2);
 
 		xcb_free_pixmap(connection, cursor_image);
 		xcb_free_pixmap(connection, cursor_mask);
