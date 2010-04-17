@@ -47,6 +47,9 @@
 #include "../../../../../fbreader/src/library/Book.h"
 #include "../../../../../fbreader/src/library/Author.h"
 
+#include "wait.xbm"
+#include "wait-mask.xbm"
+
 extern "C" {
 #include <xcb/xcb_atom.h>
 #include <xcb/randr.h>
@@ -64,6 +67,8 @@ extern const xcb_atom_t INTEGER;
 extern xcb_connection_t *connection;
 extern xcb_window_t window;
 extern xcb_screen_t *screen;
+extern xcb_gcontext_t gc;
+extern xcb_drawable_t rect;
 ZLApplication *myapplication;
 static bool in_main_loop;
 
@@ -78,6 +83,7 @@ void set_busy_cursor(bool set)
 	xcb_cursor_t cursor = 0;
 
 	if(set) {
+		/*
 		int shape = 26;
 
 		xcb_font_t font = xcb_generate_id(connection);
@@ -94,6 +100,43 @@ void set_busy_cursor(bool set)
 				65535, 65535, 65535);
 
 		xcb_close_font(connection, font);
+		*/
+
+		xcb_pixmap_t cursor_image =
+			xcb_create_pixmap_from_bitmap_data(
+				connection,
+				rect,
+				wait_bitmap_bits,
+				wait_bitmap_width,
+				wait_bitmap_height,
+				1,
+				0,
+				65535,
+				&gc);
+
+		xcb_pixmap_t cursor_mask =
+			xcb_create_pixmap_from_bitmap_data(
+				connection,
+				rect,
+				wait_mask_bits,
+				wait_mask_width,
+				wait_mask_height,
+				1,
+				0,
+				65535,
+				&gc);
+
+		cursor = xcb_generate_id(connection);
+		xcb_create_cursor (connection,
+				cursor,
+				cursor_image,
+				cursor_mask,
+				0, 0, 0,
+				65535, 65535, 65535,
+				0, 0);
+
+		xcb_free_pixmap(connection, cursor_image);
+		xcb_free_pixmap(connection, cursor_mask);
 	}
 
 	uint32_t value_list = cursor;
