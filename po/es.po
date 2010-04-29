@@ -500,19 +500,6 @@ msgstr "Encendido"
 msgid "Off"
 msgstr "Apagado"
 
-#: fbreader/data/default/keydefs.n516.tmpl:17
-#: fbreader/data/default/keydefs.v3.tmpl:24
-msgid "OK"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:18
-msgid "Back"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:19
-msgid "Next"
-msgstr ""
-
 #: fbreader/data/default/keydefs.n516.tmpl:20
 msgid "Prior"
 msgstr ""
@@ -523,30 +510,6 @@ msgstr ""
 
 #: fbreader/data/default/keydefs.n516.tmpl:22
 msgid "LP Prior"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:23
-msgid "Down"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:24
-msgid "Up"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:25
-#: fbreader/data/default/keydefs.v3.tmpl:28
-#, fuzzy
-msgid "Right"
-msgstr "derecha"
-
-#: fbreader/data/default/keydefs.n516.tmpl:26
-#: fbreader/data/default/keydefs.v3.tmpl:30
-#, fuzzy
-msgid "Left"
-msgstr "izquierda"
-
-#: fbreader/data/default/keydefs.n516.tmpl:28
-msgid "Zoom"
 msgstr ""
 
 #: fbreader/data/default/keydefs.v3.tmpl:14
@@ -604,14 +567,6 @@ msgstr "derecha"
 
 #: fbreader/data/default/keydefs.v3.tmpl:31
 msgid "LP Left"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:32
-msgid "+"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:33
-msgid "-"
 msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
@@ -705,6 +660,49 @@ msgstr "Mostrar Ayuda"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
 msgid "Show font size dialog"
 msgstr "Mostrar diálogo de tamaño de fuente"
+
+#: fbreader/data/default/keydefs.v3.tmpl:33
+msgid "-"
+msgstr "-"
+
+#: fbreader/data/default/keydefs.v3.tmpl:32
+msgid "+"
+msgstr "+"
+
+#: fbreader/data/default/keydefs.n516.tmpl:26
+#: fbreader/data/default/keydefs.v3.tmpl:30
+msgid "Left"
+msgstr "Izquierda"
+
+#: fbreader/data/default/keydefs.n516.tmpl:25
+#: fbreader/data/default/keydefs.v3.tmpl:28
+msgid "Right"
+msgstr "Derecha"
+
+#: fbreader/data/default/keydefs.n516.tmpl:28
+msgid "Zoom"
+msgstr "Zoom"
+
+#: fbreader/data/default/keydefs.n516.tmpl:24
+msgid "Up"
+msgstr "Arriba"
+
+#: fbreader/data/default/keydefs.n516.tmpl:23
+msgid "Down"
+msgstr "Abajo"
+
+#: fbreader/data/default/keydefs.n516.tmpl:19
+msgid "Next"
+msgstr "Siguiente"
+
+#: fbreader/data/default/keydefs.n516.tmpl:17
+#: fbreader/data/default/keydefs.v3.tmpl:24
+msgid "OK"
+msgstr "OK"
+
+#: fbreader/data/default/keydefs.n516.tmpl:18
+msgid "Back"
+msgstr "Atrás"
 
 #~ msgid "Menu"
 #~ msgstr "Menú del libro"
