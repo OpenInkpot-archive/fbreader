@@ -552,10 +552,6 @@ msgstr ""
 msgid "LP OK"
 msgstr ""
 
-#: fbreader/data/default/keydefs.v3.tmpl:26
-msgid "C"
-msgstr ""
-
 #: fbreader/data/default/keydefs.v3.tmpl:29
 #, fuzzy
 msgid "LP Right"
@@ -703,6 +699,10 @@ msgstr "Atrás"
 #: fbreader/data/default/keydefs.n516.tmpl:20
 msgid "Prior"
 msgstr "Anterior"
+
+#: fbreader/data/default/keydefs.v3.tmpl:26
+msgid "C"
+msgstr "C"
 
 #~ msgid "Menu"
 #~ msgstr "Menú del libro"
