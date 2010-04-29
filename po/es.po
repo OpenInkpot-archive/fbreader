@@ -500,10 +500,6 @@ msgstr "Encendido"
 msgid "Off"
 msgstr "Apagado"
 
-#: fbreader/data/default/keydefs.n516.tmpl:20
-msgid "Prior"
-msgstr ""
-
 #: fbreader/data/default/keydefs.n516.tmpl:21
 msgid "LP Next"
 msgstr ""
@@ -703,6 +699,10 @@ msgstr "OK"
 #: fbreader/data/default/keydefs.n516.tmpl:18
 msgid "Back"
 msgstr "Atrás"
+
+#: fbreader/data/default/keydefs.n516.tmpl:20
+msgid "Prior"
+msgstr "Anterior"
 
 #~ msgid "Menu"
 #~ msgstr "Menú del libro"
