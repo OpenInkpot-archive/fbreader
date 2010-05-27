@@ -53,9 +53,18 @@ static void appendToAnnotation(std::string &anno, const std::string str) {
 
 
 LitResLink::LitResLink() : 
-	NetworkLink(LITRES_SITENAME, "Каталог LitRes") {
+	NetworkLink(
+		LITRES_SITENAME,
+		"Каталог LitRes",
+		"Продажа электронных книг.",
+		"feed-litres.png",
+		std::map<std::string,std::string>()
+	) {
+	myLinks[URL_SIGN_IN] = "https://robot.litres.ru/pages/catalit_authorise/?lfrom=51";
+	myLinks[URL_SIGN_UP] = "https://robot.litres.ru/pages/catalit_register_user/?lfrom=51";
+	myLinks[URL_REFILL_ACCOUNT] = "https://www.litres.ru/pages/put_money_on_account/?lfrom=51";
+	myLinks[URL_RECOVER_PASSWORD] = "http://robot.litres.ru/pages/catalit_recover_pass/?lfrom=51";
 	myAuthenticationManager = new LitResAuthenticationManager(*this);
-	myGenresValid = false;
 }
 
 shared_ptr<ZLExecutionData> LitResLink::simpleSearchData(NetworkOperationData &result, const std::string &pattern) const {
@@ -71,7 +80,7 @@ shared_ptr<ZLExecutionData> LitResLink::advancedSearchData(NetworkOperationData 
 	ZLNetworkUtil::appendParameter(request, "search_person", author);
 	if (!tag.empty()) {
 		std::vector<std::string> genreIds;
-		fillGenreIds(tag, genreIds);
+		LitResGenreMap::Instance().fillGenreIds(tag, genreIds);
 		if (!genreIds.empty()) {
 			for (std::vector<std::string>::const_iterator it = genreIds.begin(); it != genreIds.end(); ++it) {
 				ZLNetworkUtil::appendParameter(request, "genre", *it);
@@ -102,6 +111,7 @@ public:
 	LitResRootCatalogItem(
 		const LitResLink &link,
 		const std::string &title,
+		const std::string &icon,
 		const std::string &summary
 	);
 
@@ -187,9 +197,10 @@ private:
 LitResRootCatalogItem::LitResRootCatalogItem(
 	const LitResLink &link,
 	const std::string &title,
+	const std::string &icon,
 	const std::string &summary
 ) : NetworkCatalogItem(link, title, summary, std::map<URLType,std::string>()) {
-	URLByType[URL_COVER] = "feed-litres.png";
+	URLByType[URL_COVER] = icon;
 }
 
 std::string LitResRootCatalogItem::loadChildren(NetworkItem::List &children) {
@@ -212,7 +223,7 @@ std::string LitResRootCatalogItem::loadChildren(NetworkItem::List &children) {
 		"none",
 		"Книги по жанрам",
 		"Просмотр книг по жанрам",
-		link.genresTree()
+		LitResGenreMap::Instance().genresTree()
 	));
 	children.push_back(new LitResMyCatalogItem(link));
 
@@ -410,7 +421,7 @@ std::string LitResGenresItem::loadChildren(NetworkItem::List &children) {
 }
 
 shared_ptr<NetworkItem> LitResLink::libraryItem() const {
-	return new LitResRootCatalogItem(*this, Title, "Продажа электронных книг.");
+	return new LitResRootCatalogItem(*this, Title, Icon, Summary);
 }
 
 void LitResLink::rewriteUrl(std::string &url, bool) const {

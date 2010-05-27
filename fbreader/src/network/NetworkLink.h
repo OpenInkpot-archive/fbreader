@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include <shared_ptr.h>
 #include <ZLOptions.h>
@@ -39,16 +40,27 @@ public:
 	static std::string NetworkDataDirectory();
 	static std::string CertificatesPathPrefix();
 
+public:
+	static const std::string URL_MAIN;
+	static const std::string URL_SEARCH;
+	static const std::string URL_SIGN_IN;
+	static const std::string URL_SIGN_OUT;
+	static const std::string URL_SIGN_UP;
+	static const std::string URL_REFILL_ACCOUNT;
+	static const std::string URL_RECOVER_PASSWORD;
+
 protected:
-	NetworkLink(const std::string &siteName, const std::string &title);
+	NetworkLink(
+		const std::string &siteName,
+		const std::string &title,
+		const std::string &summary,
+		const std::string &icon,
+		const std::map<std::string,std::string> &links
+	);
 
 public:
 	virtual ~NetworkLink();
-
-public:
-	const std::string SiteName;
-	const std::string Title;
-	ZLBooleanOption OnOption;
+	std::string url(const std::string &urlId) const;
 
 public:
 	virtual shared_ptr<ZLExecutionData> simpleSearchData(NetworkOperationData &data, const std::string &pattern) const = 0;
@@ -59,6 +71,17 @@ public:
 	virtual shared_ptr<NetworkItem> libraryItem() const = 0;
 
 	virtual void rewriteUrl(std::string &url, bool isUrlExternal = false) const = 0;
+
+public:
+	const std::string SiteName;
+	const std::string Title;
+	const std::string Summary;
+	const std::string Icon;
+	ZLBooleanOption OnOption;
+
+private:
+protected:
+	/*const*/ std::map<std::string,std::string> myLinks;
 
 private: // disable copying
 	NetworkLink(const NetworkLink &);

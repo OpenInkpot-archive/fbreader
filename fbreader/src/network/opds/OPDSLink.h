@@ -20,16 +20,22 @@
 #ifndef __OPDSLINK_H__
 #define __OPDSLINK_H__
 
-#include <set>
+#include <map>
+#include <vector>
 #include <string>
 
 #include "../NetworkLink.h"
-
 
 class NetworkAuthenticationManager;
 class URLRewritingRule;
 
 class OPDSLink : public NetworkLink {
+
+public:
+	enum URLCondition {
+		URL_CONDITION_NEVER,
+		URL_CONDITION_SIGNED_IN,
+	};
 
 private:
 	class AdvancedSearch;
@@ -37,11 +43,10 @@ private:
 public:
 	OPDSLink(
 		const std::string &siteName,
-		const std::string &catalogURL,
-		const std::string &searchURL,
 		const std::string &title,
 		const std::string &summary,
-		const std::string &iconName
+		const std::string &icon,
+		const std::map<std::string,std::string> &links
 	);
 	~OPDSLink();
 	void setupAdvancedSearch(
@@ -51,10 +56,10 @@ public:
 		const std::string &tagParameter,
 		const std::string &annotationParameter
 	);
-	void setIgnoredFeeds(const std::set<std::string> &ignoredFeeds);
-	void setAccountDependentFeeds(const std::set<std::string> &accountDependentFeeds);
+	void setUrlConditions(const std::map<std::string,URLCondition> &conditions);
+	void setUrlRewritingRules(const std::vector<shared_ptr<URLRewritingRule> > &rules);
+
 	void setAuthenticationManager(shared_ptr<NetworkAuthenticationManager> mgr);
-	void addUrlRewritingRule(shared_ptr<URLRewritingRule> rule);
 
 private:
 	const std::string searchURL(const std::string &pattern) const;
@@ -78,17 +83,12 @@ private:
 	void rewriteUrl(std::string &url, bool isUrlExternal = false) const;
 
 private:
-	const std::string myCatalogURL;
-	const std::string mySearchURL;
-	const std::string myTitle;
-	const std::string mySummary;
-	const std::string myIconName;
 	shared_ptr<AdvancedSearch> myAdvancedSearch;
-	std::set<std::string> myIgnoredFeeds;
-	std::set<std::string> myAccountDependentFeeds;
-	shared_ptr<NetworkAuthenticationManager> myAuthenticationManager;
 
-	std::set<shared_ptr<URLRewritingRule> > myUrlRewritingRules;
+	std::map<std::string,URLCondition> myUrlConditions;
+	std::vector<shared_ptr<URLRewritingRule> > myUrlRewritingRules;
+
+	shared_ptr<NetworkAuthenticationManager> myAuthenticationManager;
 
 friend class OPDSCatalogItem;
 };

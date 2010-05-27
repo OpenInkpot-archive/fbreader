@@ -33,7 +33,7 @@
 #include "../network/NetworkItems.h"
 #include "../network/NetworkLinkCollection.h"
 #include "../network/NetworkLink.h"
-#include "../network/NetworkAuthenticationManager.h"
+#include "../network/authentication/NetworkAuthenticationManager.h"
 
 class NetworkCatalogRootNode::LoginAction : public ZLRunnable {
 
@@ -49,6 +49,46 @@ class NetworkCatalogRootNode::LogoutAction : public ZLRunnable {
 
 public:
 	LogoutAction(NetworkAuthenticationManager &mgr);
+	void run();
+
+private:
+	NetworkAuthenticationManager &myManager;
+};
+
+class NetworkCatalogRootNode::RefillAccountAction : public ZLRunnable {
+
+public:
+	RefillAccountAction(NetworkAuthenticationManager &mgr);
+	void run();
+
+private:
+	NetworkAuthenticationManager &myManager;
+};
+
+class NetworkCatalogRootNode::DontShowAction : public ZLRunnable {
+
+public:
+	DontShowAction(NetworkLink &link);
+	void run();
+
+private:
+	NetworkLink &myLink;
+};
+
+class NetworkCatalogRootNode::PasswordRecoveryAction : public ZLRunnable {
+
+public:
+	PasswordRecoveryAction(NetworkAuthenticationManager &mgr);
+	void run();
+
+private:
+	NetworkAuthenticationManager &myManager;
+};
+
+class NetworkCatalogRootNode::RegisterUserAction : public ZLRunnable {
+
+public:
+	RegisterUserAction(NetworkAuthenticationManager &mgr);
 	void run();
 
 private:

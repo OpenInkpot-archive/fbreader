@@ -48,27 +48,17 @@ private:
 		OPENSEARCH_TOTALRESULTS, OPENSEARCH_ITEMSPERPAGE, OPENSEARCH_STARTINDEX,
 	};
 
-	void processState(const std::string &tag, bool closed);
-	State getNextState(const std::string &tag, bool closed);
-
-private:
-	bool checkAtomTag(const std::string &tag, const std::string &pattern) const;
-	bool checkDCTag(const std::string &tag, const std::string &pattern) const;
-	bool checkOpenSearchTag(const std::string &tag, const std::string &pattern) const;
-
-	static bool checkNSTag(const std::string &tag, const std::string &nsprefix, const std::string &pattern);
-	
 private:
 	shared_ptr<OPDSFeedReader> myFeedReader;
 
 	std::string myBuffer;
-	std::string myDCPrefix;
-	std::string myAtomPrefix;
-	std::string myOpenSearchPrefix;
+
+	std::string myDublinCoreNamespaceId;
+	std::string myAtomNamespaceId;
+	std::string myOpenSearchNamespaceId;
+	std::string myCalibreNamespaceId;
 
 	State myState;
-
-	std::map<std::string, std::string> myAttributes;
 
 	shared_ptr<OPDSFeedMetadata> myFeed;
 	shared_ptr<OPDSEntry> myEntry;
@@ -79,6 +69,7 @@ private:
 	shared_ptr<ATOMCategory> myCategory;
 	shared_ptr<ATOMUpdated> myUpdated;
 	shared_ptr<ATOMPublished> myPublished;
+
 	//shared_ptr<ATOMTitle> myTitle;      // TODO: implement ATOMTextConstruct & ATOMTitle
 	//shared_ptr<ATOMSummary> mySummary;  // TODO: implement ATOMTextConstruct & ATOMSummary
 	bool mySummaryTagFound;

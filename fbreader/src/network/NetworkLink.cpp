@@ -24,8 +24,14 @@
 
 #include "NetworkLink.h"
 #include "NetworkOperationData.h"
-#include "NetworkAuthenticationManager.h"
 
+const std::string NetworkLink::URL_MAIN = "main";
+const std::string NetworkLink::URL_SEARCH = "search";
+const std::string NetworkLink::URL_SIGN_IN = "signIn";
+const std::string NetworkLink::URL_SIGN_OUT = "signOut";
+const std::string NetworkLink::URL_SIGN_UP = "signUp";
+const std::string NetworkLink::URL_REFILL_ACCOUNT = "refillAccount";
+const std::string NetworkLink::URL_RECOVER_PASSWORD = "recoverPassword";
 
 std::string NetworkLink::NetworkDataDirectory() {
 	return ZLFile(ZLibrary::ApplicationDirectory() + ZLibrary::FileNameDelimiter + "network").path();
@@ -35,13 +41,27 @@ std::string NetworkLink::CertificatesPathPrefix() {
 	return NetworkDataDirectory() + ZLibrary::FileNameDelimiter + "certificates" + ZLibrary::FileNameDelimiter;
 }
 
-NetworkLink::NetworkLink(const std::string &siteName, const std::string &title) : 
+NetworkLink::NetworkLink(
+	const std::string &siteName,
+	const std::string &title,
+	const std::string &summary,
+	const std::string &icon,
+	const std::map<std::string,std::string> &links
+) : 
 	SiteName(siteName), 
 	Title(title),
-	OnOption(ZLCategoryKey::NETWORK, siteName, "on", true) {
+	Summary(summary),
+	Icon(icon),
+	OnOption(ZLCategoryKey::NETWORK, siteName, "on", true),
+	myLinks(links) {
 }
 
 NetworkLink::~NetworkLink() {
+}
+
+std::string NetworkLink::url(const std::string &urlId) const {
+	std::map<std::string,std::string>::const_iterator it = myLinks.find(urlId);
+	return (it != myLinks.end()) ? it->second : std::string();
 }
 
 shared_ptr<ZLExecutionData> NetworkLink::resume(NetworkOperationData &result) const {

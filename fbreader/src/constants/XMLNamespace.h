@@ -34,7 +34,8 @@ public:
 	static const std::string XLink;
 	static const std::string OpenPackagingFormat;
 	static const std::string Atom;
-	static const std::string OpenSearchPrefix;
+	static const std::string OpenSearch;
+	static const std::string CalibreMetadata;
 };
 
 #endif /* __XMLNAMESPACE_H__ */

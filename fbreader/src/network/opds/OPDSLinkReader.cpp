@@ -19,7 +19,8 @@
 
 #include "OPDSLinkReader.h"
 #include "OPDSLink.h"
-#include "OPDSBasicAuthenticationManager.h"
+#include "../authentication/basic/BasicAuthenticationManager.h"
+#include "../litres/LitResAuthenticationManager.h"
 
 #include "URLRewritingRule.h"
 
@@ -28,16 +29,15 @@ OPDSLinkReader::OPDSLinkReader() : myState(READ_NOTHING) {
 }
 
 shared_ptr<NetworkLink> OPDSLinkReader::link() {
-	if (mySiteName.empty() || myTitle.empty() || myLinks["main"].empty()) {
+	if (mySiteName.empty() || myTitle.empty() || myLinks[NetworkLink::URL_MAIN].empty()) {
 		return 0;
 	}
 	OPDSLink *opdsLink = new OPDSLink(
 		mySiteName,
-		myLinks["main"],
-		myLinks["search"],
 		myTitle,
 		mySummary,
-		myIconName
+		myIcon,
+		myLinks
 	);
 	if (!mySearchType.empty()) {
 		opdsLink->setupAdvancedSearch(
@@ -48,16 +48,17 @@ shared_ptr<NetworkLink> OPDSLinkReader::link() {
 			mySearchFields["annotation"]
 		);
 	}
-	opdsLink->setIgnoredFeeds(myIgnoredFeeds);
-	opdsLink->setAccountDependentFeeds(myAccountDependentFeeds);
+	opdsLink->setUrlConditions(myUrlConditions);
+	opdsLink->setUrlRewritingRules(myUrlRewritingRules);
+
+	shared_ptr<NetworkAuthenticationManager> authManager;
 	if (myAuthenticationType == "basic") {
-		opdsLink->setAuthenticationManager(
-			new OPDSBasicAuthenticationManager(mySiteName, myLinks["signIn"], myLinks["signOut"])
-		);
+		authManager = new BasicAuthenticationManager(*opdsLink);
+	} else if (myAuthenticationType == "litres") {
+		authManager = new LitResAuthenticationManager(*opdsLink);
 	}
-	for (std::set<shared_ptr<URLRewritingRule> >::const_iterator it = myUrlRewritingRules.begin(); it != myUrlRewritingRules.end(); ++it) {
-		opdsLink->addUrlRewritingRule(*it);
-	}
+	opdsLink->setAuthenticationManager(authManager);
+
 	return opdsLink;
 }
 
@@ -140,7 +141,7 @@ void OPDSLinkReader::startElementHandler(const char *tag, const char **attribute
 		if (type != 0 && name != 0 && value != 0) {
 			std::string typeStr = type;
 			if (typeStr == "addUrlParameter") {
-				myUrlRewritingRules.insert(new URLRewritingRule(URLRewritingRule::ADD_URL_PARAMETER, ruleApply, name, value));
+				myUrlRewritingRules.push_back(new URLRewritingRule(URLRewritingRule::ADD_URL_PARAMETER, ruleApply, name, value));
 			}
 		}
 	}
@@ -150,11 +151,8 @@ void OPDSLinkReader::endElementHandler(const char *tag) {
 	if (myState == READ_SEARCH_FIELD) {
 		myState = READ_SEARCH_DESCRIPTION;
 	} else if (myState == READ_FEEDS_CONDITION) {
-		if (myAttrBuffer == "signedIn") {
-			myAccountDependentFeeds.insert(myBuffer);
-		} else if (myAttrBuffer == "never") {
-			myIgnoredFeeds.insert(myBuffer);
-		}
+		myUrlConditions[myBuffer] = (myAttrBuffer == "signedIn") ?
+			OPDSLink::URL_CONDITION_SIGNED_IN : OPDSLink::URL_CONDITION_NEVER;
 		myState = READ_FEEDS;
 	} else if (myState == READ_URL_REWRITING_RULES && TAG_RULE == tag) {
 		//myState = myState;
@@ -180,7 +178,7 @@ void OPDSLinkReader::characterDataHandler(const char *text, size_t len) {
 			mySummary.append(text, len);
 			break;
 		case READ_ICON_NAME:
-			myIconName.append(text, len);
+			myIcon.append(text, len);
 			break;
 		case READ_LINK:
 			myLinks[myAttrBuffer].append(text, len);

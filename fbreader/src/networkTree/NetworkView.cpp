@@ -30,15 +30,14 @@
 
 #include "../network/NetworkLinkCollection.h"
 #include "../network/NetworkLink.h"
-#include "../network/NetworkAuthenticationManager.h"
-
 #include "../network/SearchResult.h"
+#include "../network/authentication/NetworkAuthenticationManager.h"
 
 #include "../options/FBOptions.h"
 
 #include "../fbreader/FBReader.h"
 
-NetworkView::NetworkView(ZLPaintContext &context) : ZLBlockTreeView(context), myUpdateChildren(true) {
+NetworkView::NetworkView(ZLPaintContext &context) : ZLBlockTreeView(context), myUpdateChildren(true), myUpdateAccountDependents(false) {
 }
 
 void NetworkView::drawCoverLater(FBReaderNode *node, int vOffset) {

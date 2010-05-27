@@ -72,8 +72,6 @@ DCDate::DCDate(int year, int month, int day, int hour, int minutes, int seconds,
 	ATOMDateConstruct(year, month, day, hour, minutes, seconds, sfract, tzhour, tzminutes) {
 }
 
-
-
 OPDSEntry::OPDSEntry() {
 }
 
@@ -81,22 +79,9 @@ OPDSEntry::OPDSEntry(shared_ptr<ATOMId> id, const std::string &title, shared_ptr
 	ATOMEntry(id, title, updated) {
 }
 
-
-
 OPDSFeedMetadata::OPDSFeedMetadata() : myOpensearchTotalResults(0), myOpensearchItemsPerPage(0), myOpensearchStartIndex(1) {
 }
 
 OPDSFeedMetadata::OPDSFeedMetadata(shared_ptr<ATOMId> id, const std::string &title, shared_ptr<ATOMUpdated> updated) :
-	ATOMFeedMetadata(id, title, updated) {
+	ATOMFeedMetadata(id, title, updated), myOpensearchTotalResults(0), myOpensearchItemsPerPage(0), myOpensearchStartIndex(1) {
 }
-
-
-
-OPDSFeed::OPDSFeed() {
-}
-
-OPDSFeed::OPDSFeed(shared_ptr<ATOMId> id, const std::string &title, shared_ptr<ATOMUpdated> updated) :
-	OPDSFeedMetadata(id, title, updated) {
-}
-
-

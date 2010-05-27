@@ -24,6 +24,7 @@
 #include "LitResDataParser.h"
 #include "LitResGenre.h"
 #include "LitResLink.h"
+#include "../NetworkLink.h"
 
 static const std::string TAG_CATALOG = "catalit-fb2-books";
 static const std::string TAG_BOOK = "fb2-book";
@@ -63,7 +64,7 @@ std::string LitResDataParser::makeDemoUrl(const std::string &bookId) const {
 	return url;
 }
 
-LitResDataParser::LitResDataParser(const LitResLink &link, NetworkItem::List &books) : 
+LitResDataParser::LitResDataParser(const NetworkLink &link, NetworkItem::List &books) : 
 	myLink(link),
 	myBooks(books), 
 	myIndex(0) {
@@ -212,8 +213,10 @@ void LitResDataParser::processState(const std::string &tag, bool closed, const c
 		if (closed && TAG_GENRE == tag) {
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
 
-			const std::map<std::string, shared_ptr<LitResGenre> > &genresMap = myLink.genresMap();
-			const std::map<shared_ptr<LitResGenre>, std::string> &genresTitles = myLink.genresTitles();
+			const std::map<std::string,shared_ptr<LitResGenre> > &genresMap =
+				LitResGenreMap::Instance().genresMap();
+			const std::map<shared_ptr<LitResGenre>,std::string> &genresTitles =
+				LitResGenreMap::Instance().genresTitles();
 
 			std::map<std::string, shared_ptr<LitResGenre> >::const_iterator it = genresMap.find(myBuffer);
 			if (it != genresMap.end()) {
