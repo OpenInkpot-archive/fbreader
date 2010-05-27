@@ -147,8 +147,6 @@ void ATOMLink::readAttributes(const std::map<std::string, std::string> &attribut
 	readAttribute(LENGTH, attributes);
 }
 
-
-
 ATOMLogo::ATOMLogo() {
 }
 

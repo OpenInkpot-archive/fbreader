@@ -35,18 +35,21 @@ public:
 	static const std::string REL_BOOKSHELF;
 	static const std::string REL_SUBSCRIPTIONS;
 
+	// Entry level / catalog types
+	static const std::string REL_CATALOG_AUTHOR;
+
 	// Entry level / acquisition links
 	static const std::string REL_ACQUISITION;
 	static const std::string REL_ACQUISITION_BUY;
 	static const std::string REL_ACQUISITION_BORROW;
 	static const std::string REL_ACQUISITION_SUBSCRIBE;
 	static const std::string REL_ACQUISITION_SAMPLE;
+	static const std::string REL_ACQUISITION_CONDITIONAL;
+	static const std::string REL_ACQUISITION_SAMPLE_OR_FULL;
 
 	// Entry level / other
 	static const std::string REL_COVER;
-	static const std::string REL_STANZA_COVER;
 	static const std::string REL_THUMBNAIL;
-	static const std::string REL_STANZA_THUMBNAIL;
 
 	// Any (?) level
 	static const std::string REL_ALTERNATE;
@@ -61,13 +64,15 @@ public:
 	static const std::string MIME_APP_PDF;
 	static const std::string MIME_APP_ATOM;
 
+	// a special MIME type for the litres OPDS catalog
+	static const std::string MIME_APP_LITRES;
+
 	// MIME types / image
 	static const std::string MIME_IMG_PNG;
 	static const std::string MIME_IMG_JPEG;
 
 	// MIME types / text
 	static const std::string MIME_TEXT_HTML;
-
 };
 
 

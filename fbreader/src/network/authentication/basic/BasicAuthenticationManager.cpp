@@ -94,7 +94,7 @@ void BasicAuthenticationManager::logOut() {
 	myAccountChecked = true;
 	myAccountUserNameOption.setValue("");
 
-	const std::string signOutUrl = Link.url(NetworkLink::URL_SIGN_IN);
+	const std::string signOutUrl = Link.url(NetworkLink::URL_SIGN_OUT);
 	if (!signOutUrl.empty()) {
 		// TODO: is it so necessary to clean up cookies???
 		shared_ptr<ZLExecutionData> data = ZLNetworkManager::Instance().createNoActionRequest(
@@ -105,18 +105,14 @@ void BasicAuthenticationManager::logOut() {
 	}
 }
 
-std::string BasicAuthenticationManager::networkBookId(const NetworkBookItem &) {
-	return "";
-}
-
-NetworkItem::URLType BasicAuthenticationManager::downloadLinkType(const NetworkBookItem &) {
-	return NetworkItem::URL_NONE;
-}
-
 const std::string &BasicAuthenticationManager::currentUserName() {
 	return myAccountUserNameOption.value();
 }
 
 const ZLNetworkSSLCertificate &BasicAuthenticationManager::certificate() {
 	return myCertificate;
+}
+
+shared_ptr<BookReference> BasicAuthenticationManager::downloadReference(const NetworkBookItem &book) {
+	return 0;
 }

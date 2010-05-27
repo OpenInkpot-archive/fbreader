@@ -37,6 +37,7 @@ protected:
 	NetworkContainerNode(NetworkContainerNode *parent, size_t atPosition = (size_t)-1);
 
 private:
+	void drawCover(ZLPaintContext &context, int vOffset);
 	const ZLTypeId &typeId() const;
 };
 
@@ -45,16 +46,39 @@ class NetworkCatalogNode : public NetworkContainerNode {
 public:
 	static const ZLTypeId TYPE_ID;
 
-private:
-	class ExpandCatalogAction;
+protected:
+	class ExpandCatalogAction : public ZLRunnableWithKey {
+
+	public:
+		ExpandCatalogAction(NetworkCatalogNode &node);
+		ZLResourceKey key() const;
+		void run();
+
+	private:
+		NetworkCatalogNode &myNode;
+	};
+
+	class ReloadAction : public ZLRunnableWithKey {
+
+	public:
+		ReloadAction(NetworkCatalogNode &node);
+		ZLResourceKey key() const;
+		bool makesSense() const;
+		void run();
+
+	private:
+		NetworkCatalogNode &myNode;
+	};
+
 	class OpenInBrowserAction;
-	class ReloadAction;
 
 protected:
 	NetworkCatalogNode(ZLBlockTreeView::RootNode *parent, shared_ptr<NetworkItem> item, size_t atPosition = (size_t)-1);
 	NetworkCatalogNode(NetworkCatalogNode *parent, shared_ptr<NetworkItem> item, size_t atPosition = (size_t)-1);
 
 private:
+	void init();
+	const ZLResource &resource() const;
 	const ZLTypeId &typeId() const;
 
 friend class NetworkNodesFactory;
@@ -65,25 +89,15 @@ public:
 
 	void updateChildren();
 
-	shared_ptr<ZLRunnable> expandCatalogAction();
-	shared_ptr<ZLRunnable> openInBrowserAction();
-	shared_ptr<ZLRunnable> reloadAction();
-
 protected:
 	shared_ptr<ZLImage> extractCoverImage() const;
 	std::string title() const;
 	std::string summary() const;
 	virtual shared_ptr<ZLImage> lastResortCoverImage() const;
-	void paint(ZLPaintContext &context, int vOffset);
-
-	virtual void paintHyperlinks(ZLPaintContext &context, int vOffset);
 
 private:
 	shared_ptr<NetworkItem> myItem;
 	NetworkItem::List myChildrenItems;
-	shared_ptr<ZLRunnable> myExpandCatalogAction;
-	shared_ptr<ZLRunnable> myOpenInBrowserAction;
-	shared_ptr<ZLRunnable> myReloadAction;
 };
 
 class NetworkCatalogRootNode : public NetworkCatalogNode {
@@ -105,20 +119,14 @@ public:
 	const NetworkLink &link() const;
 
 private:
+	void init();
+	const ZLResource &resource() const;
 	const ZLTypeId &typeId() const;
 
-	void paintHyperlinks(ZLPaintContext &context, int vOffset);
 	shared_ptr<ZLImage> lastResortCoverImage() const;
-	bool hasAuxHyperlink() const;
 
 private:
 	NetworkLink &myLink;
-	shared_ptr<ZLRunnable> myLoginAction;
-	shared_ptr<ZLRunnable> myLogoutAction;
-	shared_ptr<ZLRunnable> myDontShowAction;
-	shared_ptr<ZLRunnable> myRefillAccountAction;
-	shared_ptr<ZLRunnable> myPasswordRecoveryAction;
-	shared_ptr<ZLRunnable> myRegisterUserAction;
 };
 
 class SearchResultNode : public NetworkContainerNode {
@@ -132,11 +140,12 @@ public:
 	shared_ptr<NetworkBookCollection> searchResult();
 
 private:
+	void init();
+	const ZLResource &resource() const;
 	const ZLTypeId &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
 	std::string title() const;
 	std::string summary() const;
-	void paint(ZLPaintContext &context, int vOffset);
 
 private:
 	shared_ptr<NetworkBookCollection> mySearchResult;
@@ -157,10 +166,11 @@ public:
 	const NetworkBookItem::AuthorData &author();
 
 private:
+	void init();
+	const ZLResource &resource() const;
 	const ZLTypeId &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
 	std::string title() const;
-	void paint(ZLPaintContext &context, int vOffset);
 
 private:
 	NetworkBookItem::AuthorData myAuthor;
@@ -178,15 +188,13 @@ protected:
 
 friend class NetworkNodesFactory;
 
-public:
-	const std::string &seriesTitle();
-
 private:
+	void init();
+	const ZLResource &resource() const;
 	const ZLTypeId &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
 	std::string title() const;
 	std::string summary() const;
-	void paint(ZLPaintContext &context, int vOffset);
 
 private:
 	std::string mySeriesTitle;
@@ -199,51 +207,28 @@ class NetworkBookNode : public FBReaderNode {
 public:
 	static const ZLTypeId TYPE_ID;
 
-private:
-	class ReadAction;
-	class DownloadAction;
-	class ReadDemoAction;
-	class BuyAction;
-	class DeleteAction;
+	enum SummaryType { AUTHORS, NONE };
 
 private:
-	NetworkBookNode(NetworkContainerNode *parent, shared_ptr<NetworkItem> book);
-
-private:
+	NetworkBookNode(NetworkContainerNode *parent, shared_ptr<NetworkItem> book, SummaryType summaryType);
 	void init();
 
 friend class NetworkNodesFactory;
 
 public:
-	shared_ptr<NetworkItem> book();
+	const NetworkBookItem &book() const;
 
 private:
+	const ZLResource &resource() const;
 	const ZLTypeId &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
 	std::string title() const;
 	std::string summary() const;
-	void paint(ZLPaintContext &context, int vOffset);
-
-	const NetworkBookItem &bookItem() const;
-	NetworkBookItem &bookItem();
-
-	bool hasLocalCopy();
-	bool hasDirectLink();
-	bool canBePurchased();
-	static bool hasLocalCopy(NetworkBookItem &book, NetworkItem::URLType format);
+	void drawCover(ZLPaintContext &context, int vOffset);
 
 private:
 	shared_ptr<NetworkItem> myBook;
-	shared_ptr<ZLRunnable> myReadAction;
-	shared_ptr<ZLRunnable> myDownloadAction;
-	shared_ptr<ZLRunnable> myReadDemoAction;
-	shared_ptr<ZLRunnable> myDownloadDemoAction;
-	shared_ptr<ZLRunnable> myBuyAction;
-	shared_ptr<ZLRunnable> myDeleteAction;
+	SummaryType mySummaryType;
 };
-
-inline shared_ptr<NetworkItem> NetworkBookNode::book() { return myBook; }
-inline const NetworkBookItem &NetworkBookNode::bookItem() const { return (const NetworkBookItem&)*myBook; }
-inline NetworkBookItem &NetworkBookNode::bookItem() { return (NetworkBookItem&)*myBook; }
 
 #endif /* __NETWORKNODES_H__ */

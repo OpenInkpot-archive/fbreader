@@ -20,26 +20,29 @@
 #ifndef __NETWORKOPERATIONDATA_H__
 #define __NETWORKOPERATIONDATA_H__
 
+#include <shared_ptr.h>
+
 #include "NetworkItems.h"
+
+class ZLExecutionData;
 
 class NetworkLink;
 
-struct NetworkOperationData {
-	NetworkOperationData(const NetworkLink &link);
-	void clear();
+class NetworkOperationData {
 
+public:
+	NetworkOperationData(const NetworkLink &link);
+
+	void clear();
+	shared_ptr<ZLExecutionData> resume();
+
+public:
 	const NetworkLink &Link;
 	NetworkItem::List Items;
 	std::string ResumeURI;
-	size_t ResumeCount;
+
+private:
+	size_t myResumeCount;
 };
-
-inline NetworkOperationData::NetworkOperationData(const NetworkLink &link) : Link(link), ResumeCount(0) {
-}
-
-inline void NetworkOperationData::clear() {
-	Items.clear();
-	ResumeURI.clear();
-}
 
 #endif /* __NETWORKOPERATIONDATA_H__ */

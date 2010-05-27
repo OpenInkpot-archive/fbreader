@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- Vietnamese FBReader resources, by Phạm Văn Hùng_Firestork -->
 <resources>
 	<node name="libraryView">
@@ -63,6 +63,7 @@
 			<node name="download" value="Tải về" />
 			<node name="readDemo" value="Đọc thử bản mẫu" />
 			<node name="downloadDemo" value="Tải về bản mẫu " />
+			<node name="demo" toBeTranslated="true" value="sample"/>
 			<node name="buy" value="Mua (%s)" />
 		</node>
 	</node>

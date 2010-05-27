@@ -26,7 +26,10 @@
 
 #include <shared_ptr.h>
 
+#include <ZLFile.h>
 #include <ZLTypeId.h>
+
+#include "BookReference.h"
 
 class NetworkAuthenticationManager;
 class NetworkLink;
@@ -39,11 +42,6 @@ public:
 	enum URLType {
 		URL_NONE,
 		URL_CATALOG,
-		URL_BOOK_EPUB,
-		URL_BOOK_MOBIPOCKET,
-		URL_BOOK_FB2_ZIP,
-		URL_BOOK_PDF,
-		URL_BOOK_DEMO_FB2_ZIP,
 		URL_HTML_PAGE,
 		URL_COVER
 	};
@@ -80,15 +78,15 @@ class NetworkCatalogItem : public NetworkItem {
 public:
 	static const ZLTypeId TYPE_ID;
 
-	enum CatalogType {
-		OTHER,
-		BY_AUTHORS,
-	};
-
 	enum VisibilityType {
 		Always,
 		Never,
 		LoggedUsers
+	};
+
+	enum CatalogType {
+		OTHER,
+		BY_AUTHORS,
 	};
 
 public:
@@ -97,7 +95,8 @@ public:
 		const std::string &title,
 		const std::string &summary,
 		const std::map<URLType,std::string> &urlByType,
-		VisibilityType visibility = Always
+		VisibilityType visibility = Always,
+		CatalogType type = OTHER
 	);
 
 	const ZLTypeId &typeId() const;
@@ -107,10 +106,9 @@ public:
 	// returns error message
 	virtual std::string loadChildren(List &children) = 0;
 
-	virtual CatalogType catalogType() const;
-
 public:
 	const VisibilityType Visibility;
+	const CatalogType Type;
 };
 
 class NetworkBookItem : public NetworkItem {
@@ -135,32 +133,35 @@ public:
 		const std::string &summary,
 		const std::string &language,
 		const std::string &date,
-		const std::string &price,
 		const std::vector<AuthorData> &authors,
 		const std::vector<std::string> &tags,
 		const std::string &seriesTitle,
 		unsigned int indexInSeries,
-		const std::map<URLType,std::string> &urlByType
+		const std::map<URLType,std::string> &urlByType,
+		const std::vector<shared_ptr<BookReference> > references
 	);
 	NetworkBookItem(const NetworkBookItem &book, unsigned int index);
 
 	const ZLTypeId &typeId() const;
 
 public:
-	URLType bestBookFormat() const;
-	URLType bestDemoFormat() const;
+	shared_ptr<BookReference> reference(BookReference::Type type) const;
+
+	std::string localCopyFileName() const;
+	void removeLocalFiles() const;
 
 public:
 	/*const*/ unsigned int Index;
 	const std::string Id;
 	const std::string Language;
 	const std::string Date;
-	// number with curency code (see http://en.wikipedia.org/wiki/List_of_circulating_currencies for example)
-	const std::string Price;
 	const std::vector<AuthorData> Authors;
 	const std::vector<std::string> Tags;
 	const std::string SeriesTitle;
 	const int IndexInSeries;
+
+private:
+	std::vector<shared_ptr<BookReference> > myReferences;
 };
 
 #endif /* __NETWORKITEMS_H__ */

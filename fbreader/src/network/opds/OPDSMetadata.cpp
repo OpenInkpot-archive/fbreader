@@ -22,15 +22,17 @@
 
 const std::string OPDSConstants::REL_BOOKSHELF     = "http://opds-spec.org/bookshelf";
 const std::string OPDSConstants::REL_SUBSCRIPTIONS = "http://opds-spec.org/subscriptions";
+const std::string OPDSConstants::REL_CATALOG_AUTHOR = "http://data.fbreader.org/catalog/author";
 const std::string OPDSConstants::REL_ACQUISITION   = "http://opds-spec.org/acquisition";
 const std::string OPDSConstants::REL_ACQUISITION_BUY        = "http://opds-spec.org/acquisition/buy";
 const std::string OPDSConstants::REL_ACQUISITION_BORROW     = "http://opds-spec.org/acquisition/borrow";
 const std::string OPDSConstants::REL_ACQUISITION_SUBSCRIBE  = "http://opds-spec.org/acquisition/subscribe";
 const std::string OPDSConstants::REL_ACQUISITION_SAMPLE     = "http://opds-spec.org/acquisition/sample";
+const std::string OPDSConstants::REL_ACQUISITION_CONDITIONAL     = "http://data.fbreader.org/acquisition/conditional";
+const std::string OPDSConstants::REL_ACQUISITION_SAMPLE_OR_FULL     = "http://data.fbreader.org/acquisition/sampleOrFull";
+
 const std::string OPDSConstants::REL_COVER         = "http://opds-spec.org/cover";
-const std::string OPDSConstants::REL_STANZA_COVER  = "x-stanza-cover-image";
 const std::string OPDSConstants::REL_THUMBNAIL     = "http://opds-spec.org/thumbnail";
-const std::string OPDSConstants::REL_STANZA_THUMBNAIL = "x-stanza-cover-image-thumbnail";
 
 const std::string OPDSConstants::REL_ALTERNATE     = "alternate";
 
@@ -41,6 +43,8 @@ const std::string OPDSConstants::MIME_APP_EPUB  = "application/epub+zip";
 const std::string OPDSConstants::MIME_APP_MOBI  = "application/x-mobipocket-ebook";
 const std::string OPDSConstants::MIME_APP_PDF   = "application/pdf";
 const std::string OPDSConstants::MIME_APP_ATOM  = "application/atom+xml";
+const std::string OPDSConstants::MIME_APP_LITRES  = "application/litres+xml";
+
 const std::string OPDSConstants::MIME_IMG_PNG   = "image/png";
 const std::string OPDSConstants::MIME_IMG_JPEG  = "image/jpeg";
 const std::string OPDSConstants::MIME_TEXT_HTML = "text/html";

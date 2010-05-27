@@ -19,6 +19,8 @@
 
 #include <algorithm>
 
+#include <ZLResource.h>
+
 #include "ZLBlockTreeNode.h"
 
 const ZLTypeId ZLBlockTreeNode::TYPE_ID(ZLObjectWithRTTI::TYPE_ID);
@@ -78,7 +80,7 @@ size_t ZLBlockTreeNode::level() const {
 	return l;
 }
 
-void ZLBlockTreeNode::addHyperlink(size_t left, size_t top, size_t right, size_t bottom, shared_ptr<ZLRunnable> action) {
+void ZLBlockTreeNode::addHyperlink(size_t left, size_t top, size_t right, size_t bottom, shared_ptr<ZLRunnableWithKey> action) {
 	myHyperlinks[Rectangle(left, top, right, bottom)] = action;
 }
 

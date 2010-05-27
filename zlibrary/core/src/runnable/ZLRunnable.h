@@ -20,11 +20,26 @@
 #ifndef __ZLRUNNABLE_H__
 #define __ZLRUNNABLE_H__
 
+#include <string>
+
+class ZLResource;
+class ZLResourceKey;
+
 class ZLRunnable {
 
 public:
-	virtual ~ZLRunnable() {}
+	virtual ~ZLRunnable();
 	virtual void run() = 0;
 };
+
+class ZLRunnableWithKey : public ZLRunnable {
+
+public:
+	virtual ZLResourceKey key() const = 0;
+	virtual std::string text(const ZLResource &resource) const;
+	virtual bool makesSense() const;
+};
+
+inline ZLRunnable::~ZLRunnable() {}
 
 #endif /* __ZLRUNNABLE_H__ */

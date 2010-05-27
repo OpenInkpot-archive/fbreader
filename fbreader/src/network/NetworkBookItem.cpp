@@ -17,10 +17,9 @@
  * 02110-1301, USA.
  */
 
-//#include <ZLStringUtil.h>
-//#include <ZLFile.h>
-
 #include "NetworkItems.h"
+#include "NetworkLink.h"
+#include "authentication/NetworkAuthenticationManager.h"
 
 const ZLTypeId NetworkBookItem::TYPE_ID(NetworkItem::TYPE_ID);
 
@@ -37,23 +36,23 @@ NetworkBookItem::NetworkBookItem(
 	const std::string &summary,
 	const std::string &language,
 	const std::string &date,
-	const std::string &price,
 	const std::vector<AuthorData> &authors,
 	const std::vector<std::string> &tags,
 	const std::string &seriesTitle,
 	unsigned int indexInSeries,
-	const std::map<URLType,std::string> &urlByType
+	const std::map<URLType,std::string> &urlByType,
+	const std::vector<shared_ptr<BookReference> > references
 ) : 
 	NetworkItem(link, title, summary, urlByType),
 	Index(index),
 	Id(id),
 	Language(language),
 	Date(date),
-	Price(price),
 	Authors(authors),
 	Tags(tags),
 	SeriesTitle(seriesTitle),
-	IndexInSeries(indexInSeries) {
+	IndexInSeries(indexInSeries),
+	myReferences(references) {
 }
 
 NetworkBookItem::NetworkBookItem(const NetworkBookItem &book, unsigned int index) :
@@ -62,7 +61,6 @@ NetworkBookItem::NetworkBookItem(const NetworkBookItem &book, unsigned int index
 	Id(book.Id), 
 	Language(book.Language), 
 	Date(book.Date), 
-	Price(book.Price), 
 	Authors(book.Authors), 
 	Tags(book.Tags),
 	SeriesTitle(book.SeriesTitle),
@@ -73,60 +71,81 @@ const ZLTypeId &NetworkBookItem::typeId() const {
 	return TYPE_ID;
 }
 
-/*std::string NetworkBookItem::fileName(URLType format) const {
-	std::string authorName;
-	size_t maxSize = 256 - title().size() - myLanguage.size() - 4;
-	if (!myAuthors.empty()) {
-		authorName = myAuthors[0].DisplayName;
-		for (size_t i = 1;  i < myAuthors.size() && authorName.size() < maxSize; ++i) {
-			authorName.append(",_");
-			authorName.append(myAuthors[i].DisplayName);
+shared_ptr<BookReference> NetworkBookItem::reference(BookReference::Type type) const {
+	shared_ptr<BookReference> reference;
+	for (std::vector<shared_ptr<BookReference> >::const_iterator it = myReferences.begin(); it != myReferences.end(); ++it) {
+		if ((*it)->ReferenceType == type &&
+				(reference.isNull() || (*it)->BookFormat > reference->BookFormat)) {
+			reference = *it;
 		}
 	}
-	if (authorName.size() > maxSize) {
-		authorName.erase(maxSize);
-		ZLStringUtil::stripWhiteSpaces(authorName);
-	}
-	std::string fName = authorName + "_" + title() + "_(" + myLanguage + ")";
-	switch (format) {
-		case LINK_HTTP:
-			break;
-		case BOOK_EPUB:
-			fName += ".epub";
-			break;
-		case BOOK_MOBIPOCKET:
-			fName += ".mobi";
-			break;
-		case BOOK_FB2_ZIP:
-			fName += ".fb2.zip";
-			break;
-//		case BOOK_PDF:
-//			fName += ".pdf";
-//			break;
-		case BOOK_DEMO_FB2_ZIP:
-			fName += "_(trial).fb2.zip";
-			break;
-		case NONE:
-			return "";
-			break;
-	}
-	return ZLFile::replaceIllegalCharacters(fName, '_');
-}*/
 
-NetworkItem::URLType NetworkBookItem::bestBookFormat() const {
-	if (URLByType.count(URL_BOOK_EPUB) != 0) {
-		return URL_BOOK_EPUB;
-	} else if (URLByType.count(URL_BOOK_FB2_ZIP) != 0) {
-		return URL_BOOK_FB2_ZIP;
-	} else if (URLByType.count(URL_BOOK_MOBIPOCKET) != 0) {
-		return URL_BOOK_MOBIPOCKET;
+	if (reference.isNull() && type == BookReference::DOWNLOAD_FULL) {
+		reference = this->reference(BookReference::DOWNLOAD_FULL_CONDITIONAL);
+		if (!reference.isNull()) {
+			shared_ptr<NetworkAuthenticationManager> authManager =
+				Link.authenticationManager();
+			if (authManager.isNull() || authManager->needPurchase(*this)) {
+				return 0;
+			}
+			reference = authManager->downloadReference(*this);
+		}
 	}
-	return URL_NONE;
+
+	if (reference.isNull() &&
+			type == BookReference::DOWNLOAD_FULL &&
+			this->reference(BookReference::BUY).isNull() &&
+			this->reference(BookReference::BUY_IN_BROWSER).isNull()) {
+		reference = this->reference(BookReference::DOWNLOAD_FULL_OR_DEMO);
+	}
+
+	if (reference.isNull() &&
+			type == BookReference::DOWNLOAD_DEMO &&
+			(!this->reference(BookReference::BUY).isNull() ||
+			 !this->reference(BookReference::BUY_IN_BROWSER).isNull())) {
+		reference = this->reference(BookReference::DOWNLOAD_FULL_OR_DEMO);
+	}
+
+	return reference;
 }
 
-NetworkItem::URLType NetworkBookItem::bestDemoFormat() const {
-	if (URLByType.count(URL_BOOK_DEMO_FB2_ZIP) != 0) {
-		return URL_BOOK_DEMO_FB2_ZIP;
+std::string NetworkBookItem::localCopyFileName() const {
+	const bool hasBuyReference =
+		!this->reference(BookReference::BUY).isNull() ||
+		!this->reference(BookReference::BUY_IN_BROWSER).isNull();
+	shared_ptr<BookReference> reference;
+	std::string fileName;
+	for (std::vector<shared_ptr<BookReference> >::const_iterator it = myReferences.begin(); it != myReferences.end(); ++it) {
+		const BookReference::Type type = (*it)->ReferenceType;
+		if ((type == BookReference::DOWNLOAD_FULL ||
+				 type == BookReference::DOWNLOAD_FULL_CONDITIONAL ||
+				 (!hasBuyReference && type == BookReference::DOWNLOAD_FULL_OR_DEMO)) &&
+				(reference.isNull() || (*it)->BookFormat > reference->BookFormat)) {
+			std::string name = (*it)->localCopyFileName();
+			if (!name.empty()) {
+				reference = *it;
+				fileName = name;
+			}
+		}
 	}
-	return URL_NONE;
+	return fileName;
+}
+
+void NetworkBookItem::removeLocalFiles() const {
+	const bool hasBuyReference =
+		!this->reference(BookReference::BUY).isNull() ||
+		!this->reference(BookReference::BUY_IN_BROWSER).isNull();
+	for (std::vector<shared_ptr<BookReference> >::const_iterator it = myReferences.begin(); it != myReferences.end(); ++it) {
+		const BookReference::Type type = (*it)->ReferenceType;
+		if (type == BookReference::DOWNLOAD_FULL ||
+				type == BookReference::DOWNLOAD_FULL_CONDITIONAL ||
+				(!hasBuyReference && type == BookReference::DOWNLOAD_FULL_OR_DEMO)) {
+			std::string fileName = (*it)->localCopyFileName();
+			if (!fileName.empty()) {
+				// TODO: remove a book from the library
+				// TODO: remove a record from the database
+				ZLFile(fileName).remove();
+			}
+		}
+	}
 }

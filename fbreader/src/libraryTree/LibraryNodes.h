@@ -20,9 +20,9 @@
 #ifndef __LIBRARYNODES_H__
 #define __LIBRARYNODES_H__
 
-#include <ZLImage.h>
-
 #include "../blockTree/FBReaderNode.h"
+
+class ZLImage;
 
 class Author;
 class Book;
@@ -33,23 +33,20 @@ class AuthorNode : public FBReaderNode {
 public:
 	static const ZLTypeId TYPE_ID;
 
-private:
-	class EditInfoAction;
-
 public:
 	AuthorNode(ZLBlockTreeView::RootNode *parent, size_t atPosition, shared_ptr<Author> author);
+	void init();
 
 	shared_ptr<Author> author() const;
 
 private:
+	const ZLResource &resource() const;
 	const ZLTypeId &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
 	std::string title() const;
-	void paint(ZLPaintContext &context, int vOffset);
 
 private:
 	shared_ptr<Author> myAuthor;
-	shared_ptr<ZLRunnable> myEditInfoAction;
 };
 
 class SeriesNode : public FBReaderNode {
@@ -58,30 +55,19 @@ public:
 	static const ZLTypeId TYPE_ID;
 
 public:
-	SeriesNode(AuthorNode *parent, shared_ptr<Book> book);
+	SeriesNode(AuthorNode *parent);
+	void init();
 
 	shared_ptr<Book> book() const;
 
 private:
+	const ZLResource &resource() const;
 	const ZLTypeId &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
 	std::string title() const;
-	void paint(ZLPaintContext &context, int vOffset);
-
-private:
-	shared_ptr<Book> myBook;
 };
 
 class TagNode : public FBReaderNode {
-
-private:
-	class EditOrCloneAction;
-	class EditAction;
-	class CloneAction;
-	class RemoveAction;
-
-	class NameEntry;
-	class IncludeSubtagsEntry;
 
 public:
 	static const ZLTypeId TYPE_ID;
@@ -92,30 +78,24 @@ private:
 public:
 	TagNode(ZLBlockTreeView::RootNode *parent, shared_ptr<Tag> tag);
 	TagNode(TagNode *parent, shared_ptr<Tag> tag);
+	void init();
+
 	shared_ptr<Tag> tag() const;
 
 private:
+	const ZLResource &resource() const;
 	const ZLTypeId &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
 	std::string title() const;
-	void paint(ZLPaintContext &context, int vOffset);
 
 private:
-	shared_ptr<Tag> myTag;
-	shared_ptr<ZLRunnable> myEditAction;
-	shared_ptr<ZLRunnable> myCloneAction;
-	shared_ptr<ZLRunnable> myRemoveAction;
+	const shared_ptr<Tag> myTag;
 };
 
 class BookNode : public FBReaderNode {
 
 public:
 	static const ZLTypeId TYPE_ID;
-
-private:
-	class ReadAction;
-	class EditInfoAction;
-	class RemoveAction;
 
 public:
 	BookNode(AuthorNode *parent, shared_ptr<Book> book);
@@ -125,17 +105,16 @@ public:
 	shared_ptr<Book> book() const;
 
 private:
+	void init();
+	bool highlighted() const;
+	const ZLResource &resource() const;
 	const ZLTypeId &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
 	std::string title() const;
 	std::string summary() const;
-	void paint(ZLPaintContext &context, int vOffset);
 
 private:
-	shared_ptr<Book> myBook;
-	shared_ptr<ZLRunnable> myReadAction;
-	shared_ptr<ZLRunnable> myEditInfoAction;
-	shared_ptr<ZLRunnable> myRemoveAction;
+	const shared_ptr<Book> myBook;
 };
 
 #endif /* __LIBRARYNODES_H__ */

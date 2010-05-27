@@ -32,8 +32,9 @@ OPDSCatalogItem::OPDSCatalogItem(
 	const std::string &title,
 	const std::string &summary,
 	const std::map<URLType,std::string> &urlByType,
-	VisibilityType visibility
-) : NetworkCatalogItem(link, title, summary, urlByType, visibility) {
+	VisibilityType visibility,
+	CatalogType catalogType
+) : NetworkCatalogItem(link, title, summary, urlByType, visibility, catalogType) {
 }
 
 std::string OPDSCatalogItem::loadChildren(NetworkItem::List &children) {
@@ -49,7 +50,7 @@ std::string OPDSCatalogItem::loadChildren(NetworkItem::List &children) {
 		}
 
 		children.insert(children.end(), data.Items.begin(), data.Items.end());
-		networkData = Link.resume(data);
+		networkData = data.resume();
 	}
 
 	return "";

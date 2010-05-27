@@ -27,11 +27,11 @@
 #include "NetworkNodesFactory.h"
 
 #include "../network/NetworkItems.h"
-
 #include "../network/NetworkLinkCollection.h"
 #include "../network/NetworkLink.h"
 #include "../network/SearchResult.h"
 #include "../network/authentication/NetworkAuthenticationManager.h"
+#include "../networkActions/NetworkOperationRunnable.h"
 
 #include "../options/FBOptions.h"
 
@@ -144,7 +144,7 @@ void NetworkView::paint() {
 		}
 	}
 	for (std::map<FBReaderNode*,int>::const_iterator it = nodes.begin(); it != nodes.end(); ++it) {
-		it->first->drawCover(context(), it->second);
+		it->first->drawCoverReal(context(), it->second);
 	}
 	myNodesToPaintCovers.clear();
 }

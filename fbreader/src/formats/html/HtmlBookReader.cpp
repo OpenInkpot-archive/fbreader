@@ -81,7 +81,6 @@ HtmlHeaderTagAction::HtmlHeaderTagAction(HtmlBookReader &reader, FBTextKind kind
 }
 
 void HtmlHeaderTagAction::run(const HtmlReader::HtmlTag &tag) {
-	bookReader().endParagraph();
 	myReader.myIsStarted = false;
 	if (tag.Start) {
 		if (myReader.myBuildTableOfContent && !myReader.myIgnoreTitles) {

@@ -82,7 +82,7 @@ public:
 	bool isOverHyperlink(size_t x, size_t y);
 
 protected:
-	void addHyperlink(size_t left, size_t top, size_t right, size_t bottom, shared_ptr<ZLRunnable> action);
+	void addHyperlink(size_t left, size_t top, size_t right, size_t bottom, shared_ptr<ZLRunnableWithKey> action);
 	void removeAllHyperlinks();
 
 private:
@@ -93,7 +93,7 @@ private:
 	List myChildren;
 	bool myIsOpen;
 
-	typedef std::map<Rectangle,shared_ptr<ZLRunnable> > LinkMap;
+	typedef std::map<Rectangle,shared_ptr<ZLRunnableWithKey> > LinkMap;
 	LinkMap myHyperlinks;
 
 private:
