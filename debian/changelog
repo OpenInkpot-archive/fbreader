@@ -1,3 +1,17 @@
+fbreader (0.12.1-19) zelazny; urgency=low
+
+  [ Tomasz Długosz ]
+  * l10n: initial hungarian translation
+
+  [ Sven Bring ]
+  * l10n: First Swedish translation for fbreader help
+
+  [ Vyacheslav Pereverzev ]
+  * l10n: Updates to Russian (ru) translation
+  * l10n: Updates to Ukrainian (uk) translation
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Thu, 27 May 2010 18:33:16 +0200
+
 fbreader (0.12.1-18) zelazny; urgency=low
 
   * add custom wait cursor
