@@ -1,3 +1,10 @@
+fbreader (0.12.1-20) zelazny; urgency=low
+
+  * Convert selected word to lowercase before submitting it to
+    dictionary application
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sun, 30 May 2010 20:37:33 +0200
+
 fbreader (0.12.1-19) zelazny; urgency=low
 
   [ Tomasz Długosz ]
