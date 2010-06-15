@@ -106,16 +106,6 @@ msgstr "Цёмны шрыфт"
 msgid "Toggle Position Indicator"
 msgstr "Паказаць індыкатар месцазнаходжання"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
-#, fuzzy
-msgid "Show Settings"
-msgstr "Настаўленні кнігі"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
-#, fuzzy
-msgid "Show Help"
-msgstr "Паказваць час"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "Arabic"
 msgstr "Арабская"
@@ -412,11 +402,6 @@ msgstr "Мова кнігі"
 msgid "Break Paragraph At"
 msgstr "Скончыць параграф на"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1145
-#, fuzzy, c-format
-msgid "Key %s"
-msgstr "Кнопка %d"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1174
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1440
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1479
@@ -704,6 +689,19 @@ msgstr "Паказваць лакальнае меню"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
 msgid "Show font size dialog"
 msgstr "Паказваць дыялог выбару шрыфта"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1145
+#, c-format
+msgid "Key %s"
+msgstr "Кнопка %s"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
+msgid "Show Settings"
+msgstr "Паказваць настаўленні"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
+msgid "Show Help"
+msgstr "Паказваць даведку"
 
 #~ msgid "Menu"
 #~ msgstr "Меню кнігі"
