@@ -1,8 +1,8 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
-#
+# 
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
 # Darafei Praliaskouski <komzpa@gmail.com>, 2009.
 msgid ""
@@ -54,11 +54,6 @@ msgstr "Да старонкі"
 msgid "Show Table of Contents"
 msgstr "Паказаць змест"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1599
-msgid "Dictionary"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
 msgid "Go to Home"
 msgstr "Да пачатку кнігі"
@@ -78,14 +73,6 @@ msgstr "Да наступнага раздзела"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
 msgid "Go to Previous TOC Section"
 msgstr "Да папярэдняга раздзела"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
-msgid "Next Page"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
-msgid "Previous Page"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
 msgid "Undo"
@@ -124,22 +111,10 @@ msgstr "Паказаць індыкатар месцазнаходжання"
 msgid "Show Settings"
 msgstr "Настаўленні кнігі"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
-msgid "Cancel/Quit"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
-msgid "Show Local Menu"
-msgstr ""
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
 #, fuzzy
 msgid "Show Help"
 msgstr "Паказваць час"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
-msgid "Show font size dialog"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "Arabic"
@@ -540,176 +515,196 @@ msgstr "Укл."
 msgid "Off"
 msgstr "Выкл."
 
-#: fbreader/data/default/keydefs.n516.tmpl:4
-#: fbreader/data/default/keydefs.v3.tmpl:4
-msgid "0"
-msgstr ""
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
+msgid "Next Page"
+msgstr "Наступная старонка"
 
-#: fbreader/data/default/keydefs.n516.tmpl:5
-#: fbreader/data/default/keydefs.v3.tmpl:5
-msgid "1"
-msgstr ""
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
+msgid "Previous Page"
+msgstr "Папярэдняя старонка"
 
-#: fbreader/data/default/keydefs.n516.tmpl:6
-#: fbreader/data/default/keydefs.v3.tmpl:6
-msgid "2"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:24
+msgid "Up"
+msgstr "Уверх"
 
-#: fbreader/data/default/keydefs.n516.tmpl:7
-#: fbreader/data/default/keydefs.v3.tmpl:7
-msgid "3"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:23
+msgid "Down"
+msgstr "Уніз"
 
-#: fbreader/data/default/keydefs.n516.tmpl:8
-#: fbreader/data/default/keydefs.v3.tmpl:8
-msgid "4"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:22
+msgid "LP Prior"
+msgstr "Кола ўверх (доўгае)"
+
+#: fbreader/data/default/keydefs.n516.tmpl:21
+msgid "LP Next"
+msgstr "Кола ўніз (доўгае)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:14
+msgid "LP 0"
+msgstr "0 (доўгае)"
+
+#: fbreader/data/default/keydefs.n516.tmpl:28
+msgid "Zoom"
+msgstr "Павялічэнне"
+
+#: fbreader/data/default/keydefs.n516.tmpl:26
+#: fbreader/data/default/keydefs.v3.tmpl:30
+msgid "Left"
+msgstr "Улева"
+
+#: fbreader/data/default/keydefs.n516.tmpl:25
+#: fbreader/data/default/keydefs.v3.tmpl:28
+msgid "Right"
+msgstr "Управа"
+
+#: fbreader/data/default/keydefs.v3.tmpl:16
+msgid "LP 2"
+msgstr "2 (доўгае)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:15
+msgid "LP 1"
+msgstr "1 (доўгае)"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1599
+msgid "Dictionary"
+msgstr "Слоўнік"
 
 #: fbreader/data/default/keydefs.n516.tmpl:9
 #: fbreader/data/default/keydefs.v3.tmpl:9
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: fbreader/data/default/keydefs.n516.tmpl:10
 #: fbreader/data/default/keydefs.v3.tmpl:10
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: fbreader/data/default/keydefs.n516.tmpl:11
 #: fbreader/data/default/keydefs.v3.tmpl:11
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #: fbreader/data/default/keydefs.n516.tmpl:12
 #: fbreader/data/default/keydefs.v3.tmpl:12
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #: fbreader/data/default/keydefs.n516.tmpl:13
 #: fbreader/data/default/keydefs.v3.tmpl:13
 msgid "9"
-msgstr ""
+msgstr "9"
 
 #: fbreader/data/default/keydefs.n516.tmpl:14
-#, fuzzy
 msgid "M/Bookmark"
-msgstr "Закладкі"
+msgstr "Кнопка M"
 
 #: fbreader/data/default/keydefs.n516.tmpl:17
 #: fbreader/data/default/keydefs.v3.tmpl:24
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: fbreader/data/default/keydefs.n516.tmpl:18
 msgid "Back"
-msgstr ""
+msgstr "Назад"
 
 #: fbreader/data/default/keydefs.n516.tmpl:19
 msgid "Next"
-msgstr ""
+msgstr "Кола ўніз"
 
 #: fbreader/data/default/keydefs.n516.tmpl:20
 msgid "Prior"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:21
-msgid "LP Next"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:22
-msgid "LP Prior"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:23
-msgid "Down"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:24
-msgid "Up"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:25
-#: fbreader/data/default/keydefs.v3.tmpl:28
-#, fuzzy
-msgid "Right"
-msgstr "Управа"
-
-#: fbreader/data/default/keydefs.n516.tmpl:26
-#: fbreader/data/default/keydefs.v3.tmpl:30
-#, fuzzy
-msgid "Left"
-msgstr "Улева"
-
-#: fbreader/data/default/keydefs.n516.tmpl:28
-msgid "Zoom"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:14
-msgid "LP 0"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:15
-msgid "LP 1"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:16
-msgid "LP 2"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:17
-msgid "LP 3"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:18
-msgid "LP 4"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:19
-msgid "LP 5"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:20
-msgid "LP 6"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:21
-msgid "LP 7"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:22
-msgid "LP 8"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:23
-msgid "LP 9"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:25
-msgid "LP OK"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:26
-msgid "C"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:29
-#, fuzzy
-msgid "LP Right"
-msgstr "Управа"
-
-#: fbreader/data/default/keydefs.v3.tmpl:31
-msgid "LP Left"
-msgstr ""
+msgstr "Кола ўверх"
 
 #: fbreader/data/default/keydefs.v3.tmpl:32
 msgid "+"
-msgstr ""
+msgstr "+"
+
+#: fbreader/data/default/keydefs.v3.tmpl:31
+msgid "LP Left"
+msgstr "Улева (доўгае)"
 
 #: fbreader/data/default/keydefs.v3.tmpl:33
 msgid "-"
-msgstr ""
+msgstr "-"
 
-#, fuzzy
+#: fbreader/data/default/keydefs.n516.tmpl:8
+#: fbreader/data/default/keydefs.v3.tmpl:8
+msgid "4"
+msgstr "4"
+
+#: fbreader/data/default/keydefs.n516.tmpl:7
+#: fbreader/data/default/keydefs.v3.tmpl:7
+msgid "3"
+msgstr "3"
+
+#: fbreader/data/default/keydefs.n516.tmpl:4
+#: fbreader/data/default/keydefs.v3.tmpl:4
+msgid "0"
+msgstr "0"
+
+#: fbreader/data/default/keydefs.n516.tmpl:6
+#: fbreader/data/default/keydefs.v3.tmpl:6
+msgid "2"
+msgstr "2"
+
+#: fbreader/data/default/keydefs.n516.tmpl:5
+#: fbreader/data/default/keydefs.v3.tmpl:5
+msgid "1"
+msgstr "1"
+
+#: fbreader/data/default/keydefs.v3.tmpl:23
+msgid "LP 9"
+msgstr "9 (доўгае)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:25
+msgid "LP OK"
+msgstr "OK (доўгае)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:21
+msgid "LP 7"
+msgstr "7 (доўгае)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:22
+msgid "LP 8"
+msgstr "8 (доўгае)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:19
+msgid "LP 5"
+msgstr "5 (доўгае)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:20
+msgid "LP 6"
+msgstr "6 (доўгае)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:17
+msgid "LP 3"
+msgstr "3 (доўгае)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:18
+msgid "LP 4"
+msgstr "4 (доўгае)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:26
+msgid "C"
+msgstr "C"
+
+#: fbreader/data/default/keydefs.v3.tmpl:29
+msgid "LP Right"
+msgstr "Управа (доўгае)"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
+msgid "Cancel/Quit"
+msgstr "Адмена/Выхад"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
+msgid "Show Local Menu"
+msgstr "Паказваць лакальнае меню"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
+msgid "Show font size dialog"
+msgstr "Паказваць дыялог выбару шрыфта"
+
 #~ msgid "Menu"
 #~ msgstr "Меню кнігі"
 
