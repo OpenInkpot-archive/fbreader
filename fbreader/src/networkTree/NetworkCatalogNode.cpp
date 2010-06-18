@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
  * 02110-1301, USA.
  */
 
-#include <iostream>
 #include <algorithm>
 
 #include <ZLResource.h>
@@ -29,134 +28,81 @@
 #include "NetworkView.h"
 #include "NetworkNodesFactory.h"
 #include "NetworkCatalogUtil.h"
-#include "NetworkOperationRunnable.h"
 
 #include "../fbreader/FBReader.h"
 
-#include "../network/NetworkLibraryItems.h"
+#include "../network/NetworkItems.h"
 #include "../network/NetworkBookCollection.h"
 #include "../network/NetworkLink.h"
-#include "../network/NetworkAuthenticationManager.h"
+#include "../network/authentication/NetworkAuthenticationManager.h"
+#include "../networkActions/NetworkOperationRunnable.h"
 
-class NetworkCatalogNode::ExpandCatalogAction : public ZLRunnable {
-
-public:
-	ExpandCatalogAction(NetworkCatalogNode &node);
-	void run();
-
-private:
-	NetworkCatalogNode &myNode;
-};
-
-class NetworkCatalogNode::OpenInBrowserAction : public ZLRunnable {
+class NetworkCatalogNode::OpenInBrowserAction : public ZLRunnableWithKey {
 
 public:
 	OpenInBrowserAction(const std::string &url);
+	ZLResourceKey key() const;
 	void run();
 
 private:
 	const std::string myURL;
 };
 
-class NetworkCatalogNode::ReloadAction : public ZLRunnable {
+const ZLTypeId NetworkCatalogNode::TYPE_ID(NetworkContainerNode::TYPE_ID);
 
-public:
-	ReloadAction(NetworkCatalogNode &node);
-	void run();
-
-private:
-	NetworkCatalogNode &myNode;
-};
-
-const std::string NetworkCatalogNode::TYPE_ID = "LibraryItemNode";
-
-
-NetworkCatalogNode::NetworkCatalogNode(ZLBlockTreeView::RootNode *parent, shared_ptr<NetworkLibraryItem> item, size_t atPosition) : 
+NetworkCatalogNode::NetworkCatalogNode(ZLBlockTreeView::RootNode *parent, shared_ptr<NetworkItem> item, size_t atPosition) : 
 	NetworkContainerNode(parent, atPosition), 
 	myItem(item) {
 }
 
-NetworkCatalogNode::NetworkCatalogNode(NetworkCatalogNode *parent, shared_ptr<NetworkLibraryItem> item, size_t atPosition) : 
+NetworkCatalogNode::NetworkCatalogNode(NetworkCatalogNode *parent, shared_ptr<NetworkItem> item, size_t atPosition) : 
 	NetworkContainerNode(parent, atPosition), 
 	myItem(item) {
 }
 
-shared_ptr<ZLRunnable> NetworkCatalogNode::expandCatalogAction() {
-	if (myExpandCatalogAction.isNull()) {
-		myExpandCatalogAction = new ExpandCatalogAction(*this);
+void NetworkCatalogNode::init() {
+	if (!item().URLByType[NetworkItem::URL_CATALOG].empty()) {
+		registerAction(new ExpandCatalogAction(*this));
 	}
-	return myExpandCatalogAction;
-}
-
-shared_ptr<ZLRunnable> NetworkCatalogNode::openInBrowserAction() {
-	if (myOpenInBrowserAction.isNull()) {
-		myOpenInBrowserAction = new OpenInBrowserAction(item().htmlURL());
+	const std::string htmlUrl =
+		item().URLByType[NetworkItem::URL_HTML_PAGE];
+	if (!htmlUrl.empty()) {
+		registerAction(new OpenInBrowserAction(htmlUrl));
 	}
-	return myOpenInBrowserAction;
+	registerAction(new ReloadAction(*this));
 }
 
-shared_ptr<ZLRunnable> NetworkCatalogNode::reloadAction() {
-	if (myReloadAction.isNull()) {
-		myReloadAction = new ReloadAction(*this);
-	}
-	return myReloadAction;
+NetworkCatalogItem &NetworkCatalogNode::item() {
+	return (NetworkCatalogItem&)*myItem;
 }
 
-NetworkLibraryCatalogItem &NetworkCatalogNode::item() {
-	return (NetworkLibraryCatalogItem&)*myItem;
-}
-
-const NetworkLibraryItemList &NetworkCatalogNode::childrenItems() {
+const NetworkItem::List &NetworkCatalogNode::childrenItems() {
 	return myChildrenItems;
 }
 
-const std::string &NetworkCatalogNode::typeId() const {
+const ZLTypeId &NetworkCatalogNode::typeId() const {
 	return TYPE_ID;
 }
 
-
-void NetworkCatalogNode::paint(ZLPaintContext &context, int vOffset) {
-	removeAllHyperlinks();
-
-	((NetworkView&)view()).drawCoverLater(this, vOffset);
-	drawTitle(context, vOffset, myItem->title());
-	const std::string &summary = item().summary();
-	if (!summary.empty()) {
-		drawSummary(context, vOffset, summary);
-	}
-
-	paintHyperlinks(context, vOffset);
+const ZLResource &NetworkCatalogNode::resource() const {
+	return ZLResource::resource("networkView")["libraryItemNode"];
 }
 
-void NetworkCatalogNode::paintHyperlinks(ZLPaintContext &context, int vOffset) {
-	const ZLResource &resource =
-		ZLResource::resource("networkView")["libraryItemNode"];
+std::string NetworkCatalogNode::title() const {
+	return myItem->Title;
+}
 
-	int left = 0;
-	if (!item().url().empty()) {
-		drawHyperlink(context, left, vOffset,
-			resource[isOpen() ? "collapseTree" : "expandTree"].value(),
-			expandCatalogAction()
-		);
-	}
-	if (!item().htmlURL().empty()) {
-		drawHyperlink(context, left, vOffset,
-			resource["openInBrowser"].value(),
-			openInBrowserAction()
-		);
-	}
-	if (isOpen()) {
-		drawHyperlink(context, left, vOffset, resource["reload"].value(), reloadAction());
-	}
+std::string NetworkCatalogNode::summary() const {
+	return ((const NetworkCatalogItem&)*myItem).Summary;
 }
 
 shared_ptr<ZLImage> NetworkCatalogNode::extractCoverImage() const {
-	const std::string &url = myItem->coverURL();
+	const std::string &url = myItem->URLByType[NetworkItem::URL_COVER];
 
 	if (url.empty()) {
 		return lastResortCoverImage();
 	}
-	
+
 	shared_ptr<ZLImage> image = NetworkCatalogUtil::getImageByUrl(url);
 	if (!image.isNull()) {
 		return image;
@@ -190,15 +136,15 @@ void NetworkCatalogNode::updateChildren() {
 	}
 
 	bool hasSubcatalogs = false;
-	for (NetworkLibraryItemList::iterator it = myChildrenItems.begin(); it != myChildrenItems.end(); ++it) {
-		if ((*it)->typeId() == NetworkLibraryCatalogItem::TYPE_ID) {
+	for (NetworkItem::List::iterator it = myChildrenItems.begin(); it != myChildrenItems.end(); ++it) {
+		if ((*it)->typeId() == NetworkCatalogItem::TYPE_ID) {
 			hasSubcatalogs = true;
 			break;
 		}
 	}
 
 	if (hasSubcatalogs) {
-		for (NetworkLibraryItemList::iterator it = myChildrenItems.begin(); it != myChildrenItems.end(); ++it) {
+		for (NetworkItem::List::iterator it = myChildrenItems.begin(); it != myChildrenItems.end(); ++it) {
 			NetworkNodesFactory::createNetworkNode(this, *it);
 		}
 	} else {
@@ -210,25 +156,30 @@ void NetworkCatalogNode::updateChildren() {
 NetworkCatalogNode::ExpandCatalogAction::ExpandCatalogAction(NetworkCatalogNode &node) : myNode(node) {
 }
 
+ZLResourceKey NetworkCatalogNode::ExpandCatalogAction::key() const {
+	return ZLResourceKey(myNode.isOpen() ? "collapseTree" : "expandTree");
+}
+
 void NetworkCatalogNode::ExpandCatalogAction::run() {
 	if (!NetworkOperationRunnable::tryConnect()) {
 		return;
 	}
 
-	NetworkLink &link = myNode.item().link();
+	const NetworkLink &link = myNode.item().Link;
 	if (!link.authenticationManager().isNull()) {
 		NetworkAuthenticationManager &mgr = *link.authenticationManager();
-		ZLBoolean3 authState = mgr.isAuthorised();
-		std::cerr << "authState == " << authState << std::endl;
-		if (authState == B3_UNDEFINED) {
-			// TODO: show information message???
+		IsAuthorisedRunnable checker(mgr);
+		checker.executeWithUI();
+		if (checker.hasErrors()) {
+			checker.showErrorMessage();
 			return;
 		}
-		if (authState == B3_TRUE && mgr.needsInitialization()) {
+		if (checker.result() == B3_TRUE && mgr.needsInitialization()) {
 			InitializeAuthenticationManagerRunnable initializer(mgr);
 			initializer.executeWithUI();
 			if (initializer.hasErrors()) {
-				mgr.logOut();
+				LogOutRunnable logout(mgr);
+				logout.executeWithUI();
 			}
 		}
 	}
@@ -243,6 +194,10 @@ void NetworkCatalogNode::ExpandCatalogAction::run() {
 NetworkCatalogNode::OpenInBrowserAction::OpenInBrowserAction(const std::string &url) : myURL(url) {
 }
 
+ZLResourceKey NetworkCatalogNode::OpenInBrowserAction::key() const {
+	return ZLResourceKey("openInBrowser");
+}
+
 void NetworkCatalogNode::OpenInBrowserAction::run() {
 	FBReader::Instance().openLinkInBrowser(myURL);
 }
@@ -250,16 +205,20 @@ void NetworkCatalogNode::OpenInBrowserAction::run() {
 NetworkCatalogNode::ReloadAction::ReloadAction(NetworkCatalogNode &node) : myNode(node) {
 }
 
+ZLResourceKey NetworkCatalogNode::ReloadAction::key() const {
+	return ZLResourceKey("reload");
+}
+
+bool NetworkCatalogNode::ReloadAction::makesSense() const {
+	return myNode.isOpen();
+}
+
 void NetworkCatalogNode::ReloadAction::run() {
 	if (!NetworkOperationRunnable::tryConnect()) {
 		return;
 	}
 
-	bool openState = myNode.isOpen();
 	myNode.updateChildren();
-	if (openState) {
-		myNode.expandOrCollapseSubtree();
-	}
+	myNode.expandOrCollapseSubtree();
 	FBReader::Instance().refreshWindow();
 }
-

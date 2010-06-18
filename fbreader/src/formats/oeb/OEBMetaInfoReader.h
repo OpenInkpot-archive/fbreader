@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,10 +36,11 @@ public:
 	void endElementHandler(const char *tag);
 	void characterDataHandler(const char *text, size_t len);
 	bool processNamespaces() const;
+	const std::vector<std::string> &externalDTDs() const;
 
 private:
 	bool isDublinCoreNamespace(const std::string &nsId) const;
-	bool isOPFNamespace(const std::string &nsId) const;
+	bool isNSName(const std::string &fullName, const std::string &shortName, const std::string &fullNSId) const;
 
 private:
 	Book &myBook;

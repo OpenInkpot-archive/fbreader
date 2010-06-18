@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,8 +23,10 @@
 #include <string>
 
 #include <ZLRunnable.h>
+#include <ZLBoolean3.h>
+#include <ZLNetworkSSLCertificate.h>
 
-#include "../network/NetworkLibraryItems.h"
+#include "../network/NetworkItems.h"
 #include "../network/NetworkBookCollection.h"
 
 class ZLProgressDialog;
@@ -57,19 +59,34 @@ inline const std::string &NetworkOperationRunnable::errorMessage() const { retur
 class DownloadBookRunnable : public NetworkOperationRunnable {
 
 public:
-	DownloadBookRunnable(const NetworkLibraryBookItem &book, NetworkLibraryBookItem::URLType format);
+	DownloadBookRunnable(const NetworkBookItem &book, NetworkItem::URLType format);
 	DownloadBookRunnable(const std::string &url);
+	~DownloadBookRunnable();
 	void run();
 
 	const std::string &fileName() const;
 
 private:
 	std::string myURL;
-	std::string mySSLCertificate;
 	std::string myNetworkBookId;
-	NetworkLibraryBookItem::URLType myFormat;
+	NetworkItem::URLType myFormat;
 
 	std::string myFileName;
+
+	shared_ptr<NetworkAuthenticationManager> myAuthManager;
+};
+
+class IsAuthorisedRunnable : public NetworkOperationRunnable {
+
+public:
+	IsAuthorisedRunnable(NetworkAuthenticationManager &mgr);
+	void run();
+
+	ZLBoolean3 result();
+
+private:
+	NetworkAuthenticationManager &myManager;
+	ZLBoolean3 myResult;
 };
 
 class AuthoriseRunnable : public NetworkOperationRunnable {
@@ -93,15 +110,25 @@ private:
 	NetworkAuthenticationManager &myManager;
 };
 
-class PurchaseBookRunnable : public NetworkOperationRunnable {
+class LogOutRunnable : public NetworkOperationRunnable {
 
 public:
-	PurchaseBookRunnable(NetworkAuthenticationManager &mgr, NetworkLibraryBookItem &book);
+	LogOutRunnable(NetworkAuthenticationManager &mgr);
 	void run();
 
 private:
 	NetworkAuthenticationManager &myManager;
-	NetworkLibraryBookItem &myBook;
+};
+
+class PurchaseBookRunnable : public NetworkOperationRunnable {
+
+public:
+	PurchaseBookRunnable(NetworkAuthenticationManager &mgr, NetworkBookItem &book);
+	void run();
+
+private:
+	NetworkAuthenticationManager &myManager;
+	NetworkBookItem &myBook;
 };
 
 class PasswordRecoveryRunnable : public NetworkOperationRunnable {
@@ -172,12 +199,12 @@ private:
 class LoadSubCatalogRunnable : public NetworkOperationRunnable {
 
 public:
-	LoadSubCatalogRunnable(NetworkLibraryCatalogItem &item, NetworkLibraryItemList &children);
+	LoadSubCatalogRunnable(NetworkCatalogItem &item, NetworkItem::List &children);
 	void run();
 
 private:
-	NetworkLibraryCatalogItem &myItem;
-	NetworkLibraryItemList &myChildren;
+	NetworkCatalogItem &myItem;
+	NetworkItem::List &myChildren;
 };
 
 #endif /* __NETWORKOPERATIONRUNNABLE_H__ */

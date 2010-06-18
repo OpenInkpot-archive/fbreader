@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,11 @@
 class OPDSXMLParser : public ZLXMLReader {
 
 public:
+	static const std::string KEY_PRICE;
+	static const std::string KEY_CURRENCY;
+	static const std::string KEY_FORMAT;
+
+public:
 	OPDSXMLParser(shared_ptr<OPDSFeedReader> feedReader);
 
 private:
@@ -43,32 +48,25 @@ private:
 		START, 
 		FEED, F_ENTRY, F_ID, F_LINK, F_CATEGORY, F_TITLE, F_UPDATED, F_AUTHOR,
 		FA_NAME, FA_URI, FA_EMAIL,
-		FE_AUTHOR, FE_ID, FE_CATEGORY, FE_LINK, FE_PUBLISHED, FE_SUMMARY, FE_CONTENT, FE_SUBTITLE, FE_TITLE, FE_UPDATED, FE_DC_LANGUAGE, FE_DC_ISSUED, FE_DC_PUBLISHER,
+		FE_AUTHOR, FE_ID, FE_CATEGORY, FE_LINK, FE_PUBLISHED, FE_SUMMARY, FE_CONTENT, FE_SUBTITLE, FE_TITLE, FE_UPDATED, FE_DC_LANGUAGE, FE_DC_ISSUED, FE_DC_PUBLISHER, FE_CALIBRE_SERIES, FE_CALIBRE_SERIES_INDEX,
+		FEL_PRICE, FEL_FORMAT,
 		FEA_NAME, FEA_URI, FEA_EMAIL,
 		OPENSEARCH_TOTALRESULTS, OPENSEARCH_ITEMSPERPAGE, OPENSEARCH_STARTINDEX,
+		FEC_HACK_SPAN,
 	};
 
-	void processState(const std::string &tag, bool closed);
-	State getNextState(const std::string &tag, bool closed);
-
-private:
-	bool checkAtomTag(const std::string &tag, const std::string &pattern) const;
-	bool checkDCTag(const std::string &tag, const std::string &pattern) const;
-	bool checkOpenSearchTag(const std::string &tag, const std::string &pattern) const;
-
-	static bool checkNSTag(const std::string &tag, const std::string &nsprefix, const std::string &pattern);
-	
 private:
 	shared_ptr<OPDSFeedReader> myFeedReader;
 
 	std::string myBuffer;
-	std::string myDCPrefix;
-	std::string myAtomPrefix;
-	std::string myOpenSearchPrefix;
+
+	std::string myDublinCoreNamespaceId;
+	std::string myAtomNamespaceId;
+	std::string myOpenSearchNamespaceId;
+	std::string myCalibreNamespaceId;
+	std::string myOpdsNamespaceId;
 
 	State myState;
-
-	std::map<std::string, std::string> myAttributes;
 
 	shared_ptr<OPDSFeedMetadata> myFeed;
 	shared_ptr<OPDSEntry> myEntry;
@@ -79,6 +77,7 @@ private:
 	shared_ptr<ATOMCategory> myCategory;
 	shared_ptr<ATOMUpdated> myUpdated;
 	shared_ptr<ATOMPublished> myPublished;
+
 	//shared_ptr<ATOMTitle> myTitle;      // TODO: implement ATOMTextConstruct & ATOMTitle
 	//shared_ptr<ATOMSummary> mySummary;  // TODO: implement ATOMTextConstruct & ATOMSummary
 	bool mySummaryTagFound;

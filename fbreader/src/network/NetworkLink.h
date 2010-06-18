@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,11 +22,12 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include <shared_ptr.h>
 #include <ZLOptions.h>
 
-#include "NetworkLibraryItems.h"
+#include "NetworkItems.h"
 
 class ZLExecutionData;
 
@@ -39,25 +40,48 @@ public:
 	static std::string NetworkDataDirectory();
 	static std::string CertificatesPathPrefix();
 
+public:
+	static const std::string URL_MAIN;
+	static const std::string URL_SEARCH;
+	static const std::string URL_SIGN_IN;
+	static const std::string URL_SIGN_OUT;
+	static const std::string URL_SIGN_UP;
+	static const std::string URL_REFILL_ACCOUNT;
+	static const std::string URL_RECOVER_PASSWORD;
+
 protected:
-	NetworkLink(const std::string &siteName, const std::string &title);
+	NetworkLink(
+		const std::string &siteName,
+		const std::string &title,
+		const std::string &summary,
+		const std::string &icon,
+		const std::map<std::string,std::string> &links
+	);
 
 public:
 	virtual ~NetworkLink();
+	std::string url(const std::string &urlId) const;
+
+public:
+	virtual shared_ptr<ZLExecutionData> simpleSearchData(NetworkOperationData &data, const std::string &pattern) const = 0;
+	virtual shared_ptr<ZLExecutionData> advancedSearchData(NetworkOperationData &data, const std::string &titleAndSeries, const std::string &author, const std::string &tag, const std::string &annotation) const = 0;
+	virtual shared_ptr<ZLExecutionData> resume(NetworkOperationData &data) const;
+
+	virtual shared_ptr<NetworkAuthenticationManager> authenticationManager() const = 0;
+	virtual shared_ptr<NetworkItem> libraryItem() const = 0;
+
+	virtual void rewriteUrl(std::string &url, bool isUrlExternal = false) const = 0;
 
 public:
 	const std::string SiteName;
 	const std::string Title;
+	const std::string Summary;
+	const std::string Icon;
 	ZLBooleanOption OnOption;
 
-public:
-	virtual shared_ptr<ZLExecutionData> simpleSearchData(NetworkOperationData &data, const std::string &pattern) = 0;
-	virtual shared_ptr<ZLExecutionData> advancedSearchData(NetworkOperationData &data, const std::string &titleAndSeries, const std::string &author, const std::string &tag, const std::string &annotation) = 0;
-	virtual shared_ptr<ZLExecutionData> resume(NetworkOperationData &data);
-
-public:
-	virtual shared_ptr<NetworkAuthenticationManager> authenticationManager();
-	virtual shared_ptr<NetworkLibraryItem> libraryItem() = 0;
+private:
+protected:
+	/*const*/ std::map<std::string,std::string> myLinks;
 
 private: // disable copying
 	NetworkLink(const NetworkLink &);

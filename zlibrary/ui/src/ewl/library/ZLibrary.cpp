@@ -507,7 +507,7 @@ void main_loop(ZLApplication *application)
 							break;
 
 						xcb_configure_notify_event_t *conf = (xcb_configure_notify_event_t *)e;
-						ZLEwlViewWidget *view = (ZLEwlViewWidget*)application->myViewWidget;
+						ZLEwlViewWidget *view = (ZLEwlViewWidget*)(&*application->myViewWidget);
 						if(view->width() != conf->width || view->height() != conf->height) {
 							view->resize(conf->width, conf->height);
 							((FBReader*)application)->showBookTextView();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -144,9 +144,6 @@ void OptionsApplyRunnable::run() {
 	FBReader &fbreader = FBReader::Instance();
 	fbreader.grabAllKeys(fbreader.KeyboardControlOption.value());
 	fbreader.clearTextCaches();
-	if (myDialog.myNetworkLibraryPage->onApply()) {
-		FBReader::Instance().invalidateNetworkView();
-	}
 	fbreader.refreshWindow();
 }
 

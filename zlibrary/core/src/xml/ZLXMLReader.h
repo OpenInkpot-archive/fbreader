@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,11 +33,36 @@ class ZLXMLReaderInternal;
 class ZLXMLReader {
 
 public:
-	static const char *attributeValue(const char **xmlattributes, const char *name);
+	class AttributeNamePredicate {
+
+	public:
+		virtual ~AttributeNamePredicate();
+		virtual bool accepts(const ZLXMLReader &reader, const char *name) const = 0;
+	};
+
+	class FixedAttributeNamePredicate : public AttributeNamePredicate {
+
+	public:
+		FixedAttributeNamePredicate(const std::string &attributeName);
+		bool accepts(const ZLXMLReader &reader, const char *name) const;
+
+	private:
+		const std::string myAttributeName;
+	};
+
+	class NamespaceAttributeNamePredicate : public AttributeNamePredicate {
+
+	public:
+		NamespaceAttributeNamePredicate(const std::string &ns, const std::string &name);
+		bool accepts(const ZLXMLReader &reader, const char *name) const;
+
+	private:
+		const std::string myNamespaceName;
+		const std::string myAttributeName;
+	};
 
 protected:
 	ZLXMLReader(const char *encoding = 0);
-	const std::map<std::string,std::string> &namespaces() const;
 
 public:
 	virtual ~ZLXMLReader();
@@ -48,6 +73,11 @@ public:
 	bool readDocument(shared_ptr<ZLAsynchronousInputStream> stream);
 
 	const std::string &errorMessage() const;
+
+	const std::map<std::string,std::string> &namespaces() const;
+
+	const char *attributeValue(const char **xmlattributes, const char *name);
+	const char *attributeValue(const char **xmlattributes, const AttributeNamePredicate &predicate);
 
 private:
 	void initialize(const char *encoding = 0);

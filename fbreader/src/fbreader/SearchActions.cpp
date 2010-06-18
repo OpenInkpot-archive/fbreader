@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ bool SearchAction::isVisible() const {
 	shared_ptr<ZLView> view = FBReader::Instance().currentView();
 	return
 		!view.isNull() && 
-		view->typeId() == ZLTextView::TYPE_ID &&
+		view->isInstanceOf(ZLTextView::TYPE_ID) &&
 		((FBView&)*view).hasContents();
 }
 
@@ -112,7 +112,7 @@ bool FindNextAction::isEnabled() const {
 	shared_ptr<ZLView> view = FBReader::Instance().currentView();
 	return
 		!view.isNull() && 
-		view->typeId() == ZLTextView::TYPE_ID &&
+		view->isInstanceOf(ZLTextView::TYPE_ID) &&
 		((ZLTextView&)*view).canFindNext();
 	return false;
 }
@@ -125,7 +125,7 @@ bool FindPreviousAction::isEnabled() const {
 	shared_ptr<ZLView> view = FBReader::Instance().currentView();
 	return
 		!view.isNull() && 
-		view->typeId() == ZLTextView::TYPE_ID &&
+		view->isInstanceOf(ZLTextView::TYPE_ID) &&
 		((ZLTextView&)*view).canFindPrevious();
 }
 

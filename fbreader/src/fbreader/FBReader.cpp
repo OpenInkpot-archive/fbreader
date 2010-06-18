@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
- * Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Alexander Kerner <lunohod@openinkpot.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@
 #include <ZLStringUtil.h>
 #include <ZLResource.h>
 #include <ZLMessage.h>
+#include <ZLTimeManager.h>
+#include <ZLLogger.h>
 
 #include <ZLTextStyleCollection.h>
 #include <ZLTextHyphenator.h>
@@ -43,8 +45,9 @@
 #include "TimeUpdater.h"
 
 #include "../libraryTree/LibraryView.h"
+#include "../network/NetworkLinkCollection.h"
+#include "../networkActions/NetworkOperationRunnable.h"
 #include "../networkTree/NetworkView.h"
-#include "../networkTree/NetworkOperationRunnable.h"
 
 #include "../migration/migrate.h"
 
@@ -57,7 +60,7 @@
 #include "../database/booksdb/BooksDBUtil.h"
 #include "../library/Book.h"
 
-#include "../network/litres/LitResUtil.h"
+#include <ZLTextSelectionModel.h>
 
 static const std::string OPTIONS = "Options";
 
@@ -98,7 +101,6 @@ FBReader::FBReader(const std::string &bookToOpen) :
 	myBookAlreadyOpen(false),
 	myActionOnCancel(UNFULLSCREEN) {
 
-	myModel = 0;
 	myBookTextView = new BookTextView(*context());
 	myFootnoteView = new FootnoteView(*context());
 	myContentsView = new ContentsView(*context());
@@ -145,6 +147,7 @@ FBReader::FBReader(const std::string &bookToOpen) :
 	addAction(ActionCode::CANCEL, new CancelAction());
 	addAction(ActionCode::SHOW_HIDE_POSITION_INDICATOR, new ToggleIndicatorAction());
 	addAction(ActionCode::QUIT, new QuitAction());
+	addAction(ActionCode::FORCE_QUIT, new ForceQuitAction());
 	addAction(ActionCode::OPEN_PREVIOUS_BOOK, new OpenPreviousBookAction());
 	addAction(ActionCode::SHOW_HELP, new ShowHelpAction());
 	addAction(ActionCode::GOTO_NEXT_TOC_SECTION, new GotoNextTOCSectionAction());
@@ -152,11 +155,12 @@ FBReader::FBReader(const std::string &bookToOpen) :
 	addAction(ActionCode::COPY_SELECTED_TEXT_TO_CLIPBOARD, new CopySelectedTextAction());
 	addAction(ActionCode::OPEN_SELECTED_TEXT_IN_DICTIONARY, new OpenSelectedTextInDictionaryAction());
 	addAction(ActionCode::CLEAR_SELECTION, new ClearSelectionAction());
-	addAction(ActionCode::GOTO_PAGE_NUMBER, new GotoPageNumber(std::string()));
-	addAction(ActionCode::GOTO_PAGE_NUMBER_WITH_PARAMETER, new GotoPageNumber(PageIndexParameter));
+	addAction(ActionCode::GOTO_PAGE_NUMBER, new GotoPageNumberAction(std::string()));
+	addAction(ActionCode::GOTO_PAGE_NUMBER_WITH_PARAMETER, new GotoPageNumberAction(PageIndexParameter));
 	shared_ptr<Action> booksOrderAction = new BooksOrderAction();
 	addAction(ActionCode::ORGANIZE_BOOKS_BY_AUTHOR, booksOrderAction);
 	addAction(ActionCode::ORGANIZE_BOOKS_BY_TAG, booksOrderAction);
+	addAction(ActionCode::FILTER_LIBRARY, new FilterLibraryAction());
 
 	addAction(ActionCode::SHOW_FOOTNOTES, new ShowFootnotes());
 	addAction(ActionCode::HYPERLINK_NAV_START, new HyperlinkNavStart());
@@ -179,9 +183,6 @@ FBReader::FBReader(const std::string &bookToOpen) :
 }
 
 FBReader::~FBReader() {
-	if (myModel != 0) {
-		delete myModel;
-	}
 	ZLTextStyleCollection::deleteInstance();
 	PluginCollection::deleteInstance();
 	ZLTextHyphenator::deleteInstance();
@@ -193,7 +194,6 @@ void FBReader::initWindow() {
 	MigrationRunnable migration;
 	if (migration.shouldMigrate()) {
 		ZLDialogManager::Instance().wait(ZLResourceKey("migrate"), migration);
-		myRecentBooks.reload();
 	}
 
 	if (!myBookAlreadyOpen) {
@@ -202,7 +202,7 @@ void FBReader::initWindow() {
 			createBook(myBookToOpen, book);
 		}
 		if (book.isNull()) {
-			const BookList &books = myRecentBooks.books();
+			const BookList &books = Library::Instance().recentBooks();
 			if (!books.empty()) {
 				book = books[0];
 			}
@@ -220,6 +220,11 @@ void FBReader::initWindow() {
 	//refreshWindow();
 
 	//ZLTimeManager::Instance().addTask(new TimeUpdater(), 1000);
+}
+
+void FBReader::refreshWindow() {
+	ZLApplication::refreshWindow();
+	((RecentBooksPopupData&)*myRecentBooksPopupData).updateId();
 }
 
 bool FBReader::createBook(const std::string& fileName, shared_ptr<Book> &book) {
@@ -298,25 +303,24 @@ void FBReader::openBookInternal(shared_ptr<Book> book) {
 		FootnoteView &footnoteView = (FootnoteView&)*myFootnoteView;
 
 		bookTextView.saveState();
-		bookTextView.setModel(0, "", 0);
+		bookTextView.setModel(0, 0);
 		bookTextView.setContentsModel(0);
-		contentsView.setModel(0, "");
-		if (myModel != 0) {
-			delete myModel;
-		}
+		contentsView.setModel(0);
+		myModel.reset();
 		myModel = new BookModel(book);
-		const std::string &lang = book->language();
-		ZLTextHyphenator::Instance().load(lang);
-		bookTextView.setModel(myModel->bookTextModel(), lang, book);
+		ZLTextHyphenator::Instance().load(book->language());
+		bookTextView.setModel(myModel->bookTextModel(), book);
 		bookTextView.setCaption(book->title());
 		bookTextView.setContentsModel(myModel->contentsModel());
-		footnoteView.setModel(0, lang);
+		footnoteView.setModel(0);
 		footnoteView.setCaption(book->title());
-		contentsView.setModel(myModel->contentsModel(), lang);
+		contentsView.setModel(myModel->contentsModel());
 		contentsView.setCaption(book->title());
 
-		myRecentBooks.addBook(book);
+		Library::Instance().addBook(book);
+		Library::Instance().addBookToRecentList(book);
 		((RecentBooksPopupData&)*myRecentBooksPopupData).updateId();
+		showBookTextView();
 	}
 }
 
@@ -333,7 +337,8 @@ void FBReader::openLinkInBrowser(const std::string &url) const {
 		return;
 	}
 	std::string copy = url;
-	transformUrl(copy);
+	NetworkLinkCollection::Instance().rewriteUrl(copy, true);
+	ZLLogger::Instance().println("URL", copy);
 	program->run("openLink", copy);
 }
 
@@ -341,14 +346,14 @@ void FBReader::tryShowFootnoteView(const std::string &id, const std::string &typ
 	if (type == "external") {
 		openLinkInBrowser(id);
 	} else if (type == "internal") {
-		if (((myMode == BOOK_TEXT_MODE) || (myMode == FOOTNOTE_MODE) || (myMode == HYPERLINK_NAV_MODE)) && (myModel != 0)) {
+		if (((myMode == BOOK_TEXT_MODE) || (myMode == FOOTNOTE_MODE) || (myMode == HYPERLINK_NAV_MODE)) && !myModel.isNull()) {
 			BookModel::Label label = myModel->label(id);
 			if (!label.Model.isNull()) {
 				if ((myMode != FOOTNOTE_MODE) && (label.Model == myModel->bookTextModel())) {
 					bookTextView().gotoParagraph(label.ParagraphNumber);
 				} else {
 					FootnoteView &view = ((FootnoteView&)*myFootnoteView);
-					view.setModel(label.Model, myModel->book()->language());
+					view.setModel(label.Model);
 					setMode(FOOTNOTE_MODE);
 					view.gotoParagraph(label.ParagraphNumber);
 				}
@@ -378,7 +383,7 @@ void FBReader::invertRegion(HyperlinkCoord link, bool flush)
 	((ZLApplication*)this)->invertRegion(link.x0, link.y0, link.x1, link.y1, flush);
 }
 
-void FBReader::invertRegion(const ZLTextElementArea &e)
+void FBReader::invertRegion(const ZLTextElementRectangle &e)
 {
 	((ZLApplication*)this)->invertRegion(
 			e.XStart,
@@ -407,7 +412,7 @@ inline bool FBReader::isword(ZLTextElementIterator e)
 void FBReader::highlightFirstWord()
 {
 	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
-	ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).myTextElementMap;
+	const ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).textArea().myTextElementMap;
 
 	for (word_it = elementMap.begin(); word_it != elementMap.end(); ++word_it) {
 		if(isword(word_it)) {
@@ -421,7 +426,7 @@ void FBReader::highlightFirstWord()
 void FBReader::highlightNextWord()
 {
 	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
-	ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).myTextElementMap;
+	const ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).textArea().myTextElementMap;
 
 	ZLTextElementIterator w = word_it;
 
@@ -443,7 +448,7 @@ void FBReader::highlightNextWord()
 void FBReader::highlightNextLineWord()
 {
 	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
-	ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).myTextElementMap;
+	const ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).textArea().myTextElementMap;
 	int y = word_it->YStart;
 	bool cycle = false;
 
@@ -470,7 +475,7 @@ void FBReader::highlightNextLineWord()
 void FBReader::highlightPrevWord()
 {
 	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
-	ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).myTextElementMap;
+	const ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).textArea().myTextElementMap;
 
 	ZLTextElementIterator w = word_it;
 
@@ -492,7 +497,7 @@ void FBReader::highlightPrevWord()
 void FBReader::highlightPrevLineWord()
 {
 	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
-	ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).myTextElementMap;
+	const ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).textArea().myTextElementMap;
 	int y = word_it->YStart;
 	bool cycle = false;
 
@@ -720,12 +725,43 @@ std::string FBReader::helpFileName(const std::string &language) const {
 	return ZLibrary::ApplicationDirectory() + ZLibrary::FileNameDelimiter + "help" + ZLibrary::FileNameDelimiter + "MiniHelp." + language + ".fb2";
 }
 
-void FBReader::openFile(const std::string &fileName) {
+void FBReader::openFile(const std::string &filePath) {
 	shared_ptr<Book> book;
-	createBook(fileName, book);
+	createBook(filePath, book);
 	if (!book.isNull()) {
 		openBook(book);
 		refreshWindow();
+	}
+}
+
+bool FBReader::canDragFiles(const std::vector<std::string> &filePaths) const {
+	switch (myMode) {
+		case BOOK_TEXT_MODE:
+		case FOOTNOTE_MODE:
+		case CONTENTS_MODE:
+		case LIBRARY_MODE:
+			return filePaths.size() > 0;
+		default:
+			return false;
+	}
+}
+
+void FBReader::dragFiles(const std::vector<std::string> &filePaths) {
+	switch (myMode) {
+		case BOOK_TEXT_MODE:
+		case FOOTNOTE_MODE:
+		case CONTENTS_MODE:
+			if (filePaths.size() > 0) {
+				openFile(filePaths[0]);
+			}
+			break;
+		case LIBRARY_MODE:
+			if (filePaths.size() > 0) {
+				openFile(filePaths[0]);
+			}
+			break;
+		default:
+			break;
 	}
 }
 
@@ -773,32 +809,8 @@ shared_ptr<ProgramCollection> FBReader::webBrowserCollection() const {
 	return myProgramCollectionMap.collection("Web Browser");
 }
 
-RecentBooks &FBReader::recentBooks() {
-	return myRecentBooks;
-}
-
-const RecentBooks &FBReader::recentBooks() const {
-	return myRecentBooks;
-}
-
 shared_ptr<Book> FBReader::currentBook() const {
 	return myModel->book();
-}
-
-void FBReader::transformUrl(std::string &url) const {
-	static const std::string LFROM_PREFIX = "lfrom=";
-	if (url.find("litres.ru") != std::string::npos) {
-		size_t index = url.find(LFROM_PREFIX);
-		if (index == std::string::npos) {
-			url = LitResUtil::appendLFrom(url);
-		} else {
-			size_t index2 = index + LFROM_PREFIX.size();
-			while (index2 < url.size() && url[index2] != '&') {
-				++index2;
-			}
-			url.replace(index, index2 - index, LitResUtil::LFROM);
-		}
-	}
 }
 
 void FBReader::invalidateNetworkView() {

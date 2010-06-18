@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,9 @@ public:
 	static void stripWhiteSpaces(std::string &str);
 
 	static std::string printf(const std::string &format, const std::string &arg0);
+
+	static std::string doubleToString(double value);
+	static double stringToDouble(const std::string &value, double defaultValue);
 };
 
 #endif /* __ZLSTRINGUTIL_H__ */

@@ -60,8 +60,9 @@
 			<node name="read" value="Read local copy"/>
 			<node name="delete" value="Delete local copy"/>
 			<node name="download" value="Download"/>
-			<node name="readDemo" value="Read demo"/>
-			<node name="downloadDemo" value="Download demo"/>
+			<node name="readDemo" value="Read sample"/>
+			<node name="downloadDemo" value="Download sample"/>
+			<node name="demo" value="sample"/>
 			<node name="buy" value="Buy (%s)"/>
 		</node>
 	</node>
@@ -111,29 +112,95 @@
 		<node name="quit" value="Close" />
 	</node>
 	<node name="toolbar">
-		<node name="showReading" value="Show Reading Mode" />
-		<node name="showLibrary" value="Show Library Tree">
+		<node name="showReading">
+			<node name="label" value="Read Book" />
+			<node name="tooltip" value="Show Reading Mode" />
+		</node>
+		<node name="showLibrary">
+			<node name="label" value="Library" />
+			<node name="tooltip" value="Show Library Tree" />
 			<node name="popup" value="Show Recent Books List" />
 		</node>
-		<node name="showRecent" value="Show Recent Books List" />
-		<node name="byAuthor" value="Organize Books by Author" />
-		<node name="byTag" value="Organize Books by Tag" />
-		<node name="addBook" value="Add File to Library" />
-		<node name="showNetLibrary" value="Search in Network Libraries" />
-		<node name="searchOnNetwork" value="Network Search" />
-		<node name="advancedSearchOnNetwork" value="Advanced Network Search" />
-		<node name="gotoHome" value="Go to Start of Text" />
-		<node name="undo" value="Go Back" />
-		<node name="redo" value="Go Forward" />
-		<node name="gotoPageNumberWithParameter" value="Go to Page" />
-		<node name="toc" value="Table of Contents" />
-		<node name="search" value="Text Search" />
-		<node name="findNext" value="Find Next" />
-		<node name="findPrevious" value="Find Previous" />
-		<node name="bookInfo" value="Show Book Info Dialog" />
-		<node name="preferences" value="Show Preferences Dialog" />
-		<node name="rotate" value="Rotate Text" />
-		<node name="showHelp" value="About FBReader" />
+		<node name="showRecent">
+			<node name="label" value="Recent Books" />
+			<node name="tooltip" value="Show Recent Books List" />
+		</node>
+		<node name="byAuthor">
+			<node name="label" value="By Author" />
+			<node name="tooltip" value="Organize Books by Author" />
+		</node>
+		<node name="byTag">
+			<node name="label" value="By Tag" />
+			<node name="tooltip" value="Organize Books by Tag" />
+		</node>
+		<node name="addBook">
+			<node name="label" value="Add File" />
+			<node name="tooltip" value="Add File to Library" />
+		</node>
+		<node name="showNetLibrary">
+			<node name="label" value="Network" />
+			<node name="tooltip" value="Search in Network Libraries" />
+		</node>
+		<node name="searchOnNetwork">
+			<node name="label" value="Simple Search" />
+			<node name="tooltip" value="Network Search" />
+		</node>
+		<node name="advancedSearchOnNetwork">
+			<node name="label" value="Search" />
+			<node name="tooltip" value="Advanced Network Search" />
+		</node>
+		<node name="gotoHome">
+			<node name="label" value="Go to Start" />
+			<node name="tooltip" value="Go to Start of Text" />
+		</node>
+		<node name="undo">
+			<node name="label" value="Go Back" />
+			<node name="tooltip" value="Go Back" />
+		</node>
+		<node name="redo">
+			<node name="label" value="Go Forward" />
+			<node name="tooltip" value="Go Forward" />
+		</node>
+		<node name="gotoPageNumberWithParameter">
+			<node name="label" value="Go to Page" />
+			<node name="tooltip" value="Go to Page" />
+		</node>
+		<node name="toc">
+			<node name="label" value="TOC" />
+			<node name="tooltip" value="Table of Contents" />
+		</node>
+		<node name="search">
+			<node name="label" value="Search" />
+			<node name="tooltip" value="Text Search" />
+		</node>
+		<node name="findNext">
+			<node name="label" value="Next" />
+			<node name="tooltip" value="Find Next" />
+		</node>
+		<node name="findPrevious">
+			<node name="label" value="Previous" />
+			<node name="tooltip" value="Find Previous" />
+		</node>
+		<node name="bookInfo">
+			<node name="label" value="Book Info" />
+			<node name="tooltip" value="Show Book Info Dialog" />
+		</node>
+		<node name="preferences">
+			<node name="label" value="Preferences" />
+			<node name="tooltip" value="Show Preferences Dialog" />
+		</node>
+		<node name="rotate">
+			<node name="label" value="Rotate" />
+			<node name="tooltip" value="Rotate Text" />
+		</node>
+		<node name="showHelp">
+			<node name="label" value="About" />
+			<node name="tooltip" value="About FBReader" />
+		</node>
+		<node name="filterLibrary">
+			<node name="label" value="Filter" />
+			<node name="tooltip" value="Filter" />
+		</node>
 	</node>
 	<node name="dialog">
 		<node name="button">
@@ -446,6 +513,8 @@
 			<node name="loadSubCatalog" value="Loading catalog. Please, wait..." />
 			<node name="registerUser" value="Registering new account. Please, wait..." />
 			<node name="passwordRecovery" value="Recovering password. Please, wait..." />
+			<node name="authenticationCheck" value="Account validation. Please, wait..." />
+			<node name="signOut" value="Signing out. Please, wait..." />
 		</node>
 		<node name="purchaseConfirmBox">
 			<node name="title" value="Purchase book" />
@@ -464,7 +533,7 @@
 		</node>
 		<node name="dontShowConfirmBox">
 			<node name="title" value="Disable catalog" />
-			<node name="message" value="Are you sure you want to disable&#10;&#8220;%s&#8221; catalog?&#10;&#10;You can enable it in the future at&#10;&#8220;Network Search&#8221; tab in the Options dialog." />
+			<node name="message" value="Are you sure you want to disable&#10;&#8220;%s&#8221; catalog?&#10;&#10;You can enable this catalog again at&#10;&#8220;Network Search&#8221; tab in the Preferences dialog." />
 		</node>
 		<node name="deleteLocalCopyBox">
 			<node name="title" value="Delete Book" />
@@ -485,6 +554,10 @@
 		<node name="recoverySuccessfulBox">
 			<node name="title" value="Password Recovery" />
 			<node name="message" value="A message with further instructions&#10;has been sent to&#10;%s" />
+		</node>
+		<node name="cantOpenDownloadedFile">
+			<node name="title" value="Download Error" />
+			<node name="message" value="Can&apos;t open downloaded file&#10;%s." />
 		</node>
 	</node>
 	<node name="style">

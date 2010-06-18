@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,21 +22,70 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
 #include <shared_ptr.h>
 
-class ZLExecutionData {
+#include <ZLTypeId.h>
+#include <ZLUserData.h>
+
+class ZLExecutionData : public ZLUserDataHolder, public ZLObjectWithRTTI {
 
 public:
 	typedef std::vector<shared_ptr<ZLExecutionData> > Vector;
-	static void executeAll(const Vector &dataVector);
+
+public:
+	static const ZLTypeId TYPE_ID;
+
+public:
+	class Runner {
+
+	protected:
+		Runner();
+		virtual ~Runner();
+
+	public:
+		virtual std::string perform(const Vector &dataVector) const = 0;
+		std::string perform(shared_ptr<ZLExecutionData> data) const;
+	};
+
+public:
+	class Listener {
+
+	protected:
+		Listener();
+
+	public:
+		virtual ~Listener();
+
+		void cancelProcess();
+		virtual void showPercent(int ready, int full) = 0;
+
+	private:
+		ZLExecutionData *myProcess;
+
+	friend class ZLExecutionData;
+	};
+
+public:
+	static std::string perform(shared_ptr<ZLExecutionData> data);
+	static std::string perform(const Vector &dataVector);
+
+private:
+	static std::set<Runner*> ourRunners;
 
 protected:
 	ZLExecutionData();
 
 public:
 	virtual ~ZLExecutionData();
-	virtual const std::string &type() const = 0;
+
+	void setListener(shared_ptr<Listener> listener);
+	virtual void onCancel();
+	void setPercent(int ready, int full);
+
+private:
+	shared_ptr<Listener> myListener;
 };
 
 #endif /* __ZLEXECUTIONDATA_H__ */

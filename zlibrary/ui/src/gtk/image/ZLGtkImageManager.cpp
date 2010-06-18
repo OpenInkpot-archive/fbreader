@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,10 +67,10 @@ shared_ptr<ZLImageData> ZLGtkImageManager::createData() const {
 	return new ZLGtkImageData();
 }
 
-void ZLGtkImageManager::convertImageDirect(const std::string &stringData, ZLImageData &data) const {
+bool ZLGtkImageManager::convertImageDirect(const std::string &stringData, ZLImageData &data) const {
 	GdkPixbufLoader *loader = gdk_pixbuf_loader_new();
 	GError *error = 0;
-  
+
 	gdk_pixbuf_loader_write(loader, (const unsigned char*)stringData.data(), stringData.length(), &error);
 	if (error == 0) {
 		gdk_pixbuf_loader_close(loader, &error);
@@ -79,9 +79,12 @@ void ZLGtkImageManager::convertImageDirect(const std::string &stringData, ZLImag
 			g_object_ref(((ZLGtkImageData&)data).myPixbuf);
 		}
 	}
-  
+
+	const bool result = (error == 0);
+
 	if (error != 0) {
 		g_error_free(error);
 	}
 	g_object_unref(loader);
+	return result;
 }

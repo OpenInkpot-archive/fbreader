@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ void ZLQtLineEdit::keyReleaseEvent(QKeyEvent *event) {
 	}
 }
 
-ZLQtApplicationWindow::LineEditParameter::LineEditParameter(QToolBar *toolbar, ZLQtApplicationWindow &window, const ZLToolbar::TextFieldItem &textFieldItem) {
+ZLQtApplicationWindow::LineEditParameter::LineEditParameter(QToolBar *toolbar, ZLQtApplicationWindow &window, const ZLToolbar::ParameterItem &textFieldItem) {
 	myEdit = new ZLQtLineEdit(toolbar, window, *this, textFieldItem.actionId());
 	myEdit->setAlignment(Qt::AlignHCenter);
 	myEdit->setMaxLength(textFieldItem.maxWidth());

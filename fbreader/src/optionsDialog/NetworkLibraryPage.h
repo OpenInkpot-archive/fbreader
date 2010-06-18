@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,21 +20,12 @@
 #ifndef __NETWORKLIBRARYPAGE_H__
 #define __NETWORKLIBRARYPAGE_H__
 
-#include <vector>
-
-#include "../network/UserList.h"
-
 class ZLDialogContent;
 
 class NetworkLibraryPage {
 
 public:
 	NetworkLibraryPage(ZLDialogContent &dialogTab);
-
-	bool onApply();
-
-private:
-	std::vector<bool> myOldUseFlag;
 };
 
 #endif /* __NETWORKLIBRARYPAGE_H__ */

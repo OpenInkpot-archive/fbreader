@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,10 +23,8 @@
 
 #include "LitResDataParser.h"
 #include "LitResGenre.h"
-#include "LitResUtil.h"
-
-#include "../NetworkAuthenticationManager.h"
-
+#include "LitResLink.h"
+#include "../NetworkLink.h"
 
 static const std::string TAG_CATALOG = "catalit-fb2-books";
 static const std::string TAG_BOOK = "fb2-book";
@@ -52,10 +50,24 @@ std::string LitResDataParser::stringAttributeValue(const char **attributes, cons
 	return value != 0 ? value : std::string();
 }
 
-LitResDataParser::LitResDataParser(NetworkLibraryItemList &books, shared_ptr<NetworkAuthenticationManager> mgr) : 
+std::string LitResDataParser::makeDemoUrl(const std::string &bookId) const {
+	std::string id;
+	if (bookId.length() < 8) {
+		id.assign(8 - bookId.length(), '0');
+	}
+	id.append(bookId);
+	std::string url = "http://robot.litres.ru/static/trials/";
+	url.append(id, 0, 2).append("/");
+	url.append(id, 2, 2).append("/");
+	url.append(id, 4, 2).append("/");
+	url.append(id).append(".fb2.zip");
+	return url;
+}
+
+LitResDataParser::LitResDataParser(const NetworkLink &link, NetworkItem::List &books) : 
+	myLink(link),
 	myBooks(books), 
-	myIndex(0), 
-	myAuthenticationManager(mgr) {
+	myIndex(0) {
 	myState = START;
 }
 
@@ -82,37 +94,60 @@ void LitResDataParser::processState(const std::string &tag, bool closed, const c
 		break;
 	case CATALOG: 
 		if (!closed && TAG_BOOK == tag) {
-			const std::string bookId = stringAttributeValue(attributes, "hub_id");
-			myCurrentBook = new NetworkLibraryBookItem(bookId, myIndex++);
-			currentBook().setAuthenticationManager(myAuthenticationManager);
+			myBookId = stringAttributeValue(attributes, "hub_id");
+			myURLByType[NetworkItem::URL_COVER] =
+				stringAttributeValue(attributes, "cover_preview");
 
-			currentBook().setCoverURL(stringAttributeValue(attributes, "cover_preview"));
-
-			const std::string url = stringAttributeValue(attributes, "url");
+			std::string url = stringAttributeValue(attributes, "url");
 			if (!url.empty()) {
-				currentBook().urlByType()[NetworkLibraryBookItem::LINK_HTTP] =
-					LitResUtil::appendLFrom(url);
+				myLink.rewriteUrl(url);
+				myURLByType[NetworkItem::URL_HTML_PAGE] = url;
 			}
 
 			const std::string hasTrial = stringAttributeValue(attributes, "has_trial");
 			if (hasTrial == "1") {
-				std::string demoUrl;
-				LitResUtil::makeDemoUrl(demoUrl, bookId);
-				if (!demoUrl.empty()) {
-					currentBook().urlByType().insert(std::make_pair(NetworkLibraryBookItem::BOOK_DEMO_FB2_ZIP, demoUrl));
-				}
+				myURLByType.insert(
+					std::make_pair(
+						NetworkItem::URL_BOOK_DEMO_FB2_ZIP,
+						makeDemoUrl(myBookId)
+					)
+				);
 			}
 
 			const char *price = attributeValue(attributes, "price");
 			if (price != 0 && *price != '\0') {
-				currentBook().setPrice(price + LitResUtil::CURRENCY_SUFFIX);
+				myPrice = price + LitResLink::CURRENCY_SUFFIX;
 			}
 		}
 		break;
 	case BOOK: 
 		if (closed && TAG_BOOK == tag) {
-			myBooks.push_back(myCurrentBook);
-			myCurrentBook.reset();
+			myBooks.push_back(new NetworkBookItem(
+				myLink,
+				myBookId,
+				myIndex++,
+				myTitle,
+				mySummary,
+				myLanguage,
+				myDate,
+				myPrice,
+				myAuthors,
+				myTags,
+				mySeriesTitle,
+				myIndexInSeries,
+				myURLByType
+			));
+
+			myTitle.erase();
+			mySummary.erase();
+			myPrice.erase();
+			myLanguage.erase();
+			myDate.erase();
+			mySeriesTitle.erase();
+			myIndexInSeries = 0;
+			myAuthors.clear();
+			myTags.clear();
+			myURLByType.clear();
 		}
 		break;
 	case BOOK_DESCRIPTION: 
@@ -126,19 +161,17 @@ void LitResDataParser::processState(const std::string &tag, bool closed, const c
 				myAuthorMiddleName.clear();
 				myAuthorLastName.clear();
 			} else if (TAG_SEQUENCE == tag) {
-				const char *seriesTitle = attributeValue(attributes, "name");
-				if (seriesTitle != 0) {
+				mySeriesTitle = stringAttributeValue(attributes, "name");
+				if (!mySeriesTitle.empty()) {
 					const char *indexInSeries = attributeValue(attributes, "number");
-					currentBook().setSeries(
-						seriesTitle, indexInSeries != 0 ? atoi(indexInSeries) : 0
-					);
+					myIndexInSeries = indexInSeries != 0 ? atoi(indexInSeries) : 0;
 				}
 			}
 		} 
 		break;
 	case AUTHOR: 
 		if (closed && TAG_AUTHOR == tag) {
-			NetworkLibraryBookItem::AuthorData data;
+			NetworkBookItem::AuthorData data;
 			if (!myAuthorFirstName.empty()) {
 				data.DisplayName.append(myAuthorFirstName);
 			}
@@ -155,7 +188,7 @@ void LitResDataParser::processState(const std::string &tag, bool closed, const c
 				data.DisplayName.append(myAuthorLastName);
 			}
 			data.SortKey = myAuthorLastName;
-			currentBook().authors().push_back(data);
+			myAuthors.push_back(data);
 		}
 		break;
 	case FIRST_NAME: 
@@ -180,14 +213,16 @@ void LitResDataParser::processState(const std::string &tag, bool closed, const c
 		if (closed && TAG_GENRE == tag) {
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
 
-			const std::map<std::string, shared_ptr<LitResGenre> > &genresMap = LitResUtil::Instance().genresMap();
-			const std::map<shared_ptr<LitResGenre>, std::string> &genresTitles = LitResUtil::Instance().genresTitles();
+			const std::map<std::string,shared_ptr<LitResGenre> > &genresMap =
+				LitResGenreMap::Instance().genresMap();
+			const std::map<shared_ptr<LitResGenre>,std::string> &genresTitles =
+				LitResGenreMap::Instance().genresTitles();
 
 			std::map<std::string, shared_ptr<LitResGenre> >::const_iterator it = genresMap.find(myBuffer);
 			if (it != genresMap.end()) {
 				std::map<shared_ptr<LitResGenre>, std::string>::const_iterator jt = genresTitles.find(it->second);
 				if (jt != genresTitles.end()) {
-					currentBook().tags().push_back(jt->second);
+					myTags.push_back(jt->second);
 				}
 			}
 		}
@@ -195,32 +230,32 @@ void LitResDataParser::processState(const std::string &tag, bool closed, const c
 	case BOOK_TITLE: 
 		if (closed && TAG_BOOK_TITLE == tag) {
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
-			currentBook().setTitle(myBuffer);
+			myTitle = myBuffer;
 		}
 		break;
 	case ANNOTATION: 
 		if (!closed) {
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
 			if (!myBuffer.empty()) {
-				currentBook().annotation().append(myBuffer);
-				currentBook().annotation().append(" ");
+				mySummary.append(myBuffer);
+				mySummary.append(" ");
 			}
 		} else {
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
-			currentBook().annotation().append(myBuffer);
-			int size = currentBook().annotation().size();
+			mySummary.append(myBuffer);
+			int size = mySummary.size();
 			if (size > 0) {
 				if (TAG_ANNOTATION == tag) {
-					if (currentBook().annotation()[size - 1] == '\n') {
-						currentBook().annotation().erase(size - 1);
+					if (mySummary[size - 1] == '\n') {
+						mySummary.erase(size - 1);
 					}
 				} else if ("p" == tag) {
-					if (currentBook().annotation()[size - 1] != '\n') {
-						currentBook().annotation().append("\n");
+					if (mySummary[size - 1] != '\n') {
+						mySummary.append("\n");
 					}
 				} else {
-					if (!myBuffer.empty() && currentBook().annotation()[size - 1] != '\n') {
-						currentBook().annotation().append(" ");
+					if (!myBuffer.empty() && mySummary[size - 1] != '\n') {
+						mySummary.append(" ");
 					}
 				}
 			}
@@ -229,13 +264,13 @@ void LitResDataParser::processState(const std::string &tag, bool closed, const c
 	case DATE:
 		if (closed && TAG_DATE == tag) {
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
-			currentBook().setDate(myBuffer);
+			myDate = myBuffer;
 		}
 		break;
 	case LANGUAGE:
 		if (closed && TAG_LANGUAGE == tag) {
 			ZLStringUtil::stripWhiteSpaces(myBuffer);
-			currentBook().setLanguage(myBuffer);
+			myLanguage = myBuffer;
 		}
 		break;
 	}

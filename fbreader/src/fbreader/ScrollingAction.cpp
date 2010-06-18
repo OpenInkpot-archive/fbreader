@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  * Copyright (C) 2008,2009 Alexander Kerner <lunohod@openinkpot.org>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -45,7 +45,7 @@ extern bool turbo;
 #define EINK_APOLLOFB_IOCTL_SHOW_PREVIOUS _IO('F', 0x23)
 
 ScrollingAction::ScrollingAction(
-	ZLTextView::ScrollingMode textScrollingMode,
+	ZLTextAreaController::ScrollingMode textScrollingMode,
 	ZLBlockTreeView::ScrollingMode blockScrollingMode,
 	bool forward
 ) : myTextScrollingMode(textScrollingMode), myBlockScrollingMode(blockScrollingMode), myForward(forward) {
@@ -73,7 +73,7 @@ void ScrollingAction::run() {
 		return;
 	}
 
-	if (view->typeId() == ZLTextView::TYPE_ID) {
+	if (view->isInstanceOf(ZLTextView::TYPE_ID)) {
 		if(fbreader.mode() == FBReader::HYPERLINK_NAV_MODE
 				|| fbreader.mode() == FBReader::DICT_MODE) {
 			if(buffer != 0) {
@@ -108,7 +108,7 @@ void ScrollingAction::run() {
 
 		if(fbreader.mode() == FBReader::BOOK_TEXT_MODE) {
 			// jump to next section
-			ZLTextWordCursor endC = fbreader.bookTextView().endCursor();
+			ZLTextWordCursor endC = fbreader.bookTextView().textArea().endCursor();
 			if(endC.isNull())
 				return;
 			if(myForward
@@ -120,9 +120,9 @@ void ScrollingAction::run() {
 			}
 
 			// jump to previous section
-			ZLTextWordCursor startC = fbreader.bookTextView().startCursor();
+			ZLTextWordCursor startC = fbreader.bookTextView().textArea().startCursor();
 			ContentsView &contentsView = (ContentsView&)*fbreader.myContentsView;
-			const ContentsModel &contentsModel = (const ContentsModel&)*contentsView.model();
+            const ContentsModel &contentsModel = (const ContentsModel&)*contentsView.textArea().model();
 			size_t current = contentsView.currentTextViewParagraph(false);
 			if(!myForward
 					&& !startC.isNull()
@@ -173,13 +173,13 @@ void ScrollingAction::run() {
 				close(x);
 			}
 		}
-	} else if (view->typeId() == ZLBlockTreeView::TYPE_ID) {
+	} else if (view->isInstanceOf(ZLBlockTreeView::TYPE_ID)) {
 		((ZLBlockTreeView&)*view).scroll(myBlockScrollingMode, !myForward);
 	}
 	fbreader.myLastScrollingTime = ZLTime();
 }
 
-LineScrollingAction::LineScrollingAction(bool forward) : ScrollingAction(ZLTextView::SCROLL_LINES, ZLBlockTreeView::ITEM, forward) {
+LineScrollingAction::LineScrollingAction(bool forward) : ScrollingAction(ZLTextAreaController::SCROLL_LINES, ZLBlockTreeView::ITEM, forward) {
 }
 
 int LineScrollingAction::scrollingDelay() const {
@@ -190,7 +190,7 @@ size_t LineScrollingAction::textOptionValue() const {
 	return FBReader::Instance().LinesToScrollOption.value();
 }
 
-PageScrollingAction::PageScrollingAction(bool forward) : ScrollingAction(ZLTextView::KEEP_LINES, ZLBlockTreeView::PAGE, forward) {
+PageScrollingAction::PageScrollingAction(bool forward) : ScrollingAction(ZLTextAreaController::KEEP_LINES, ZLBlockTreeView::PAGE, forward) {
 }
 
 int PageScrollingAction::scrollingDelay() const {
@@ -201,14 +201,14 @@ size_t PageScrollingAction::textOptionValue() const {
 	return FBReader::Instance().LinesToKeepOption.value();
 }
 
-MouseWheelScrollingAction::MouseWheelScrollingAction(bool forward) : ScrollingAction(ZLTextView::SCROLL_LINES, ZLBlockTreeView::ITEM, forward) {
+MouseWheelScrollingAction::MouseWheelScrollingAction(bool forward) : ScrollingAction(ZLTextAreaController::SCROLL_LINES, ZLBlockTreeView::ITEM, forward) {
 }
 
 size_t MouseWheelScrollingAction::textOptionValue() const {
 	return 1;
 }
 
-TapScrollingAction::TapScrollingAction(bool forward) : ScrollingAction(ZLTextView::KEEP_LINES, ZLBlockTreeView::NONE, forward) {
+TapScrollingAction::TapScrollingAction(bool forward) : ScrollingAction(ZLTextAreaController::KEEP_LINES, ZLBlockTreeView::NONE, forward) {
 }
 
 size_t TapScrollingAction::textOptionValue() const {

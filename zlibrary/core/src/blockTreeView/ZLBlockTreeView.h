@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,19 +30,23 @@ public:
 	class RootNode : public ZLBlockTreeNode {
 
 	public:
+		static const ZLTypeId TYPE_ID;
+ 
+	public:
 		RootNode(ZLBlockTreeView &view);
 
 	private:
+		const ZLTypeId &typeId() const;
 		void paint(ZLPaintContext &context, int vOffset);
 		int height(ZLPaintContext &context) const;
 	};
 
 public:
-	static const std::string TYPE_ID;
-	const std::string &typeId() const;
+	static const ZLTypeId TYPE_ID;
 
 protected:
 	ZLBlockTreeView(ZLPaintContext &context);
+	const ZLTypeId &typeId() const;
 
 	RootNode &rootNode();
 	void clear();

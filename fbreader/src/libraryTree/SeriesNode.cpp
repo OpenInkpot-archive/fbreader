@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,34 +24,29 @@
 
 #include "../library/Book.h"
 
-const std::string SeriesNode::TYPE_ID = "SeriesNode";
+const ZLTypeId SeriesNode::TYPE_ID(FBReaderNode::TYPE_ID);
 
-const std::string &SeriesNode::typeId() const {
+const ZLResource &SeriesNode::resource() const {
+	return ZLResource::resource("libraryView")["seriesNode"];
+}
+
+const ZLTypeId &SeriesNode::typeId() const {
 	return TYPE_ID;
 }
 
-SeriesNode::SeriesNode(AuthorNode *parent, shared_ptr<Book> book) : FBReaderNode(parent), myBook(book) {
+SeriesNode::SeriesNode(AuthorNode *parent) : FBReaderNode(parent) {
+}
+
+void SeriesNode::init() {
+	registerExpandTreeAction();
 }
 
 shared_ptr<Book> SeriesNode::book() const {
-	return myBook;
+	return ((BookNode&)*children().front()).book();
 }
 
-void SeriesNode::paint(ZLPaintContext &context, int vOffset) {
-	const ZLResource &resource =
-		ZLResource::resource("libraryView")["seriesNode"];
-
-	removeAllHyperlinks();
-
-	drawCover(context, vOffset);
-	drawTitle(context, vOffset, myBook->seriesTitle());
-
-	int left = 0;
-	drawHyperlink(
-		context, left, vOffset,
-		resource[isOpen() ? "collapseTree" : "expandTree"].value(),
-		expandTreeAction()
-	);
+std::string SeriesNode::title() const {
+	return book()->seriesTitle();
 }
 
 shared_ptr<ZLImage> SeriesNode::extractCoverImage() const {

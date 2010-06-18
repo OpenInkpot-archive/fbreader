@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,60 +43,58 @@ public:
 			TOGGLE_BUTTON,
 			TEXT_FIELD,
 			COMBO_BOX,
-			SEPARATOR
+			SEARCH_FIELD,
+			SEPARATOR,
+			FILL_SEPARATOR
 		};
 
 	public:
-		Item(const ZLToolbar &toolbar);
+		Item(ZLToolbar &toolbar, Type type);
 		virtual ~Item();
 
-		virtual Type type() const = 0;
-
+		Type type() const;
 		const ZLToolbar &toolbar() const;
 
 	private:
 		const ZLToolbar &myToolbar;
+		const Type myType;
 	};
 
 	class ActionItem : public Item {
 
 	public:
-		ActionItem(const ZLToolbar &toolbar, const std::string &actionId, const ZLResource &tooltip);
+		ActionItem(ZLToolbar &toolbar, Type type, const std::string &actionId);
 		const std::string &actionId() const;
+		const std::string &label() const;
 		const std::string &tooltip() const;
 
 	private:
 		const std::string myActionId;
 
 	protected:
-		const ZLResource &myTooltip;
+		const ZLResource &myResource;
 	};
 
 	class AbstractButtonItem : public ActionItem {
 
 	public:
-		AbstractButtonItem(const ZLToolbar &toolbar, const std::string &actionId, const ZLResource &tooltip);
+		AbstractButtonItem(ZLToolbar &toolbar, Type type, const std::string &actionId);
 		const std::string &iconName() const;
 	};
 
 	class PlainButtonItem : public AbstractButtonItem {
 
 	public:
-		PlainButtonItem(const ZLToolbar &toolbar, const std::string &actionId, const ZLResource &tooltip);
-
-		Type type() const;
+		PlainButtonItem(ZLToolbar &toolbar, const std::string &actionId);
 	};
 
 	class MenuButtonItem : public AbstractButtonItem {
 
 	public:
-		MenuButtonItem(const ZLToolbar &toolbar, const std::string &actionId, const ZLResource &tooltip);
+		MenuButtonItem(ZLToolbar &toolbar, const std::string &actionId);
 
 		const std::string &popupTooltip() const;
 		shared_ptr<ZLPopupData> popupData() const;
-	
-	private:
-		Type type() const;
 	};
 
 	class ButtonGroup;
@@ -104,9 +102,7 @@ public:
 	class ToggleButtonItem : public AbstractButtonItem {
 
 	public:
-		ToggleButtonItem(const ZLToolbar &toolbar, const std::string &actionId, ButtonGroup &group, const ZLResource &tooltip);
-
-		Type type() const;
+		ToggleButtonItem(ZLToolbar &toolbar, const std::string &actionId, ButtonGroup &group);
 
 		ButtonGroup &buttonGroup();
 		void press();
@@ -122,8 +118,9 @@ public:
 		ButtonGroup(const std::string &groupId);
 		void press(const ToggleButtonItem *item);
 
-		void setDefaultAction(const std::string &actionId);
+	public:
 		const std::string &defaultAction() const;
+		void setDefaultAction(const std::string &actionId);
 
 	private:
 		typedef std::set<const ToggleButtonItem*> ItemSet;
@@ -141,8 +138,7 @@ public:
 	class SeparatorItem : public Item {
 
 	public:
-		SeparatorItem(const ZLToolbar &toolbar);
-		Type type() const;
+		SeparatorItem(ZLToolbar &toolbar, Type type);
 	};
 
 	class ParameterItem : public ActionItem {
@@ -154,29 +150,17 @@ public:
 		};
 
 	public:
-		ParameterItem(const ZLToolbar &toolbar, const std::string &actionId, const std::string &parameterId, int maxWidth, SymbolSet symbolSet, const ZLResource &tooltip);
+		ParameterItem(ZLToolbar &toolbar, Type type, const std::string &actionId, const std::string &parameterId, int maxWidth);
 		const std::string &parameterId() const;
 		int maxWidth() const;
+
+		void setSymbolSet(SymbolSet symbolSet);
 		SymbolSet symbolSet() const;
 
 	private:
 		const std::string myParameterId;
 		const int myMaxWidth;
-		const SymbolSet mySymbolSet;
-	};
-
-	class TextFieldItem : public ParameterItem {
-
-	public:
-		TextFieldItem(const ZLToolbar &toolbar, const std::string &actionId, const std::string &parameterId, int maxWidth, SymbolSet symbolSet, const ZLResource &tooltip);
-		Type type() const;
-	};
-
-	class ComboBoxItem : public ParameterItem {
-
-	public:
-		ComboBoxItem(const ZLToolbar &toolbar, const std::string &actionId, const std::string &parameterId, int maxWidth, SymbolSet symbolSet, const ZLResource &tooltip);
-		Type type() const;
+		SymbolSet mySymbolSet;
 	};
 
 public:
@@ -184,13 +168,9 @@ public:
 	typedef std::vector<ItemPtr> ItemVector;
 
 	ZLToolbar();
-	void addPlainButton(const std::string &actionId);
-	void addMenuButton(const std::string &actionId);
-	void addToggleButton(const std::string &actionId, const std::string &groupId, bool isDefault);
-	void addParameterItem(Item::Type type, const std::string &actionId, const std::string &parameterId, int maxWidth, ParameterItem::SymbolSet symbolSet);
-	void addSeparator();
 
 	const ItemVector &items() const;
+	const ZLResource &resource(const std::string &id) const;
 
 	void registerPopupData(const std::string &actionId, shared_ptr<ZLPopupData> popupData);
 
@@ -205,6 +185,7 @@ private:
 
 friend class MenuButtonItem;
 friend class ZLApplication;
+friend class ZLToolbarCreator;
 };
 
 #endif /* __ZLTOOLBAR_H__ */

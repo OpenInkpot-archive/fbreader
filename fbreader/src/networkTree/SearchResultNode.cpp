@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,7 @@
 #include "../network/NetworkBookCollection.h"
 
 
-const std::string SearchResultNode::TYPE_ID = "SearchResultNode";
-
+const ZLTypeId SearchResultNode::TYPE_ID(NetworkContainerNode::TYPE_ID);
 
 SearchResultNode::SearchResultNode(ZLBlockTreeView::RootNode *parent, shared_ptr<NetworkBookCollection> searchResult, const std::string &summary, size_t atPosition) : 
 	NetworkContainerNode(parent, atPosition), 
@@ -37,26 +36,24 @@ SearchResultNode::SearchResultNode(ZLBlockTreeView::RootNode *parent, shared_ptr
 	mySummary(summary) {
 }
 
-const std::string &SearchResultNode::typeId() const {
+void SearchResultNode::init() {
+	registerExpandTreeAction();
+}
+
+const ZLTypeId &SearchResultNode::typeId() const {
 	return TYPE_ID;
 }
 
-void SearchResultNode::paint(ZLPaintContext &context, int vOffset) {
-	const ZLResource &resource =
-		ZLResource::resource("networkView")["searchResultNode"];
+const ZLResource &SearchResultNode::resource() const {
+	return ZLResource::resource("networkView")["searchResultNode"];
+}
 
-	removeAllHyperlinks();
+std::string SearchResultNode::title() const {
+	return resource()["title"].value();
+}
 
-	((NetworkView&)view()).drawCoverLater(this, vOffset);
-	drawTitle(context, vOffset, resource["title"].value());
-	drawSummary(context, vOffset, mySummary);
-
-	int left = 0;
-	drawHyperlink(
-		context, left, vOffset,
-		resource[isOpen() ? "collapseTree" : "expandTree"].value(),
-		expandTreeAction()
-	);
+std::string SearchResultNode::summary() const {
+	return mySummary;
 }
 
 shared_ptr<ZLImage> SearchResultNode::extractCoverImage() const {

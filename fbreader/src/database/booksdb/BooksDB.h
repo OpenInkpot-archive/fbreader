@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #define __BOOKSDB_H__
 
 #include <set>
+#include <map>
 #include <deque>
 
 #include "../sqldb/implsqlite/SQLiteDataBase.h"
@@ -81,6 +82,7 @@ public:
 
 	std::string getNetFile(const std::string &url);
 	bool setNetFile(const std::string &url, const std::string &fileName);
+	bool unsetNetFile(const std::string &url);
 
 	bool loadBookState(const Book &book, ReadingState &state);
 	bool setBookState(const Book &book, const ReadingState &state);
@@ -93,9 +95,17 @@ public:
 	bool checkBookList(const Book &book);
 
 private:
-	shared_ptr<Book> loadTableBook(const std::string fileName);
-	bool loadAuthors(int bookId, AuthorList &authors);
-	bool loadSeries(int bookId, std::string &seriesTitle, int &indexInSeries);
+public:
+	shared_ptr<Tag> getTagById(int id) const;
+	void loadAllTagsById() const;
+
+private:
+	void loadSeries(Book &book);
+	void loadSeries(const std::map<int,shared_ptr<Book> > &books);
+	void loadAuthors(Book &book);
+	void loadAuthors(const std::map<int,shared_ptr<Book> > &books);
+	void loadTags(Book &book);
+	void loadTags(const std::map<int,shared_ptr<Book> > &books);
 
 	std::string getFileName(int fileId);
 
@@ -114,9 +124,6 @@ private:
 
 	shared_ptr<FindFileIdRunnable> myFindFileId;
 
-	shared_ptr<LoadAuthorsRunnable> myLoadAuthors;
-	shared_ptr<LoadTagsRunnable> myLoadTags;
-	shared_ptr<LoadSeriesRunnable> myLoadSeries;
 	shared_ptr<LoadFileEntriesRunnable> myLoadFileEntries;
 
 	shared_ptr<LoadRecentBooksRunnable> myLoadRecentBooks;
@@ -134,9 +141,6 @@ private:
 	shared_ptr<DBCommand> myFindFileName;
 
 	shared_ptr<DBCommand> myFindAuthorId;
-	//shared_ptr<DBCommand> myLoadSeriesTitles;
-
-	//shared_ptr<DBCommand> myLoadAuthorNames;
 
 	shared_ptr<DBCommand> myLoadBooks;
 

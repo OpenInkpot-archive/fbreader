@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,16 +23,18 @@
 #include <string>
 #include <vector>
 
-#include <ZLOptions.h>
-
 #include <shared_ptr.h>
 
-#include "NetworkLibraryItems.h"
+#include <ZLOptions.h>
+#include <ZLExecutionData.h>
 
-class ZLSlowProcessListener;
+#include "NetworkItems.h"
 
 class NetworkLink;
 class NetworkBookCollection;
+class BookReference;
+
+struct ZLNetworkSSLCertificate;
 
 class NetworkLinkCollection {
 
@@ -53,10 +55,10 @@ private:
 	~NetworkLinkCollection();
 
 public:
-	std::string bookFileName(const std::string &networkBookId) const;
-	std::string makeBookFileName(const std::string &url, NetworkLibraryBookItem::URLType format);
+	std::string bookFileName(const BookReference &reference) const;
+	std::string makeBookFileName(const BookReference &reference);
 
-	bool downloadBook(const std::string &url, const std::string &networkBookId, NetworkLibraryBookItem::URLType format, std::string &fileName, const std::string &sslSertificate, shared_ptr<ZLSlowProcessListener> listener);
+	bool downloadBook(const BookReference &reference, std::string &fileName, const ZLNetworkSSLCertificate &sslSertificate, shared_ptr<ZLExecutionData::Listener> listener);
 
 	shared_ptr<NetworkBookCollection> simpleSearch(const std::string &pattern);
 	shared_ptr<NetworkBookCollection> advancedSearch(const std::string &titleAndSeries, const std::string &author, const std::string &tag, const std::string &annotation);
@@ -67,8 +69,10 @@ public:
 
 	const std::string &errorMessage() const;
 
+	void rewriteUrl(std::string &url, bool externalUrl = false) const;
+
 private:
-	std::string makeBookFileName(const std::string &url, NetworkLibraryBookItem::URLType format, bool createDirectories);
+	std::string makeBookFileName(const std::string &url, BookReference::Format format, BookReference::Type type, bool createDirectories);
 
 private:
 	typedef std::vector<shared_ptr<NetworkLink> > LinkVector;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +26,6 @@
 
 #include <shared_ptr.h>
 
-#include <ZLOptions.h>
-
 class ZLEncodingConverter {
 
 protected:
@@ -42,7 +40,7 @@ public:
 
 private:
 	ZLEncodingConverter(const ZLEncodingConverter&);
-	ZLEncodingConverter &operator=(const ZLEncodingConverter&);
+	ZLEncodingConverter &operator = (const ZLEncodingConverter&);
 };
 
 class ZLEncodingConverterInfo {
@@ -63,7 +61,7 @@ private:
 
 private:
 	ZLEncodingConverterInfo(const ZLEncodingConverterInfo&);
-	ZLEncodingConverterInfo &operator=(const ZLEncodingConverterInfo&);
+	ZLEncodingConverterInfo &operator = (const ZLEncodingConverterInfo&);
 };
 
 typedef shared_ptr<ZLEncodingConverterInfo> ZLEncodingConverterInfoPtr;
@@ -83,7 +81,7 @@ private:
 
 private:
 	ZLEncodingSet(const ZLEncodingSet&);
-	ZLEncodingSet &operator=(const ZLEncodingSet&);
+	ZLEncodingSet &operator = (const ZLEncodingSet&);
 };
 
 class ZLEncodingConverterProvider;

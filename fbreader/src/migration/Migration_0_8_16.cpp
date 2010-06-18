@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  */
 
 #include <ZLFile.h>
+#include <ZLLanguageUtil.h>
 
 #include "Migration.h"
 #include "FB2MigrationReader.h"
@@ -51,7 +52,7 @@ void Migration_0_8_16::doMigrationInternal() {
 				} else if (language == "cz") {
 					languageOption.setValue("cs");
 				} else if (language == "none") {
-					languageOption.setValue("other");
+					languageOption.setValue(ZLLanguageUtil::OtherLanguageCode);
 				} else if ((language == "chinese") || (language == "anycharacter")) {
 					languageOption.setValue("zh");
 				}

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 #include "NetworkOperationRunnable.h"
 
 #include "../network/UserList.h"
-#include "../network/NetworkAuthenticationManager.h"
+#include "../network/authentication/NetworkAuthenticationManager.h"
 
 class UserNamesEntry : public ZLComboOptionEntry {
 
@@ -120,7 +120,8 @@ bool AuthenticationDialog::run(NetworkAuthenticationManager &mgr) {
 	while (true) {
 		std::string password;
 		if (!runDialog(mgr, userList, errorMessage, password)) {
-			mgr.logOut();
+			LogOutRunnable logout(mgr);
+			logout.executeWithUI();
 			return false;
 		}
 
@@ -134,18 +135,21 @@ bool AuthenticationDialog::run(NetworkAuthenticationManager &mgr) {
 		authoriser.executeWithUI();
 		if (authoriser.hasErrors()) {
 			errorMessage = authoriser.errorMessage();
-			mgr.logOut();
-		} else {
+			LogOutRunnable logout(mgr);
+			logout.executeWithUI();
+			continue;
+		}
+		if (mgr.needsInitialization()) {
 			InitializeAuthenticationManagerRunnable initializer(mgr);
 			initializer.executeWithUI();
 			if (initializer.hasErrors()) {
 				errorMessage = initializer.errorMessage();
-				mgr.logOut();
-			} else {
-				userList.saveUser(mgr.currentUserName());
-				return true;
+				LogOutRunnable logout(mgr);
+				logout.executeWithUI();
+				continue;
 			}
 		}
+		userList.saveUser(mgr.currentUserName());
+		return true;
 	}
 }
-

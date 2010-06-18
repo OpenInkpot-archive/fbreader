@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,6 @@
 #include "ZLXMLReader.h"
 
 #include "expat/ZLXMLReaderInternal.h"
-
-
 
 class ZLXMLReaderHandler : public ZLAsynchronousInputStream::Handler {
 
@@ -157,6 +155,44 @@ const std::vector<std::string> &ZLXMLReader::externalDTDs() const {
 const char *ZLXMLReader::attributeValue(const char **xmlattributes, const char *name) {
 	while (*xmlattributes != 0) {
 		bool useNext = strcmp(*xmlattributes, name) == 0;
+		++xmlattributes;
+		if (*xmlattributes == 0) {
+			return 0;
+		}
+		if (useNext) {
+			return *xmlattributes;
+		}
+		++xmlattributes;
+	}
+	return 0;
+}
+
+ZLXMLReader::AttributeNamePredicate::~AttributeNamePredicate() {
+}
+
+ZLXMLReader::FixedAttributeNamePredicate::FixedAttributeNamePredicate(const std::string &attributeName) : myAttributeName(attributeName) {
+}
+
+bool ZLXMLReader::FixedAttributeNamePredicate::accepts(const ZLXMLReader&, const char *name) const {
+	return myAttributeName == name;
+}
+
+ZLXMLReader::NamespaceAttributeNamePredicate::NamespaceAttributeNamePredicate(const std::string &ns, const std::string &name) : myNamespaceName(ns), myAttributeName(name) {
+}
+
+bool ZLXMLReader::NamespaceAttributeNamePredicate::accepts(const ZLXMLReader &reader, const char *name) const {
+	const std::map<std::string,std::string> &namespaces = reader.namespaces();
+	for (std::map<std::string,std::string>::const_iterator it = namespaces.begin(); it != namespaces.end(); ++it) {
+		if (it->second == myNamespaceName) {
+			return it->first + ':' + myAttributeName == name;
+		}
+	}
+	return false;
+}
+
+const char *ZLXMLReader::attributeValue(const char **xmlattributes, const AttributeNamePredicate &predicate) {
+	while (*xmlattributes != 0) {
+		bool useNext = predicate.accepts(*this, *xmlattributes);
 		++xmlattributes;
 		if (*xmlattributes == 0) {
 			return 0;

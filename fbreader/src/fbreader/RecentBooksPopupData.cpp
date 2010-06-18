@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,11 +35,11 @@ size_t RecentBooksPopupData::id() const {
 }
 
 size_t RecentBooksPopupData::count() const {
-	return FBReader::Instance().recentBooks().books().size();
+	return Library::Instance().recentBooks().size();
 }
 
 const std::string RecentBooksPopupData::text(size_t index) {
-	BookList books = FBReader::Instance().recentBooks().books();
+	const BookList &books = Library::Instance().recentBooks();
 	if (index >= books.size()) {
 		return "";
 	}
@@ -54,7 +54,7 @@ const std::string RecentBooksPopupData::text(size_t index) {
 
 void RecentBooksPopupData::run(size_t index) {
 	FBReader &fbreader = FBReader::Instance();
-	BookList books = fbreader.recentBooks().books();
+	const BookList &books = Library::Instance().recentBooks();
 	if (index >= books.size()) {
 		return;
 	}

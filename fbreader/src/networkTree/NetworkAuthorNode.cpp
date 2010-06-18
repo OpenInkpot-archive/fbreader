@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,36 +23,31 @@
 #include "NetworkNodes.h"
 #include "NetworkView.h"
 
-const std::string NetworkAuthorNode::TYPE_ID = "NetworkAuthorNode";
+const ZLTypeId NetworkAuthorNode::TYPE_ID(NetworkContainerNode::TYPE_ID);
 
-const std::string &NetworkAuthorNode::typeId() const {
+const ZLTypeId &NetworkAuthorNode::typeId() const {
 	return TYPE_ID;
 }
 
-NetworkAuthorNode::NetworkAuthorNode(NetworkContainerNode *parent, const NetworkLibraryBookItem::AuthorData &author) : NetworkContainerNode(parent), myAuthor(author) {
+const ZLResource &NetworkAuthorNode::resource() const {
+	return ZLResource::resource("networkView")["authorNode"];
 }
 
-void NetworkAuthorNode::paint(ZLPaintContext &context, int vOffset) {
-	const ZLResource &resource =
-		ZLResource::resource("networkView")["authorNode"];
+NetworkAuthorNode::NetworkAuthorNode(NetworkContainerNode *parent, const NetworkBookItem::AuthorData &author) : NetworkContainerNode(parent), myAuthor(author) {
+}
 
-	removeAllHyperlinks();
+void NetworkAuthorNode::init() {
+	registerExpandTreeAction();
+}
 
-	((NetworkView&)view()).drawCoverLater(this, vOffset);
-	drawTitle(context, vOffset, myAuthor.DisplayName);
-
-	int left = 0;
-	drawHyperlink(
-		context, left, vOffset,
-		resource[isOpen() ? "collapseTree" : "expandTree"].value(),
-		expandTreeAction()
-	);
+std::string NetworkAuthorNode::title() const {
+	return myAuthor.DisplayName;
 }
 
 shared_ptr<ZLImage> NetworkAuthorNode::extractCoverImage() const {
 	return defaultCoverImage("booktree-author.png");
 }
 
-const NetworkLibraryBookItem::AuthorData &NetworkAuthorNode::author() {
+const NetworkBookItem::AuthorData &NetworkAuthorNode::author() {
 	return myAuthor;
 }

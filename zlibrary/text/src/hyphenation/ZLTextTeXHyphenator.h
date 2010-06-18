@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ friend class ZLTextTeXPatternComparator;
 class ZLTextTeXPatternComparator {
 
 public:
-	bool operator() (const ZLTextTeXHyphenationPattern *p1, const ZLTextTeXHyphenationPattern *p2) const;
+	bool operator () (const ZLTextTeXHyphenationPattern *p1, const ZLTextTeXHyphenationPattern *p2) const;
 };
 
 class ZLTextTeXHyphenator : public ZLTextHyphenator {

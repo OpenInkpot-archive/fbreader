@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,14 +22,12 @@
 #include <ZLibrary.h>
 #include <ZLStringUtil.h>
 #include <ZLNetworkManager.h>
-#include <ZLNetworkDownloadData.h>
 #include <ZLDir.h>
 #include <ZLFile.h>
 #include <ZLFileImage.h>
 
-#include <ZLOutputStream.h>
-
 #include "ZLNetworkImage.h"
+
 
 ZLNetworkImage::ZLNetworkImage(const std::string &mimeType, const std::string &url) : ZLSingleImage(mimeType), myURL(url), myIsSynchronized(false) {
 	static const std::string directoryPath = ZLNetworkManager::CacheDirectory();
@@ -57,8 +55,13 @@ ZLNetworkImage::ZLNetworkImage(const std::string &mimeType, const std::string &u
 
 	ZLFile imageFile(myFileName);
 	if (imageFile.exists()) {
-		myIsSynchronized = true;
 		myCachedImage = new ZLFileImage("image/auto", myFileName, 0);
+		if (myCachedImage->good()) {
+			myIsSynchronized = true;
+		} else {
+			myCachedImage.reset();
+			imageFile.remove();
+		}
 	}
 }
 
@@ -67,8 +70,7 @@ shared_ptr<ZLExecutionData> ZLNetworkImage::synchronizationData() const {
 		return 0;
 	}
 	myIsSynchronized = true;
-
-	return new ZLNetworkDownloadData(myURL, myFileName);
+	return ZLNetworkManager::Instance().createDownloadRequest(myURL, myFileName);
 }
 
 const shared_ptr<std::string> ZLNetworkImage::stringData() const {
@@ -76,6 +78,10 @@ const shared_ptr<std::string> ZLNetworkImage::stringData() const {
 		ZLFile imageFile(myFileName);
 		if (imageFile.exists()) {
 			myCachedImage = new ZLFileImage("image/auto", myFileName, 0);
+			if (!myCachedImage->good()) {
+				myCachedImage.reset();
+				imageFile.remove();
+			}
 		}
 	}
 	return myCachedImage.isNull() ? 0 : myCachedImage->stringData();

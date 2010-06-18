@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,19 +26,48 @@
 #include <optionEntries/ZLSimpleOptionEntry.h>
 #include <optionEntries/ZLToggleBooleanOptionEntry.h>
 
+#include "../fbreader/FBReader.h"
+
 #include "../network/NetworkLink.h"
 #include "../network/NetworkLinkCollection.h"
-#include "../network/NetworkAuthenticationManager.h"
+#include "../network/UserList.h"
 
 #include "NetworkLibraryPage.h"
+
+
+class NetworkLinkBooleanOptionEntry : public ZLBooleanOptionEntry {
+
+public:
+	NetworkLinkBooleanOptionEntry(ZLBooleanOption &option);
+	bool initialState() const;
+	void onAccept(bool state);
+
+private:
+	ZLBooleanOption &myOption;
+};
+
+NetworkLinkBooleanOptionEntry::NetworkLinkBooleanOptionEntry(ZLBooleanOption &option) : myOption(option) {
+}
+
+bool NetworkLinkBooleanOptionEntry::initialState() const {
+	return myOption.value();
+}
+
+void NetworkLinkBooleanOptionEntry::onAccept(bool state) {
+	bool oldState = myOption.value();
+	myOption.setValue(state);
+	if (state != oldState) {
+		FBReader::Instance().invalidateNetworkView();
+	}
+}
+
 
 NetworkLibraryPage::NetworkLibraryPage(ZLDialogContent &dialogTab) {
 	NetworkLinkCollection &linkCollection = NetworkLinkCollection::Instance();
 	const size_t linkCollectionSize = linkCollection.size();
 	for (size_t i = 0; i < linkCollectionSize; ++i) {
 		NetworkLink &link = linkCollection.link(i);
-		dialogTab.addOption(link.SiteName, "", new ZLSimpleBooleanOptionEntry(link.OnOption));
-		myOldUseFlag.push_back(link.OnOption.value());
+		dialogTab.addOption(link.SiteName, "", new NetworkLinkBooleanOptionEntry(link.OnOption));
 	}
 	ZLNetworkManager &networkManager = ZLNetworkManager::Instance();
 	if (!networkManager.providesProxyInfo()) {
@@ -53,25 +82,4 @@ NetworkLibraryPage::NetworkLibraryPage(ZLDialogContent &dialogTab) {
 		useProxyEntry->onStateChanged(useProxyEntry->initialState());
 	}
 	dialogTab.addOption(ZLResourceKey("timeout"), new ZLSimpleSpinOptionEntry(networkManager.TimeoutOption(), 5));
-}
-
-bool NetworkLibraryPage::onApply() {
-	NetworkLinkCollection &linkCollection = NetworkLinkCollection::Instance();
-	const size_t linkCollectionSize = linkCollection.size();
-
-	bool netChanged = false;
-
-	for (size_t i = 0; i < linkCollectionSize; ++i) {
-		NetworkLink &link = linkCollection.link(i);
-		const bool oldUse = myOldUseFlag[i];
-		if (link.OnOption.value() != oldUse) {
-			shared_ptr<NetworkAuthenticationManager> mgr = link.authenticationManager();
-			if (!mgr.isNull()) {
-				mgr->logOut();
-			}
-			netChanged = true;
-		}
-	}
-
-	return netChanged;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,16 @@ class Tag;
 class BookComparator {
 
 public:
-	bool operator() (
+	bool operator () (
+		const shared_ptr<Book> book0,
+		const shared_ptr<Book> book1
+	);
+};
+
+class BookByFileNameComparator {
+
+public:
+	bool operator () (
 		const shared_ptr<Book> book0,
 		const shared_ptr<Book> book1
 	);
@@ -38,7 +47,7 @@ public:
 class AuthorComparator {
 
 public:
-	bool operator() (
+	bool operator () (
 		const shared_ptr<Author> author0,
 		const shared_ptr<Author> author1
 	);
@@ -47,7 +56,7 @@ public:
 class TagComparator {
 
 public:
-	bool operator() (
+	bool operator () (
 		shared_ptr<Tag> tag0,
 		shared_ptr<Tag> tag1
 	);

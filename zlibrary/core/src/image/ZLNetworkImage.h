@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ public:
 	const shared_ptr<std::string> stringData() const;
 
 private:
-	virtual shared_ptr<ZLExecutionData> synchronizationData() const;
+	shared_ptr<ZLExecutionData> synchronizationData() const;
 
 private:
 	const std::string myURL;

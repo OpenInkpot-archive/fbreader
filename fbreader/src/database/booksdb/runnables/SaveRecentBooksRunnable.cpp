@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,6 @@
  * 02110-1301, USA.
  */
 
-#include <iostream>
-
 #include "../DBRunnables.h"
 #include "../../../library/Book.h"
 #include "../../sqldb/implsqlite/SQLiteFactory.h"
@@ -35,10 +33,9 @@ bool SaveRecentBooksRunnable::run() {
 	DBIntValue &insertBookId = (DBIntValue &) *myInsertRecentBooks->parameter("@book_id").value();
 	for (BookList::const_iterator it = myBooks.begin(); it != myBooks.end(); ++it) {
 		shared_ptr<Book> book = (*it);
-if (book->bookId() == 0) { // TODO: remove debug code
-	std::cout << "SaveRecentBooksRunnable::run(): bookId == 0 in \"" << book->filePath() << "\"" << std::endl;
-	return false;
-}
+		if (book->bookId() == 0) {
+			return false;
+		}
 		insertBookId = book->bookId();
 		if (!myInsertRecentBooks->execute()) {
 			return false;

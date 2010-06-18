@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,14 +21,14 @@
 #define __SCROLLINGACTION_H__
 
 #include <ZLApplication.h>
-#include <ZLTextView.h>
+#include <ZLTextAreaController.h>
 #include <ZLBlockTreeView.h>
 
 class ScrollingAction : public ZLApplication::Action {
 
 protected:
 	ScrollingAction(
-		ZLTextView::ScrollingMode textScrollingMode,
+		ZLTextAreaController::ScrollingMode textScrollingMode,
 		ZLBlockTreeView::ScrollingMode blockScrollingMode,
 		bool forward
 	);
@@ -41,7 +41,7 @@ public:
 	void run();
 
 private:
-	const ZLTextView::ScrollingMode myTextScrollingMode;
+	const ZLTextAreaController::ScrollingMode myTextScrollingMode;
 	const ZLBlockTreeView::ScrollingMode myBlockScrollingMode;
 	const bool myForward;
 };

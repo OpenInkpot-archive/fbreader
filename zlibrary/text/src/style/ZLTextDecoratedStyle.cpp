@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -167,11 +167,13 @@ ZLTextAlignmentType ZLTextForcedStyle::alignment() const {
 }
 
 bool ZLTextForcedStyle::bold() const {
-	return myEntry.boldSupported() ? myEntry.bold() : base()->bold();
+	return (myEntry.supportedFontModifier() & FONT_MODIFIER_BOLD) ?
+					 (myEntry.fontModifier() & FONT_MODIFIER_BOLD) : base()->bold();
 }
 
 bool ZLTextForcedStyle::italic() const {
-	return myEntry.italicSupported() ? myEntry.italic() : base()->italic();
+	return (myEntry.supportedFontModifier() & FONT_MODIFIER_ITALIC) ?
+					 (myEntry.fontModifier() & FONT_MODIFIER_ITALIC) : base()->italic();
 }
 
 int ZLTextForcedStyle::fontSize() const {
