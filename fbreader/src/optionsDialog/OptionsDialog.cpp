@@ -157,9 +157,9 @@ OptionsDialog::OptionsDialog() {
 	libraryTab.addOption(ZLResourceKey("bookPath"), library.PathOption);
 	libraryTab.addOption(ZLResourceKey("lookInSubdirectories"), library.ScanSubdirsOption);
 	libraryTab.addOption(ZLResourceKey("collectBooksWithoutMetaInfo"), library.CollectAllBooksOption);
-	libraryTab.addOption(ZLResourceKey("downloadDirectory"), NetworkLinkCollection::Instance().DirectoryOption);
+	//libraryTab.addOption(ZLResourceKey("downloadDirectory"), NetworkLinkCollection::Instance().DirectoryOption);
 
-	myNetworkLibraryPage = new NetworkLibraryPage(myDialog->createTab(ZLResourceKey("NetworkLibrary")));
+	//myNetworkLibraryPage = new NetworkLibraryPage(myDialog->createTab(ZLResourceKey("NetworkLibrary")));
 
 	ZLDialogContent &encodingTab = myDialog->createTab(ZLResourceKey("Language"));
 	encodingTab.addOption(ZLResourceKey("autoDetect"), new ZLSimpleBooleanOptionEntry(PluginCollection::Instance().LanguageAutoDetectOption));

@@ -39,13 +39,15 @@ ShowNetworkLibraryAction::ShowNetworkLibraryAction() : SetModeAction(FBReader::N
 }
 
 bool ShowNetworkLibraryAction::isVisible() const {
-	return SetModeAction::isVisible() && NetworkLinkCollection::Instance().numberOfEnabledLinks() > 0;
+    return false;
+	//return SetModeAction::isVisible() && NetworkLinkCollection::Instance().numberOfEnabledLinks() > 0;
 }
 
 SearchOnNetworkAction::SearchOnNetworkAction() : ModeDependentAction(FBReader::NETWORK_LIBRARY_MODE) {
 }
 
 void SearchOnNetworkAction::run() {
+    /*
 	NetworkLinkCollection &collection = NetworkLinkCollection::Instance();
 	for (size_t i = 0; i < collection.size(); ++i) {
 		NetworkLink &link = collection.link(i);
@@ -67,10 +69,12 @@ void SearchOnNetworkAction::run() {
 	}
 
 	doSearch();
+    */
 }
 
 
 void SimpleSearchOnNetworkAction::doSearch() {
+    /*
 	FBReader &fbreader = FBReader::Instance();
 	const std::string pattern = fbreader.visualParameter(SEARCH_PARAMETER_ID);
 	if (pattern.empty()) {
@@ -93,9 +97,11 @@ void SimpleSearchOnNetworkAction::doSearch() {
 
 	fbreader.invalidateNetworkView();
 	fbreader.refreshWindow();
+    */
 }
 
 void AdvancedSearchOnNetworkAction::doSearch() {
+    /*
 	shared_ptr<ZLDialog> searchDialog = ZLDialogManager::Instance().createDialog(ZLResourceKey("networkSearchDialog"));
 
 	ZLStringOption titleAndSeriesOption(FBCategoryKey::SEARCH, "network", "title", "");
@@ -149,6 +155,7 @@ void AdvancedSearchOnNetworkAction::doSearch() {
 			FBReader::Instance().refreshWindow();
 		}
 	}
+    */
 }
 
 std::string SimpleSearchOnNetworkAction::makeSummary(const std::string &pattern) {

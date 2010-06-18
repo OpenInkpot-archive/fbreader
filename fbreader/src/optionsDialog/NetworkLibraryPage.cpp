@@ -63,6 +63,7 @@ void NetworkLinkBooleanOptionEntry::onAccept(bool state) {
 
 
 NetworkLibraryPage::NetworkLibraryPage(ZLDialogContent &dialogTab) {
+    /*
 	NetworkLinkCollection &linkCollection = NetworkLinkCollection::Instance();
 	const size_t linkCollectionSize = linkCollection.size();
 	for (size_t i = 0; i < linkCollectionSize; ++i) {
@@ -82,4 +83,5 @@ NetworkLibraryPage::NetworkLibraryPage(ZLDialogContent &dialogTab) {
 		useProxyEntry->onStateChanged(useProxyEntry->initialState());
 	}
 	dialogTab.addOption(ZLResourceKey("timeout"), new ZLSimpleSpinOptionEntry(networkManager.TimeoutOption(), 5));
+    */
 }

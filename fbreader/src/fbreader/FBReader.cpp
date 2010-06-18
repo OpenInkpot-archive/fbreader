@@ -104,20 +104,22 @@ FBReader::FBReader(const std::string &bookToOpen) :
 	myBookTextView = new BookTextView(*context());
 	myFootnoteView = new FootnoteView(*context());
 	myContentsView = new ContentsView(*context());
-	myNetworkLibraryView = new NetworkView(*context());
-	myLibraryByAuthorView = new LibraryByAuthorView(*context());
-	myLibraryByTagView = new LibraryByTagView(*context());
+	//myNetworkLibraryView = new NetworkView(*context());
+	//myLibraryByAuthorView = new LibraryByAuthorView(*context());
+	//myLibraryByTagView = new LibraryByTagView(*context());
 	myRecentBooksPopupData = new RecentBooksPopupData();
 	myMode = UNDEFINED_MODE;
 	myPreviousMode = BOOK_TEXT_MODE;
 	setMode(BOOK_TEXT_MODE);
 
 	addAction(ActionCode::SHOW_READING, new UndoAction(FBReader::ALL_MODES & ~FBReader::BOOK_TEXT_MODE));
+    /*
 	addAction(ActionCode::SHOW_LIBRARY, new SetModeAction(FBReader::LIBRARY_MODE, FBReader::BOOK_TEXT_MODE | FBReader::CONTENTS_MODE));
 	addAction(ActionCode::SHOW_NETWORK_LIBRARY, new ShowNetworkLibraryAction());
 	addAction(ActionCode::SEARCH_ON_NETWORK, new SimpleSearchOnNetworkAction());
 	addAction(ActionCode::ADVANCED_SEARCH_ON_NETWORK, new AdvancedSearchOnNetworkAction());
 	registerPopupData(ActionCode::SHOW_LIBRARY, myRecentBooksPopupData);
+    */
 	addAction(ActionCode::SHOW_OPTIONS_DIALOG, new ShowOptionsDialogAction());
 	addAction(ActionCode::SHOW_MENU, new ShowMenuDialogAction());
 	addAction(ActionCode::SHOW_TOC, new ShowContentsAction());
@@ -337,7 +339,7 @@ void FBReader::openLinkInBrowser(const std::string &url) const {
 		return;
 	}
 	std::string copy = url;
-	NetworkLinkCollection::Instance().rewriteUrl(copy, true);
+	//NetworkLinkCollection::Instance().rewriteUrl(copy, true);
 	ZLLogger::Instance().println("URL", copy);
 	program->run("openLink", copy);
 }
@@ -362,6 +364,7 @@ void FBReader::tryShowFootnoteView(const std::string &id, const std::string &typ
 			}
 		}
 	} else if (type == "book") {
+        /*
 		DownloadBookRunnable downloader(id);
 		downloader.executeWithUI();
 		if (downloader.hasErrors()) {
@@ -375,6 +378,7 @@ void FBReader::tryShowFootnoteView(const std::string &id, const std::string &typ
 				refreshWindow();
 			}
 		}
+        */
 	}
 }
 
@@ -675,8 +679,8 @@ void FBReader::setMode(ViewMode mode) {
 		case LIBRARY_MODE:
 		{
 			shared_ptr<Book> currentBook = myModel->book();
-			((LibraryView&)*myLibraryByAuthorView).showBook(currentBook);
-			((LibraryView&)*myLibraryByTagView).showBook(currentBook);
+			//((LibraryView&)*myLibraryByAuthorView).showBook(currentBook);
+			//((LibraryView&)*myLibraryByTagView).showBook(currentBook);
 			showLibraryView();
 			break;
 		}
