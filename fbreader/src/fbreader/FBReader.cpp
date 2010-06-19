@@ -387,24 +387,38 @@ void FBReader::invertRegion(HyperlinkCoord link, bool flush)
 	((ZLApplication*)this)->invertRegion(link.x0, link.y0, link.x1, link.y1, flush);
 }
 
-void FBReader::invertRegion(const ZLTextElementRectangle &e)
+void FBReader::invertRegion(ZLTextElementRectangle e)
 {
-	((ZLApplication*)this)->invertRegion(
-			e.XStart,
-			e.YStart,
-			e.XEnd,
-			e.YEnd,
-			true);
-}
+	const ZLTextArea &area = ((ZLTextView&)*myBookTextView).textArea();
 
+	e.XStart += area.hOffset();
+	e.XEnd += area.hOffset();
+	e.YStart += area.vOffset();
+	e.YEnd += area.vOffset();
+
+	((ZLApplication*)this)->invertRegion(
+		e.XStart,
+		e.YStart,
+		e.XEnd,
+		e.YEnd,
+		true);
+}
 
 inline bool FBReader::isword(ZLTextElementIterator e)
 {
 	bool ret = false;
 	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
 
-	if (e->Kind == ZLTextElement::WORD_ELEMENT) {
-		sm.selectWord(e->XStart, e->YStart);
+	const ZLTextArea &area = ((ZLTextView&)*myBookTextView).textArea();
+	ZLTextElementRectangle r = *e;
+
+	r.XStart += area.hOffset();
+	r.XEnd += area.hOffset();
+	r.YStart += area.vOffset();
+	r.YEnd += area.vOffset();
+
+	if (r.Kind == ZLTextElement::WORD_ELEMENT) {
+		sm.selectWord(r.XStart, r.YStart);
 		if (!sm.text().empty())
 			ret = true;
 		sm.clear();

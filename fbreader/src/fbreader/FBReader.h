@@ -137,7 +137,7 @@ public:
 
 	void startNavigationMode();
 	void invertRegion(HyperlinkCoord link, bool flush);
-	void invertRegion(const ZLTextElementRectangle &e);
+	void invertRegion(ZLTextElementRectangle e);
 	void highlightCurrentLink();
 	void highlightNextLink();
 	void highlightPrevLink();
