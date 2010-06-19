@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,10 +28,9 @@
 
 #include "../network/NetworkLink.h"
 #include "../network/NetworkLinkCollection.h"
-#include "../network/NetworkAuthenticationManager.h"
 #include "../network/SearchResult.h"
-
-#include "../networkTree/NetworkOperationRunnable.h"
+#include "../network/authentication/NetworkAuthenticationManager.h"
+#include "../networkActions/NetworkOperationRunnable.h"
 
 static const std::string SEARCH_PARAMETER_ID = "networkSearchPattern";
 
@@ -40,24 +39,29 @@ ShowNetworkLibraryAction::ShowNetworkLibraryAction() : SetModeAction(FBReader::N
 }
 
 bool ShowNetworkLibraryAction::isVisible() const {
-	return SetModeAction::isVisible() && NetworkLinkCollection::Instance().numberOfEnabledLinks() > 0;
+    return false;
+	//return SetModeAction::isVisible() && NetworkLinkCollection::Instance().numberOfEnabledLinks() > 0;
 }
 
 SearchOnNetworkAction::SearchOnNetworkAction() : ModeDependentAction(FBReader::NETWORK_LIBRARY_MODE) {
 }
 
 void SearchOnNetworkAction::run() {
+    /*
 	NetworkLinkCollection &collection = NetworkLinkCollection::Instance();
 	for (size_t i = 0; i < collection.size(); ++i) {
 		NetworkLink &link = collection.link(i);
 		if (link.OnOption.value()) {
 			shared_ptr<NetworkAuthenticationManager> mgr = link.authenticationManager();
 			if (!mgr.isNull()) {
-				if (mgr->isAuthorised() == B3_TRUE && mgr->needsInitialization()) {
+				IsAuthorisedRunnable checker(*mgr);
+				checker.executeWithUI();
+				if (checker.result() == B3_TRUE && mgr->needsInitialization()) {
 					InitializeAuthenticationManagerRunnable initializer(*mgr);
 					initializer.executeWithUI();
 					if (initializer.hasErrors()) {
-						mgr->logOut();
+						LogOutRunnable logout(*mgr);
+						logout.executeWithUI();
 					}
 				}
 			}
@@ -65,10 +69,12 @@ void SearchOnNetworkAction::run() {
 	}
 
 	doSearch();
+    */
 }
 
 
 void SimpleSearchOnNetworkAction::doSearch() {
+    /*
 	FBReader &fbreader = FBReader::Instance();
 	const std::string pattern = fbreader.visualParameter(SEARCH_PARAMETER_ID);
 	if (pattern.empty()) {
@@ -91,9 +97,11 @@ void SimpleSearchOnNetworkAction::doSearch() {
 
 	fbreader.invalidateNetworkView();
 	fbreader.refreshWindow();
+    */
 }
 
 void AdvancedSearchOnNetworkAction::doSearch() {
+    /*
 	shared_ptr<ZLDialog> searchDialog = ZLDialogManager::Instance().createDialog(ZLResourceKey("networkSearchDialog"));
 
 	ZLStringOption titleAndSeriesOption(FBCategoryKey::SEARCH, "network", "title", "");
@@ -147,6 +155,7 @@ void AdvancedSearchOnNetworkAction::doSearch() {
 			FBReader::Instance().refreshWindow();
 		}
 	}
+    */
 }
 
 std::string SimpleSearchOnNetworkAction::makeSummary(const std::string &pattern) {

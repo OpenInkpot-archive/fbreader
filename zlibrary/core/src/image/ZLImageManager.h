@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,11 +65,11 @@ protected:
 	virtual ~ZLImageManager() {}
 
 	virtual shared_ptr<ZLImageData> createData() const = 0;
-	virtual void convertImageDirect(const std::string &stringData, ZLImageData &imageData) const = 0;
+	virtual bool convertImageDirect(const std::string &stringData, ZLImageData &imageData) const = 0;
 
 private:
-	void convertMultiImage(const ZLMultiImage &multiImage, ZLImageData &imageData) const;
-	void convertFromPalmImageFormat(const std::string &imageString, ZLImageData &imageData) const;
+	bool convertMultiImage(const ZLMultiImage &multiImage, ZLImageData &imageData) const;
+	bool convertFromPalmImageFormat(const std::string &imageString, ZLImageData &imageData) const;
 };
 
 inline void ZLImageData::setGrayPixel(unsigned char c) { setPixel(c, c, c); }

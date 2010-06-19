@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,10 +72,12 @@ protected:
 public:
 	FBView(ZLPaintContext &context);
 
+	void setCaption(const std::string &caption);
+
+private:
 	bool onFingerTap(int x, int y);
 
 	const std::string &caption() const;
-	void setCaption(const std::string &caption);
 
 	int leftMargin() const;
 	int rightMargin() const;
@@ -86,6 +88,7 @@ public:
 	shared_ptr<ZLTextStyle> baseStyle() const;
 
 	bool isSelectionEnabled() const;
+	int doubleClickDelay() const;
 
 protected:
 	bool onStylusPress(int x, int y);
@@ -101,7 +104,7 @@ protected:
 	int pressedY() const;
 	bool isReleasedWithoutMotion() const;
 
-	std::string word(const ZLTextElementArea &area) const;
+	std::string word(const ZLTextElementRectangle &rectangle) const;
 
 	shared_ptr<ZLTextPositionIndicatorInfo> indicatorInfo() const;
 

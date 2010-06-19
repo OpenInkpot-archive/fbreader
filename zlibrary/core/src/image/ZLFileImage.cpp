@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,9 +18,11 @@
  */
 
 #include <ZLFile.h>
+#include <ZLLogger.h>
 
 #include "ZLFileImage.h"
 
 shared_ptr<ZLInputStream> ZLFileImage::inputStream() const {
+	ZLLogger::Instance().println("image", "Reading image from file " + myPath);
 	return ZLFile(myPath).inputStream();
 }

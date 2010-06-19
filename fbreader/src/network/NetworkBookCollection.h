@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,12 @@
 #ifndef __NETWORKBOOKCOLLECTION_H__
 #define __NETWORKBOOKCOLLECTION_H__
 
-#include "NetworkLibraryItems.h"
+#include "NetworkItems.h"
 
 #include "NetworkComparators.h"
 
 
-typedef std::map<NetworkLibraryBookItem::AuthorData, NetworkLibraryItemList, NetworkAuthorComparator> NetworkAuthorBooksMap;
+typedef std::map<NetworkBookItem::AuthorData, NetworkItem::List, NetworkAuthorComparator> NetworkAuthorBooksMap;
 
 
 class NetworkBookCollection {
@@ -34,16 +34,16 @@ public:
 	NetworkBookCollection();
 
 public:
-	void addBook(shared_ptr<NetworkLibraryItem> bookPtr);
+	void addBook(shared_ptr<NetworkItem> bookPtr);
 
-	const NetworkLibraryItemList &books() const;
+	const NetworkItem::List &books() const;
 	bool empty() const;
 
 	const NetworkAuthorBooksMap &authorBooksMap();
 
 private:
-	NetworkLibraryItemList myBookList;
-	std::map<NetworkLibraryBookItem::AuthorData, unsigned int> myAuthorRates;
+	NetworkItem::List myBookList;
+	std::map<NetworkBookItem::AuthorData, unsigned int> myAuthorRates;
 	shared_ptr<NetworkAuthorComparator> myAuthorComparator;
 	shared_ptr<NetworkAuthorBooksMap> myAuthorBooksMap;
 
@@ -52,7 +52,7 @@ private: // disable copying
 	const NetworkBookCollection &operator = (const NetworkBookCollection &);
 };
 
-inline const NetworkLibraryItemList &NetworkBookCollection::books() const { return myBookList; }
+inline const NetworkItem::List &NetworkBookCollection::books() const { return myBookList; }
 inline bool NetworkBookCollection::empty() const { return myBookList.empty(); }
 
 #endif /* __NETWORKBOOKCOLLECTION_H__ */

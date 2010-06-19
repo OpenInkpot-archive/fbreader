@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2007-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -160,21 +160,23 @@ shared_ptr<ZLImageData> ZLWin32ImageManager::createData() const {
 	return new ZLWin32ImageData();
 }
 
-void ZLWin32ImageManager::convertImageDirect(const std::string &stringData, ZLImageData &data) const {
+bool ZLWin32ImageManager::convertImageDirect(const std::string &stringData, ZLImageData &data) const {
 	ZLWin32ImageData &win32Data = (ZLWin32ImageData&)data;
-	if (bmpConvert(stringData, win32Data)) {
-		return;
+	bool result = false;
+	if (bmpConvert(stringData, win32Data, result)) {
+		return result;
 	}
-	if (pngConvert(stringData, win32Data)) {
-		return;
+	if (pngConvert(stringData, win32Data, result)) {
+		return result;
 	}
-	if (jpegConvert(stringData, win32Data)) {
-		return;
+	if (jpegConvert(stringData, win32Data, result)) {
+		return result;
 	}
-	if (gifConvert(stringData, win32Data)) {
-		return;
+	if (gifConvert(stringData, win32Data, result)) {
+		return result;
 	}
-	if (tiffConvert(stringData, win32Data)) {
-		return;
+	if (tiffConvert(stringData, win32Data, result)) {
+		return result;
 	}
+	return false;
 }

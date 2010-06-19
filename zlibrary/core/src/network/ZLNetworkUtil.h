@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,9 @@ public:
 	static std::string htmlEncode(const std::string &stringToEncode);
 	static std::string hostFromUrl(const std::string &url);
 	static std::string url(const std::string &baseUrl, const std::string &relativePath);
-	static void addParameter(std::string &url, const std::string &name, const std::string &value);
+
+	static std::string &appendParameter(std::string &url, const std::string &name, const std::string &value);
+	static bool hasParameter(const std::string &url, const std::string &name);
 
 private:
 	ZLNetworkUtil();

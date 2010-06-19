@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 
 #if MAEMO_VERSION <= 3
 	#include <hildon-widgets/hildon-program.h>
-#elif MAEMO_VERSION == 4
+#elif MAEMO_VERSION <= 5
 	#include <hildon/hildon-program.h>
 #else
 	#error Unknown MAEMO_VERSION

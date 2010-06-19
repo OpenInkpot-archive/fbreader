@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,13 +81,13 @@ void OEBCoverReader::startElementHandler(const char *tag, const char **attribute
 			if (COVER == type) {
 				const char *href = attributeValue(attributes, "href");
 				if (href != 0) {
-					myCoverXHTML = myPathPrefix + href;
+					myCoverXHTML = myPathPrefix + MiscUtil::decodeHtmlURL(href);
 					interrupt();
 				}
 			} else if (COVER_IMAGE == type) {
 				const char *href = attributeValue(attributes, "href");
 				if (href != 0) {
-					myImage = new ZLFileImage("image/auto", myPathPrefix + href, 0);
+					myImage = new ZLFileImage("image/auto", myPathPrefix + MiscUtil::decodeHtmlURL(href), 0);
 					interrupt();
 				}
 			}

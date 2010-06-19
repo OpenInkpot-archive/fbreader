@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,35 +17,65 @@
  * 02110-1301, USA.
  */
 
+#include <ZLLogger.h>
+
 #include "ZLZipHeader.h"
 #include "ZLZDecompressor.h"
 #include "../ZLInputStream.h"
 
+const int ZLZipHeader::SignatureLocalFile = 0x04034B50;
+const int ZLZipHeader::SignatureData = 0x08074B50;
+
 bool ZLZipHeader::readFrom(ZLInputStream &stream) {
 	size_t startOffset = stream.offset();
 	Signature = readLong(stream);
-	Version = readShort(stream);
-	Flags = readShort(stream);
-	CompressionMethod = readShort(stream);
-	ModificationTime = readShort(stream);
-	ModificationDate = readShort(stream);
-	CRC32 = readLong(stream);
-	CompressedSize = readLong(stream);
-	UncompressedSize = readLong(stream);
-	NameLength = readShort(stream);
-	ExtraLength = readShort(stream);
-	return (Signature == 0x04034B50) && (stream.offset() == startOffset + 30) && (NameLength != 0);
+	switch (Signature) {
+		default:
+			return false;
+		case SignatureLocalFile:
+			Version = readShort(stream);
+			Flags = readShort(stream);
+			CompressionMethod = readShort(stream);
+			ModificationTime = readShort(stream);
+			ModificationDate = readShort(stream);
+			CRC32 = readLong(stream);
+			CompressedSize = readLong(stream);
+			UncompressedSize = readLong(stream);
+			if (CompressionMethod == 0 && CompressedSize != UncompressedSize) {
+				ZLLogger::Instance().println("zip", "Different compressed & uncompressed size for stored entry; the uncompressed one will be used.");
+				CompressedSize = UncompressedSize;
+			}
+			NameLength = readShort(stream);
+			ExtraLength = readShort(stream);
+			return stream.offset() == startOffset + 30 && NameLength != 0;
+		case SignatureData:
+			CRC32 = readLong(stream);
+			CompressedSize = readLong(stream);
+			UncompressedSize = readLong(stream);
+			NameLength = 0;
+			ExtraLength = 0;
+			return stream.offset() == startOffset + 16;
+	}
 }
 
-void ZLZipHeader::skipEntry(ZLInputStream &stream, const ZLZipHeader &header) {
-	if (header.Flags & 0x08) {
-		stream.seek(header.ExtraLength, false);
-		ZLZDecompressor decompressor((size_t)-1);
-		while (decompressor.decompress(stream, 0, 2048) == 2048) {
-		}
-		stream.seek(16, false);
-	} else {
-		stream.seek(header.ExtraLength + header.CompressedSize, false);
+void ZLZipHeader::skipEntry(ZLInputStream &stream, ZLZipHeader &header) {
+	switch (header.Signature) {
+		default:
+			break;
+		case SignatureLocalFile:
+			if (header.Flags & 0x08) {
+				stream.seek(header.ExtraLength, false);
+				ZLZDecompressor decompressor((size_t)-1);
+				size_t size;
+				do {
+					size = decompressor.decompress(stream, 0, 2048);
+					header.UncompressedSize += size;
+				} while (size == 2048);
+				//stream.seek(16, false);
+			} else {
+				stream.seek(header.ExtraLength + header.CompressedSize, false);
+			}
+			break;
 	}
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  * Copyright (C) 2008 Alexander Kerner <lunohod@openinkpot.org>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -90,6 +90,8 @@ public:
 	shared_ptr<Book> currentBook() const;
 
 	void _refreshWindow();
+	void refreshWindow();
+
 private:
 	void initWindow();
 
@@ -99,7 +101,9 @@ private:
 	std::string helpFileName(const std::string &language) const;
 
 public:
-	void openFile(const std::string &fileName);
+	void openFile(const std::string &filePath);
+	bool canDragFiles(const std::vector<std::string> &filePaths) const;
+	void dragFiles(const std::vector<std::string> &filePaths);
 
 	bool isViewFinal() const;
 
@@ -133,7 +137,7 @@ public:
 
 	void startNavigationMode();
 	void invertRegion(HyperlinkCoord link, bool flush);
-	void invertRegion(const ZLTextElementArea &e);
+	void invertRegion(ZLTextElementRectangle e);
 	void highlightCurrentLink();
 	void highlightNextLink();
 	void highlightPrevLink();
@@ -146,9 +150,6 @@ public:
 	void highlightPrevWord();
 	void highlightPrevLineWord();
 	void openDict();
-
-	RecentBooks &recentBooks();
-	const RecentBooks &recentBooks() const;
 
 	void invalidateNetworkView();
 	void invalidateAccountDependents();
@@ -163,8 +164,6 @@ private:
 	void rebuildCollectionInternal();
 	friend class RebuildCollectionRunnable;
 	friend class OptionsApplyRunnable;
-
-	void transformUrl(std::string &url) const;
 
 private:
 	ViewMode myMode;
@@ -181,7 +180,7 @@ private:
 	ZLTime myLastScrollingTime;
 
 public:
-	BookModel *myModel;
+	shared_ptr<BookModel> myModel;
 
 	shared_ptr<ZLKeyBindings> myBindings0;
 	shared_ptr<ZLKeyBindings> myBindings90;
@@ -194,8 +193,6 @@ public:
 	ProgramCollectionMap myProgramCollectionMap;
 
 	shared_ptr<ZLMessageHandler> myOpenFileHandler;
-
-	RecentBooks myRecentBooks;
 
 	enum {
 		RETURN_TO_TEXT_MODE,

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 #include <cstdlib>
 
 #include "NCXReader.h"
+#include "../util/MiscUtil.h"
+#include "../util/EntityFilesCollector.h"
 
 NCXReader::NCXReader(BookReader &modelReader) : myModelReader(modelReader), myReadState(READ_NONE), myPlayIndex(-65535) {
 }
@@ -53,7 +55,7 @@ void NCXReader::startElementHandler(const char *tag, const char **attributes) {
 			} else if (TAG_CONTENT == tag) {
 				const char *src = attributeValue(attributes, "src");
 				if (src != 0) {
-					myPointStack.back().ContentHRef = src;
+					myPointStack.back().ContentHRef = MiscUtil::decodeHtmlURL(src);
 				}
 			}
 			break;
@@ -102,6 +104,10 @@ void NCXReader::characterDataHandler(const char *text, size_t len) {
 	if (myReadState == READ_TEXT) {
 		myPointStack.back().Text.append(text, len);
 	}
+}
+
+const std::vector<std::string> &NCXReader::externalDTDs() const {
+	return EntityFilesCollector::Instance().externalDTDs("xhtml");
 }
 
 const std::map<int,NCXReader::NavPoint> &NCXReader::navigationMap() const {

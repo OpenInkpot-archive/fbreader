@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2007-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,8 @@
 
 #include "ZLWin32ImageManager.h"
 
-bool ZLWin32ImageManager::bmpConvert(const std::string &stringData, ZLWin32ImageData &data) const {
+bool ZLWin32ImageManager::bmpConvert(const std::string &stringData, ZLWin32ImageData &data, bool &result) const {
+	result = false;
 	if (stringData.size() <= sizeof(BITMAPFILEHEADER)) {
 		return false;
 	}
@@ -41,5 +42,6 @@ bool ZLWin32ImageManager::bmpConvert(const std::string &stringData, ZLWin32Image
 	data.myBytesPerPixel = 3;
 	data.myBytesPerLine = (data.myWidth * 24 + 31) / 32 * 4;
 
+	result = true;
 	return true;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,20 +20,24 @@
 #ifndef __NETWORKOPDSFEEDREADER_H__
 #define __NETWORKOPDSFEEDREADER_H__
 
-#include <set>
+#include <map>
 #include <string>
 
 #include "OPDSFeedReader.h"
+#include "OPDSLink.h"
 
 class NetworkOperationData;
 
-class NetworkLibraryItem;
-
+class NetworkItem;
 
 class NetworkOPDSFeedReader : public OPDSFeedReader {
 
 public:
-	NetworkOPDSFeedReader(const std::string &baseURL, NetworkOperationData &result);
+	NetworkOPDSFeedReader(
+		const OPDSLink &link,
+		const std::string &baseURL,
+		NetworkOperationData &result
+	);
 
 public:
 	void processFeedEntry(shared_ptr<OPDSEntry> entry);
@@ -42,14 +46,15 @@ public:
 	void processFeedEnd();
 
 private:
-	shared_ptr<NetworkLibraryItem> readBookItem(OPDSEntry &entry);
-	shared_ptr<NetworkLibraryItem> readCatalogItem(OPDSEntry &entry);
+	shared_ptr<NetworkItem> readBookItem(OPDSEntry &entry);
+	shared_ptr<NetworkItem> readCatalogItem(OPDSEntry &entry);
 
 private:
+	const OPDSLink &myLink;
 	const std::string myBaseURL;
 	NetworkOperationData &myData;
 	unsigned int myIndex;
-	std::set<std::string> myIgnoredItems;
+	unsigned int myOpenSearchStartIndex;
 };
 
 

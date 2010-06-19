@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,16 +57,16 @@ void StyleSheetTable::addMap(const std::string &tag, const std::string &aClass, 
 static void parseLength(const std::string &toParse, short &size, ZLTextStyleEntry::SizeUnit &unit) {
 	if (ZLStringUtil::stringEndsWith(toParse, "%")) {
 		unit = ZLTextStyleEntry::SIZE_UNIT_PERCENT;
-		size = atoi(toParse.data());
+		size = atoi(toParse.c_str());
 	} else if (ZLStringUtil::stringEndsWith(toParse, "em")) {
 		unit = ZLTextStyleEntry::SIZE_UNIT_EM_100;
-		size = (short)(100 * atof(toParse.data()));
+		size = (short)(100 * ZLStringUtil::stringToDouble(toParse, 0));
 	} else if (ZLStringUtil::stringEndsWith(toParse, "ex")) {
 		unit = ZLTextStyleEntry::SIZE_UNIT_EX_100;
-		size = (short)(100 * atof(toParse.data()));
+		size = (short)(100 * ZLStringUtil::stringToDouble(toParse, 0));
 	} else {
 		unit = ZLTextStyleEntry::SIZE_UNIT_PIXEL;
-		size = atoi(toParse.data());
+		size = atoi(toParse.c_str());
 	}
 }
 
@@ -170,13 +170,18 @@ shared_ptr<ZLTextStyleEntry> StyleSheetTable::createControl(const AttributeMap &
 		} else if (bold[0] == "lighter") {
 		}
 		if (num != -1) {
-			entry->setBold(num >= 600);
+			entry->setFontModifier(FONT_MODIFIER_BOLD, num >= 600);
 		}
 	}
 
 	const std::vector<std::string> &italic = values(styles, "font-style");
 	if (!italic.empty()) {
-		entry->setItalic(italic[0] == "italic");
+		entry->setFontModifier(FONT_MODIFIER_ITALIC, italic[0] == "italic");
+	}
+
+	const std::vector<std::string> &variant = values(styles, "font-variant");
+	if (!variant.empty()) {
+		entry->setFontModifier(FONT_MODIFIER_SMALLCAPS, variant[0] == "small-caps");
 	}
 
 	const std::vector<std::string> &fontFamily = values(styles, "font-family");

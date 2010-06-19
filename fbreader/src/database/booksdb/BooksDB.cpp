@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 #include <ZLibrary.h>
 #include <ZLFile.h>
 #include <ZLDir.h>
+#include <ZLLanguageUtil.h>
 
 #include "BooksDB.h"
 #include "BooksDBQuery.h"
@@ -47,15 +48,12 @@ BooksDB &BooksDB::Instance() {
 	return *ourInstance;
 }
 
-
-
 BooksDB::BooksDB(const std::string &path) : SQLiteDataBase(path), myInitialized(false) {
 	initCommands();
 }
 
 BooksDB::~BooksDB() {
 }
-
 
 bool BooksDB::initDatabase() {
 	if (isInitialized()) {
@@ -71,8 +69,8 @@ bool BooksDB::initDatabase() {
 	ZLFile stateFile(databaseDirName() + ZLibrary::FileNameDelimiter + STATE_DATABASE_NAME);
 	ZLFile netFile(databaseDirName() + ZLibrary::FileNameDelimiter + NET_DATABASE_NAME);
 	shared_ptr<DBCommand> cmd = SQLiteFactory::createCommand(BooksDBQuery::PREINIT_DATABASE, connection(), "@stateFile", DBValue::DBTEXT, "@netFile", DBValue::DBTEXT);
-	((DBTextValue &) *cmd->parameter("@stateFile").value()) = stateFile.physicalFilePath();
-	((DBTextValue &) *cmd->parameter("@netFile").value()) = netFile.physicalFilePath();
+	((DBTextValue&)*cmd->parameter("@stateFile").value()) = stateFile.physicalFilePath();
+	((DBTextValue&)*cmd->parameter("@netFile").value()) = netFile.physicalFilePath();
 	if (!cmd->execute()) {
 		myInitialized = false;
 		close();
@@ -103,9 +101,6 @@ void BooksDB::initCommands() {
 	myGetPalmType = SQLiteFactory::createCommand(BooksDBQuery::GET_PALM_TYPE, connection(), "@file_id", DBValue::DBINT);
 	mySetPalmType = SQLiteFactory::createCommand(BooksDBQuery::SET_PALM_TYPE, connection(), "@file_id", DBValue::DBINT, "@type", DBValue::DBTEXT);
 
-	myGetNetFile = SQLiteFactory::createCommand(BooksDBQuery::GET_NET_FILE, connection(), "@url", DBValue::DBTEXT);
-	mySetNetFile = SQLiteFactory::createCommand(BooksDBQuery::SET_NET_FILE, connection(), "@file_id", DBValue::DBINT, "@url", DBValue::DBTEXT);
-
 	myLoadStackPos = SQLiteFactory::createCommand(BooksDBQuery::LOAD_STACK_POS, connection(), "@book_id", DBValue::DBINT);
 	mySetStackPos = SQLiteFactory::createCommand(BooksDBQuery::SET_STACK_POS, connection(), "@book_id", DBValue::DBINT, "@stack_pos", DBValue::DBINT);
 
@@ -125,9 +120,6 @@ void BooksDB::initCommands() {
 
 	myFindFileId = new FindFileIdRunnable(connection());
 
-	myLoadAuthors = new LoadAuthorsRunnable(connection());
-	myLoadTags = new LoadTagsRunnable(connection());
-	myLoadSeries = new LoadSeriesRunnable(connection());
 	myLoadFileEntries = new LoadFileEntriesRunnable(connection());
 
 	myLoadRecentBooks = new LoadRecentBooksRunnable(connection());
@@ -146,83 +138,34 @@ bool BooksDB::clearDatabase() {
 	return executeAsTransaction(*runnable);
 }
 
-
-shared_ptr<Book> BooksDB::loadTableBook(const std::string fileName) {
-	DBCommand &cmd = *myLoadBook;
-	
-	myFindFileId->setFileName(fileName);
-	if (!myFindFileId->run()) {
-		return false;
-	}
-	((DBIntValue &) *cmd.parameter("@file_id").value()) = myFindFileId->fileId();
-	shared_ptr<DBDataReader> reader = cmd.executeReader();
-
-	if (reader.isNull()) {
-		return 0;
-	}
-
-	if (!reader->next()) {
-		reader->close();
-		return 0;
-	}
-
-	const int enctype = reader->type(1); /* encoding */
-	const int langtype = reader->type(2); /* language */
-	if (reader->type(0) != DBValue::DBINT  /* book_id  */
-		|| (enctype != DBValue::DBTEXT && enctype != DBValue::DBNULL)
-		|| (langtype != DBValue::DBTEXT && langtype != DBValue::DBNULL)
-		|| reader->type(3) != DBValue::DBTEXT /* title    */ ) {
-		reader->close();
-		return 0;
-	}
-
-	shared_ptr<Book> bookptr = new Book(fileName);
-	Book &book = *bookptr;
-	book.setBookId( reader->intValue(0) );
-	if (enctype == DBValue::DBTEXT) {
-		book.setEncoding( reader->textValue(1) );
-	} else {
-		book.setEncoding( BooksDBQuery::AutoEncoding );
-	}
-	if (langtype == DBValue::DBTEXT) {
-		book.setLanguage( reader->textValue(2) );
-	} else {
-		book.setLanguage( BooksDBQuery::OtherLanguage );
-	}
-	book.setTitle( reader->textValue(3) );
-
-	reader->close();
-
-	return bookptr;
-}
-
-
 shared_ptr<Book> BooksDB::loadBook(const std::string &fileName) {
 	if (!isInitialized()) {
 		return 0;
 	}
 
-	shared_ptr<Book> book = loadTableBook(fileName);
-	if (book.isNull()) {
-		return book;
+	myFindFileId->setFileName(fileName);
+	if (!myFindFileId->run()) {
+		return false;
 	}
+	((DBIntValue&)*myLoadBook->parameter("@file_id").value()) = myFindFileId->fileId();
+	shared_ptr<DBDataReader> reader = myLoadBook->executeReader();
 
-	myLoadSeries->setBookId(book->bookId());
-	if (!myLoadSeries->run()) {
+	if (reader.isNull() || !reader->next() ||
+			reader->type(0) != DBValue::DBINT /* book_id */) {
 		return 0;
 	}
-	book->setSeries(myLoadSeries->seriesTitle(), myLoadSeries->indexInSeries());
+	const int bookId = reader->intValue(0);
 
-	myLoadAuthors->setBookId(book->bookId());
-	if (!myLoadAuthors->run()) {
-		return 0;
-	}
-	book->removeAllAuthors();
-	myLoadAuthors->collectAuthors(book->_authors());
+	shared_ptr<Book> book = Book::createBook(
+		fileName, bookId,
+		reader->textValue(1, Book::AutoEncoding),
+		reader->textValue(2, ZLLanguageUtil::OtherLanguageCode),
+		reader->textValue(3, std::string())
+	);
 
-	if (!myLoadTags->run(*book)) {
-		return 0;
-	}
+	loadSeries(*book);
+	loadAuthors(*book);
+	loadTags(*book);
 
 	return book;
 }
@@ -268,7 +211,7 @@ int BooksDB::getFileSize(const std::string fileName) {
 	if (!myFindFileId->run()) {
 		return 0;
 	}
-	((DBIntValue &) *myGetFileSize->parameter("@file_id").value()) = myFindFileId->fileId();
+	((DBIntValue&)*myGetFileSize->parameter("@file_id").value()) = myFindFileId->fileId();
 
 	shared_ptr<DBValue> fileSize = myGetFileSize->executeScalar();
 
@@ -281,7 +224,7 @@ int BooksDB::getFileSize(const std::string fileName) {
 	if (fileSize->type() != DBValue::DBINT) {
 		return -1;
 	}
-	return ((DBIntValue &) *fileSize).value();
+	return ((DBIntValue&)*fileSize).value();
 }
 
 bool BooksDB::setFileSize(const std::string fileName, int size) {
@@ -292,8 +235,8 @@ bool BooksDB::setFileSize(const std::string fileName, int size) {
 	if (!executeAsTransaction(*myFindFileId)) {
 		return false;
 	}
-	((DBIntValue &) *mySetFileSize->parameter("@file_id").value()) = myFindFileId->fileId();
-	((DBIntValue &) *mySetFileSize->parameter("@size").value()) = size;
+	((DBIntValue&)*mySetFileSize->parameter("@file_id").value()) = myFindFileId->fileId();
+	((DBIntValue&)*mySetFileSize->parameter("@size").value()) = size;
 	return mySetFileSize->execute();
 }
 
@@ -303,12 +246,11 @@ bool BooksDB::setEncoding(const Book &book, const std::string &encoding) {
 	}
 
 	shared_ptr<DBCommand> command = SQLiteFactory::createCommand(BooksDBQuery::SET_ENCODING, connection());
-	DBCommand &cmd = *command;
 
-	cmd.parameters().push_back( DBCommandParameter("@book_id", new DBIntValue(book.bookId())) );
-	cmd.parameters().push_back( DBCommandParameter("@encoding", new DBTextValue(encoding)) );
+	command->parameters().push_back(DBCommandParameter("@book_id", new DBIntValue(book.bookId())));
+	command->parameters().push_back(DBCommandParameter("@encoding", new DBTextValue(encoding)));
 
-	return cmd.execute();
+	return command->execute();
 }
 
 bool BooksDB::loadFileEntries(const std::string &fileName, std::vector<std::string> &entries) {
@@ -352,93 +294,60 @@ bool BooksDB::saveRecentBooks(const BookList &books) {
 
 std::string BooksDB::getFileName(int fileId) {
 	std::string fileName;
-	DBIntValue &findFileId = (DBIntValue &) *myFindFileName->parameter("@file_id").value();
+	DBIntValue &findFileId = (DBIntValue&)*myFindFileName->parameter("@file_id").value();
+	findFileId = fileId;
 	while (true) {
-		findFileId = fileId;
 		shared_ptr<DBDataReader> reader = myFindFileName->executeReader();
-		if (reader.isNull()) {
-			return "";
+		if (reader.isNull() || !reader->next()) {
+			return std::string();
 		}
-		if (!reader->next()) {
-			reader->close();
-			return "";
+		const std::string namePart = reader->textValue(0, std::string());
+		switch (reader->type(1)) { /* parent_id */
+			default:
+				return std::string();
+			case DBValue::DBNULL:
+				return namePart + ZLibrary::FileNameDelimiter + fileName;
+			case DBValue::DBINT:
+				if (fileName.empty()) {
+					fileName = namePart;
+				} else {
+					fileName = namePart + BooksDBQuery::ArchiveEntryDelimiter + fileName;
+				}
+				findFileId = reader->intValue(1);
+				break;
 		}
-		const int parentType = reader->type(1); /* parent_id */
-		if (reader->type(0) != DBValue::DBTEXT  /* name  */
-			|| (parentType != DBValue::DBINT && parentType != DBValue::DBNULL)) {
-			reader->close();
-			return "";
-		}
-		if (parentType == DBValue::DBNULL) {
-			fileName = reader->textValue(0) + ZLibrary::FileNameDelimiter + fileName;
-			reader->close();
-			return fileName;
-		}
-		if (!fileName.empty()) {
-			fileName = reader->textValue(0) + BooksDBQuery::ArchiveEntryDelimiter + fileName;
-		} else {
-			fileName = reader->textValue(0);
-		}
-		fileId = reader->intValue(1);
 	}
 }
 
 bool BooksDB::loadBooks(BookList &books) {
 	shared_ptr<DBDataReader> reader = myLoadBooks->executeReader();
-	if (reader.isNull()) {
-		return false;
-	}
+
 	books.clear();
+	std::map<int,shared_ptr<Book> > bookMap;
+
 	while (reader->next()) {
-		const int enctype = reader->type(1);      /* encoding */
-		const int langtype = reader->type(2);     /* language */
-		if (reader->type(0) != DBValue::DBINT     /* book_id  */
-			|| (enctype != DBValue::DBTEXT && enctype != DBValue::DBNULL)
-			|| (langtype != DBValue::DBTEXT && langtype != DBValue::DBNULL)
-			|| reader->type(3) != DBValue::DBTEXT /* title    */
-			|| reader->type(4) != DBValue::DBINT  /* file_id  */ ) {
-			reader->close();
+		if (reader->type(0) != DBValue::DBINT || /* book_id */
+				reader->type(4) != DBValue::DBINT) { /* file_id */
 			return false;
 		}
+		const int bookId = reader->intValue(0);
 		const int fileId = reader->intValue(4);
 		const std::string fileName = getFileName(fileId);
-		shared_ptr<Book> bookptr = new Book(fileName);
-		Book &book = *bookptr;
-		book.setBookId( reader->intValue(0) );
-		if (enctype == DBValue::DBTEXT) {
-			book.setEncoding( reader->textValue(1) );
-		} else {
-			book.setEncoding( BooksDBQuery::AutoEncoding );
-		}
-		if (langtype == DBValue::DBTEXT) {
-			book.setLanguage( reader->textValue(2) );
-		} else {
-			book.setLanguage( BooksDBQuery::OtherLanguage );
-		}
-		book.setTitle( reader->textValue(3) );
-		books.push_back(bookptr);
-	}
-	reader->close();
-	
-	for (BookList::iterator it = books.begin(); it != books.end(); ++it) {
-		Book &book = **it;
-		myLoadSeries->setBookId(book.bookId());
-		if (!myLoadSeries->run()) {
-			return false;
-		}
-		book.setSeries(myLoadSeries->seriesTitle(), myLoadSeries->indexInSeries());
 
-		myLoadAuthors->setBookId(book.bookId());
-		if (!myLoadAuthors->run()) {
-			return false;
-		}
-		book.removeAllAuthors();
-		myLoadAuthors->collectAuthors(book._authors());
-
-		if (!myLoadTags->run(book)) {
-			return false;
-		}
+		shared_ptr<Book> book = Book::createBook(
+			fileName,
+			bookId,
+			reader->textValue(1, Book::AutoEncoding),
+			reader->textValue(2, ZLLanguageUtil::OtherLanguageCode),
+			reader->textValue(3, std::string())
+		);
+		books.push_back(book);
+		bookMap[bookId] = book;
 	}
+
+	loadSeries(bookMap);
+	loadAuthors(bookMap);
+	loadTags(bookMap);
 
 	return true;
 }
@@ -447,7 +356,7 @@ bool BooksDB::loadBookStateStack(const Book &book, std::deque<ReadingState> &sta
 	if (book.bookId() == 0) {
 		return false;
 	}
-	((DBIntValue &) *myLoadBookStateStack->parameter("@book_id").value()) = book.bookId();
+	((DBIntValue&)*myLoadBookStateStack->parameter("@book_id").value()) = book.bookId();
 	shared_ptr<DBDataReader> reader = myLoadBookStateStack->executeReader();
 	if (reader.isNull()) {
 		return false;
@@ -455,8 +364,7 @@ bool BooksDB::loadBookStateStack(const Book &book, std::deque<ReadingState> &sta
 	while (reader->next()) {
 		if (reader->type(0) != DBValue::DBINT    /* paragraph */
 			|| reader->type(1) != DBValue::DBINT /* word      */
-			|| reader->type(2) != DBValue::DBINT /* char      */ ) {
-			reader->close();
+			|| reader->type(2) != DBValue::DBINT /* char      */) {
 			return false;
 		}
 		const int paragraph = reader->intValue(0);
@@ -464,7 +372,6 @@ bool BooksDB::loadBookStateStack(const Book &book, std::deque<ReadingState> &sta
 		const int character = reader->intValue(2);
 		stack.push_back(ReadingState(paragraph, word, character));
 	}
-	reader->close();
 	return true;
 }
 
@@ -493,12 +400,12 @@ std::string BooksDB::getPalmType(const std::string &fileName) {
 	if (!myFindFileId->run()) {
 		return "";
 	}
-	((DBIntValue &) *myGetPalmType->parameter("@file_id").value()) = myFindFileId->fileId();
+	((DBIntValue&)*myGetPalmType->parameter("@file_id").value()) = myFindFileId->fileId();
 	shared_ptr<DBValue> value = myGetPalmType->executeScalar();
 	if (value.isNull() || value->type() != DBValue::DBTEXT) {
 		return "";
 	}
-	return ((DBTextValue &) *value).value();
+	return ((DBTextValue&)*value).value();
 }
 
 bool BooksDB::setPalmType(const std::string &fileName, const std::string &type) {
@@ -509,43 +416,56 @@ bool BooksDB::setPalmType(const std::string &fileName, const std::string &type) 
 	if (!myFindFileId->run()) {
 		return "";
 	}
-	((DBIntValue &) *mySetPalmType->parameter("@file_id").value()) = myFindFileId->fileId();
-	((DBTextValue &) *mySetPalmType->parameter("@type").value()) = type;
+	((DBIntValue&)*mySetPalmType->parameter("@file_id").value()) = myFindFileId->fileId();
+	((DBTextValue&)*mySetPalmType->parameter("@type").value()) = type;
 	return mySetPalmType->execute();
 }
 
 std::string BooksDB::getNetFile(const std::string &url) {
-	if (!isInitialized()) {
-		return false;
-	}
-	((DBTextValue &) *myGetNetFile->parameter("@url").value()) = url;
-	shared_ptr<DBValue> value = myGetNetFile->executeScalar();
+	static shared_ptr<DBCommand> command = SQLiteFactory::createCommand(
+		"SELECT file_id FROM NetFiles WHERE url = @url;",
+		connection(), "@url", DBValue::DBTEXT
+	);
+
+	((DBTextValue&)*command->parameter("@url").value()) = url;
+	shared_ptr<DBValue> value = command->executeScalar();
 	if (value.isNull() || value->type() != DBValue::DBINT) {
-		return "";
+		return std::string();
 	}
-	return getFileName(((DBIntValue &) *value).value());
+	return getFileName(((DBIntValue&)*value).value());
 }
 
 bool BooksDB::setNetFile(const std::string &url, const std::string &fileName) {
-	if (!isInitialized()) {
-		return "";
-	}
+	static shared_ptr<DBCommand> command = SQLiteFactory::createCommand(
+		"INSERT OR REPLACE INTO NetFiles (url, file_id) VALUES (@url, @file_id);",
+		connection(), "@file_id", DBValue::DBINT, "@url", DBValue::DBTEXT
+	);
+	
 	myFindFileId->setFileName(fileName, true);
 	if (!myFindFileId->run()) {
-		return "";
+		return false;
 	}
-	((DBIntValue &) *mySetNetFile->parameter("@file_id").value()) = myFindFileId->fileId();
-	((DBTextValue &) *mySetNetFile->parameter("@url").value()) = url;
-	return mySetNetFile->execute();
+	((DBIntValue&)*command->parameter("@file_id").value()) = myFindFileId->fileId();
+	((DBTextValue&)*command->parameter("@url").value()) = url;
+	return command->execute();
 }
 
+bool BooksDB::unsetNetFile(const std::string &url) {
+	static shared_ptr<DBCommand> command = SQLiteFactory::createCommand(
+		"SELECT file_id FROM NetFiles WHERE url = @url;",
+		connection(), "@url", DBValue::DBTEXT
+	);
+
+	((DBTextValue&)*command->parameter("@url").value()) = url;
+	return command->execute();
+}
 
 bool BooksDB::loadBookState(const Book &book, ReadingState &state) {
 	state.Paragraph = state.Word = state.Character = 0;
 	if (book.bookId() == 0) {
 		return false;
 	}
-	((DBIntValue &) *myLoadBookState->parameter("@book_id").value()) = book.bookId();
+	((DBIntValue&)*myLoadBookState->parameter("@book_id").value()) = book.bookId();
 	shared_ptr<DBDataReader> reader = myLoadBookState->executeReader();
 	if (reader.isNull()) {
 		return false;
@@ -553,14 +473,12 @@ bool BooksDB::loadBookState(const Book &book, ReadingState &state) {
 	if (!reader->next()
 		|| reader->type(0) != DBValue::DBINT /* paragraph */
 		|| reader->type(1) != DBValue::DBINT /* word      */
-		|| reader->type(2) != DBValue::DBINT /* char      */ ) {
-		reader->close();
+		|| reader->type(2) != DBValue::DBINT /* char      */) {
 		return false;
 	}
 	state.Paragraph = reader->intValue(0);
 	state.Word = reader->intValue(1);
 	state.Character = reader->intValue(2);
-	reader->close();
 	return true;
 }
 
@@ -568,10 +486,10 @@ bool BooksDB::setBookState(const Book &book, const ReadingState &state) {
 	if (book.bookId() == 0) {
 		return false;
 	}
-	((DBIntValue &) *mySetBookState->parameter("@book_id").value()) = book.bookId();
-	((DBIntValue &) *mySetBookState->parameter("@paragraph").value()) = state.Paragraph;
-	((DBIntValue &) *mySetBookState->parameter("@word").value()) = state.Word;
-	((DBIntValue &) *mySetBookState->parameter("@char").value()) = state.Character;
+	((DBIntValue&)*mySetBookState->parameter("@book_id").value()) = book.bookId();
+	((DBIntValue&)*mySetBookState->parameter("@paragraph").value()) = state.Paragraph;
+	((DBIntValue&)*mySetBookState->parameter("@word").value()) = state.Word;
+	((DBIntValue&)*mySetBookState->parameter("@char").value()) = state.Character;
 	return mySetBookState->execute();
 }
 
@@ -579,21 +497,21 @@ int BooksDB::loadStackPos(const Book &book) {
 	if (book.bookId() == 0) {
 		return 0;
 	}
-	((DBIntValue &) *myLoadStackPos->parameter("@book_id").value()) = book.bookId();
+	((DBIntValue&)*myLoadStackPos->parameter("@book_id").value()) = book.bookId();
 	shared_ptr<DBValue> stackPosValue = myLoadStackPos->executeScalar();
 	if (stackPosValue.isNull()
 		|| stackPosValue->type() != DBValue::DBINT) {
 		return 0;
 	}
-	return ((DBIntValue &) *stackPosValue).value();
+	return ((DBIntValue&)*stackPosValue).value();
 }
 
 bool BooksDB::setStackPos(const Book &book, int stackPos) {
 	if (book.bookId() == 0) {
 		return false;
 	}
-	((DBIntValue &) *mySetStackPos->parameter("@book_id").value()) = book.bookId();
-	((DBIntValue &) *mySetStackPos->parameter("@stack_pos").value()) = stackPos;
+	((DBIntValue&)*mySetStackPos->parameter("@book_id").value()) = book.bookId();
+	((DBIntValue&)*mySetStackPos->parameter("@stack_pos").value()) = stackPos;
 	return mySetStackPos->execute();
 }
 
@@ -601,7 +519,7 @@ bool BooksDB::insertIntoBookList(const Book &book) {
 	if (book.bookId() == 0) {
 		return false;
 	}
-	((DBIntValue &) *myInsertBookList->parameter("@book_id").value()) = book.bookId();
+	((DBIntValue&)*myInsertBookList->parameter("@book_id").value()) = book.bookId();
 	return myInsertBookList->execute();
 }
 
@@ -609,7 +527,7 @@ bool BooksDB::deleteFromBookList(const Book &book) {
 	if (book.bookId() == 0) {
 		return false;
 	}
-	((DBIntValue &) *myDeleteBookList->parameter("@book_id").value()) = book.bookId();
+	((DBIntValue&)*myDeleteBookList->parameter("@book_id").value()) = book.bookId();
 	return myDeleteBookList->execute();
 }
 
@@ -617,12 +535,12 @@ bool BooksDB::checkBookList(const Book &book) {
 	if (book.bookId() == 0) {
 		return false;
 	}
-	((DBIntValue &) *myCheckBookList->parameter("@book_id").value()) = book.bookId();
+	((DBIntValue&)*myCheckBookList->parameter("@book_id").value()) = book.bookId();
 	shared_ptr<DBValue> res = myCheckBookList->executeScalar();
 	if (res.isNull() || res->type() != DBValue::DBINT) {
 		return false;
 	}
-	const int checkRes = ((DBIntValue &) *res).value();
+	const int checkRes = ((DBIntValue&)*res).value();
 	return checkRes > 0;
 }
 

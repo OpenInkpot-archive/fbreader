@@ -361,7 +361,7 @@ shared_ptr<ZLImageData> ZLEwlImageManager::createData() const {
 
 
 
-void ZLEwlImageManager::convertImageDirect(const std::string &stringData, ZLImageData &data) const {
+bool ZLEwlImageManager::convertImageDirect(const std::string &stringData, ZLImageData &data) const {
 	unsigned char m0, m1;
 	m0 = *(stringData.data());
 	m1 = *(stringData.data()+1);
@@ -389,12 +389,14 @@ void ZLEwlImageManager::convertImageDirect(const std::string &stringData, ZLImag
 		data.init(10, 10);
 		bzero(((ZLEwlImageData&)data).getImageData(), 25);
 
-		return;
+		return false;
 	}
 
 	ZLIntegerOption myDitherAlgo(ZLCategoryKey::LOOK_AND_FEEL, "Options", "DitherAlgo", 0);
 	if(myDitherAlgo.value() == 2)
 		floyd_steinberg_dither(data);
+
+    return true;
 }
 
 void ZLEwlImageManager::convertImageDirectJpeg(const std::string &stringData, ZLImageData &data) const {

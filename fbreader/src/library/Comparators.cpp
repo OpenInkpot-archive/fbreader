@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,6 +45,13 @@ bool BookComparator::operator() (
 		return seriesTitle0 <= book1->title();
 	}
 	return comp < 0;
+}
+
+bool BookByFileNameComparator::operator() (
+	const shared_ptr<Book> book0,
+	const shared_ptr<Book> book1
+) {
+	return book0->filePath() < book1->filePath();
 }
 
 bool AuthorComparator::operator() (

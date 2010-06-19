@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,6 +45,8 @@ public:
 
 	void wait(const ZLResourceKey &key, ZLRunnable &runnable) const;
 	bool isWaiting() const { return myIsWaiting; }
+
+	shared_ptr<ZLProgressDialog> createProgressDialog(const ZLResourceKey &key) const;
 
 	bool isClipboardSupported(ClipboardType type) const;
 	void setClipboardText(const std::string &text, ClipboardType type) const;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2007-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+
+#include <windows.h>
 
 #include <stdio.h>
 #include <setjmp.h>
@@ -97,7 +99,8 @@ static void errorExit(j_common_ptr info) {
 	longjmp(((JpegErrorManager*)info->err)->mySetjmpBuffer, 1);
 }
 
-bool ZLWin32ImageManager::jpegConvert(const std::string &stringData, ZLWin32ImageData &data) const {
+bool ZLWin32ImageManager::jpegConvert(const std::string &stringData, ZLWin32ImageData &data, bool &result) const {
+	result = false;
 	struct jpeg_decompress_struct info;
 	JpegSourceManager reader(stringData);
 	JpegErrorManager errorManager;
@@ -152,5 +155,6 @@ bool ZLWin32ImageManager::jpegConvert(const std::string &stringData, ZLWin32Imag
 	jpeg_finish_decompress(&info);
 	jpeg_destroy_decompress(&info);
 
+	result = true;
 	return true;
 }

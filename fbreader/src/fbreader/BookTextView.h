@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ public:
 	BookTextView(ZLPaintContext &context);
 	~BookTextView();
 
-	void setModel(shared_ptr<ZLTextModel> model, const std::string &language, shared_ptr<Book> book);
+	void setModel(shared_ptr<ZLTextModel> model, shared_ptr<Book> book);
 	void setContentsModel(shared_ptr<ZLTextModel> contentsModel);
 	void saveState();
 	void saveBookmarks();
@@ -65,7 +65,7 @@ private:
 
 	void preparePaintInfo();
 
-	bool getHyperlinkInfo(const ZLTextElementArea &area, std::string &id, std::string &type) const;
+	bool getHyperlinkInfo(const ZLTextElementRectangle &rectangle, std::string &id, std::string &type) const;
 
 	shared_ptr<PositionIndicator> createPositionIndicator(const ZLTextPositionIndicatorInfo &info);
 

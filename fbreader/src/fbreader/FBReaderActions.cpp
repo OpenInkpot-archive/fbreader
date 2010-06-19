@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  * Copyright (C) 2008,2009 Alexander Kerner <lunohod@openinkpot.org>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,14 +29,14 @@
 #include <optionEntries/ZLSimpleOptionEntry.h>
 #include <ZLibrary.h>
 
-#include <ZLTextView.h>
 #include <ZLBlockTreeView.h>
+#include <ZLTextView.h>
+#include <ZLTextSelectionModel.h>
 
 #include "FBReader.h"
 #include "FBReaderActions.h"
 #include "BookTextView.h"
 #include "ContentsView.h"
-#include "FBFileHandler.h"
 #include "BookInfoDialog.h"
 
 #include "../bookmodel/BookModel.h"
@@ -46,6 +46,7 @@
 
 #include "../database/booksdb/BooksDBUtil.h"
 #include "../database/booksdb/BooksDB.h"
+#include "../library/Library.h"
 #include "../library/Book.h"
 
 #include <sys/types.h>
@@ -110,30 +111,6 @@ bool ShowContentsAction::isVisible() const {
 	return ModeDependentAction::isVisible() && !((ContentsView&)*FBReader::Instance().myContentsView).isEmpty();
 }
 
-AddBookAction::AddBookAction(int visibleInModes) : ModeDependentAction(visibleInModes) {
-}
-
-void AddBookAction::run() {
-	FBReader &fbreader = FBReader::Instance();
-
-	const ZLResourceKey dialogKey("addFileDialog");
-	const ZLResource &msgResource = ZLResource::resource("dialog")[dialogKey];
-	FBFileHandler handler;
-	if (ZLDialogManager::Instance().selectionDialog(dialogKey, handler)) {
-		shared_ptr<Book> book = handler.description();
-		if (!book.isNull()) {
-			if (BookInfoDialog(book).dialog().run()) {
-				Library::Instance().addBook(book);
-				fbreader.openBook(book);
-				fbreader.setMode(FBReader::BOOK_TEXT_MODE);
-			} else {
-				Library::Instance().removeBook(book);
-			}
-			fbreader.refreshWindow();
-		}
-	}
-}
-
 ScrollToHomeAction::ScrollToHomeAction() : ModeDependentAction(FBReader::BOOK_TEXT_MODE) {
 }
 
@@ -141,7 +118,7 @@ bool ScrollToHomeAction::isEnabled() const {
 	if (!isVisible()) {
 		return false;
 	}
-	ZLTextWordCursor cursor = FBReader::Instance().bookTextView().startCursor();
+	ZLTextWordCursor cursor = FBReader::Instance().bookTextView().textArea().startCursor();
 	return cursor.isNull() || !cursor.isStartOfParagraph() || !cursor.paragraphCursor().isFirst();
 }
 
@@ -156,7 +133,7 @@ bool ScrollToStartOfTextAction::isEnabled() const {
 	if (!isVisible()) {
 		return false;
 	}
-	ZLTextWordCursor cursor = FBReader::Instance().bookTextView().startCursor();
+	ZLTextWordCursor cursor = FBReader::Instance().bookTextView().textArea().startCursor();
 	return cursor.isNull() || !cursor.isStartOfParagraph() || !cursor.paragraphCursor().isFirst();
 }
 
@@ -171,7 +148,7 @@ bool ScrollToEndOfTextAction::isEnabled() const {
 	if (!isVisible()) {
 		return false;
 	}
-	ZLTextWordCursor cursor = FBReader::Instance().bookTextView().endCursor();
+	ZLTextWordCursor cursor = FBReader::Instance().bookTextView().textArea().endCursor();
 	return cursor.isNull() || !cursor.isEndOfParagraph() || !cursor.paragraphCursor().isLast();
 }
 
@@ -246,12 +223,12 @@ bool OpenPreviousBookAction::isVisible() const {
 			(fbreader.mode() != FBReader::CONTENTS_MODE)) {
 		return false;
 	}
-	return fbreader.recentBooks().books().size() > 1;
+	return Library::Instance().recentBooks().size() > 1;
 }
 
 void OpenPreviousBookAction::run() {
 	FBReader &fbreader = FBReader::Instance();
-	BookList books = fbreader.recentBooks().books();
+	const BookList &books = Library::Instance().recentBooks();
 	fbreader.openBook(books[1]);
 	fbreader.refreshWindow();
 	fbreader.resetWindowCaption();
@@ -308,20 +285,24 @@ void QuitAction::run() {
 	FBReader::Instance().closeView();
 }
 
+void ForceQuitAction::run() {
+	FBReader::Instance().quit();
+}
+
 bool GotoNextTOCSectionAction::isVisible() const {
 	FBReader &fbreader = FBReader::Instance();
 	if (fbreader.mode() != FBReader::BOOK_TEXT_MODE) {
 		return false;
 	}
 	const ContentsView &contentsView = (const ContentsView&)*fbreader.myContentsView;
-	shared_ptr<ZLTextModel> model = contentsView.model();
+	shared_ptr<ZLTextModel> model = contentsView.textArea().model();
 	return !model.isNull() && (model->paragraphsNumber() > 1);
 }
 
 bool GotoNextTOCSectionAction::isEnabled() const {
 	FBReader &fbreader = FBReader::Instance();
 	const ContentsView &contentsView = (const ContentsView&)*fbreader.myContentsView;
-	shared_ptr<ZLTextModel> model = contentsView.model();
+	shared_ptr<ZLTextModel> model = contentsView.textArea().model();
 	return !model.isNull() && ((int)contentsView.currentTextViewParagraph() < (int)model->paragraphsNumber() - 1);
 }
 
@@ -329,7 +310,7 @@ void GotoNextTOCSectionAction::run() {
 	FBReader &fbreader = FBReader::Instance();
 	ContentsView &contentsView = (ContentsView&)*fbreader.myContentsView;
 	size_t current = contentsView.currentTextViewParagraph();
-	const ContentsModel &contentsModel = (const ContentsModel&)*contentsView.model();
+	const ContentsModel &contentsModel = (const ContentsModel&)*contentsView.textArea().model();
 	int reference = contentsModel.reference(((const ZLTextTreeParagraph*)contentsModel[current + 1]));
 	if (reference != -1) {
 		((ZLTextView&)*fbreader.myBookTextView).gotoParagraph(reference);
@@ -343,14 +324,14 @@ bool GotoPreviousTOCSectionAction::isVisible() const {
 		return false;
 	}
 	const ContentsView &contentsView = (const ContentsView&)*fbreader.myContentsView;
-	shared_ptr<ZLTextModel> model = contentsView.model();
+	shared_ptr<ZLTextModel> model = contentsView.textArea().model();
 	return !model.isNull() && (model->paragraphsNumber() > 1);
 }
 
 bool GotoPreviousTOCSectionAction::isEnabled() const {
 	const FBReader &fbreader = FBReader::Instance();
 	const ContentsView &contentsView = (const ContentsView&)*fbreader.myContentsView;
-	shared_ptr<ZLTextModel> model = contentsView.model();
+	shared_ptr<ZLTextModel> model = contentsView.textArea().model();
 	if (model.isNull()) {
 		return false;
 	}
@@ -360,7 +341,7 @@ bool GotoPreviousTOCSectionAction::isEnabled() const {
 		return true;
 	}
 	if (tocIndex == 0) {
-		const ZLTextWordCursor &cursor = fbreader.bookTextView().startCursor();
+		const ZLTextWordCursor &cursor = fbreader.bookTextView().textArea().startCursor();
 		if (cursor.isNull()) {
 			return false;
 		}
@@ -378,17 +359,17 @@ void GotoPreviousTOCSectionAction::run() {
 	FBReader &fbreader = FBReader::Instance();
 	ContentsView &contentsView = (ContentsView&)*fbreader.myContentsView;
 	size_t current = contentsView.currentTextViewParagraph(false);
-	const ContentsModel &contentsModel = (const ContentsModel&)*contentsView.model();
+	const ContentsModel &contentsModel = (const ContentsModel&)*contentsView.textArea().model();
 
 	int reference = contentsModel.reference(((const ZLTextTreeParagraph*)contentsModel[current]));
-	const ZLTextWordCursor &cursor = fbreader.bookTextView().startCursor();
+	const ZLTextWordCursor &cursor = fbreader.bookTextView().textArea().startCursor();
 	if (!cursor.isNull() &&
 			(cursor.elementIndex() == 0)) {
 		int paragraphIndex = cursor.paragraphCursor().index();
 		if (reference == paragraphIndex) {
 			reference = contentsModel.reference(((const ZLTextTreeParagraph*)contentsModel[current - 1]));
 		} else if (reference == paragraphIndex - 1) {
-			const ZLTextModel &textModel = *fbreader.bookTextView().model();
+			const ZLTextModel &textModel = *fbreader.bookTextView().textArea().model();
 			const ZLTextParagraph *para = textModel[paragraphIndex];
 			if ((para != 0) && (para->kind() == ZLTextParagraph::END_OF_SECTION_PARAGRAPH)) {
 				reference = contentsModel.reference(((const ZLTextTreeParagraph*)contentsModel[current - 1]));
@@ -401,27 +382,27 @@ void GotoPreviousTOCSectionAction::run() {
 	}
 }
 
-GotoPageNumber::GotoPageNumber(const std::string &parameter) : ModeDependentAction(FBReader::BOOK_TEXT_MODE), myParameter(parameter) {
+GotoPageNumberAction::GotoPageNumberAction(const std::string &parameter) : ModeDependentAction(FBReader::BOOK_TEXT_MODE), myParameter(parameter) {
 }
 
-bool GotoPageNumber::isVisible() const {
+bool GotoPageNumberAction::isVisible() const {
 	return
 		ModeDependentAction::isVisible() &&
 		!FBReader::Instance().bookTextView().hasMultiSectionModel();
 }
 
-bool GotoPageNumber::isEnabled() const {
+bool GotoPageNumberAction::isEnabled() const {
 	return ModeDependentAction::isEnabled() && (FBReader::Instance().bookTextView().pageNumber() > 1);
 }
 
-void GotoPageNumber::callback(int pagenumber) {
+void GotoPageNumberAction::callback(int pagenumber) {
 	FBReader &fbreader = FBReader::Instance();
 	if(pagenumber >= 0)
 		fbreader.bookTextView().gotoPage(pagenumber);
 	fbreader.refreshWindow();
 }
 
-void GotoPageNumber::run() {
+void GotoPageNumberAction::run() {
 	FBReader &fbreader = FBReader::Instance();
 	ZLEwlGotoPageDialog(fbreader);
 
@@ -433,7 +414,7 @@ void GotoPageNumber::run() {
 
 bool SelectionAction::isVisible() const {
 	shared_ptr<ZLView> view = FBReader::Instance().currentView();
-	return !view.isNull() && view->typeId() == ZLTextView::TYPE_ID;
+	return !view.isNull() && view->isInstanceOf(ZLTextView::TYPE_ID);
 }
 
 bool SelectionAction::isEnabled() const {
@@ -444,12 +425,8 @@ bool SelectionAction::isEnabled() const {
 	return !selectionModel.text().empty() || !selectionModel.image().isNull();
 }
 
-ZLTextView &SelectionAction::textView() {
+ZLTextView &SelectionAction::textView() const {
 	return (ZLTextView&)*FBReader::Instance().currentView();
-}
-
-const ZLTextView &SelectionAction::textView() const {
-	return (const ZLTextView&)*FBReader::Instance().currentView();
 }
 
 bool CopySelectedTextAction::isVisible() const {
@@ -457,7 +434,7 @@ bool CopySelectedTextAction::isVisible() const {
 }
 
 void CopySelectedTextAction::run() {
-	textView().copySelectedTextToClipboard(ZLDialogManager::CLIPBOARD_MAIN);
+	textView().selectionModel().copySelectionToClipboard(ZLDialogManager::CLIPBOARD_MAIN);
 }
 
 bool OpenSelectedTextInDictionaryAction::isVisible() const {
@@ -479,6 +456,12 @@ void FBFullscreenAction::run() {
 		fbreader.myActionOnCancel = FBReader::UNFULLSCREEN;
 	}
 	FullscreenAction::run();
+}
+
+FilterLibraryAction::FilterLibraryAction() : ModeDependentAction(FBReader::LIBRARY_MODE) {
+}
+
+void FilterLibraryAction::run() {
 }
 
 void ShowFootnotes::run() {

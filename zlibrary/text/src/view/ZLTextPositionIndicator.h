@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ public:
 	virtual ~PositionIndicator();
 
 	virtual void draw();
+	bool isResponsibleFor(int x, int y);
 	bool onStylusPress(int x, int y);
 	int textPosition() const;
 	int currentPage() const;

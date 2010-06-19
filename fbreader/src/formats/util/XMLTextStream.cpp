@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ private:
 XMLTextReader::XMLTextReader(std::string &buffer, const std::string &startTag) : myStartTag(ZLUnicodeUtil::toLower(startTag)), myBuffer(buffer), myStarted(myStartTag.empty()) {
 }
 
-void XMLTextReader::startElementHandler(const char *tag, const char **attributes) {
+void XMLTextReader::startElementHandler(const char *tag, const char**) {
 	if (!myStarted && (myStartTag == ZLUnicodeUtil::toLower(tag))) {
 		myStarted = true;
 	}

@@ -61,14 +61,18 @@
 		<node name="fi" value="Finlandia" />
 		<node name="fr" value="Perancis" />
 		<node name="he" value="Ibrani" />
+		<node name="hu" value="Hongaria" />
 		<node name="id" value="Indonesia" />
 		<node name="it" value="Italia" />
+		<node name="lt" value="Lituavi" />
+		<node name="nl" value="Belanda" />
 		<node name="no" value="Norwegia" />
 		<node name="pt" value="Portugis" />
 		<node name="ru" value="Rusia" />
 		<node name="sv" value="Swedia" />
 		<node name="tr" value="Turki" />
 		<node name="uk" value="Ukraina" />
+		<node name="vi" value="Vietnam" />
 		<node name="zh" value="Cina" />
 		<node name="other" value="Lainnya" />
 	</node>

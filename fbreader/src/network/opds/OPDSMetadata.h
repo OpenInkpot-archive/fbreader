@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 #ifndef __OPDSMETADATA_H__
 #define __OPDSMETADATA_H__
 
+#include <map>
+
 #include "../atom/ATOMContainers.h"
 
 
@@ -33,30 +35,34 @@ public:
 	static const std::string REL_BOOKSHELF;
 	static const std::string REL_SUBSCRIPTIONS;
 
+	// Entry level / catalog types
+	static const std::string REL_CATALOG_AUTHOR;
+
 	// Entry level / acquisition links
 	static const std::string REL_ACQUISITION;
-	static const std::string REL_BUYING;
-	static const std::string REL_LENDING;
-	static const std::string REL_SUBSCRIPTION;
-	static const std::string REL_SAMPLE;
+	static const std::string REL_ACQUISITION_BUY;
+	static const std::string REL_ACQUISITION_BORROW;
+	static const std::string REL_ACQUISITION_SUBSCRIBE;
+	static const std::string REL_ACQUISITION_SAMPLE;
+	static const std::string REL_ACQUISITION_CONDITIONAL;
+	static const std::string REL_ACQUISITION_SAMPLE_OR_FULL;
 
 	// Entry level / other
 	static const std::string REL_COVER;
-	static const std::string REL_STANZA_COVER;
 	static const std::string REL_THUMBNAIL;
-	static const std::string REL_STANZA_THUMBNAIL;
-
-	// Any (?) level
-	static const std::string REL_ALTERNATE;
 
 	// MIME types / MIME type for "Full Entry" atom:link element
 	static const std::string MIME_OPDS_FULLENTRY;
 
 	// MIME types / application
+	static const std::string MIME_APP_FB2ZIP;
 	static const std::string MIME_APP_EPUB;
 	static const std::string MIME_APP_MOBI;
 	static const std::string MIME_APP_PDF;
 	static const std::string MIME_APP_ATOM;
+
+	// a special MIME type for the litres OPDS catalog
+	static const std::string MIME_APP_LITRES;
 
 	// MIME types / image
 	static const std::string MIME_IMG_PNG;
@@ -64,7 +70,6 @@ public:
 
 	// MIME types / text
 	static const std::string MIME_TEXT_HTML;
-
 };
 
 
@@ -79,8 +84,6 @@ public:
 	DCDate(int year, int month, int day, int hour, int minutes, int seconds, float sfract, int tzhour, int tzminutes);
 };
 
-
-
 class OPDSEntry : public ATOMEntry {
 
 public:
@@ -90,15 +93,22 @@ public:
 	const std::string &dcLanguage() const { return myDCLanguage; }
 	const std::string &dcPublisher() const { return myDCPublisher; }
 	shared_ptr<DCDate> dcIssued() { return myDCIssued; }
+	const std::string &seriesTitle() const { return mySeriesTitle; }
+	int seriesIndex() const { return mySeriesIndex; }
 
 	void setDCLanguage(const std::string &language) { myDCLanguage = language; }
 	void setDCPublisher(const std::string &publisher) { myDCPublisher = publisher; }
 	void setDCIssued(shared_ptr<DCDate> issued) { myDCIssued = issued; }
+	void setSeriesTitle(const std::string &seriesTitle) { mySeriesTitle = seriesTitle; }
+	void setSeriesIndex(int seriesIndex) { mySeriesIndex = seriesIndex; }
 
 private:
 	std::string myDCLanguage;
 	std::string myDCPublisher;
 	shared_ptr<DCDate> myDCIssued;
+
+	std::string mySeriesTitle;
+	int mySeriesIndex;
 };
 
 
@@ -129,20 +139,5 @@ inline unsigned long OPDSFeedMetadata::getOpensearchStartIndex() const { return 
 inline void OPDSFeedMetadata::setOpensearchTotalResults(unsigned long number) { myOpensearchTotalResults = number; }
 inline void OPDSFeedMetadata::setOpensearchItemsPerPage(unsigned long number) { myOpensearchItemsPerPage = number; }
 inline void OPDSFeedMetadata::setOpensearchStartIndex(unsigned long number) { myOpensearchStartIndex = number; }
-
-
-
-class OPDSFeed : public OPDSFeedMetadata {
-
-public:
-	OPDSFeed();
-	OPDSFeed(shared_ptr<ATOMId> id, const std::string &title, shared_ptr<ATOMUpdated> updated);
-
-	std::vector<shared_ptr<OPDSEntry> > &entries() { return myEntries; }
-	const std::vector<shared_ptr<OPDSEntry> > &entries() const { return myEntries; }
-
-private:
-	std::vector<shared_ptr<OPDSEntry> > myEntries;
-};
 
 #endif /* __OPDSMETADATA_H__ */

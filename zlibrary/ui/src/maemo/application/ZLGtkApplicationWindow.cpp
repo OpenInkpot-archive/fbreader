@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,7 +103,7 @@ ZLGtkApplicationWindow::ZLGtkApplicationWindow(ZLApplication *application) :
 	ZLApplicationWindow(application),
 	KeyActionOnReleaseNotOnPressOption(ZLCategoryKey::CONFIG, "KeyAction", "OnRelease", false),
 	myFullScreen(false) {
-	myProgram = HILDON_PROGRAM(hildon_program_get_Instance());
+	myProgram = HILDON_PROGRAM(hildon_program_get_instance());
 	g_set_application_name("");
 
 	myWindow = HILDON_WINDOW(hildon_window_new());
@@ -343,7 +343,8 @@ void ZLGtkApplicationWindow::setToolbarItemState(ZLToolbar::ItemPtr item, bool v
 	 * Not sure, but looks like gtk_widget_set_sensitive(WIDGET, false)
 	 * does something strange if WIDGET is already insensitive.
 	 */
-	bool alreadyEnabled = (GTK_WIDGET_STATE(toolItem) & GTK_STATE_INSENSITIVE) == 0;
+	bool alreadyEnabled =
+		(GTK_WIDGET_STATE(toolItem) & GTK_STATE_INSENSITIVE) == 0;
 	if (enabled != alreadyEnabled) {
 		gtk_widget_set_sensitive(GTK_WIDGET(toolItem), enabled);
 	}
@@ -371,7 +372,8 @@ void ZLGtkApplicationWindow::refresh() {
 		} else {
 			gtk_widget_hide(gtkItem);
 		}
-		bool alreadyEnabled = (GTK_WIDGET_STATE(gtkItem) & GTK_STATE_INSENSITIVE) == 0;
+		bool alreadyEnabled =
+			(GTK_WIDGET_STATE(gtkItem) & GTK_STATE_INSENSITIVE) == 0;
 		if (application().isActionEnabled(id) != alreadyEnabled) {
 			gtk_widget_set_sensitive(gtkItem, !alreadyEnabled);
 		}

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -296,6 +296,27 @@ void ZLGtkPaintContext::drawImage(int x, int y, const ZLImageData &image) {
 	// 0, 0			-- offset in the image
 	// -1, -1		-- use the whole
 	// GDK_RGB_DITHER_NONE -- no dithering, hopefully, (0, 0) after it does not harm
+}
+
+void ZLGtkPaintContext::drawImage(int x, int y, const ZLImageData &image, int width, int height, ScalingType type) {
+	GdkPixbuf *imageRef = ((const ZLGtkImageData&)image).pixbuf();
+	if (imageRef == 0) {
+		return;
+	}
+
+	const int realWidth = imageWidth(image, width, height, type);
+	const int realHeight = imageHeight(image, width, height, type);
+	GdkPixbuf *scaled = gdk_pixbuf_scale_simple(imageRef, realWidth, realHeight, GDK_INTERP_BILINEAR);
+
+	if (imageRef != 0) {
+		gdk_pixbuf_render_to_drawable(
+			scaled, myPixmap,
+			0, 0, 0,
+			x, y - realHeight,
+			realWidth, realHeight, GDK_RGB_DITHER_NONE, 0, 0
+		);
+	}
+	gdk_pixbuf_unref(scaled);
 }
 
 void ZLGtkPaintContext::drawLine(int x0, int y0, int x1, int y1) {

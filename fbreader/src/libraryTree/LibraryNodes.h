@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,9 @@
 #ifndef __LIBRARYNODES_H__
 #define __LIBRARYNODES_H__
 
-#include <ZLImage.h>
-
 #include "../blockTree/FBReaderNode.h"
+
+class ZLImage;
 
 class Author;
 class Book;
@@ -31,58 +31,46 @@ class Tag;
 class AuthorNode : public FBReaderNode {
 
 public:
-	static const std::string TYPE_ID;
-
-private:
-	class EditInfoAction;
+	static const ZLTypeId TYPE_ID;
 
 public:
 	AuthorNode(ZLBlockTreeView::RootNode *parent, size_t atPosition, shared_ptr<Author> author);
+	void init();
 
 	shared_ptr<Author> author() const;
 
 private:
-	const std::string &typeId() const;
+	const ZLResource &resource() const;
+	const ZLTypeId &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
-	void paint(ZLPaintContext &context, int vOffset);
+	std::string title() const;
 
 private:
 	shared_ptr<Author> myAuthor;
-	shared_ptr<ZLRunnable> myEditInfoAction;
 };
 
 class SeriesNode : public FBReaderNode {
 
 public:
-	static const std::string TYPE_ID;
+	static const ZLTypeId TYPE_ID;
 
 public:
-	SeriesNode(AuthorNode *parent, shared_ptr<Book> book);
+	SeriesNode(AuthorNode *parent);
+	void init();
 
 	shared_ptr<Book> book() const;
 
 private:
-	const std::string &typeId() const;
+	const ZLResource &resource() const;
+	const ZLTypeId &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
-	void paint(ZLPaintContext &context, int vOffset);
-
-private:
-	shared_ptr<Book> myBook;
+	std::string title() const;
 };
 
 class TagNode : public FBReaderNode {
 
-private:
-	class EditOrCloneAction;
-	class EditAction;
-	class CloneAction;
-	class RemoveAction;
-
-	class NameEntry;
-	class IncludeSubtagsEntry;
-
 public:
-	static const std::string TYPE_ID;
+	static const ZLTypeId TYPE_ID;
 
 private:
 	static size_t positionToInsert(ZLBlockTreeNode *parent, shared_ptr<Tag> tag);
@@ -90,29 +78,24 @@ private:
 public:
 	TagNode(ZLBlockTreeView::RootNode *parent, shared_ptr<Tag> tag);
 	TagNode(TagNode *parent, shared_ptr<Tag> tag);
+	void init();
+
 	shared_ptr<Tag> tag() const;
 
 private:
-	const std::string &typeId() const;
+	const ZLResource &resource() const;
+	const ZLTypeId &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
-	void paint(ZLPaintContext &context, int vOffset);
+	std::string title() const;
 
 private:
-	shared_ptr<Tag> myTag;
-	shared_ptr<ZLRunnable> myEditAction;
-	shared_ptr<ZLRunnable> myCloneAction;
-	shared_ptr<ZLRunnable> myRemoveAction;
+	const shared_ptr<Tag> myTag;
 };
 
 class BookNode : public FBReaderNode {
 
 public:
-	static const std::string TYPE_ID;
-
-private:
-	class ReadAction;
-	class EditInfoAction;
-	class RemoveAction;
+	static const ZLTypeId TYPE_ID;
 
 public:
 	BookNode(AuthorNode *parent, shared_ptr<Book> book);
@@ -122,15 +105,16 @@ public:
 	shared_ptr<Book> book() const;
 
 private:
-	const std::string &typeId() const;
+	void init();
+	bool highlighted() const;
+	const ZLResource &resource() const;
+	const ZLTypeId &typeId() const;
 	shared_ptr<ZLImage> extractCoverImage() const;
-	void paint(ZLPaintContext &context, int vOffset);
+	std::string title() const;
+	std::string summary() const;
 
 private:
-	shared_ptr<Book> myBook;
-	shared_ptr<ZLRunnable> myReadAction;
-	shared_ptr<ZLRunnable> myEditInfoAction;
-	shared_ptr<ZLRunnable> myRemoveAction;
+	const shared_ptr<Book> myBook;
 };
 
 #endif /* __LIBRARYNODES_H__ */

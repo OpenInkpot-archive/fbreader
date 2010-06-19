@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,26 +20,30 @@
 #ifndef __LITRESLINK_H__
 #define __LITRESLINK_H__
 
-
-#include <map>
 #include <string>
 
 #include "../NetworkLink.h"
-
 
 class NetworkAuthenticationManager;
 
 class LitResLink : public NetworkLink {
 
 public:
+	static const std::string CURRENCY_SUFFIX;
+
+public:
 	LitResLink();
 
-	shared_ptr<ZLExecutionData> simpleSearchData(NetworkOperationData &result, const std::string &pattern);
-	shared_ptr<ZLExecutionData> advancedSearchData(NetworkOperationData &result, const std::string &titleAndSeries, const std::string &author, const std::string &tag, const std::string &annotation);
+private:
+	shared_ptr<ZLExecutionData> simpleSearchData(NetworkOperationData &result, const std::string &pattern) const;
+	shared_ptr<ZLExecutionData> advancedSearchData(NetworkOperationData &result, const std::string &titleAndSeries, const std::string &author, const std::string &tag, const std::string &annotation) const;
 
-	shared_ptr<NetworkAuthenticationManager> authenticationManager();
+	shared_ptr<NetworkItem> libraryItem() const;
 
-	shared_ptr<NetworkLibraryItem> libraryItem();
+public:
+	shared_ptr<NetworkAuthenticationManager> authenticationManager() const;
+
+	void rewriteUrl(std::string &url, bool isUrlExternal = false) const;
 
 private:
 	shared_ptr<NetworkAuthenticationManager> myAuthenticationManager;

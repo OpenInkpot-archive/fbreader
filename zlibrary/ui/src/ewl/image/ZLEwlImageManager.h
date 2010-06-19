@@ -262,7 +262,7 @@ class ZLEwlImageManager : public ZLImageManager {
 
 	protected:
 		shared_ptr<ZLImageData> createData() const;
-		void convertImageDirect(const std::string &stringData, ZLImageData &imageData) const;
+		bool convertImageDirect(const std::string &stringData, ZLImageData &imageData) const;
 		void convertImageDirectJpeg(const std::string &stringData, ZLImageData &imageData) const;
 		void convertImageDirectPng(const std::string &stringData, ZLImageData &imageData) const;
 		void convertImageDirectGif(const std::string &stringData, ZLImageData &imageData) const;

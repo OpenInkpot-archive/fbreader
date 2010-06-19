@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,16 +31,25 @@ class Tag;
 
 class Book {
 
-friend class BooksDB;
+public:
+	static const std::string AutoEncoding;
 
 public:
+	static shared_ptr<Book> createBook(
+		const std::string &filePath,
+		int id,
+		const std::string &encoding,
+		const std::string &language,
+		const std::string &title
+	);
+
 	static shared_ptr<Book> loadFromFile(const std::string &filePath);
 
 	// this method is used in Migration only
 	static shared_ptr<Book> loadFromBookInfo(const std::string &filePath);
 
 private:
-	Book(const std::string filePath);
+	Book(const std::string filePath, int id);
 
 public:
 	~Book();
@@ -61,8 +70,6 @@ public: // modifiable book methods
 	void setLanguage(const std::string &language);
 	void setEncoding(const std::string &encoding);
 	void setSeries(const std::string &title, int index);
-
-	AuthorList &_authors();
 
 public:
 	bool addTag(shared_ptr<Tag> tag);
@@ -107,8 +114,6 @@ inline int Book::indexInSeries() const { return myIndexInSeries; }
 
 inline const TagList &Book::tags() const { return myTags; }
 inline const AuthorList &Book::authors() const { return myAuthors; }
-
-inline AuthorList &Book::_authors() { return myAuthors; }
 
 inline int Book::bookId() const { return myBookId; }
 inline void Book::setBookId(int bookId) { myBookId = bookId; }
