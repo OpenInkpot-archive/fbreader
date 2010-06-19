@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  */
 
 #include <ZLImage.h>
+#include <ZLLogger.h>
 
 #include "BookReader.h"
 #include "BookModel.h"
@@ -47,7 +48,7 @@ void BookReader::setFootnoteTextModel(const std::string &id) {
 	if (it != myModel.myFootnotes.end()) {
 		myCurrentTextModel = (*it).second;
 	} else {
-		myCurrentTextModel = new ZLTextPlainModel(8192);
+		myCurrentTextModel = new ZLTextPlainModel(myModel.myBookTextModel->language(), 8192);
 		myModel.myFootnotes.insert(std::pair<std::string,shared_ptr<ZLTextModel> >(id, myCurrentTextModel));
 	}
 }
@@ -132,6 +133,10 @@ void BookReader::addHyperlinkControl(FBTextKind kind, const std::string &label) 
 			myHyperlinkType.erase();
 			break;
 	}
+	ZLLogger::Instance().println(
+		"hyperlink",
+		" + control (" + myHyperlinkType + "): " + label
+	);
 	if (myTextParagraphExists) {
 		flushTextBufferToParagraph();
 		myCurrentTextModel->addHyperlinkControl(kind, label, myHyperlinkType);
@@ -150,6 +155,10 @@ void BookReader::addHyperlinkLabel(const std::string &label) {
 }
 
 void BookReader::addHyperlinkLabel(const std::string &label, int paragraphNumber) {
+	ZLLogger::Instance().println(
+		"hyperlink",
+		" + label: " + label
+	);
 	myModel.myInternalHyperlinks.insert(
 		std::pair<std::string,BookModel::Label>(
 			label, BookModel::Label(myCurrentTextModel, paragraphNumber)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
 #include <ZLMessage.h>
 #include <ZLView.h>
 
+class ZLApplicationWindow;
 class ZLViewWidget;
 class ZLPaintContext;
 class ZLKeyBindings;
@@ -50,6 +51,7 @@ class ZLApplication : public ZLApplicationBase {
 
 public:
 	static ZLApplication &Instance();
+	static void deleteInstance();
 
 private:
 	static ZLApplication *ourInstance;
@@ -120,17 +122,16 @@ protected:
 	void registerPopupData(const std::string &actionId, shared_ptr<ZLPopupData> popupData);
 
 	void setView(shared_ptr<ZLView> view);
-	shared_ptr<ZLView> currentView() const;
 	ZLView::Angle rotation() const;
 
 	void setFullscreen(bool fullscreen);
 	bool isFullscreen() const;
-	void quit();
 
 public:
 	virtual ~ZLApplication();
 	virtual void initWindow();
 
+	shared_ptr<ZLView> currentView() const;
 	shared_ptr<ZLPaintContext> context();
 
 	void grabAllKeys(bool grab);
@@ -147,12 +148,15 @@ public:
 	virtual shared_ptr<ZLKeyBindings> keyBindings();	
 	void doActionByKey(const std::string &key);
 
+	void quit();
 	virtual bool closeView();
-	virtual void openFile(const std::string &fileName);
+	virtual void openFile(const std::string &filePath);
+	virtual bool canDragFiles(const std::vector<std::string> &filePaths) const;
+	virtual void dragFiles(const std::vector<std::string> &filePaths);
 
 	virtual bool isViewFinal() const;
 
-	void refreshWindow();
+	virtual void refreshWindow();
 	void presentWindow();
 
 	void invertRegion(int x0, int y0, int x1, int y1, bool flush);
@@ -176,7 +180,7 @@ private:
 	const ZLMenubar &menubar() const;
 
 public:
-	ZLViewWidget *myViewWidget;
+	shared_ptr<ZLViewWidget> myViewWidget;
 private:
 	shared_ptr<ZLView> myInitialView;
 	std::map<std::string,shared_ptr<Action> > myActionMap;
@@ -184,7 +188,7 @@ private:
 	mutable shared_ptr<ZLToolbar> myFullscreenToolbar;
 	mutable shared_ptr<ZLMenubar> myMenubar;
 	shared_ptr<ZLPaintContext> myContext;
-	class ZLApplicationWindow *myWindow;
+	shared_ptr <ZLApplicationWindow> myWindow;
 	ZLTime myLastKeyActionTime;
 	shared_ptr<ZLMessageHandler> myPresentWindowHandler;
 

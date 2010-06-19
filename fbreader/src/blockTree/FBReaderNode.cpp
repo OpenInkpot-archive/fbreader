@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,11 +27,14 @@
 #include "../options/FBOptions.h"
 #include "../options/FBTextStyle.h"
 
-class FBReaderNode::ExpandTreeAction : public ZLRunnable {
+const ZLTypeId FBReaderNode::TYPE_ID(ZLBlockTreeNode::TYPE_ID);
+
+class FBReaderNode::ExpandTreeAction : public ZLRunnableWithKey {
 
 public:
 	ExpandTreeAction(FBReaderNode &node);
 	void run();
+	ZLResourceKey key() const;
 
 private:
 	FBReaderNode &myNode;
@@ -39,10 +42,21 @@ private:
 
 std::map<std::string,shared_ptr<ZLImage> > FBReaderNode::ourDefaultCovers;
 
-FBReaderNode::FBReaderNode(ZLBlockTreeNode *parent, size_t atPosition) : ZLBlockTreeNode(parent, atPosition), myCoverImageIsStored(false) {
+FBReaderNode::FBReaderNode(ZLBlockTreeNode *parent, size_t atPosition) : ZLBlockTreeNode(parent, atPosition), myCoverImageIsStored(false), myIsInitialized(false) {
+}
+
+void FBReaderNode::init() {
+}
+
+bool FBReaderNode::highlighted() const {
+	return false;
 }
 
 FBReaderNode::~FBReaderNode() {
+}
+
+const ZLTypeId &FBReaderNode::typeId() const {
+	return TYPE_ID;
 }
 
 shared_ptr<ZLImage> FBReaderNode::coverImage() const {
@@ -54,6 +68,10 @@ shared_ptr<ZLImage> FBReaderNode::coverImage() const {
 }
 
 void FBReaderNode::drawCover(ZLPaintContext &context, int vOffset) {
+	drawCoverReal(context, vOffset);
+}
+
+void FBReaderNode::drawCoverReal(ZLPaintContext &context, int vOffset) {
 	shared_ptr<ZLImage> cover = coverImage();
 	if (cover.isNull()) {
 		return;
@@ -89,25 +107,31 @@ void FBReaderNode::drawCover(ZLPaintContext &context, int vOffset) {
 	context.drawImage(hOffset + (w - width) / 2, vOffset + (h + height) / 2, *coverData, width, height, ZLPaintContext::SCALE_FIT_TO_SIZE);
 }
 
-void FBReaderNode::drawTitle(ZLPaintContext &context, int vOffset, const std::string &text, bool highlighted) {
+void FBReaderNode::drawTitle(ZLPaintContext &context, int vOffset) {
 	const FBTextStyle &style = FBTextStyle::Instance();
 	const int unit = unitSize(context, style);
 	const int hOffset = level() * unit * 3 + unit * 2;
 
-	context.setColor(highlighted ?
+	context.setColor(highlighted() ?
 		FBOptions::Instance().colorOption(ZLTextStyle::HIGHLIGHTED_TEXT).value() :
 		FBOptions::Instance().RegularTextColorOption.value());
 	context.setFont(style.fontFamily(), style.fontSize(), style.bold(), style.italic());
 
+	const std::string text = title();
 	context.drawString(hOffset, vOffset + 2 * unit, text.data(), text.size(), false);
 }
 
-void FBReaderNode::drawSummary(ZLPaintContext &context, int vOffset, const std::string &text, bool highlighted) {
+void FBReaderNode::drawSummary(ZLPaintContext &context, int vOffset) {
+	const std::string text = summary();
+	if (text.empty()) {
+		return;
+	}
+
 	const FBTextStyle &style = FBTextStyle::Instance();
 	const int unit = unitSize(context, style);
 	const int hOffset = level() * unit * 3 + unit * 2;
 
-	context.setColor(highlighted ?
+	context.setColor(highlighted() ?
 		FBOptions::Instance().colorOption(ZLTextStyle::HIGHLIGHTED_TEXT).value() :
 		FBOptions::Instance().RegularTextColorOption.value());
 	context.setFont(style.fontFamily(), style.fontSize() * 2 / 3, style.bold(), style.italic());
@@ -115,39 +139,31 @@ void FBReaderNode::drawSummary(ZLPaintContext &context, int vOffset, const std::
 	context.drawString(hOffset, vOffset + 13 * unit / 4, text.data(), text.size(), false);
 }
 
-void FBReaderNode::internalDrawHyperlink(ZLPaintContext &context, int &hOffset, int &vOffset, const std::string &text, shared_ptr<ZLRunnable> action, bool aux) {
-	if (action.isNull()) {
+void FBReaderNode::drawHyperlink(ZLPaintContext &context, int &hOffset, int &vOffset, shared_ptr<ZLRunnableWithKey> action, bool auxiliary) {
+	// auxiliary makes font size and hSkip to be 70% of their normal sizes
+	if (action.isNull() || !action->makesSense()) {
 		return;
 	}
 
-	// aux makes font size and hOffset to be 70% of their normal sizes
-
 	const FBTextStyle &style = FBTextStyle::Instance();
 	const int unit = unitSize(context, style);
-	const int h = aux ? (unit * 11 / 2) : (unit * 9 / 2);
+	const int h = auxiliary ? (unit * 11 / 2) : (unit * 9 / 2);
 	const int left = hOffset + level() * unit * 3 + unit * 2;
 
 	context.setColor(FBOptions::Instance().colorOption("internal").value());
 	context.setFont(
 		style.fontFamily(), 
-		aux ? (7 * style.fontSize() / 15) : (style.fontSize() * 2 / 3), 
+		auxiliary ? (7 * style.fontSize() / 15) : (style.fontSize() * 2 / 3), 
 		style.bold(), 
 		style.italic()
 	);
 
+	const std::string text = action->text(resource());
 	const int stringW = context.stringWidth(text.data(), text.size(), false);
 	const int stringH = context.stringHeight();
 	context.drawString(left, vOffset + h, text.data(), text.size(), false);
 	addHyperlink(left, h - stringH, left + stringW, h, action);
 	hOffset += stringW + 4 * context.spaceWidth();
-}
-
-void FBReaderNode::drawHyperlink(ZLPaintContext &context, int &hOffset, int &vOffset, const std::string &text, shared_ptr<ZLRunnable> action) {
-	internalDrawHyperlink(context, hOffset, vOffset, text, action, false);
-}
-
-void FBReaderNode::drawAuxHyperlink(ZLPaintContext &context, int &hOffset, int &vOffset, const std::string &text, shared_ptr<ZLRunnable> action) {
-	internalDrawHyperlink(context, hOffset, vOffset, text, action, true);
 }
 
 FBReaderNode::ExpandTreeAction::ExpandTreeAction(FBReaderNode &node) : myNode(node) {
@@ -156,6 +172,10 @@ FBReaderNode::ExpandTreeAction::ExpandTreeAction(FBReaderNode &node) : myNode(no
 void FBReaderNode::ExpandTreeAction::run() {
 	myNode.expandOrCollapseSubtree();
 	FBReader::Instance().refreshWindow();
+}
+
+ZLResourceKey FBReaderNode::ExpandTreeAction::key() const {
+	return ZLResourceKey(myNode.isOpen() ? "collapseTree" : "expandTree");
 }
 
 void FBReaderNode::expandOrCollapseSubtree() {
@@ -173,11 +193,14 @@ void FBReaderNode::expandOrCollapseSubtree() {
 	}
 }
 
-shared_ptr<ZLRunnable> FBReaderNode::expandTreeAction() {
-	if (myExpandTreeAction.isNull()) {
-		myExpandTreeAction = new ExpandTreeAction(*this);
+void FBReaderNode::registerAction(shared_ptr<ZLRunnableWithKey> action, bool auxiliary) {
+	if (!action.isNull()) {
+		myActions.push_back(std::make_pair(action, auxiliary));
 	}
-	return myExpandTreeAction;
+}
+
+void FBReaderNode::registerExpandTreeAction() {
+	registerAction(new ExpandTreeAction(*this));
 }
 
 shared_ptr<ZLImage> FBReaderNode::defaultCoverImage(const std::string &id) {
@@ -191,17 +214,62 @@ shared_ptr<ZLImage> FBReaderNode::defaultCoverImage(const std::string &id) {
 	return cover;
 }
 
-bool FBReaderNode::hasAuxHyperlink() const {
-	return false;
-}
-
 int FBReaderNode::height(ZLPaintContext &context) const {
+	bool hasAuxHyperlink = false;
+	for (std::vector<std::pair<shared_ptr<ZLRunnableWithKey>,bool> >::const_iterator it = myActions.begin(); it != myActions.end(); ++it) {
+		if (it->second && it->first->makesSense()) {
+			hasAuxHyperlink = true;
+			break;
+		}
+	}
 	return
 		unitSize(context, FBTextStyle::Instance()) *
-			(hasAuxHyperlink() ? 13 : 11) / 2;
+			(hasAuxHyperlink ? 13 : 11) / 2;
 }
 
 int FBReaderNode::unitSize(ZLPaintContext &context, const FBTextStyle &style) const {
 	context.setFont(style.fontFamily(), style.fontSize(), style.bold(), style.italic());
 	return (context.stringHeight() * 2 + 2) / 3;
+}
+
+std::string FBReaderNode::summary() const {
+	std::string result;
+	int count = 0;
+	const ZLBlockTreeNode::List &subNodes = children();
+	ZLBlockTreeNode::List::const_iterator it = subNodes.begin();
+	for (; it != subNodes.end() && count < 3; ++it, ++count) {
+		if (count > 0) {
+			result += ", ";
+		}
+		result += ((const FBReaderNode*)*it)->title();
+	}
+	if (it != subNodes.end()) {
+		result += ", ...";
+	}
+	return result;
+}
+
+void FBReaderNode::paint(ZLPaintContext &context, int vOffset) {
+	if (!myIsInitialized) {
+		init();
+		myIsInitialized = true;
+	}
+
+	removeAllHyperlinks();
+
+	drawCover(context, vOffset);
+	drawTitle(context, vOffset);
+	drawSummary(context, vOffset);
+
+	int left = 0;
+	int auxLeft = 0;
+	for (std::vector<std::pair<shared_ptr<ZLRunnableWithKey>,bool> >::const_iterator it = myActions.begin(); it != myActions.end(); ++it) {
+		if (it->first->makesSense()) {
+			if (it->second) {
+				drawHyperlink(context, auxLeft, vOffset, it->first, true);
+			} else {
+				drawHyperlink(context, left, vOffset, it->first);
+			}
+		}
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,11 @@
 
 #include <algorithm>
 
+#include <ZLResource.h>
+
 #include "ZLBlockTreeNode.h"
+
+const ZLTypeId ZLBlockTreeNode::TYPE_ID(ZLObjectWithRTTI::TYPE_ID);
 
 ZLBlockTreeNode::ZLBlockTreeNode(ZLBlockTreeView &view) : myView(view), myParent(0), myChildIndex(0), myIsOpen(true) {
 }
@@ -76,7 +80,7 @@ size_t ZLBlockTreeNode::level() const {
 	return l;
 }
 
-void ZLBlockTreeNode::addHyperlink(size_t left, size_t top, size_t right, size_t bottom, shared_ptr<ZLRunnable> action) {
+void ZLBlockTreeNode::addHyperlink(size_t left, size_t top, size_t right, size_t bottom, shared_ptr<ZLRunnableWithKey> action) {
 	myHyperlinks[Rectangle(left, top, right, bottom)] = action;
 }
 

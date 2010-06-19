@@ -33,7 +33,7 @@ fi
 
 create_tmpdir() {
 	mkdir $tmpdir
-	cp -r Makefile build_packages.sh zlibrary fbreader makefiles README.build CHANGES* distributions distributions-nonGPL $tmpdir
+	cp -r Makefile build_packages.sh zlibrary fbreader makefiles README.build CHANGES* distributions distributions-nonGPL ChangeLog $tmpdir
 	rm -rf `find $tmpdir -name ".svn"`
 	make -C $tmpdir distclean 1> /dev/null 2>&1
 
@@ -87,7 +87,7 @@ build_package() {
 					/scratchbox/login -d `pwd` $make_package ARCHITECTURE=$1 $2
 					;;
 				maemo5)
-					/scratchbox/login sb-conf se FREMANTLE_X86
+					/scratchbox/login sb-conf se FREMANTLE_ARMEL
 					/scratchbox/login -d `pwd` $make_package ARCHITECTURE=$1 $2
 					;;
 				*)

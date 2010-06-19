@@ -10,10 +10,13 @@ case "$1" in
 		toolbar_file=data/default/toolbar.desktop.xml
 		fullscreen_toolbar_file=data/default/fullscreen_toolbar.desktop.xml
 		;;
+	macosx)
+		toolbar_file=data/default/toolbar.macosx.xml
+		;;
 	maemo)
 		case "$2" in
 			maemo5)
-		    toolbar_file=""
+		    toolbar_file=data/default/toolbar.maemo5.xml
 				;;
 			*)
 		    toolbar_file=data/default/toolbar.maemo.xml

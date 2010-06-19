@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 #include <ZLBlockTreeView.h>
 
-#include "../network/NetworkLibraryItems.h"
+#include "../network/NetworkItems.h"
 
 
 class NetworkBookCollection;
@@ -38,9 +38,9 @@ private:
 	NetworkNodesFactory();
 
 public:
-	static FBReaderNode *createNetworkNode(NetworkCatalogNode *parent, shared_ptr<NetworkLibraryItem> item, size_t atPosition = -1);
+	static FBReaderNode *createNetworkNode(NetworkCatalogNode *parent, shared_ptr<NetworkItem> item, size_t atPosition = (size_t)-1);
 	static void createSubnodes(SearchResultNode *parent, NetworkBookCollection &books);
-	static void fillAuthorNode(NetworkContainerNode *parent, const NetworkLibraryItemList &books);
+	static void fillAuthorNode(NetworkContainerNode *parent, const NetworkItem::List &books);
 };
 
 #endif /* __NETWORKNODESFACTORY_H__ */

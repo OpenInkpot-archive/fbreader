@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,9 @@
  */
 
 #include <cctype>
+#include <cstdio>
+#include <cstdlib>
+#include <locale.h>
 
 #include "ZLStringUtil.h"
 
@@ -95,3 +98,18 @@ std::string ZLStringUtil::printf(const std::string &format, const std::string &a
 	return format.substr(0, index) + arg0 + format.substr(index + 2);
 }
 
+std::string ZLStringUtil::doubleToString(double value) {
+	char buf[100];
+	setlocale(LC_NUMERIC, "C");
+	sprintf(buf, "%f", value);
+	return buf;
+}
+
+double ZLStringUtil::stringToDouble(const std::string &value, double defaultValue) {
+	if (!value.empty()) {
+		setlocale(LC_NUMERIC, "C");
+		return atof(value.c_str());
+	} else {
+		return defaultValue;
+	}
+}

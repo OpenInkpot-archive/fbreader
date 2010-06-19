@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,17 +17,11 @@
  * 02110-1301, USA.
  */
 
-
 #include <ZLibrary.h>
 
 #include "BooksDBQuery.h"
 
-
 const std::string BooksDBQuery::ArchiveEntryDelimiter = ":";
-
-const std::string BooksDBQuery::OtherLanguage = "other";
-const std::string BooksDBQuery::AutoEncoding = "auto";
-
 
 const std::string BooksDBQuery::PREINIT_DATABASE = \
 	"ATTACH @stateFile AS State; " \
@@ -228,44 +222,11 @@ const std::string BooksDBQuery::LOAD_BOOK = \
 	"FROM Books AS b " \
 	"WHERE b.file_id = @file_id; ";
 
-const std::string BooksDBQuery::LOAD_SERIES = \
-	"SELECT " \
-	"	s.name AS name, " \
-	"	bs.book_index AS book_index " \
-	"FROM BookSeries AS bs " \
-	"	INNER JOIN Series AS s ON s.series_id = bs.series_id " \
-	"WHERE bs.book_id = @book_id; ";
-
-const std::string BooksDBQuery::LOAD_AUTHORS = \
-	"SELECT " \
-	"	a.name AS name, " \
-	"	a.sort_key AS sort_key, " \
-	"	ba.author_index AS author_index " \
-	"FROM BookAuthor AS ba " \
-	"	INNER JOIN Authors AS a ON a.author_id = ba.author_id " \
-	"WHERE ba.book_id = @book_id " \
-	"ORDER BY author_index; ";
-
-const std::string BooksDBQuery::FIND_FILE_ID = \
-	"SELECT file_id FROM Files " \
-	"WHERE name = @name " \
-	"	AND coalesce(parent_id, 0) = @parent_id; ";
-
-const std::string BooksDBQuery::ADD_FILE = \
-	"INSERT INTO Files (name, parent_id, size) " \
-	"VALUES ( " \
-	"	@name, " \
-	"	nullif(@parent_id, 0), " \
-	"	nullif(@size, 0) " \
-	"); " \
-	" " \
-	"SELECT last_insert_rowid() AS file_id; ";
-
 const std::string BooksDBQuery::ADD_BOOK = \
 	"INSERT INTO Books (encoding, language, title, file_id) " \
 	"	VALUES ( " \
-	"		nullif(@encoding,\"" + AutoEncoding + "\"), " \
-	"		nullif(@language,\"" + OtherLanguage + "\"), " \
+	"		nullif(@encoding,\"auto\"), " \
+	"		nullif(@language,\"other\"), " \
 	"		@title, " \
 	"		@file_id " \
 	"	); " \
@@ -274,8 +235,8 @@ const std::string BooksDBQuery::ADD_BOOK = \
 
 const std::string BooksDBQuery::UPDATE_BOOK = \
 	"UPDATE Books SET " \
-	"	encoding = nullif(@encoding,\"" + AutoEncoding + "\"), " \
-	"	language = nullif(@language,\"" + OtherLanguage + "\"), " \
+	"	encoding = nullif(@encoding,\"auto\"), " \
+	"	language = nullif(@language,\"other\"), " \
 	"	title = @title " \
 	"WHERE " \
 	"	book_id = @book_id; ";
@@ -362,9 +323,6 @@ const std::string BooksDBQuery::SET_BOOK_STATE_STACK = "INSERT OR REPLACE INTO B
 
 const std::string BooksDBQuery::SET_PALM_TYPE = "INSERT OR REPLACE INTO PalmType (file_id, type) VALUES (@file_id, @type); ";
 const std::string BooksDBQuery::GET_PALM_TYPE = "SELECT type FROM PalmType WHERE file_id = @file_id; ";
-
-const std::string BooksDBQuery::SET_NET_FILE = "INSERT OR REPLACE INTO NetFiles (url, file_id) VALUES (@url, @file_id); ";
-const std::string BooksDBQuery::GET_NET_FILE = "SELECT file_id FROM NetFiles WHERE url = @url; ";
 
 const std::string BooksDBQuery::LOAD_STACK_POS = "SELECT stack_pos FROM StackPosition WHERE book_id = @book_id; ";
 const std::string BooksDBQuery::SET_STACK_POS = "INSERT OR REPLACE INTO StackPosition(book_id, stack_pos) VALUES (@book_id, @stack_pos); ";

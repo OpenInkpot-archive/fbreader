@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2007-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,14 +78,14 @@ private:
 	
 protected:
 	shared_ptr<ZLImageData> createData() const;
-	void convertImageDirect(const std::string &stringData, ZLImageData &imageData) const;
+	bool convertImageDirect(const std::string &stringData, ZLImageData &imageData) const;
 
 private:
-	bool bmpConvert(const std::string &stringData, ZLWin32ImageData &imageData) const;
-	bool pngConvert(const std::string &stringData, ZLWin32ImageData &imageData) const;
-	bool jpegConvert(const std::string &stringData, ZLWin32ImageData &imageData) const;
-	bool gifConvert(const std::string &stringData, ZLWin32ImageData &imageData) const;
-	bool tiffConvert(const std::string &stringData, ZLWin32ImageData &imageData) const;
+	bool bmpConvert(const std::string &stringData, ZLWin32ImageData &imageData, bool &result) const;
+	bool pngConvert(const std::string &stringData, ZLWin32ImageData &imageData, bool &result) const;
+	bool jpegConvert(const std::string &stringData, ZLWin32ImageData &imageData, bool &result) const;
+	bool gifConvert(const std::string &stringData, ZLWin32ImageData &imageData, bool &result) const;
+	bool tiffConvert(const std::string &stringData, ZLWin32ImageData &imageData, bool &result) const;
 };
 
 inline void ZLWin32ImageData::setPosition(unsigned int x, unsigned int y) {

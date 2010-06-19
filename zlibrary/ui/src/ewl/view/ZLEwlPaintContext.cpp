@@ -772,7 +772,7 @@ void ZLEwlPaintContext::drawGlyph(FT_Bitmap* bitmap, FT_Int x, FT_Int y)
 	FT_Int  x_max = x + bitmap->width;
 	FT_Int  y_max = y + bitmap->rows;
 	unsigned char val;
-	unsigned char white = pal[255];
+	unsigned int white = pal[255];
 	int s;
 
 	for ( i = x, p = 0; i < x_max; i++, p++ ) {

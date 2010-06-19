@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,25 +23,25 @@
 
 #include <map>
 
-#include "NetworkLibraryItems.h"
+#include "NetworkItems.h"
 
 
 class NetworkBookItemComparator {
 
 public:
-	bool operator () (const shared_ptr<NetworkLibraryItem> &bookPtr0, const shared_ptr<NetworkLibraryItem> &bookPtr1);
+	bool operator () (const shared_ptr<NetworkItem> &bookPtr0, const shared_ptr<NetworkItem> &bookPtr1);
 };
 
 
 class NetworkAuthorComparator {
 
 public:
-	NetworkAuthorComparator(const std::map<NetworkLibraryBookItem::AuthorData, unsigned int> &rates);
+	NetworkAuthorComparator(const std::map<NetworkBookItem::AuthorData, unsigned int> &rates);
 
-	bool operator () (const NetworkLibraryBookItem::AuthorData &author0, const NetworkLibraryBookItem::AuthorData &author1);
+	bool operator () (const NetworkBookItem::AuthorData &author0, const NetworkBookItem::AuthorData &author1);
 
 private:
-	const std::map<NetworkLibraryBookItem::AuthorData, unsigned int> &myRates;
+	const std::map<NetworkBookItem::AuthorData, unsigned int> &myRates;
 };
 
 

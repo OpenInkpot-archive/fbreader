@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,25 +20,24 @@
 #include <ZLResource.h>
 #include <ZLImage.h>
 #include <ZLExecutionData.h>
-#include <ZLTime.h>
+#include <ZLTimeManager.h>
 
 #include "NetworkView.h"
 #include "NetworkNodes.h"
 #include "NetworkNodesFactory.h"
 
-#include "../network/NetworkLibraryItems.h"
-
+#include "../network/NetworkItems.h"
 #include "../network/NetworkLinkCollection.h"
 #include "../network/NetworkLink.h"
-#include "../network/NetworkAuthenticationManager.h"
-
 #include "../network/SearchResult.h"
+#include "../network/authentication/NetworkAuthenticationManager.h"
+#include "../networkActions/NetworkOperationRunnable.h"
 
 #include "../options/FBOptions.h"
 
 #include "../fbreader/FBReader.h"
 
-NetworkView::NetworkView(ZLPaintContext &context) : ZLBlockTreeView(context), myUpdateChildren(true) {
+NetworkView::NetworkView(ZLPaintContext &context) : ZLBlockTreeView(context), myUpdateChildren(true), myUpdateAccountDependents(false) {
 }
 
 void NetworkView::drawCoverLater(FBReaderNode *node, int vOffset) {
@@ -106,7 +105,7 @@ bool NetworkView::CoverUpdater::hasTasks() const {
 }
 
 void NetworkView::CoverUpdater::run() {
-	ZLExecutionData::executeAll(myDataVector);
+	ZLExecutionData::perform(myDataVector);
 }
 
 NetworkView::CoverUpdaterRunner::CoverUpdaterRunner(shared_ptr<CoverUpdater> updater) : myUpdater(updater) {
@@ -145,7 +144,7 @@ void NetworkView::paint() {
 		}
 	}
 	for (std::map<FBReaderNode*,int>::const_iterator it = nodes.begin(); it != nodes.end(); ++it) {
-		it->first->drawCover(context(), it->second);
+		it->first->drawCoverReal(context(), it->second);
 	}
 	myNodesToPaintCovers.clear();
 }
@@ -172,7 +171,8 @@ void NetworkView::makeUpToDate() {
 			continue;
 		}
 		bool processed = false;
-		while (nodeIt != rootChildren.end() && ((FBReaderNode*)*nodeIt)->typeId() == NetworkCatalogNode::TYPE_ID) {
+		while (nodeIt != rootChildren.end() &&
+					 (*nodeIt)->isInstanceOf(NetworkCatalogNode::TYPE_ID)) {
 			const NetworkLink &nodeLink = ((NetworkCatalogRootNode*)*nodeIt)->link();
 			if (&nodeLink == &link) {
 				++nodeIt;
@@ -196,17 +196,18 @@ void NetworkView::makeUpToDate() {
 			}
 		}
 		if (!processed) {
-			new NetworkCatalogRootNode(&rootNode(), link, nodeCount++);
+			NetworkCatalogNode *ptr = new NetworkCatalogRootNode(&rootNode(), link, nodeCount++);
+			ptr->item().onDisplayItem();
 		}
 	}
 
 	SearchResultNode *srNode = 0;
 
 	while (nodeIt != rootChildren.end()) {
-		FBReaderNode *node = (FBReaderNode *) *nodeIt++;
+		ZLBlockTreeNode *node = *nodeIt++;
 		++nodeCount;
-		if (node->typeId() == SearchResultNode::TYPE_ID) {
-			srNode = (SearchResultNode *) node;
+		if (node->isInstanceOf(SearchResultNode::TYPE_ID)) {
+			srNode = (SearchResultNode*)node;
 		} else {
 			nodesToDelete.insert(node);
 		}
@@ -231,8 +232,8 @@ void NetworkView::makeUpToDate() {
 	}
 
 	if (srNode != 0) {
-		srNode->open(true);
-		ensureVisible(srNode);
+		srNode->open(false);
+		srNode->expandOrCollapseSubtree();
 	}
 }
 
@@ -240,7 +241,7 @@ void NetworkView::updateAccountDependents() {
 	ZLBlockTreeNode::List rootChildren = rootNode().children();
 
 	ZLBlockTreeNode::List::iterator nodeIt = rootChildren.begin();
-	while (nodeIt != rootChildren.end() && ((FBReaderNode*)*nodeIt)->typeId() == NetworkCatalogNode::TYPE_ID) {
+	while (nodeIt != rootChildren.end() && (*nodeIt)->isInstanceOf(NetworkCatalogNode::TYPE_ID)) {
 		NetworkCatalogNode &node = (NetworkCatalogNode &) **nodeIt;
 		updateAccountDependents(node);
 		++nodeIt;
@@ -250,29 +251,29 @@ void NetworkView::updateAccountDependents() {
 void NetworkView::updateAccountDependents(NetworkCatalogNode &node) {
 	std::set<ZLBlockTreeNode*> nodesToDelete;
 
-	const NetworkLibraryItemList &nodeItems = node.childrenItems();
+	const NetworkItem::List &nodeItems = node.childrenItems();
 
 	ZLBlockTreeNode::List nodeChildren = node.children();
 	ZLBlockTreeNode::List::iterator nodeIt = nodeChildren.begin();
 
 	size_t nodeCount = 0;
 	for (size_t i = 0; i < nodeItems.size(); ++i) {
-		shared_ptr<NetworkLibraryItem> currentItemPtr = nodeItems[i];
-		NetworkLibraryItem &currentItem = *currentItemPtr;
+		shared_ptr<NetworkItem> currentItemPtr = nodeItems[i];
+		NetworkItem &currentItem = *currentItemPtr;
 
-		if (currentItem.typeId() != NetworkLibraryCatalogItem::TYPE_ID) {
+		if (currentItem.typeId() != NetworkCatalogItem::TYPE_ID) {
 			continue;
 		}
 
 		bool processed = false;
 		while (nodeIt != nodeChildren.end()) {
-			if (((FBReaderNode*)*nodeIt)->typeId() != NetworkCatalogNode::TYPE_ID) {
+			if (!(*nodeIt)->isInstanceOf(NetworkCatalogNode::TYPE_ID)) {
 				++nodeIt;
 				++nodeCount;
 				continue;
 			}
 			NetworkCatalogNode &child = (NetworkCatalogNode &) **nodeIt;
-			NetworkLibraryCatalogItem &childItem = child.item();
+			NetworkCatalogItem &childItem = child.item();
 			if (&childItem == &currentItem) {
 				if (processAccountDependent(child.item())) {
 					updateAccountDependents(child);
@@ -299,14 +300,14 @@ void NetworkView::updateAccountDependents(NetworkCatalogNode &node) {
 				}
 			}
 		}
-		if (!processed && processAccountDependent((NetworkLibraryCatalogItem &) currentItem)) {
+		if (!processed && processAccountDependent((NetworkCatalogItem &) currentItem)) {
 			NetworkNodesFactory::createNetworkNode(&node, currentItemPtr, nodeCount++);
 		}
 	}
 
 	while (nodeIt != nodeChildren.end()) {
-		FBReaderNode *node = (FBReaderNode *) *nodeIt++;
-		if (node->typeId() == NetworkCatalogNode::TYPE_ID) {
+		ZLBlockTreeNode *node = *nodeIt++;
+		if (node->isInstanceOf(NetworkCatalogNode::TYPE_ID)) {
 			nodesToDelete.insert(node);
 		}
 	}
@@ -316,13 +317,13 @@ void NetworkView::updateAccountDependents(NetworkCatalogNode &node) {
 	}
 }
 
-bool NetworkView::processAccountDependent(NetworkLibraryCatalogItem &item) {
-	if (!item.dependsOnAccount()) {
+bool NetworkView::processAccountDependent(NetworkCatalogItem &item) {
+	if (item.Visibility == NetworkCatalogItem::Always) {
 		return true;
 	}
-	NetworkLink &link = item.link();
+	const NetworkLink &link = item.Link;
 	if (link.authenticationManager().isNull()) {
-		return true;
+		return false;
 	}
-	return link.authenticationManager()->isAuthorised() != B3_FALSE;
+	return link.authenticationManager()->isAuthorised().Status != B3_FALSE;
 }

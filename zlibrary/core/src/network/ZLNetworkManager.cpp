@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,11 +25,17 @@
 #include <ZLOutputStream.h>
 #include <ZLResource.h>
 #include <ZLibrary.h>
+#include <ZLXMLReader.h>
 
 #include "ZLNetworkManager.h"
-#include "ZLNetworkData.h"
+#include "ZLNetworkRequest.h"
 #include "ZLNetworkUtil.h"
-#include "ZLNetworkDownloadData.h"
+
+#include "requests/ZLNetworkDownloadRequest.h"
+#include "requests/ZLNetworkNoActionRequest.h"
+#include "requests/ZLNetworkReadToStringRequest.h"
+#include "requests/ZLNetworkXMLParserRequest.h"
+
 
 ZLNetworkManager *ZLNetworkManager::ourInstance = 0;
 
@@ -40,9 +46,6 @@ void ZLNetworkManager::deleteInstance() {
 }
 
 ZLNetworkManager &ZLNetworkManager::Instance() {
-	if (ourInstance == 0) {
-		ourInstance = new ZLNetworkManager();
-	}
 	return *ourInstance;
 }
 
@@ -51,6 +54,10 @@ std::string ZLNetworkManager::CacheDirectory() {
 		ZLibrary::ApplicationWritableDirectory() +
 		ZLibrary::FileNameDelimiter +
 		"cache";
+}
+
+std::string ZLNetworkManager::CookiesPath() {
+	return ZLFile(CacheDirectory() + ZLibrary::FileNameDelimiter + "cookies").path();
 }
 
 ZLNetworkManager::ZLNetworkManager() {
@@ -129,143 +136,54 @@ std::string ZLNetworkManager::proxyPort() const {
 	return ProxyPortOption().value();
 }
 
-void ZLNetworkManager::setStandardOptions(void *curlHandle, const std::string &proxy) const {
-	/*
-	CURL *handle = (CURL*)curlHandle;
-	static const char *AGENT_NAME = "FBReader";
-
-	curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, true);
-	curl_easy_setopt(handle, CURLOPT_USERAGENT, AGENT_NAME);
-	if (useProxy()) {
-		curl_easy_setopt(handle, CURLOPT_PROXY, proxy.c_str());
-	}
-	curl_easy_setopt(handle, CURLOPT_LOW_SPEED_LIMIT, 1L);
-	curl_easy_setopt(handle, CURLOPT_LOW_SPEED_TIME, TimeoutOption().value());
-	curl_easy_setopt(handle, CURLOPT_CONNECTTIMEOUT, ConnectTimeoutOption().value());
-	curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 1L);
-	curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 2L);
-	*/
+std::string ZLNetworkManager::downloadFile(const std::string &url, const std::string &fileName, shared_ptr<ZLExecutionData::Listener> listener) const {
+	return downloadFile(url, ZLNetworkSSLCertificate::NULL_CERTIFICATE, fileName, listener);
 }
 
-std::string ZLNetworkManager::downloadFile(const std::string &url, const std::string &fileName, shared_ptr<ZLSlowProcessListener> listener) const {
-	return downloadFile(url, fileName, "", listener);
-}
-
-std::string ZLNetworkManager::downloadFile(const std::string &url, const std::string &fileName, const std::string &sslCertificate, shared_ptr<ZLSlowProcessListener> listener) const {
-	/*
-	ZLFile fileToWrite(fileName);
-	shared_ptr<ZLOutputStream> stream = fileToWrite.outputStream(true);
-	if (stream.isNull() || !stream->open()) {
-		const ZLResource &errorResource =
-			ZLResource::resource("dialog")["networkError"];
-		return
-			ZLStringUtil::printf(
-				errorResource["couldntCreateFileMessage"].value(), fileName
-			);
-	}
-	ZLExecutionData::Vector dataVector;
-	ZLNetworkDownloadData *data = new ZLNetworkDownloadData(url, fileName, sslCertificate, stream);
+std::string ZLNetworkManager::downloadFile(const std::string &url, const ZLNetworkSSLCertificate &sslCertificate, const std::string &fileName, shared_ptr<ZLExecutionData::Listener> listener) const {
+	shared_ptr<ZLExecutionData> data = createDownloadRequest(url, sslCertificate, fileName);
 	data->setListener(listener);
-	dataVector.push_back(data);
-	return perform(dataVector);
-	*/
+	return perform(data);
 }
 
-std::string ZLNetworkManager::perform(const ZLExecutionData::Vector &dataList) const {
-	/*
-	const ZLResource &errorResource = ZLResource::resource("dialog")["networkError"];
 
-	if (dataList.empty()) {
-		return errorResource["emptyLibrariesList"].value();
-	}
 
-	const std::string proxy = proxyHost() + ':' + proxyPort();
-	CURLM *handle = curl_multi_init();
-	std::map<CURL*,shared_ptr<ZLExecutionData> > handleToData; 
-	for (ZLExecutionData::Vector::const_iterator it = dataList.begin(); it != dataList.end(); ++it) {
-		if (it->isNull() || (*it)->type() != ZLNetworkData::TYPE_ID) {
-			continue;
-		}
-		ZLNetworkData &nData = (ZLNetworkData&)**it;
-		if (!nData.doBefore()) {
-			continue;
-		}
-		CURL *easyHandle = nData.handle();
-		if (easyHandle != 0) {
-			handleToData[easyHandle] = *it;
-			setStandardOptions(easyHandle, proxy);
-			curl_multi_add_handle(handle, easyHandle);
-		}
-	}
+shared_ptr<ZLExecutionData> ZLNetworkManager::createDownloadRequest(const std::string &url, const std::string &fileName) const {
+	return new ZLNetworkDownloadRequest(url, ZLNetworkSSLCertificate::NULL_CERTIFICATE, fileName);
+}
 
-	int counter;
-	CURLMcode res;
-	do {
-		res = curl_multi_perform(handle, &counter);
-	} while ((res == CURLM_CALL_MULTI_PERFORM) || (counter > 0));
+shared_ptr<ZLExecutionData> ZLNetworkManager::createDownloadRequest(const std::string &url, shared_ptr<ZLOutputStream> stream) const {
+	return new ZLNetworkDownloadRequest(url, ZLNetworkSSLCertificate::NULL_CERTIFICATE, stream);
+}
 
-	CURLMsg *message;
-	std::set<std::string> errors;
-	do {
-		int queueSize;
-		message = curl_multi_info_read(handle, &queueSize);
-		if ((message != 0) && (message->msg == CURLMSG_DONE)) {
-			ZLNetworkData &nData = (ZLNetworkData&)*handleToData[message->easy_handle];
-			nData.doAfter(message->data.result == CURLE_OK);
-			const std::string &url = nData.url();
-			switch (message->data.result) {
-				case CURLE_OK:
-					break;
-				case CURLE_WRITE_ERROR:
-					if (!nData.errorMessage().empty()) {
-						errors.insert(nData.errorMessage());
-					} else {
-						errors.insert(ZLStringUtil::printf(errorResource["somethingWrongMessage"].value(), ZLNetworkUtil::hostFromUrl(url)));
-					}
-					break;
-				default:
-					errors.insert(ZLStringUtil::printf(errorResource["somethingWrongMessage"].value(), ZLNetworkUtil::hostFromUrl(url)));
-					break;
-				case CURLE_COULDNT_RESOLVE_PROXY:
-					errors.insert(ZLStringUtil::printf(errorResource["couldntResolveProxyMessage"].value(), proxyHost()));
-					break;
-				case CURLE_COULDNT_RESOLVE_HOST:
-					errors.insert(ZLStringUtil::printf(errorResource["couldntResolveHostMessage"].value(), ZLNetworkUtil::hostFromUrl(url)));
-					break;
-				case CURLE_COULDNT_CONNECT:
-					errors.insert(ZLStringUtil::printf(errorResource["couldntConnectMessage"].value(), ZLNetworkUtil::hostFromUrl(url)));
-					break;
-				case CURLE_OPERATION_TIMEDOUT:
-					errors.insert(errorResource["operationTimedOutMessage"].value());
-					break;
-				case CURLE_SSL_CONNECT_ERROR:
-					errors.insert(ZLStringUtil::printf(errorResource["sslConnectErrorMessage"].value(), curl_easy_strerror(CURLE_SSL_CONNECT_ERROR)));
-					break;
-				case CURLE_PEER_FAILED_VERIFICATION:
-					errors.insert(ZLStringUtil::printf(errorResource["peerFailedVerificationMessage"].value(), ZLNetworkUtil::hostFromUrl(url)));
-					break;
-				case CURLE_SSL_CACERT:
-					errors.insert(ZLStringUtil::printf(errorResource["sslCertificateAuthorityMessage"].value(), ZLNetworkUtil::hostFromUrl(url)));
-					break;
-				case CURLE_SSL_CACERT_BADFILE:
-					errors.insert(ZLStringUtil::printf(errorResource["sslBadCertificateFileMessage"].value(), nData.sslCertificate()));
-					break;
-				case CURLE_SSL_SHUTDOWN_FAILED:
-					errors.insert(ZLStringUtil::printf(errorResource["sslShutdownFailedMessage"].value(), ZLNetworkUtil::hostFromUrl(url)));
-					break;
-			}
-		}
-	} while ((message != 0) && (errors.size() < 3));
+shared_ptr<ZLExecutionData> ZLNetworkManager::createDownloadRequest(const std::string &url, const ZLNetworkSSLCertificate &sslCertificate, const std::string &fileName) const {
+	return new ZLNetworkDownloadRequest(url, sslCertificate, fileName);
+}
 
-	curl_multi_cleanup(handle);
+shared_ptr<ZLExecutionData> ZLNetworkManager::createDownloadRequest(const std::string &url, const ZLNetworkSSLCertificate &sslCertificate, shared_ptr<ZLOutputStream> stream) const {
+	return new ZLNetworkDownloadRequest(url, sslCertificate, stream);
+}
 
-	std::string result;
-	for (std::set<std::string>::const_iterator et = errors.begin(); et != errors.end(); ++et) {
-		if (!result.empty()) {
-			result += '\n';
-		}
-		result += *et;
-	}
-	return result;
-	*/
+shared_ptr<ZLExecutionData> ZLNetworkManager::createNoActionRequest(const std::string &url) const {
+	return new ZLNetworkNoActionRequest(url, ZLNetworkSSLCertificate::NULL_CERTIFICATE);
+}
+
+shared_ptr<ZLExecutionData> ZLNetworkManager::createNoActionRequest(const std::string &url, const ZLNetworkSSLCertificate &sslCertificate) const {
+	return new ZLNetworkNoActionRequest(url, sslCertificate);
+}
+
+shared_ptr<ZLExecutionData> ZLNetworkManager::createReadToStringRequest(const std::string &url, std::string &buffer) const {
+	return new ZLNetworkReadToStringRequest(url, ZLNetworkSSLCertificate::NULL_CERTIFICATE, buffer);
+}
+
+shared_ptr<ZLExecutionData> ZLNetworkManager::createReadToStringRequest(const std::string &url, const ZLNetworkSSLCertificate &sslCertificate, std::string &buffer) const {
+	return new ZLNetworkReadToStringRequest(url, sslCertificate, buffer);
+}
+
+shared_ptr<ZLExecutionData> ZLNetworkManager::createXMLParserRequest(const std::string &url, shared_ptr<ZLXMLReader> reader) const {
+	return new ZLNetworkXMLParserRequest(url, ZLNetworkSSLCertificate::NULL_CERTIFICATE, reader);
+}
+
+shared_ptr<ZLExecutionData> ZLNetworkManager::createXMLParserRequest(const std::string &url, const ZLNetworkSSLCertificate &sslCertificate, shared_ptr<ZLXMLReader> reader) const {
+	return new ZLNetworkXMLParserRequest(url, sslCertificate, reader);
 }

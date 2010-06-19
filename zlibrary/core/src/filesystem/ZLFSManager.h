@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,10 +45,11 @@ protected:
 	virtual ~ZLFSManager();
 	
 public:
-	virtual void normalize(std::string &path) const = 0;
+	void normalize(std::string &path) const;
 	virtual std::string resolveSymlink(const std::string &path) const = 0;
 
 protected:
+	virtual void normalizeRealPath(std::string &path) const = 0;
 	virtual ZLInputStream *createPlainInputStream(const std::string &path) const = 0;
 	virtual ZLOutputStream *createOutputStream(const std::string &path) const = 0;
 	virtual ZLFSDir *createPlainDirectory(const std::string &path) const = 0;

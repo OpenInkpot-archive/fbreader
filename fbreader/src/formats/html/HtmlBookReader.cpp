@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,7 +81,6 @@ HtmlHeaderTagAction::HtmlHeaderTagAction(HtmlBookReader &reader, FBTextKind kind
 }
 
 void HtmlHeaderTagAction::run(const HtmlReader::HtmlTag &tag) {
-	bookReader().endParagraph();
 	myReader.myIsStarted = false;
 	if (tag.Start) {
 		if (myReader.myBuildTableOfContent && !myReader.myIgnoreTitles) {
@@ -329,7 +328,7 @@ shared_ptr<HtmlTagAction> HtmlBookReader::createAction(const std::string &tag) {
 	} else if (tag == "A") {
 		return new HtmlHrefTagAction(*this);
 	} else if (tag == "TD") {
-		return new HtmlBreakTagAction(*this, HtmlBreakTagAction::BREAK_AT_END);
+		//return new HtmlBreakTagAction(*this, HtmlBreakTagAction::BREAK_AT_END);
 	} else if (tag == "TR") {
 		return new HtmlBreakTagAction(*this, HtmlBreakTagAction::BREAK_AT_END);
 	} else if (tag == "DIV") {

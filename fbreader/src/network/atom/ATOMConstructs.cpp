@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,6 +47,14 @@ void ATOMCommonAttributes::readAttribute(const std::string &name, const std::map
 	}	
 }
 
+void ATOMCommonAttributes::setUserData(const std::string &key, const std::string &value) {
+	myUserData[key] = value;
+}
+
+const std::string ATOMCommonAttributes::userData(const std::string &key) const {
+	std::map<std::string,std::string>::const_iterator it = myUserData.find(key);
+	return (it != myUserData.end()) ? it->second : std::string();
+}
 
 ATOMPersonConstruct::ATOMPersonConstruct() {
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2007-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 #include <map>
 
 #include <ZLLanguageList.h>
+#include <ZLLanguageUtil.h>
 
 #include "ZLLanguageOptionEntry.h"
 
@@ -34,10 +35,9 @@ ZLAbstractLanguageOptionEntry::ZLAbstractLanguageOptionEntry(const std::string &
 	for (std::map<std::string,std::string>::const_iterator it = myValuesToCodes.begin(); it != myValuesToCodes.end(); ++it) {
 		myValues.push_back(it->first);
 	}
-	static const std::string otherCode = "other";
-	std::string otherName = ZLLanguageList::languageName(otherCode);
+	std::string otherName = ZLLanguageList::languageName(ZLLanguageUtil::OtherLanguageCode);
 	myValues.push_back(otherName);
-	myValuesToCodes[otherName] = otherCode;
+	myValuesToCodes[otherName] = ZLLanguageUtil::OtherLanguageCode;
 	if (myInitialValue.empty()) {
 		myInitialValue = otherName;
 	}

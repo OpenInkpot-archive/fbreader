@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,13 +25,11 @@
 
 #include <ZLBlockTreeView.h>
 
-#include "NetworkOperationRunnable.h"
-
-#include "../network/NetworkLibraryItems.h"
+#include "../network/NetworkItems.h"
 
 class NetworkAuthorNode;
 class NetworkCatalogNode;
-class NetworkLibraryItem;
+class NetworkItem;
 class FBReaderNode;
 
 class NetworkView : public ZLBlockTreeView {
@@ -57,7 +55,7 @@ private:
 	void makeUpToDate();
 	void updateAccountDependents();
 	void updateAccountDependents(NetworkCatalogNode &node);
-	bool processAccountDependent(NetworkLibraryCatalogItem &item);
+	bool processAccountDependent(NetworkCatalogItem &item);
 
 private:
 	bool myUpdateChildren;

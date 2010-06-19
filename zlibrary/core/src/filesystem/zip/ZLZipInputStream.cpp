@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -109,6 +109,5 @@ size_t ZLZipInputStream::offset() const {
 }
 
 size_t ZLZipInputStream::sizeOfOpened() {
-	// TODO: implement for files with Flags & 0x08
 	return myUncompressedSize;
 }

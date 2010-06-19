@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 #include <cstring>
 
 #include <ZLFile.h>
+#include <ZLFileUtil.h>
 #include <ZLFileImage.h>
 #include <ZLUnicodeUtil.h>
 #include <ZLStringUtil.h>
@@ -31,6 +32,8 @@
 
 #include "../../bookmodel/BookReader.h"
 #include "../../bookmodel/BookModel.h"
+
+#include "../../constants/XMLNamespace.h"
 
 static const bool USE_CSS = false;
 
@@ -54,6 +57,13 @@ void XHTMLTagAction::beginParagraph(XHTMLReader &reader) {
 void XHTMLTagAction::endParagraph(XHTMLReader &reader) {
 	reader.endParagraph();
 }
+
+class XHTMLTagStyleAction : public XHTMLTagAction {
+
+public:
+	void doAtStart(XHTMLReader &reader, const char **xmlattributes);
+	void doAtEnd(XHTMLReader &reader);
+};
 
 class XHTMLTagLinkAction : public XHTMLTagAction {
 
@@ -86,13 +96,37 @@ public:
 class XHTMLTagImageAction : public XHTMLTagAction {
 
 public:
-	XHTMLTagImageAction(const std::string &nameAttribute);
+	XHTMLTagImageAction(shared_ptr<ZLXMLReader::AttributeNamePredicate> predicate);
+	XHTMLTagImageAction(const std::string &attributeName);
 
 	void doAtStart(XHTMLReader &reader, const char **xmlattributes);
 	void doAtEnd(XHTMLReader &reader);
 
 private:
-	const std::string myNameAttribute;
+	shared_ptr<ZLXMLReader::AttributeNamePredicate> myPredicate;
+};
+
+class XHTMLSvgImageAttributeNamePredicate : public ZLXMLReader::NamespaceAttributeNamePredicate {
+
+public:
+	XHTMLSvgImageAttributeNamePredicate();
+	bool accepts(const ZLXMLReader &reader, const char *name) const;
+
+private:
+	bool myIsEnabled;
+
+friend class XHTMLTagSvgAction;
+};
+
+class XHTMLTagSvgAction : public XHTMLTagAction {
+
+public:
+	XHTMLTagSvgAction(XHTMLSvgImageAttributeNamePredicate &predicate);
+	void doAtStart(XHTMLReader &reader, const char **xmlattributes);
+	void doAtEnd(XHTMLReader &reader);
+
+private:
+	XHTMLSvgImageAttributeNamePredicate &myPredicate;
 };
 
 class XHTMLTagItemAction : public XHTMLTagAction {
@@ -143,6 +177,27 @@ public:
 	void doAtEnd(XHTMLReader &reader);
 };
 
+void XHTMLTagStyleAction::doAtStart(XHTMLReader &reader, const char **xmlattributes) {
+	static const std::string TYPE = "text/css";
+
+	const char *type = reader.attributeValue(xmlattributes, "type");
+	if ((type == 0) || (TYPE != type)) {
+		return;
+	}
+
+	if (reader.myReadState == XHTMLReader::READ_NOTHING) {
+		reader.myReadState = XHTMLReader::READ_STYLE;
+		reader.myTableParser = new StyleSheetTableParser(reader.myStyleSheetTable);
+	}
+}
+
+void XHTMLTagStyleAction::doAtEnd(XHTMLReader &reader) {
+	if (reader.myReadState == XHTMLReader::READ_STYLE) {
+		reader.myReadState = XHTMLReader::READ_NOTHING;
+		reader.myTableParser.reset();
+	}
+}
+
 void XHTMLTagLinkAction::doAtStart(XHTMLReader &reader, const char **xmlattributes) {
 	static const std::string REL = "stylesheet";
 	const char *rel = reader.attributeValue(xmlattributes, "rel");
@@ -161,7 +216,7 @@ void XHTMLTagLinkAction::doAtStart(XHTMLReader &reader, const char **xmlattribut
 		return;
 	}
 
-	shared_ptr<ZLInputStream> cssStream = ZLFile(reader.myPathPrefix + href).inputStream();
+	shared_ptr<ZLInputStream> cssStream = ZLFile(reader.myPathPrefix + MiscUtil::decodeHtmlURL(href)).inputStream();
 	if (cssStream.isNull()) {
 		return;
 	}
@@ -185,12 +240,12 @@ void XHTMLTagParagraphAction::doAtEnd(XHTMLReader &reader) {
 }
 
 void XHTMLTagBodyAction::doAtStart(XHTMLReader &reader, const char**) {
-	reader.myInsideBody = true;
+	reader.myReadState = XHTMLReader::READ_BODY;
 }
 
 void XHTMLTagBodyAction::doAtEnd(XHTMLReader &reader) {
 	endParagraph(reader);
-	reader.myInsideBody = false;
+	reader.myReadState = XHTMLReader::READ_NOTHING;
 }
 
 void XHTMLTagRestartParagraphAction::doAtStart(XHTMLReader &reader, const char**) {
@@ -217,16 +272,21 @@ void XHTMLTagItemAction::doAtEnd(XHTMLReader &reader) {
 	endParagraph(reader);
 }
 
-XHTMLTagImageAction::XHTMLTagImageAction(const std::string &nameAttribute) : myNameAttribute(nameAttribute) {
+XHTMLTagImageAction::XHTMLTagImageAction(shared_ptr<ZLXMLReader::AttributeNamePredicate> predicate) {
+	myPredicate = predicate;
+}
+
+XHTMLTagImageAction::XHTMLTagImageAction(const std::string &attributeName) {
+	myPredicate = new ZLXMLReader::FixedAttributeNamePredicate(attributeName);
 }
 
 void XHTMLTagImageAction::doAtStart(XHTMLReader &reader, const char **xmlattributes) {
-	const char *fileName = reader.attributeValue(xmlattributes, myNameAttribute.c_str());
+	const char *fileName = reader.attributeValue(xmlattributes, *myPredicate);
 	if (fileName == 0) {
 		return;
 	}
 
-	const std::string fullfileName = pathPrefix(reader) + fileName;
+	const std::string fullfileName = pathPrefix(reader) + MiscUtil::decodeHtmlURL(fileName);
 	if (!ZLFile(fullfileName).exists()) {
 		return;
 	}
@@ -243,6 +303,24 @@ void XHTMLTagImageAction::doAtStart(XHTMLReader &reader, const char **xmlattribu
 	if (flag) {
 		beginParagraph(reader);
 	}
+}
+
+XHTMLTagSvgAction::XHTMLTagSvgAction(XHTMLSvgImageAttributeNamePredicate &predicate) : myPredicate(predicate) {
+}
+
+void XHTMLTagSvgAction::doAtStart(XHTMLReader&, const char**) {
+	myPredicate.myIsEnabled = true;
+}
+
+void XHTMLTagSvgAction::doAtEnd(XHTMLReader&) {
+	myPredicate.myIsEnabled = false;
+}
+
+XHTMLSvgImageAttributeNamePredicate::XHTMLSvgImageAttributeNamePredicate() : ZLXMLReader::NamespaceAttributeNamePredicate(XMLNamespace::XLink, "href"), myIsEnabled(false) {
+}
+
+bool XHTMLSvgImageAttributeNamePredicate::accepts(const ZLXMLReader &reader, const char *name) const {
+	return myIsEnabled && NamespaceAttributeNamePredicate::accepts(reader, name);
 }
 
 void XHTMLTagImageAction::doAtEnd(XHTMLReader&) {
@@ -263,9 +341,15 @@ void XHTMLTagControlAction::doAtEnd(XHTMLReader &reader) {
 
 void XHTMLTagHyperlinkAction::doAtStart(XHTMLReader &reader, const char **xmlattributes) {
 	const char *href = reader.attributeValue(xmlattributes, "href");
-	if (href != 0) {
-		const std::string link = (*href == '#') ? (reader.myReferenceName + href) : href;
-		const FBTextKind hyperlinkType = MiscUtil::referenceType(link);
+	if (href != 0 && href[0] != '\0') {
+		const FBTextKind hyperlinkType = MiscUtil::referenceType(href);
+		std::string link = MiscUtil::decodeHtmlURL(href);
+		if (hyperlinkType == INTERNAL_HYPERLINK) {
+			link = (link[0] == '#') ?
+				reader.myReferenceName + link :
+				reader.myReferenceDirName + link;
+			link = ZLFileUtil::normalizeUnixPath(link);
+		}
 		myHyperlinkStack.push(hyperlinkType);
 		bookReader(reader).addHyperlinkControl(hyperlinkType, link);
 	} else {
@@ -273,7 +357,9 @@ void XHTMLTagHyperlinkAction::doAtStart(XHTMLReader &reader, const char **xmlatt
 	}
 	const char *name = reader.attributeValue(xmlattributes, "name");
 	if (name != 0) {
-		bookReader(reader).addHyperlinkLabel(reader.myReferenceName + "#" + name);
+		bookReader(reader).addHyperlinkLabel(
+			reader.myReferenceName + "#" + MiscUtil::decodeHtmlURL(name)
+		);
 	}
 }
 
@@ -328,7 +414,7 @@ void XHTMLReader::fillTagTable() {
 		//addAction("script",	new XHTMLTagAction());
 
 		//addAction("font",	new XHTMLTagAction());
-		//addAction("style",	new XHTMLTagAction());
+		addAction("style",	new XHTMLTagStyleAction());
 
 		addAction("p",	new XHTMLTagParagraphAction());
 		addAction("h1",	new XHTMLTagParagraphWithControlAction(H1));
@@ -363,6 +449,9 @@ void XHTMLReader::fillTagTable() {
 
 		addAction("img",	new XHTMLTagImageAction("src"));
 		addAction("object",	new XHTMLTagImageAction("data"));
+		XHTMLSvgImageAttributeNamePredicate *predicate = new XHTMLSvgImageAttributeNamePredicate();
+		addAction("image",	new XHTMLTagImageAction(predicate));
+		addAction("svg",	new XHTMLTagSvgAction(*predicate));
 
 		//addAction("area",	new XHTMLTagAction());
 		//addAction("map",	new XHTMLTagAction());
@@ -404,10 +493,12 @@ bool XHTMLReader::readFile(const std::string &filePath, const std::string &refer
 
 	myPathPrefix = MiscUtil::htmlDirectoryPrefix(filePath);
 	myReferenceName = referenceName;
+	const int index = referenceName.rfind('/', referenceName.length() - 1);
+	myReferenceDirName = referenceName.substr(0, index + 1);
 
 	myPreformatted = false;
 	myNewParagraphInProgress = false;
-	myInsideBody = false;
+	myReadState = READ_NOTHING;
 
 	myCSSStack.clear();
 	myStyleEntryStack.clear();
@@ -528,38 +619,53 @@ void XHTMLReader::endParagraph() {
 }
 
 void XHTMLReader::characterDataHandler(const char *text, size_t len) {
-	if (myPreformatted) {
-		if ((*text == '\r') || (*text == '\n')) {
-			myModelReader.addControl(CODE, false);
-			endParagraph();
-			beginParagraph();
-			myModelReader.addControl(CODE, true);
-		}
-		size_t spaceCounter = 0;
-		while ((spaceCounter < len) && isspace((unsigned char)*(text + spaceCounter))) {
-			++spaceCounter;
-		}
-		myModelReader.addFixedHSpace(spaceCounter);
-		text += spaceCounter;
-		len -= spaceCounter;
-	} else if ((myNewParagraphInProgress) || !myModelReader.paragraphIsOpen()) {
-		while (isspace((unsigned char)*text)) {
-			++text;
-			if (--len == 0) {
-				break;
+	switch (myReadState) {
+		case READ_NOTHING:
+			break;
+		case READ_STYLE:
+			if (!myTableParser.isNull()) {
+				myTableParser->parse(text, len);
 			}
-		}
-	}
-	if (len > 0) {
-		myCurrentParagraphIsEmpty = false;
-		if (myInsideBody && !myModelReader.paragraphIsOpen()) {
-			myModelReader.beginParagraph();
-		}
-		myModelReader.addData(std::string(text, len));
-		myNewParagraphInProgress = false;
+			break;
+		case READ_BODY:
+			if (myPreformatted) {
+				if ((*text == '\r') || (*text == '\n')) {
+					myModelReader.addControl(CODE, false);
+					endParagraph();
+					beginParagraph();
+					myModelReader.addControl(CODE, true);
+				}
+				size_t spaceCounter = 0;
+				while ((spaceCounter < len) && isspace((unsigned char)*(text + spaceCounter))) {
+					++spaceCounter;
+				}
+				myModelReader.addFixedHSpace(spaceCounter);
+				text += spaceCounter;
+				len -= spaceCounter;
+			} else if ((myNewParagraphInProgress) || !myModelReader.paragraphIsOpen()) {
+				while (isspace((unsigned char)*text)) {
+					++text;
+					if (--len == 0) {
+						break;
+					}
+				}
+			}
+			if (len > 0) {
+				myCurrentParagraphIsEmpty = false;
+				if (!myModelReader.paragraphIsOpen()) {
+					myModelReader.beginParagraph();
+				}
+				myModelReader.addData(std::string(text, len));
+				myNewParagraphInProgress = false;
+			}
+			break;
 	}
 }
 
 const std::vector<std::string> &XHTMLReader::externalDTDs() const {
 	return EntityFilesCollector::Instance().externalDTDs("xhtml");
+}
+
+bool XHTMLReader::processNamespaces() const {
+	return true;
 }

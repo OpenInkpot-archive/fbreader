@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,8 +49,10 @@ bool LoadFileEntriesRunnable::run() {
 			res = false;
 			continue;
 		}
-		const std::string entry = reader->textValue(0);
-		myEntries.push_back(myFileName + BooksDBQuery::ArchiveEntryDelimiter + entry);
+		myEntries.push_back(
+			myFileName + BooksDBQuery::ArchiveEntryDelimiter +
+			reader->textValue(0, std::string())
+		);
 	}
 	reader->close();
 	return res;

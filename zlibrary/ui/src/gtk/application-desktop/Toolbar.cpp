@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -123,6 +123,7 @@ void ZLGtkApplicationWindow::Toolbar::addToolbarItem(ZLToolbar::ItemPtr item) {
 	switch (item->type()) {
 		case ZLToolbar::Item::TEXT_FIELD:
 		case ZLToolbar::Item::COMBO_BOX:
+		case ZLToolbar::Item::SEARCH_FIELD:
 			{
 				const ZLToolbar::ParameterItem &parameterItem = (const ZLToolbar::ParameterItem&)*item;
 				GtkEntryParameter *parameter =
@@ -139,6 +140,11 @@ void ZLGtkApplicationWindow::Toolbar::addToolbarItem(ZLToolbar::ItemPtr item) {
 			break;
 		case ZLToolbar::Item::SEPARATOR:
 			gtkItem = gtk_separator_tool_item_new();
+			break;
+		case ZLToolbar::Item::FILL_SEPARATOR:
+			gtkItem = gtk_separator_tool_item_new();
+			gtk_separator_tool_item_set_draw(GTK_SEPARATOR_TOOL_ITEM(gtkItem), false);
+			gtk_tool_item_set_expand(gtkItem, true);
 			break;
 	}
 	if (gtkItem != 0) {
@@ -204,7 +210,8 @@ void ZLGtkApplicationWindow::Toolbar::setToolbarItemState(ZLToolbar::ItemPtr ite
 	 * Not sure, but looks like gtk_widget_set_sensitive(WIDGET, false)
 	 * does something strange if WIDGET is already insensitive.
 	 */
-	bool alreadyEnabled = GTK_WIDGET_STATE(GTK_WIDGET(gtkItem)) != GTK_STATE_INSENSITIVE;
+	bool alreadyEnabled =
+		(GTK_WIDGET_STATE(GTK_WIDGET(gtkItem)) & GTK_STATE_INSENSITIVE) == 0;
 	if (enabled != alreadyEnabled) {
 		gtk_widget_set_sensitive(GTK_WIDGET(gtkItem), enabled);
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,30 +23,52 @@
 #include "NetworkNodes.h"
 #include "NetworkView.h"
 
-const std::string NetworkSeriesNode::TYPE_ID = "NetworkSeriesNode";
+const ZLTypeId NetworkSeriesNode::TYPE_ID(NetworkContainerNode::TYPE_ID);
 
-const std::string &NetworkSeriesNode::typeId() const {
+const ZLTypeId &NetworkSeriesNode::typeId() const {
 	return TYPE_ID;
 }
 
-NetworkSeriesNode::NetworkSeriesNode(NetworkContainerNode *parent, const std::string &seriesTitle) : NetworkContainerNode(parent), mySeriesTitle(seriesTitle) {
+const ZLResource &NetworkSeriesNode::resource() const {
+	return ZLResource::resource("networkView")["seriesNode"];
 }
 
-void NetworkSeriesNode::paint(ZLPaintContext &context, int vOffset) {
-	const ZLResource &resource =
-		ZLResource::resource("networkView")["seriesNode"];
+NetworkSeriesNode::NetworkSeriesNode(NetworkContainerNode *parent, const std::string &seriesTitle, SummaryType summaryType) : 
+	NetworkContainerNode(parent), mySeriesTitle(seriesTitle), mySummaryType(summaryType) {
+}
 
-	removeAllHyperlinks();
+void NetworkSeriesNode::init() {
+	registerExpandTreeAction();
+}
 
-	((NetworkView&)view()).drawCoverLater(this, vOffset);
-	drawTitle(context, vOffset, mySeriesTitle);
+std::string NetworkSeriesNode::title() const {
+	return mySeriesTitle;
+}
 
-	int left = 0;
-	drawHyperlink(
-		context, left, vOffset,
-		resource[isOpen() ? "collapseTree" : "expandTree"].value(),
-		expandTreeAction()
-	);
+std::string NetworkSeriesNode::summary() const {
+	if (mySummary.empty()) {
+		if (mySummaryType == BOOKS) {
+			mySummary = FBReaderNode::summary();
+		} else {
+			std::set<NetworkBookItem::AuthorData> authorSet;
+			const std::vector<ZLBlockTreeNode*> &books = children();
+			for (std::vector<ZLBlockTreeNode*>::const_iterator it = books.begin(); it != books.end(); ++it) {
+				const NetworkBookItem &book = ((NetworkBookNode*)*it)->book();
+				const std::vector<NetworkBookItem::AuthorData> &authors = book.Authors;
+				for (std::vector<NetworkBookItem::AuthorData>::const_iterator it = authors.begin(); it != authors.end(); ++it) {
+					if (authorSet.find(*it) == authorSet.end()) {
+						authorSet.insert(*it);
+						if (!mySummary.empty()) {
+							mySummary += ", ";
+						}
+						mySummary += it->DisplayName;
+					}
+				}
+			}
+		}
+	}
+	
+	return mySummary;
 }
 
 shared_ptr<ZLImage> NetworkSeriesNode::extractCoverImage() const {
@@ -58,8 +80,4 @@ shared_ptr<ZLImage> NetworkSeriesNode::extractCoverImage() const {
 		}
 	}
 	return defaultCoverImage("booktree-book.png");
-}
-
-const std::string &NetworkSeriesNode::seriesTitle() {
-	return mySeriesTitle;
 }

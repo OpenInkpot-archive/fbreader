@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@ BookTextView::BookTextView(ZLPaintContext &context) :
 
 BookTextView::~BookTextView() {
 	saveState();
-	setModel(0, "", 0);
+	setModel(0, 0);
 }
 
 void BookTextView::readBookState(const Book &book) {
@@ -112,8 +112,8 @@ void BookTextView::saveBookState(const Book &book) {
 	ZLBooleanOption(ZLCategoryKey::STATE, LAST_STATE_GROUP, STATE_VALID, false).setValue(false);
 }
 
-void BookTextView::setModel(shared_ptr<ZLTextModel> model, const std::string &language, shared_ptr<Book> book) {
-	FBView::setModel(model, language);
+void BookTextView::setModel(shared_ptr<ZLTextModel> model, shared_ptr<Book> book) {
+	FBView::setModel(model);
 	if (!myBook.isNull()) {
 		saveBookState(*myBook);
 	}
@@ -167,7 +167,7 @@ void BookTextView::setContentsModel(shared_ptr<ZLTextModel> contentsModel) {
 void BookTextView::saveState() {
 	saveBookmarks();
 
-	const ZLTextWordCursor &cursor = startCursor();
+	const ZLTextWordCursor &cursor = textArea().startCursor();
 
 	if (myBook.isNull()) {
 		return;
@@ -208,7 +208,7 @@ void BookTextView::saveBookmarks() {
 }
 
 void BookTextView::addBookmark() {
-	const ZLTextWordCursor &cursor = startCursor();
+	const ZLTextWordCursor &cursor = textArea().startCursor();
 	const ZLTextParagraphCursor &paragraph = cursor.paragraphCursor();
 
 	myBookmarks.push_back(std::make_pair(Position(cursor.paragraphCursor().index(), cursor.elementIndex(), 0), positionIndicator()->currentPage()));
@@ -224,7 +224,7 @@ std::vector<std::pair<BookTextView::Position, std::pair<int, std::string> > > Bo
 	BookmarkTextVector ret;
 
 	for(int i = 0; i < myBookmarks.size(); i++) {
-		ZLTextWordCursor pos = startCursor();
+		ZLTextWordCursor pos = textArea().startCursor();
 		pos.moveToParagraph(myBookmarks.at(i).first.Paragraph);
 		pos.moveTo(myBookmarks.at(i).first.Word, 0);
 
@@ -263,7 +263,7 @@ BookTextView::Position BookTextView::cursorPosition(const ZLTextWordCursor &curs
 }
 
 bool BookTextView::pushCurrentPositionIntoStack(bool doPushSamePosition) {
-	const ZLTextWordCursor &cursor = startCursor();
+	const ZLTextWordCursor &cursor = textArea().startCursor();
 	if (cursor.isNull()) {
 		return false;
 	}
@@ -285,7 +285,7 @@ bool BookTextView::pushCurrentPositionIntoStack(bool doPushSamePosition) {
 }
 
 void BookTextView::replaceCurrentPositionInStack() {
-	const ZLTextWordCursor &cursor = startCursor();
+	const ZLTextWordCursor &cursor = textArea().startCursor();
 	if (!cursor.isNull()) {
 		myPositionStack[myCurrentPointInStack] = cursorPosition(cursor);
 		myStackChanged = true;
@@ -293,29 +293,32 @@ void BookTextView::replaceCurrentPositionInStack() {
 }
 
 void BookTextView::gotoParagraph(int num, bool end) {
-	if (!empty()) {
-		if (!myLockUndoStackChanges) {
-			if (myPositionStack.size() > myCurrentPointInStack) {
-				myPositionStack.erase(myPositionStack.begin() + myCurrentPointInStack, myPositionStack.end());
-				myStackChanged = true;
-			}
-			pushCurrentPositionIntoStack(false);
-			myCurrentPointInStack = myPositionStack.size();
-		}
-
-		FBView::gotoParagraph(num, end);
+	if (textArea().isEmpty()) {
+		return;
 	}
+
+	if (!myLockUndoStackChanges) {
+		if (myPositionStack.size() > myCurrentPointInStack) {
+			myPositionStack.erase(myPositionStack.begin() + myCurrentPointInStack, myPositionStack.end());
+			myStackChanged = true;
+		}
+		pushCurrentPositionIntoStack(false);
+		myCurrentPointInStack = myPositionStack.size();
+	}
+
+	FBView::gotoParagraph(num, end);
 }
 
 bool BookTextView::canUndoPageMove() {
-	if (empty()) {
+	if (textArea().isEmpty()) {
 		return false;
 	}
+
 	if (myCurrentPointInStack == 0) {
 		return false;
 	}
 	if ((myCurrentPointInStack == 1) && (myPositionStack.size() == 1)) {
-		const ZLTextWordCursor &cursor = startCursor();
+		const ZLTextWordCursor &cursor = textArea().startCursor();
 		if (!cursor.isNull()) {
 			return myPositionStack.back() != cursorPosition(cursor);
 		}
@@ -344,7 +347,8 @@ void BookTextView::undoPageMove() {
 }
 
 bool BookTextView::canRedoPageMove() {
-	return !empty() && (myCurrentPointInStack + 1 < myPositionStack.size());
+	return !textArea().isEmpty() &&
+					myCurrentPointInStack + 1 < myPositionStack.size();
 }
 
 void BookTextView::redoPageMove() {
@@ -365,16 +369,16 @@ void BookTextView::redoPageMove() {
 	}
 }
 
-bool BookTextView::getHyperlinkInfo(const ZLTextElementArea &area, std::string &id, std::string &type) const {
-	if ((area.Kind != ZLTextElement::WORD_ELEMENT) &&
-			(area.Kind != ZLTextElement::IMAGE_ELEMENT)) {
+bool BookTextView::getHyperlinkInfo(const ZLTextElementRectangle &rectangle, std::string &id, std::string &type) const {
+	if ((rectangle.Kind != ZLTextElement::WORD_ELEMENT) &&
+			(rectangle.Kind != ZLTextElement::IMAGE_ELEMENT)) {
 		return false;
 	}
-	ZLTextWordCursor cursor = startCursor();
-	cursor.moveToParagraph(area.ParagraphIndex);
+	ZLTextWordCursor cursor = textArea().startCursor();
+	cursor.moveToParagraph(rectangle.ParagraphIndex);
 	cursor.moveToParagraphStart();
 	ZLTextKind hyperlinkKind = REGULAR;
-	for (int i = 0; i < area.ElementIndex; ++i) {
+	for (int i = 0; i < rectangle.ElementIndex; ++i) {
 		const ZLTextElement &element = cursor.element();
 		if (element.kind() == ZLTextElement::CONTROL_ELEMENT) {
 			const ZLTextControlEntry &control = ((const ZLTextControlElement&)element).entry();
@@ -398,18 +402,18 @@ bool BookTextView::_onStylusPress(int x, int y) {
 
 bool BookTextView::onStylusClick(int x, int y, int count) {
 	FBReader &fbreader = FBReader::Instance();
-	const ZLTextElementArea *area = elementByCoordinates(x, y);
-	if (area != 0) {
+	const ZLTextElementRectangle *rectangle = textArea().elementByCoordinates(x, y);
+	if (rectangle != 0) {
 		std::string id;
 		std::string type;
-		if (getHyperlinkInfo(*area, id, type)) {
+		if (getHyperlinkInfo(*rectangle, id, type)) {
 			fbreader.tryShowFootnoteView(id, type);
 			return true;
 		}
 		
 		if (fbreader.isDictionarySupported() &&
 				fbreader.EnableSingleClickDictionaryOption.value()) {
-			const std::string txt = word(*area);
+			const std::string txt = word(*rectangle);
 			if (!txt.empty()) {
 				fbreader.openInDictionary(txt);
 				return true;
@@ -426,18 +430,18 @@ bool BookTextView::_onStylusRelease(int x, int y) {
 		return false;
 	}
 
-	const ZLTextElementArea *area = elementByCoordinates(x, y);
-	if (area != 0) {
+	const ZLTextElementRectangle *rectangle = textArea().elementByCoordinates(x, y);
+	if (rectangle != 0) {
 		std::string id;
 		std::string type;
-		if (getHyperlinkInfo(*area, id, type)) {
+		if (getHyperlinkInfo(*rectangle, id, type)) {
 			fbreader.tryShowFootnoteView(id, type);
 			return true;
 		}
 		
 		if (fbreader.isDictionarySupported() &&
 				fbreader.EnableSingleClickDictionaryOption.value()) {
-			const std::string txt = word(*area);
+			const std::string txt = word(*rectangle);
 			if (!txt.empty()) {
 				fbreader.openInDictionary(txt);
 				return true;
@@ -449,10 +453,10 @@ bool BookTextView::_onStylusRelease(int x, int y) {
 }
 
 bool BookTextView::_onStylusMove(int x, int y) {
-	const ZLTextElementArea *area = elementByCoordinates(x, y);
+	const ZLTextElementRectangle *rectangle = textArea().elementByCoordinates(x, y);
 	std::string id;
 	std::string type;
-	FBReader::Instance().setHyperlinkCursor((area != 0) && getHyperlinkInfo(*area, id, type));
+	FBReader::Instance().setHyperlinkCursor((rectangle != 0) && getHyperlinkInfo(*rectangle, id, type));
 	return true;
 }
 
@@ -494,9 +498,9 @@ void BookTextView::PositionIndicatorWithLabels::draw() {
 }
 
 void BookTextView::scrollToHome() {
-	if (!startCursor().isNull() &&
-			startCursor().isStartOfParagraph() &&
-			startCursor().paragraphCursor().index() == 0) {
+	if (!textArea().startCursor().isNull() &&
+			textArea().startCursor().isStartOfParagraph() &&
+			textArea().startCursor().paragraphCursor().index() == 0) {
 		return;
 	}
 

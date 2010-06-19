@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,21 +20,21 @@
 #ifndef __LITRESDATAPARSER_H__
 #define __LITRESDATAPARSER_H__
 
+#include <vector>
+#include <map>
+
 #include <ZLXMLReader.h>
 
-#include "../NetworkLibraryItems.h"
+#include "../NetworkItems.h"
 
+class NetworkLink;
 class LitResGenre;
 class NetworkAuthenticationManager;
 
-
 class LitResDataParser : public ZLXMLReader {
 
-private:
-	static std::string stringAttributeValue(const char **attributes, const char *name);
-
 public:
-	LitResDataParser(NetworkLibraryItemList &books, shared_ptr<NetworkAuthenticationManager> mgr);
+	LitResDataParser(const NetworkLink &link, NetworkItem::List &books);
 
 private:
 	void startElementHandler(const char *tag, const char **attributes);
@@ -48,26 +48,38 @@ private:
 		ANNOTATION, DATE, LANGUAGE,
 	};
 
+	std::string stringAttributeValue(const char **attributes, const char *name);
 	void processState(const std::string &tag, bool closed, const char **attributes);
 	State getNextState(const std::string &tag, bool closed);
 
-	NetworkLibraryBookItem &currentBook();
+	std::string makeDemoUrl(const std::string &bookId) const;
 
 private:
-	NetworkLibraryItemList &myBooks;
+	const NetworkLink &myLink;
+
+	NetworkItem::List &myBooks;
 	std::string myBuffer;
-	shared_ptr<NetworkLibraryItem> myCurrentBook;
+
 	unsigned int myIndex;
 
 	State myState;
 
+	std::string myBookId;
+	std::string myTitle;
+	std::string mySummary;
+	std::string myLanguage;
+	std::string myDate;
+	std::string myPrice;
+	std::string mySeriesTitle;
+	int myIndexInSeries;
+
 	std::string myAuthorFirstName;
 	std::string myAuthorMiddleName;
 	std::string myAuthorLastName;
+	std::vector<NetworkBookItem::AuthorData> myAuthors;
 
-	shared_ptr<NetworkAuthenticationManager> myAuthenticationManager;
+	std::vector<std::string> myTags;
+	std::map<NetworkItem::URLType,std::string> myURLByType;
 };
-
-inline NetworkLibraryBookItem &LitResDataParser::currentBook() { return (NetworkLibraryBookItem &) *myCurrentBook; }
 
 #endif /* __LITRESDATAPARSER_H__ */

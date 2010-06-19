@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,9 @@
 class ZLInputStream;
 
 struct ZLZipHeader {
+	static const int SignatureLocalFile;
+	static const int SignatureData;
+
 	unsigned long Signature;
 	unsigned short Version;
 	unsigned short Flags;
@@ -36,7 +39,7 @@ struct ZLZipHeader {
 	unsigned short ExtraLength;
 
 	bool readFrom(ZLInputStream &stream);
-	static void skipEntry(ZLInputStream &stream, const ZLZipHeader &header);
+	static void skipEntry(ZLInputStream &stream, ZLZipHeader &header);
 
 private:
 	unsigned short readShort(ZLInputStream &stream);

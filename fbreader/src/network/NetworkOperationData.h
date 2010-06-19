@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,26 +20,29 @@
 #ifndef __NETWORKOPERATIONDATA_H__
 #define __NETWORKOPERATIONDATA_H__
 
-#include "NetworkLibraryItems.h"
+#include <shared_ptr.h>
+
+#include "NetworkItems.h"
+
+class ZLExecutionData;
 
 class NetworkLink;
 
-struct NetworkOperationData {
-	NetworkOperationData(NetworkLink &link);
+class NetworkOperationData {
+
+public:
+	NetworkOperationData(const NetworkLink &link);
+
 	void clear();
+	shared_ptr<ZLExecutionData> resume();
 
-	NetworkLink &Link;
-	NetworkLibraryItemList Items;
+public:
+	const NetworkLink &Link;
+	NetworkItem::List Items;
 	std::string ResumeURI;
-	size_t ResumeCount;
+
+private:
+	size_t myResumeCount;
 };
-
-inline NetworkOperationData::NetworkOperationData(NetworkLink &link) : Link(link), ResumeCount(0) {
-}
-
-inline void NetworkOperationData::clear() {
-	Items.clear();
-	ResumeURI.clear();
-}
 
 #endif /* __NETWORKOPERATIONDATA_H__ */

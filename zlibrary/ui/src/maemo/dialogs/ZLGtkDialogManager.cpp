@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #if MAEMO_VERSION <= 3
 	#include <hildon-widgets/gtk-infoprint.h>
 	#include <hildon-note.h>
-#elif MAEMO_VERSION == 4
+#elif MAEMO_VERSION <= 5
 	#include <hildon/hildon-note.h>
 	#include <hildon/hildon-banner.h>
 #else
@@ -33,6 +33,7 @@
 #include "ZLGtkDialog.h"
 #include "ZLGtkOptionsDialog.h"
 #include "ZLGtkSelectionDialog.h"
+#include "ZLGtkProgressDialog.h"
 #include "ZLGtkUtil.h"
 #include "../../gtk/image/ZLGtkImageManager.h"
 
@@ -93,6 +94,10 @@ static void *runRunnable(void *data) {
 	return 0;
 }
 
+shared_ptr<ZLProgressDialog> ZLGtkDialogManager::createProgressDialog(const ZLResourceKey &key) const {
+	return new ZLGtkProgressDialog(myWindow, key);
+}
+
 void ZLGtkDialogManager::wait(const ZLResourceKey &key, ZLRunnable &runnable) const {
 	if (!myIsInitialized || myIsWaiting) {
 		runnable.run();
@@ -100,7 +105,7 @@ void ZLGtkDialogManager::wait(const ZLResourceKey &key, ZLRunnable &runnable) co
 		myIsWaiting = true;
 #if MAEMO_VERSION <= 3
 		gtk_banner_show_animation(myWindow, waitMessageText(key).c_str());
-#elif MAEMO_VERSION == 4
+#elif MAEMO_VERSION <= 5
 		GtkWidget *banner = hildon_banner_show_animation(GTK_WIDGET(myWindow), NULL, waitMessageText(key).c_str());
 #else
 		#error Unknown value for MAEMO_VERSION
@@ -116,7 +121,7 @@ void ZLGtkDialogManager::wait(const ZLResourceKey &key, ZLRunnable &runnable) co
 		pthread_join(thread, 0);
 #if MAEMO_VERSION <= 3
 		gtk_banner_close(myWindow);
-#elif MAEMO_VERSION == 4
+#elif MAEMO_VERSION <= 5
 		gtk_widget_destroy(banner);
 #else
 		#error Unknown value for MAEMO_VERSION

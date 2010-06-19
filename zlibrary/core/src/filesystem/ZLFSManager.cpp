@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  */
 
 #include <ZLibrary.h>
+#include <ZLFileUtil.h>
 
 #include "ZLFSManager.h"
 #include "ZLFSDir.h"
@@ -41,4 +42,15 @@ int ZLFSManager::findLastFileNameDelimiter(const std::string &path) const {
 
 std::string ZLFSDir::delimiter() const {
 	return ZLibrary::FileNameDelimiter;
+}
+
+void ZLFSManager::normalize(std::string &path) const {
+	int index = findArchiveFileNameDelimiter(path);
+	if (index == -1) {
+		normalizeRealPath(path);
+	} else {
+		std::string realPath = path.substr(0, index);
+		normalizeRealPath(realPath);
+		path = realPath + ':' + ZLFileUtil::normalizeUnixPath(path.substr(index + 1));
+	}
 }

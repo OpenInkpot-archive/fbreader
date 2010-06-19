@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2007-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,8 @@ static void pngReadFunction(png_structp png_ptr, png_bytep data, png_size_t leng
 	}
 }
 
-bool ZLWin32ImageManager::pngConvert(const std::string &stringData, ZLWin32ImageData &data) const {
+bool ZLWin32ImageManager::pngConvert(const std::string &stringData, ZLWin32ImageData &data, bool &result) const {
+	result = false;
 	if (!png_check_sig((png_byte*)stringData.data(), 8)) {
 		return false;
 	}
@@ -118,5 +119,6 @@ bool ZLWin32ImageManager::pngConvert(const std::string &stringData, ZLWin32Image
 	data.bgr2rgb();
 
 	png_destroy_read_struct(&pngStructure, &pngInfo, 0);
+	result = true;
 	return true;
 }

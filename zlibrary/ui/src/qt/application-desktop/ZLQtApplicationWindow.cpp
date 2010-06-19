@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -228,7 +228,7 @@ void ZLQtApplicationWindow::closeEvent(QCloseEvent *event) {
 	}
 }
 
-ZLQtApplicationWindow::LineEditParameter::LineEditParameter(QToolBar *toolbar, ZLQtApplicationWindow &window, const ZLToolbar::TextFieldItem &textFieldItem) : QLineEdit(toolbar), myWindow(window), myActionId(textFieldItem.actionId()) {
+ZLQtApplicationWindow::LineEditParameter::LineEditParameter(QToolBar *toolbar, ZLQtApplicationWindow &window, const ZLToolbar::ParameterItem &textFieldItem) : QLineEdit(toolbar), myWindow(window), myActionId(textFieldItem.actionId()) {
 	setAlignment(Qt::AlignHCenter);
 	setFocusPolicy(ClickFocus);
 	setMaxLength(textFieldItem.maxWidth());
@@ -260,7 +260,7 @@ void ZLQtApplicationWindow::LineEditParameter::internalSetValue(const std::strin
 void ZLQtApplicationWindow::addToolbarItem(ZLToolbar::ItemPtr item) {
 	switch (item->type()) {
 		case ZLToolbar::Item::TEXT_FIELD:
-			myItemToWidgetMap[&*item] = new LineEditParameter(myToolBar, *this, (ZLToolbar::TextFieldItem&)*item);
+			myItemToWidgetMap[&*item] = new LineEditParameter(myToolBar, *this, (ZLToolbar::ParameterItem&)*item);
 			break;
 		case ZLToolbar::Item::PLAIN_BUTTON:
 		case ZLToolbar::Item::MENU_BUTTON:

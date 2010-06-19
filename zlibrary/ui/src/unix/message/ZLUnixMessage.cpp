@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
  */
 
 #include <unistd.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include <ZLFile.h>
 
@@ -84,8 +84,9 @@ void ZLUnixExecMessageSender::sendStringMessage(const std::string &message) {
 		if (index >= 0) {
 			command = command.substr(0, index) + escapedMessage + command.substr(index + 2);
 		}
-		if (system(command.c_str()) == -1)
+		if (system(command.c_str()) == -1) {
 			exit(-1);
+		}
 		exit(0);
 	}
 }

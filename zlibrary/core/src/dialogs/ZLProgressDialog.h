@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2009-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,13 +21,13 @@
 #define __ZLPROGRESSDIALOG_H__
 
 #include <ZLResource.h>
-#include <ZLSlowProcess.h>
+#include <ZLExecutionData.h>
 #include <ZLRunnable.h>
 
 class ZLProgressDialog {
 
 private:
-	class SlowProcessListener;
+	class ProgressListener;
 
 protected:
 	ZLProgressDialog(const ZLResourceKey &key);
@@ -35,7 +35,7 @@ protected:
 public:
 	virtual ~ZLProgressDialog();
 
-	shared_ptr<ZLSlowProcessListener> listener();
+	shared_ptr<ZLExecutionData::Listener> listener();
 	virtual void run(ZLRunnable &runnable) = 0;
 	virtual void setMessage(const std::string &message) = 0;
 

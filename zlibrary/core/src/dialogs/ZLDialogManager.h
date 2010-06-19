@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <shared_ptr.h>
 #include <ZLRunnable.h>
 #include <ZLResource.h>
+#include <ZLOpenFileDialog.h>
 
 class ZLDialog;
 class ZLOptionsDialog;
@@ -70,6 +71,8 @@ public:
 
 	virtual shared_ptr<ZLDialog> createDialog(const ZLResourceKey &key) const = 0;
 	virtual shared_ptr<ZLOptionsDialog> createOptionsDialog(const ZLResourceKey &key, shared_ptr<ZLRunnable> applyAction = 0, bool showApplyButton = false) const = 0;
+	// TODO: change to pure virtual
+	virtual shared_ptr<ZLOpenFileDialog> createOpenFileDialog(const std::string &directoryPath, const ZLOpenFileDialog::Filter &filter) const;
 	virtual bool selectionDialog(const ZLResourceKey &key, ZLTreeHandler &handler) const = 0;
 
 	void informationBox(const ZLResourceKey &key) const;

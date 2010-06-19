@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,19 +24,23 @@
 
 const shared_ptr<std::string> ZLStreamImage::stringData() const {
 	shared_ptr<ZLInputStream> stream = inputStream();
+	if (stream.isNull() || !stream->open()) {
+		return 0;
+	}
+	if (mySize == 0) {
+		mySize = stream->sizeOfOpened();
+		if (mySize == 0) {
+			return 0;
+		}
+	}
 
 	shared_ptr<std::string> imageData = new std::string();
 
-	if (!stream.isNull() && stream->open()) {
-		if (mySize == 0) {
-			mySize = stream->sizeOfOpened();
-		}
-		stream->seek(myOffset, false);
-		char *buffer = new char[mySize];
-		stream->read(buffer, mySize);
-		imageData->append(buffer, mySize);
-		delete[] buffer;
-	}
+	stream->seek(myOffset, false);
+	char *buffer = new char[mySize];
+	stream->read(buffer, mySize);
+	imageData->append(buffer, mySize);
+	delete[] buffer;
 
 	return imageData;
 }

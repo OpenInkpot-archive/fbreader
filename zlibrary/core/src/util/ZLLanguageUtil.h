@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2008-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,12 +24,15 @@
 
 class ZLLanguageUtil {
 
-private:
-	ZLLanguageUtil();
+public:
+	static const std::string OtherLanguageCode;
 
 public:
 	static std::string languageByCode(unsigned char languageCode, unsigned char subLanguageCode);
 	static bool isRTLLanguage(const std::string &languageCode);
+
+private:
+	ZLLanguageUtil();
 };
 
 #endif /* __ZLLANGUAGEUTIL_H__ */

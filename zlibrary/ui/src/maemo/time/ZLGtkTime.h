@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ public:
 	static void createInstance() { ourInstance = new ZLGtkTimeManager(); }
 
 	void addTask(shared_ptr<ZLRunnable> task, int interval);
-	void removeTask(shared_ptr<ZLRunnable> task);
+	void removeTaskInternal(shared_ptr<ZLRunnable> task);
 
 private:
 	std::map<shared_ptr<ZLRunnable>,int> myHandlers;

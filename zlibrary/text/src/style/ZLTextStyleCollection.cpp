@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2009 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2004-2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,9 +51,9 @@ public:
 	void startElementHandler(const char *tag, const char **attributes);
 
 private:
-	static int intValue(const char **attributes, const char *name, int defaultValue = 0);
-	static bool booleanValue(const char **attributes, const char *name);
-	static ZLBoolean3 b3Value(const char **attributes, const char *name);
+	int intValue(const char **attributes, const char *name, int defaultValue = 0);
+	bool booleanValue(const char **attributes, const char *name);
+	ZLBoolean3 b3Value(const char **attributes, const char *name);
 
 private:
 	ZLTextStyleCollection &myCollection;
