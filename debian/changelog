@@ -1,3 +1,25 @@
+fbreader (0.12.1-22) zelazny; urgency=low
+
+  [ Tomasz Długosz ]
+  * l10n: initial swedish translation
+
+  [ Shuntya ]
+  * l10n: Updates to Spanish (Castilian) (es) translation
+  * l10n: Updates to Spanish (Castilian) (es) translation
+  * l10n: Updates to Spanish (Castilian) (es) translation
+  * l10n: Updates to Spanish (Castilian) (es) translation
+  * l10n: Updates to Spanish (Castilian) (es) translation
+  * l10n: Updates to French (fr) translation
+
+  [ jekhor ]
+  * l10n: Updates to Belarusian (be) translation
+  * l10n: Updates to Belarusian (be) translation
+
+  [ Alexander Kerner ]
+  * add missing header file
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 19 Jun 2010 19:36:28 +0200
+
 fbreader (0.12.1-21) zelazny; urgency=low
 
   [ Vyacheslav Pereverzev ]
