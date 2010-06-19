@@ -1,3 +1,9 @@
+fbreader (0.12.1-22.bradbury.1) bradbury; urgency=low
+
+  * bradbury branch
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 19 Jun 2010 19:38:23 +0200
+
 fbreader (0.12.1-22) zelazny; urgency=low
 
   [ Tomasz Długosz ]
