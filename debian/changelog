@@ -1,8 +1,9 @@
 fbreader (0.12.10-1) zelazny; urgency=low
 
   * merged new upstream version (0.12.10)
+  * Fixed width of first space in string started from '-'(or equivalents). Patch by GrayNM
 
- -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 19 Jun 2010 23:51:24 +0200
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sun, 20 Jun 2010 01:18:01 +0200
 
 fbreader (0.12.1-22) zelazny; urgency=low
 
