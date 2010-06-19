@@ -65,6 +65,8 @@ void ZLTextArea::prepareTextLine(Style &style, const ZLTextLineInfo &info, int y
 	int fullCorrection = 0;
 	const bool endOfParagraph = info.End.isEndOfParagraph();
 	bool wordOccured = false;
+	bool firstWord = true;
+	bool spaceChangeAllowed = true;
 
 	int x = info.StartIndent;
 
@@ -121,17 +123,39 @@ void ZLTextArea::prepareTextLine(Style &style, const ZLTextLineInfo &info, int y
 					)
 				);
 				wordOccured = true;
+				// check for starting hyphen/dash to deny first space adjustment
+				if(firstWord && kind==ZLTextElement::WORD_ELEMENT) {
+					if(((const ZLTextWord&)element).Length==1 && ((const ZLTextWord&)element).Data) {
+						ZLUnicodeUtil::Ucs2String ucs2string;
+						ZLUnicodeUtil::utf8ToUcs2(ucs2string, ((const ZLTextWord&)element).Data, ((const ZLTextWord&)element).Size);
+						if(ucs2string[0] == 0x002D ||                   // HYPHEN-MINUS
+								ucs2string[0] == 0x2010 ||                   // HYPHEN
+								ucs2string[0] == 0x2011 ||                   // NON-BREAKING HYPHEN
+								ucs2string[0] == 0x2012 ||                   // FIGURE DASH
+								ucs2string[0] == 0x2013 ||                   // EN DASH
+								ucs2string[0] == 0x2014) {                   // EM DASH
+							spaceChangeAllowed = false;
+						}
+					}
+					firstWord = false;
+				} else spaceChangeAllowed=true;
 				break;
 			}
 			case ZLTextElement::CONTROL_ELEMENT:
 			case ZLTextElement::FORCED_CONTROL_ELEMENT:
+				firstWord = false;
 				break;
 			case ZLTextElement::HSPACE_ELEMENT:
 			case ZLTextElement::NB_HSPACE_ELEMENT:
 				if (wordOccured && (spaceCounter > 0)) {
-					int correction = fullCorrection / spaceCounter;
-					x += context().spaceWidth() + correction;
-					fullCorrection -= correction;
+					if(spaceChangeAllowed) {
+						int correction = fullCorrection / spaceCounter;
+						x += context().spaceWidth() + correction;
+						fullCorrection -= correction;
+					} else {
+						x += context().spaceWidth();
+						spaceChangeAllowed = true;
+					}
 					wordOccured = false;
 					--spaceCounter;
 				}
