@@ -57,6 +57,8 @@ public:
 	bool _onStylusRelease(int x, int y);
 	bool onStylusClick(int x, int y, int count);
 
+	shared_ptr<ZLTextModel> myContentsModel;
+
 private:
 	typedef ReadingState Position;
 	Position cursorPosition(const ZLTextWordCursor &cursor) const;
@@ -80,8 +82,6 @@ private:
 	void saveBookState(const Book &book);
 
 private:
-	shared_ptr<ZLTextModel> myContentsModel;
-
 	shared_ptr<Book> myBook;
 
 	typedef std::deque<Position> PositionStack;
