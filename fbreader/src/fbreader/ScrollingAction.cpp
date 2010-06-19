@@ -107,38 +107,53 @@ void ScrollingAction::run() {
 		}
 
 		if(fbreader.mode() == FBReader::BOOK_TEXT_MODE) {
-			// jump to next section
-			ZLTextWordCursor endC = fbreader.bookTextView().textArea().endCursor();
-			if(endC.isNull())
-				return;
-			if(myForward
-					&& endC.paragraphCursor().isLast()
-					&& endC.isEndOfParagraph()) {
-				fbreader.doAction(ActionCode::GOTO_NEXT_TOC_SECTION);
-				buffer = 0;
-				return;
-			}
-
-			// jump to previous section
-			ZLTextWordCursor startC = fbreader.bookTextView().textArea().startCursor();
-			ContentsView &contentsView = (ContentsView&)*fbreader.myContentsView;
-            const ContentsModel &contentsModel = (const ContentsModel&)*contentsView.textArea().model();
-			size_t current = contentsView.currentTextViewParagraph(false);
-			if(!myForward
-					&& !startC.isNull()
-					&& startC.isStartOfParagraph()
-					&& startC.paragraphCursor().isFirst()
-					&& (current > 0)) {
-
-				if(current == -1 || contentsModel.reference((const ZLTextTreeParagraph*)contentsModel[current]) == -1) {
+			if(fbreader.isActionEnabled(ActionCode::GOTO_NEXT_TOC_SECTION) &&
+					fbreader.isActionVisible(ActionCode::GOTO_NEXT_TOC_SECTION)) {
+				// jump to next section
+				ZLTextWordCursor endC = fbreader.bookTextView().textArea().endCursor();
+				if(endC.isNull())
+					return;
+				if(myForward
+						&& endC.paragraphCursor().isLast()
+						&& endC.isEndOfParagraph()) {
+					fbreader.doAction(ActionCode::GOTO_NEXT_TOC_SECTION);
 					buffer = 0;
 					return;
 				}
+			}
 
-				fbreader.doAction(ActionCode::GOTO_PREVIOUS_TOC_SECTION);
-				fbreader.bookTextView().scrollToEndOfText();
-				buffer = 0;
-				return;
+			if(fbreader.isActionEnabled(ActionCode::GOTO_PREVIOUS_TOC_SECTION) &&
+					fbreader.isActionVisible(ActionCode::GOTO_PREVIOUS_TOC_SECTION)) {
+				// jump to previous section
+				ZLTextWordCursor startC = fbreader.bookTextView().textArea().startCursor();
+				if(startC.isNull())
+					return;
+
+				shared_ptr<ZLTextModel> contentsModelPtr = fbreader.bookTextView().myContentsModel;
+				ContentsModel &contentsModel = (ContentsModel&)*contentsModelPtr;
+
+				if(fbreader.myContentsView.isNull())
+					return;
+
+				const ContentsView &contentsView = (const ContentsView&)*fbreader.myContentsView;
+				size_t current = contentsView.currentTextViewParagraph(false);
+
+				if(!myForward
+						&& !startC.isNull()
+						&& startC.isStartOfParagraph()
+						&& startC.paragraphCursor().isFirst()
+						&& (current > 0)) {
+
+					if(current == (size_t)-1 || contentsModel.reference((const ZLTextTreeParagraph*)contentsModel[current]) == -1) {
+						buffer = 0;
+						return;
+					}
+
+					fbreader.doAction(ActionCode::GOTO_PREVIOUS_TOC_SECTION);
+					fbreader.bookTextView().scrollToEndOfText();
+					buffer = 0;
+					return;
+				}
 			}
 		}
 
