@@ -195,10 +195,10 @@ void ZLTextArea::drawTextLine(Style &style, const ZLTextLineInfo &info, int y, s
 
 	FBReader::HyperlinkCoord cur_link;
 	cur_link.id.erase();
-	cur_link.x0 = 0;
-	cur_link.x1 = 0;
-	cur_link.y0 = 0;
-	cur_link.y1 = 0;
+	cur_link.x0 = 0 + hOffset();
+	cur_link.x1 = 0 + hOffset();
+	cur_link.y0 = 0 + vOffset();
+	cur_link.y1 = 0 + vOffset();
 	cur_link.next = false;
 
 	ZLTextElementIterator it = fromIt;
@@ -240,9 +240,9 @@ void ZLTextArea::drawTextLine(Style &style, const ZLTextLineInfo &info, int y, s
 					if(!cur_link.id.empty()) {
 						const int y = it->YEnd - style.elementDescent(element) - style.textStyle()->verticalShift();
 
-						cur_link.x1 = it->XEnd;
-						cur_link.y1 = y;
-						cur_link.y0 = y - info.Height;
+						cur_link.x1 = it->XEnd + hOffset();
+						cur_link.y1 = y + vOffset();
+						cur_link.y0 = y - info.Height + vOffset();
 
 						fbreader.pageLinks.push_back(cur_link);
 
@@ -250,7 +250,7 @@ void ZLTextArea::drawTextLine(Style &style, const ZLTextLineInfo &info, int y, s
 					}
 
 					cur_link.id = ((const ZLTextHyperlinkControlEntry&)control).label();
-					cur_link.x0 = it->XStart;
+					cur_link.x0 = it->XStart + hOffset();
 				} else {
 					//printf("control.kind() %d, id: %s\n", control.kind(), ((const ZLTextHyperlinkControlEntry&)control).label().c_str());
 				}
@@ -258,7 +258,7 @@ void ZLTextArea::drawTextLine(Style &style, const ZLTextLineInfo &info, int y, s
 			} else {
 				if(control.kind() == 15) {
 					if(cur_link.id.empty() || link_not_terminated)
-						cur_link.x0 = fromIt->XStart;
+						cur_link.x0 = fromIt->XStart + hOffset();
 
 					if(cur_link.id.empty() && fbreader.pageLinks.empty()) {
 //						for (ZLTextWordCursor pos2(it); pos2.wordIndex() > 0; pos2.previousWord()) {
@@ -283,9 +283,9 @@ void ZLTextArea::drawTextLine(Style &style, const ZLTextLineInfo &info, int y, s
 
 					const int y = lit->YEnd - style.elementDescent(element) - style.textStyle()->verticalShift();
 
-					cur_link.x1 = lit->XEnd;
-					cur_link.y1 = y;
-					cur_link.y0 = y - info.Height;
+					cur_link.x1 = lit->XEnd + hOffset();
+					cur_link.y1 = y + vOffset();
+					cur_link.y0 = y - info.Height + vOffset();
 
 					fbreader.pageLinks.push_back(cur_link);
 
@@ -308,12 +308,12 @@ void ZLTextArea::drawTextLine(Style &style, const ZLTextLineInfo &info, int y, s
 		const ZLTextElement &element = paragraph[info.End.elementIndex()];
 		const int y = lit->YEnd - style.elementDescent(element) - style.textStyle()->verticalShift();
 		if(cur_link.id.empty()) {
-			cur_link.x0 = fromIt->XStart;
+			cur_link.x0 = fromIt->XStart + hOffset();
 		}
 
-		cur_link.x1 = lit->XEnd;
-		cur_link.y1 = y;
-		cur_link.y0 = y - info.Height;
+		cur_link.x1 = lit->XEnd + hOffset();
+		cur_link.y1 = y + vOffset();
+		cur_link.y0 = y - info.Height + vOffset();
 		cur_link.next = true;
 
 		fbreader.pageLinks.push_back(cur_link);
