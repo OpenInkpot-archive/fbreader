@@ -245,6 +245,17 @@ static void lcb_win_resized_2(Ecore_Evas *ee, Evas_Object *object, int w, int h,
 		evas_object_resize(object, w, h);
 }
 
+static void choicebox_resized(Ecore_Evas *ee, Evas_Object *object, int w, int h,
+             void *param)
+{
+	if(param) {
+		int *select_item = (int*)param;
+		if(*select_item >= 0)
+			choicebox_set_selection(object, *select_item);
+		*select_item = -1;
+	}
+}
+
 static void lcb_win_signal_handler(void* param, Evas_Object* o, const char* emission, const char* source)
 {
 //	printf("%s -> %s\n", source, emission);
@@ -436,6 +447,7 @@ void cb_lcb_new(int select_item)
 	ecore_x_drawable_geometry_get_fetch();
 	ecore_x_window_size_get(window, &w, &h);
 
+
 	lcb_win = ecore_evas_software_x11_new(0, 0, 0, 0, w, h);
 
 	ecore_evas_title_set(lcb_win, "LCB");
@@ -492,7 +504,9 @@ void cb_lcb_new(int select_item)
 
 	if(select_item >= 0) {
 		choicebox_scroll_to(choicebox, select_item);
-		choicebox_set_selection(choicebox, select_item);
+
+		eoi_resize_object_register(lcb_win, choicebox, choicebox_resized, &select_item);
+//		choicebox_set_selection(choicebox, select_item);
 	}
 
     eoi_register_fullscreen_choicebox(choicebox);
@@ -617,6 +631,7 @@ static void cb_rcb_destroy()
 
 			Evas_Object *o2 = edje_object_part_swallow_get(o, "contents");
 			if(o2) {
+				free(evas_object_data_get(o, "sel"));
 				evas_object_hide(o2);
 				evas_object_del(o2);
 			}
@@ -657,7 +672,7 @@ static void rcb_close_handler(Evas_Object* choicebox, void* param)
     cb_rcb_destroy();
 }
 
-void cb_rcb_new()
+void cb_rcb_new(int select_item)
 {
 	Evas* main_canvas = ecore_evas_get(lcb_win);
 	int w, h;
@@ -702,6 +717,16 @@ void cb_rcb_new()
 	evas_object_resize(wm, w, h);
 	evas_object_show(wm);
 
+	if(select_item >= 0) {
+		choicebox_scroll_to(choicebox, select_item);
+
+		int *i = (int*)malloc(sizeof(int));
+		*i = select_item;
+		eoi_resize_object_register(lcb_win, choicebox, choicebox_resized, i);
+
+		evas_object_data_set(choicebox, "sel", i);
+//		choicebox_set_selection(choicebox, select_item);
+	}
 
 	edje_object_part_swallow(wm, "contents", bg);
 	edje_object_part_swallow(wm, "right-overlay", settings_window);

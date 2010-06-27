@@ -680,10 +680,15 @@ void format_style_handler(int idx, bool is_alt)
 		INIT_VLIST(_("Font Family"), font_family_handler);
 		vlist->font_list = true;
 
-		for(int i = 0; i < myContext->fontFamilies().size(); i++)
+		ZLStringOption &option = FBTextStyle::Instance().FontFamilyOption;
+		int optnum = -1;
+		for(int i = 0; i < myContext->fontFamilies().size(); i++) {
 			ADD_VALUE_STRING(myContext->fontFamilies().at(i).c_str());
+			if(myContext->fontFamilies().at(i) == option.value())
+				optnum = i;
+		}
 		
-		cb_rcb_new();
+		cb_rcb_new(optnum);
 	} else if(1 == idx) {
 		INIT_VLIST(_("Font Size"), font_size_handler);
 		vlist->fsize_list = true;
@@ -691,7 +696,8 @@ void format_style_handler(int idx, bool is_alt)
 		for(int i = 0; i <= FONT_SIZE_MAX; i++)
 			ADD_VALUE_INT_F(FONT_SIZE(i), _("%dpt"));
 		
-		cb_rcb_new();
+		ZLIntegerRangeOption &option = FBTextStyle::Instance().FontSizeOption;
+		cb_rcb_new(option.value() - FONT_SIZE(0));
 	} else if(3 == idx) {
 		INIT_VLIST(_("Line Spacing"), line_spacing_handler);
 
