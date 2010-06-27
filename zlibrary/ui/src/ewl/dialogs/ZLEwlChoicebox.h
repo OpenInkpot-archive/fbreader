@@ -109,7 +109,7 @@ void cb_fcb_redraw(int newsize = -1);
 void cb_fcb_invalidate(int idx);
 void cb_fcb_invalidate_interval(int start, int end);
 
-void cb_rcb_new();
+void cb_rcb_new(int select_item = -1);
 
 void cb_lcb_new(int select_item = -1);
 void cb_lcb_redraw();
