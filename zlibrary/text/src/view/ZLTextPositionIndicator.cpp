@@ -221,7 +221,7 @@ std::string ZLTextView::PositionIndicator::batteryString() const {
     if(f_cf != NULL)
         fclose(f_cf);
 
-    sprintf(b, " <%d\%>", charge);
+    sprintf(b, " <%d\%%>", charge);
 
 	buffer += std::string(b);
 

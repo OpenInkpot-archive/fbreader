@@ -26,13 +26,16 @@
 #include <ZLRunnable.h>
 #include <ZLResource.h>
 #include <ZLOpenFileDialog.h>
+#include <ZLDialog.h>
+#include <ZLOptionsDialog.h>
+#include <ZLProgressDialog.h>
 
-class ZLDialog;
-class ZLOptionsDialog;
+//class ZLDialog;
+//class ZLOptionsDialog;
 class ZLTreeHandler;
 class ZLApplication;
 class ZLImageData;
-class ZLProgressDialog;
+//class ZLProgressDialog;
 
 class ZLDialogManager {
 

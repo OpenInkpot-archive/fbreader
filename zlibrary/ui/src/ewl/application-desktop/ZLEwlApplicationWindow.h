@@ -48,7 +48,7 @@ private:
 	void processAllEvents() {}
 
 private:
-	void grabAllKeys(bool grab) { }
+	void grabAllKeys(bool grab __attribute__ ((__unused__))) { }
 	//void addToolbarItem(ZLApplication::Toolbar::ItemPtr item) { }
 
 public:

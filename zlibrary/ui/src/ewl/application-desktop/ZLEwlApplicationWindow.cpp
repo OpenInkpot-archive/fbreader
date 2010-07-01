@@ -77,5 +77,5 @@ void ZLEwlApplicationWindow::close() {
 	_fbreader_closed = true;
 }
 
-void ZLEwlApplicationWindow::setCaption(const std::string &caption) {
+void ZLEwlApplicationWindow::setCaption(const std::string &caption __attribute__ ((__unused__))) {
 }

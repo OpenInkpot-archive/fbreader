@@ -429,7 +429,7 @@ inline bool FBReader::isword(ZLTextElementIterator e)
 
 void FBReader::highlightFirstWord()
 {
-	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
+	//ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
 	const ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).textArea().myTextElementMap;
 
 	for (word_it = elementMap.begin(); word_it != elementMap.end(); ++word_it) {
@@ -443,7 +443,7 @@ void FBReader::highlightFirstWord()
 
 void FBReader::highlightNextWord()
 {
-	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
+	//ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
 	const ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).textArea().myTextElementMap;
 
 	ZLTextElementIterator w = word_it;
@@ -465,9 +465,9 @@ void FBReader::highlightNextWord()
 
 void FBReader::highlightNextLineWord()
 {
-	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
+	//ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
 	const ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).textArea().myTextElementMap;
-	int y = word_it->YStart;
+	//int y = word_it->YStart;
 	bool cycle = false;
 
 	ZLTextElementIterator w = word_it;
@@ -492,7 +492,7 @@ void FBReader::highlightNextLineWord()
 
 void FBReader::highlightPrevWord()
 {
-	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
+	//ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
 	const ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).textArea().myTextElementMap;
 
 	ZLTextElementIterator w = word_it;
@@ -514,9 +514,9 @@ void FBReader::highlightPrevWord()
 
 void FBReader::highlightPrevLineWord()
 {
-	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
+	//ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
 	const ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).textArea().myTextElementMap;
-	int y = word_it->YStart;
+	//int y = word_it->YStart;
 	bool cycle = false;
 
 	ZLTextElementIterator w = word_it;
@@ -565,8 +565,8 @@ void FBReader::openDict()
 
 void FBReader::highlightCurrentLink()
 {
-	for(int i = currentLinkIdx; (i >= 0) && (i < pageLinks.size()); i++) {
-		if(!pageLinks.at(i).next || (i == (pageLinks.size() - 1))) {
+	for(int i = currentLinkIdx; (i >= 0) && (i < (int)pageLinks.size()); i++) {
+		if(!pageLinks.at(i).next || (i == ((int)pageLinks.size() - 1))) {
 			invertRegion(pageLinks.at(i), true);
 			break;
 		} else {

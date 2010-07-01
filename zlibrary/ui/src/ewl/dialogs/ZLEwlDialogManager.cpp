@@ -19,38 +19,43 @@
 
 #include "ZLEwlDialogManager.h"
 
-shared_ptr<ZLDialog> ZLEwlDialogManager::createDialog(const ZLResourceKey &key) const {
-}
-
-shared_ptr<ZLOptionsDialog> ZLEwlDialogManager::createOptionsDialog(const ZLResourceKey &id, shared_ptr<ZLRunnable> applyAction, bool showApplyButton) const {
-}
-
-void ZLEwlDialogManager::informationBox(const ZLResourceKey &key, const std::string &message) const {
-}
-
-void ZLEwlDialogManager::errorBox(const ZLResourceKey &key, const std::string &message) const {
-}
-
-int ZLEwlDialogManager::questionBox(const ZLResourceKey &key, const std::string &message, const ZLResourceKey &button0, const ZLResourceKey &button1, const ZLResourceKey &button2) const {
-}
-
-int ZLEwlDialogManager::internalBox(const char *icon, const ZLResourceKey &key, const std::string &message, const ZLResourceKey &button0, const ZLResourceKey &button1, const ZLResourceKey &button2) const {
-}
-
-bool ZLEwlDialogManager::selectionDialog(const ZLResourceKey &key, ZLTreeHandler &handler) const {
-}
-
-shared_ptr<ZLProgressDialog> ZLEwlDialogManager::createProgressDialog(const ZLResourceKey &key) const {
+shared_ptr<ZLDialog> ZLEwlDialogManager::createDialog(const ZLResourceKey &key __attribute__ ((__unused__))) const {
 	return NULL;
 }
 
-void ZLEwlDialogManager::wait(const ZLResourceKey &key, ZLRunnable &runnable) const {
-	runnable.run();
+shared_ptr<ZLOptionsDialog> ZLEwlDialogManager::createOptionsDialog(const ZLResourceKey &id __attribute__ ((__unused__)), shared_ptr<ZLRunnable> applyAction __attribute__ ((__unused__)), bool showApplyButton __attribute__ ((__unused__))) const {
+	return NULL;
 }
 
-bool ZLEwlDialogManager::isClipboardSupported(ClipboardType) const {
+void ZLEwlDialogManager::informationBox(const ZLResourceKey &key __attribute__ ((__unused__)), const std::string &message __attribute__ ((__unused__))) const {
+}
+
+void ZLEwlDialogManager::errorBox(const ZLResourceKey &key __attribute__ ((__unused__)), const std::string &message __attribute__ ((__unused__))) const {
+}
+
+int ZLEwlDialogManager::questionBox(const ZLResourceKey &key __attribute__ ((__unused__)), const std::string &message __attribute__ ((__unused__)), const ZLResourceKey &button0 __attribute__ ((__unused__)), const ZLResourceKey &button1 __attribute__ ((__unused__)), const ZLResourceKey &button2 __attribute__ ((__unused__))) const {
+	return 0;
+}
+
+int ZLEwlDialogManager::internalBox(const char *icon __attribute__ ((__unused__)), const ZLResourceKey &key __attribute__ ((__unused__)), const std::string &message __attribute__ ((__unused__)), const ZLResourceKey &button0 __attribute__ ((__unused__)), const ZLResourceKey &button1 __attribute__ ((__unused__)), const ZLResourceKey &button2 __attribute__ ((__unused__))) const {
+	return 0;
+}
+
+bool ZLEwlDialogManager::selectionDialog(const ZLResourceKey &key __attribute__ ((__unused__)), ZLTreeHandler &handler __attribute__ ((__unused__))) const {
 	return false;
 }
 
-void ZLEwlDialogManager::setClipboardText(const std::string &text, ClipboardType type) const {
+shared_ptr<ZLProgressDialog> ZLEwlDialogManager::createProgressDialog(const ZLResourceKey &key __attribute__ ((__unused__))) const {
+	return NULL;
+}
+
+void ZLEwlDialogManager::wait(const ZLResourceKey &key __attribute__ ((__unused__)), ZLRunnable &runnable __attribute__ ((__unused__))) const {
+	runnable.run();
+}
+
+bool ZLEwlDialogManager::isClipboardSupported(ClipboardType __attribute__ ((__unused__))) const {
+	return false;
+}
+
+void ZLEwlDialogManager::setClipboardText(const std::string &text __attribute__ ((__unused__)), ClipboardType type __attribute__ ((__unused__))) const {
 }

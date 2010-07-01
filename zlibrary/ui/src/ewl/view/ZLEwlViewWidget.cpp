@@ -91,6 +91,7 @@ wprop_set_active_win_id(xcb_window_t root, xcb_window_t win)
                         1, (unsigned char *) &win);
 }
 
+/*
 static void updatePoint(ZLEwlViewWidget *viewWidget, int &x, int &y) {
 	switch (viewWidget->rotation()) {
 		default:
@@ -115,6 +116,7 @@ static void updatePoint(ZLEwlViewWidget *viewWidget, int &x, int &y) {
 		}
 	}
 }
+*/
 
 int ZLEwlViewWidget::width() const {
 	return w;
@@ -129,17 +131,9 @@ ZLEwlViewWidget::ZLEwlViewWidget(ZLApplication *application, ZLView::Angle initi
 	w = 600;
 	h = 800;
 
-	xcb_screen_iterator_t screen_iter;
-	const xcb_setup_t    *setup;
-	xcb_generic_event_t  *e;
-	xcb_generic_error_t  *error;
-	xcb_void_cookie_t     cookie_window;
-	xcb_void_cookie_t     cookie_map;
 	uint32_t              mask;
 	uint32_t              values[2];
 	int                   screen_number;
-	uint8_t               is_hand = 0;
-	xcb_rectangle_t     rect_coord = { 0, 0, 600, 800};
 
 	/* getting the connection */
 	connection = xcb_connect (NULL, &screen_number);
@@ -261,10 +255,11 @@ ZLEwlViewWidget::ZLEwlViewWidget(ZLApplication *application, ZLView::Angle initi
 				format, depth, NULL, ~0, NULL);
 		assert(im);
 
-		shminfo.shmid = shmget (IPC_PRIVATE,
+		int shmid = shmget (IPC_PRIVATE,
 				im->stride*im->height,
 				IPC_CREAT | 0777);
-		assert(shminfo.shmid != -1);
+		assert(shmid != -1);
+		shminfo.shmid = (uint32_t)shmid;
 		shminfo.shmaddr = (uint8_t*)shmat (shminfo.shmid, 0, 0);
 		assert(shminfo.shmaddr);
 		im->data = shminfo.shmaddr;
@@ -313,7 +308,7 @@ void ZLEwlViewWidget::doPaint()	{
 	//sleep(10);
 }
 
-void ZLEwlViewWidget::trackStylus(bool track) {
+void ZLEwlViewWidget::trackStylus(bool track __attribute__ ((__unused__))) {
 }
 
 void ZLEwlViewWidget::resize(int w, int h) {
@@ -347,10 +342,11 @@ void ZLEwlViewWidget::resize(int w, int h) {
 				format, depth, NULL, ~0, NULL);
 		assert(im);
 
-		shminfo.shmid = shmget (IPC_PRIVATE,
+		int shmid = shmget (IPC_PRIVATE,
 				im->stride*im->height,
 				IPC_CREAT | 0777);
-		assert(shminfo.shmid != -1);
+		assert(shmid != -1);
+		shminfo.shmid = (uint32_t)shmid;
 		shminfo.shmaddr = (uint8_t*)shmat (shminfo.shmid, 0, 0);
 		assert(shminfo.shmaddr);
 		im->data = shminfo.shmaddr;

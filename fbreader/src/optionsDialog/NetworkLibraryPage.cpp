@@ -62,7 +62,7 @@ void NetworkLinkBooleanOptionEntry::onAccept(bool state) {
 }
 
 
-NetworkLibraryPage::NetworkLibraryPage(ZLDialogContent &dialogTab) {
+NetworkLibraryPage::NetworkLibraryPage(ZLDialogContent &dialogTab __attribute__((__unused__))) {
     /*
 	NetworkLinkCollection &linkCollection = NetworkLinkCollection::Instance();
 	const size_t linkCollectionSize = linkCollection.size();

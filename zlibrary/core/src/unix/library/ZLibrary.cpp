@@ -66,7 +66,7 @@ ZLibraryImplementation::ZLibraryImplementation() {
 ZLibraryImplementation::~ZLibraryImplementation() {
 }
 
-static void *loadPlugin(const std::string &path) {
+static void __attribute__((__used__)) *loadPlugin(const std::string &path) {
 	ZLLogger::Instance().println(ZLLogger::DEFAULT_CLASS, "loading " + path);
 	void *handle = dlopen(path.c_str(), RTLD_NOW);
 	if (handle == 0) {

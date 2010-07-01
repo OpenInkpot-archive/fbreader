@@ -58,6 +58,8 @@ extern bool emergency_exit;
 
 void book_settings_handler(int idx, bool is_alt);
 
+#define __UNUSED__ __attribute__((__unused__))
+
 #define FONT_SIZE_MIN	6
 #define FONT_SIZE_MAX	24 - FONT_SIZE_MIN
 #define FONT_SIZE(i) ((i)+FONT_SIZE_MIN)
@@ -166,7 +168,7 @@ void ZLEwlGotoPageDialog(FBReader &f)
 static ZLTextTreeParagraph *curTOCParent;
 static cb_list *list;
 
-int toc_handler(int idx, bool is_alt)
+int toc_handler(int idx, bool is_alt __UNUSED__)
 {
 	ZLTextTreeParagraph *selEntry;
 	std::vector<ZLTextTreeParagraph*> toc_list;
@@ -240,7 +242,7 @@ void ZLEwlTOCDialog(FBReader &f)
 	short len;
 	char *p;
 	ContentsModel &cm = (ContentsModel&)*myFbreader->myModel->contentsModel();
-	for(int i = 0; i < cm.paragraphsNumber(); i++) {
+	for(unsigned int i = 0; i < cm.paragraphsNumber(); i++) {
 		if(((ZLTextTreeParagraph*)cm[i])->parent() == cm.myRoot) {
 			p = ((ZLTextParagraph*)cm[i])->myFirstEntryAddress;
 
@@ -305,7 +307,7 @@ void ZLEwlBMKDialog(FBReader &f)
 	std::vector<std::pair<ReadingState, std::pair<int, std::string> > > bookmarks
 		= myFbreader->bookTextView().getBookmarks();
 
-	for(int i = 0; i < bookmarks.size(); i++) {
+	for(unsigned int i = 0; i < bookmarks.size(); i++) {
 		stringstream s;
 		s << _("Page ") << bookmarks.at(i).second.first << ": " << bookmarks.at(i).second.second;
 		cb_list_item item;
@@ -320,7 +322,7 @@ void ZLEwlBMKDialog(FBReader &f)
 	}
 }
 
-void ZLEwlBMKAddedMsg(FBReader &f) {
+void ZLEwlBMKAddedMsg(FBReader &f __UNUSED__) {
 	show_message(_("Bookmark added"));
 }
 
@@ -361,12 +363,12 @@ void search_found_keyhandler(Evas_Object *o, char *keyname)
 	edje_object_part_text_set(o, "text", s.c_str());
 }
 
-void search_not_found_message(FBReader &f)
+void search_not_found_message(FBReader &f __UNUSED__)
 {
 	show_message(_("Text not found"));
 }
 
-void search_found_message(FBReader &f)
+void search_found_message(FBReader &f __UNUSED__)
 {
 	bool n = false, p = false;
 
@@ -461,7 +463,7 @@ void settings_close_handler()
 //    myFbreader->refreshWindow();
 }
 
-void ZLBooleanOption_handler(int idx, bool is_alt)
+void ZLBooleanOption_handler(int idx, bool is_alt __UNUSED__)
 {
 	cb_olist_item *i = &olists.back()->items.at(idx);
 	++i->curval_idx %= i->values.size();
@@ -473,7 +475,7 @@ void ZLBooleanOption_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void font_family_handler(int idx, bool is_alt)
+void font_family_handler(int idx, bool is_alt __UNUSED__)
 {
 	FBTextStyle &baseStyle = FBTextStyle::Instance();
 
@@ -487,7 +489,7 @@ void font_family_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void line_spacing_handler(int idx, bool is_alt)
+void line_spacing_handler(int idx, bool is_alt __UNUSED__)
 {
 	FBTextStyle &baseStyle = FBTextStyle::Instance();
 
@@ -505,7 +507,7 @@ void line_spacing_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void font_size_handler(int idx, bool is_alt)
+void font_size_handler(int idx, bool is_alt __UNUSED__)
 {
 	FBTextStyle &baseStyle = FBTextStyle::Instance();
 
@@ -524,7 +526,7 @@ void font_size_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void indicator_offset_handler(int idx, bool is_alt)
+void indicator_offset_handler(int idx, bool is_alt __UNUSED__)
 {
 	ZLIntegerRangeOption &option = FBView::commonIndicatorInfo().OffsetOption;
 
@@ -542,7 +544,7 @@ void indicator_offset_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void indicator_height_handler(int idx, bool is_alt)
+void indicator_height_handler(int idx, bool is_alt __UNUSED__)
 {
 	ZLIntegerRangeOption &option = FBView::commonIndicatorInfo().HeightOption;
 
@@ -563,7 +565,7 @@ void indicator_height_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void indicator_font_size_handler(int idx, bool is_alt)
+void indicator_font_size_handler(int idx, bool is_alt __UNUSED__)
 {
 	ZLIntegerRangeOption &option = FBView::commonIndicatorInfo().FontSizeOption;
 	option.setValue(FONT_SIZE(idx));
@@ -580,7 +582,7 @@ void indicator_font_size_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void alignment_handler(int idx, bool is_alt)
+void alignment_handler(int idx, bool is_alt __UNUSED__)
 {
 	FBTextStyle &baseStyle = FBTextStyle::Instance();
 
@@ -595,7 +597,7 @@ void alignment_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void margins_val_handler(int idx, bool is_alt)
+void margins_val_handler(int idx, bool is_alt __UNUSED__)
 {
 	FBOptions &margins = FBOptions::Instance();
 	ZLIntegerRangeOption *option;
@@ -629,7 +631,7 @@ void margins_val_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void margins_handler(int idx, bool is_alt)
+void margins_handler(int idx, bool is_alt __UNUSED__)
 {
 	string t;
 
@@ -656,7 +658,7 @@ void margins_handler(int idx, bool is_alt)
 	cb_rcb_new();
 }
 
-void first_line_indent_handler(int idx, bool is_alt)
+void first_line_indent_handler(int idx, bool is_alt __UNUSED__)
 {
 	ZLIntegerRangeOption &option = ((ZLTextFullStyleDecoration*)ZLTextStyleCollection::Instance().decoration(/*REGULAR*/0))->FirstLineIndentDeltaOption;
 	option.setValue(idx * 5);
@@ -673,7 +675,7 @@ void first_line_indent_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void format_style_handler(int idx, bool is_alt)
+void format_style_handler(int idx, bool is_alt __UNUSED__)
 {
 	cb_olist *current_olist = olists.back();
 	if(0 == idx) {
@@ -682,7 +684,7 @@ void format_style_handler(int idx, bool is_alt)
 
 		ZLStringOption &option = FBTextStyle::Instance().FontFamilyOption;
 		int optnum = -1;
-		for(int i = 0; i < myContext->fontFamilies().size(); i++) {
+		for(unsigned int i = 0; i < myContext->fontFamilies().size(); i++) {
 			ADD_VALUE_STRING(myContext->fontFamilies().at(i).c_str());
 			if(myContext->fontFamilies().at(i) == option.value())
 				optnum = i;
@@ -819,10 +821,8 @@ void format_style_handler(int idx, bool is_alt)
 	}
 }
 
-void indicator_handler(int idx, bool is_alt)
+void indicator_handler(int idx, bool is_alt __UNUSED__)
 {
-	cb_olist *current_olist = olists.back();
-
 	FBIndicatorStyle &indicatorInfo = FBView::commonIndicatorInfo();
 
 	if(0 == idx) {
@@ -860,7 +860,7 @@ void indicator_handler(int idx, bool is_alt)
 	}
 }
 
-void default_language_handler(int idx, bool is_alt)
+void default_language_handler(int idx, bool is_alt __UNUSED__)
 {
 	int lsize = sizeof(languages) / sizeof(struct _language);
 
@@ -876,10 +876,10 @@ void default_language_handler(int idx, bool is_alt)
 	}
 }
 
-void default_encoding_set_handler(int idx, bool is_alt)
+void default_encoding_set_handler(int idx, bool is_alt __UNUSED__)
 {
 	const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::Instance().sets();
-	if(idx > sets.size())
+	if(idx > (int)sets.size())
 		return;
 
 	cb_item_value &iv1 = olists.back()->items.at(vlist->parent_item_idx).current_value;
@@ -895,7 +895,7 @@ void default_encoding_set_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void default_encoding_handler(int idx, bool is_alt)
+void default_encoding_handler(int idx, bool is_alt __UNUSED__)
 {
 	const std::vector<ZLEncodingConverterInfoPtr> *pinfos = NULL;
 
@@ -909,7 +909,7 @@ void default_encoding_handler(int idx, bool is_alt)
 				found = true;
 	}
 
-	if(idx >= pinfos->size())
+	if(idx >= (int)pinfos->size())
 		return;
 
 	std::string newenc = (*pinfos).at(idx)->name();
@@ -922,7 +922,7 @@ void default_encoding_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void language_handler(int idx, bool is_alt)
+void language_handler(int idx, bool is_alt __UNUSED__)
 {
 	if(1 == idx) {
 		INIT_VLIST(_("Default Language"), default_language_handler);
@@ -963,10 +963,10 @@ void language_handler(int idx, bool is_alt)
 	}
 }
 
-void book_encoding_set_handler(int idx, bool is_alt)
+void book_encoding_set_handler(int idx, bool is_alt __UNUSED__)
 {
 	const std::vector<shared_ptr<ZLEncodingSet> > &sets = ZLEncodingCollection::Instance().sets();
-	if(idx > sets.size())
+	if(idx > (int)sets.size())
 		return;
 
 	std::string newenc = sets.at(idx)->infos().at(0)->name();
@@ -987,7 +987,7 @@ void book_encoding_set_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void book_encoding_handler(int idx, bool is_alt)
+void book_encoding_handler(int idx, bool is_alt __UNUSED__)
 {
 	shared_ptr<Book> book = myFbreader->myModel->book();
 	const std::vector<ZLEncodingConverterInfoPtr> *pinfos = NULL;
@@ -1002,7 +1002,7 @@ void book_encoding_handler(int idx, bool is_alt)
 				found = true;
 	}
 
-	if(idx >= pinfos->size())
+	if(idx >= (int)pinfos->size())
 		return;
 
 	std::string newenc = (*pinfos).at(idx)->name();
@@ -1018,11 +1018,11 @@ void book_encoding_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void book_language_handler(int idx, bool is_alt)
+void book_language_handler(int idx, bool is_alt __UNUSED__)
 {
 	shared_ptr<Book> book = myFbreader->myModel->book();
 
-	int lsize = sizeof(languages) / sizeof(struct _language);
+	//int lsize = sizeof(languages) / sizeof(struct _language);
 
 	book->setLanguage(languages[idx].langId);
 
@@ -1036,7 +1036,7 @@ void book_language_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void book_para_break_handler(int idx, bool is_alt)
+void book_para_break_handler(int idx, bool is_alt __UNUSED__)
 {
 	std::string fileName = myFbreader->myModel->book()->filePath();
 	FormatPlugin *plugin = &*PluginCollection::Instance().plugin(ZLFile(fileName), false);
@@ -1070,7 +1070,7 @@ void book_para_break_handler(int idx, bool is_alt)
 	}
 }
 
-void book_settings_handler(int idx, bool is_alt)
+void book_settings_handler(int idx, bool is_alt __UNUSED__)
 {
 	shared_ptr<Book> book = myFbreader->myModel->book();
 
@@ -1128,7 +1128,7 @@ void book_settings_handler(int idx, bool is_alt)
 	}
 }
 
-void single_key_handler(int idx, bool is_alt)
+void single_key_handler(int idx, bool is_alt __UNUSED__)
 {
 	if(!actions[idx].actionId)
 		return;
@@ -1144,7 +1144,7 @@ void single_key_handler(int idx, bool is_alt)
 	do_refresh = 2;
 }
 
-void keys_handler(int idx, bool is_alt)
+void keys_handler(int idx, bool is_alt __UNUSED__)
 {
 	char *k;
 	asprintf(&k, _("Key %s"), olists.back()->items.at(idx).name.c_str());
@@ -1158,7 +1158,7 @@ void keys_handler(int idx, bool is_alt)
 	cb_rcb_new();
 }
 
-void settings_dialog_handler(int idx, bool is_alt)
+void settings_dialog_handler(int idx, bool is_alt __UNUSED__)
 {
 	shared_ptr<Book> book = myFbreader->myModel->book();
 //	fprintf(stderr, "options_dialog_handler: %d\n", idx);
@@ -1186,9 +1186,9 @@ void settings_dialog_handler(int idx, bool is_alt)
 		cb_olist_item i;
 
 		ADD_OPTION_STRING(	_("Font Family"), baseStyle.FontFamilyOption.value());
-		ADD_OPTION_INT_F(	_("Font Size"), baseStyle.FontSizeOption.value(), _("%dpt"));
+		ADD_OPTION_INT_F(	_("Font Size"), baseStyle.FontSizeOption.value(), _("%ldpt"));
 		ADD_OPTION_BOOL_H(	_("Bold"), baseStyle.BoldOption.value(), ZLBooleanOption_handler, &baseStyle.BoldOption);
-		ADD_OPTION_INT_F(	_("Line Spacing"), baseStyle.LineSpacePercentOption.value(), _("%d%%"));
+		ADD_OPTION_INT_F(	_("Line Spacing"), baseStyle.LineSpacePercentOption.value(), _("%ld%%"));
 		ADD_OPTION_INT_T(	_("Alignment"), baseStyle.AlignmentOption.value(), alignments[baseStyle.AlignmentOption.value()]);
 		ADD_OPTION_STRING(	_("Margins"), "");
 		ADD_OPTION_INT(		_("First Line Indent"), decoration->FirstLineIndentDeltaOption.value());
@@ -1217,7 +1217,7 @@ void settings_dialog_handler(int idx, bool is_alt)
 		ADD_OPTION_BOOL_H(	_("Show Battery"), indicatorInfo.ShowBatteryOption.value(), ZLBooleanOption_handler, &indicatorInfo.ShowBatteryOption);
 		ADD_OPTION_INT(		_("Indicator Height"), indicatorInfo.HeightOption.value());
 		ADD_OPTION_INT(		_("Offset From Text"), indicatorInfo.OffsetOption.value());
-		ADD_OPTION_INT_F(	_("Font Size"), indicatorInfo.FontSizeOption.value(), _("%dpt"));
+		ADD_OPTION_INT_F(	_("Font Size"), indicatorInfo.FontSizeOption.value(), _("%ldpt"));
 
 		cb_lcb_redraw();
 	} else if(2 == idx) {
@@ -1452,9 +1452,9 @@ void ZLEwlOptionsDialog(FBReader &f)
 	cb_olist_item i;
 
 	ADD_OPTION_STRING(	_("Font Family"), baseStyle.FontFamilyOption.value());
-	ADD_OPTION_INT_F(	_("Font Size"), baseStyle.FontSizeOption.value(), _("%dpt"));
+	ADD_OPTION_INT_F(	_("Font Size"), baseStyle.FontSizeOption.value(), _("%ldpt"));
 	ADD_OPTION_BOOL_H(	_("Bold"), baseStyle.BoldOption.value(), ZLBooleanOption_handler, &baseStyle.BoldOption);
-	ADD_OPTION_INT_F(	_("Line Spacing"), baseStyle.LineSpacePercentOption.value(), _("%d%%"));
+	ADD_OPTION_INT_F(	_("Line Spacing"), baseStyle.LineSpacePercentOption.value(), _("%ld%%"));
 	ADD_OPTION_INT_T(	_("Alignment"), baseStyle.AlignmentOption.value(), alignments[baseStyle.AlignmentOption.value()]);
 	ADD_OPTION_STRING(	_("Margins"), "");
 	ADD_OPTION_INT(		_("First Line Indent"), decoration->FirstLineIndentDeltaOption.value());
@@ -1518,7 +1518,7 @@ void ZLEwlBookInfo(FBReader &f)
 	list_add_tv(_("Title: "), book->title());
 
 	std::string authors;
-	for(int j = 0; j < book->authors().size(); j++) {
+	for(unsigned int j = 0; j < book->authors().size(); j++) {
 		if(!authors.empty())
 			authors += ", ";
 
@@ -1540,7 +1540,7 @@ void ZLEwlBookInfo(FBReader &f)
 	}
 }
 
-int mmenu_handler(int idx, bool is_alt)
+int mmenu_handler(int idx, bool is_alt __UNUSED__)
 {
 	switch(idx) {
 		case 0:
@@ -1631,7 +1631,7 @@ void ZLEwlMainMenu(FBReader &f)
 	}
 }
 
-void ZLEwlHelpDialog(FBReader &f)
+void ZLEwlHelpDialog(FBReader &f __UNUSED__)
 {
     show_help();
 }
@@ -1681,7 +1681,7 @@ void _ZLEwlFontSizeDialog(FBReader &f)
 }
 */
 
-void font_size_dialog_handler(int idx, bool is_alt)
+void font_size_dialog_handler(int idx, bool is_alt __UNUSED__)
 {
 	FBTextStyle &baseStyle = FBTextStyle::Instance();
 	ZLIntegerRangeOption &option = baseStyle.FontSizeOption;

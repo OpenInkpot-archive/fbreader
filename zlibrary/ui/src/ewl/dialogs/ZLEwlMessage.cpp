@@ -33,12 +33,14 @@ extern "C" {
 #include <Ecore_Evas.h>
 #include <Edje.h>
 
+#define __UNUSED__ __attribute__((__unused__))
+
 using namespace std;
 
 extern void ee_init();
 extern bool emergency_exit;
 
-static void die(const char* fmt, ...)
+static void __attribute__((__used__)) die(const char* fmt, ...)
 {
    va_list ap;
    va_start(ap, fmt);
@@ -47,13 +49,13 @@ static void die(const char* fmt, ...)
    exit(EXIT_FAILURE);
 }
 
-static int exit_handler(void* param, int ev_type, void* event)
+static int __attribute__((__used__)) exit_handler(void* param __UNUSED__, int ev_type __UNUSED__, void* event __UNUSED__)
 {
    ecore_main_loop_quit();
    return 1;
 }
 
-static void main_win_close_handler(Ecore_Evas* main_win)
+static void main_win_close_handler(Ecore_Evas* main_win __UNUSED__)
 {
    ecore_main_loop_quit();
 }
@@ -69,12 +71,7 @@ static void main_win_resize_handler(Ecore_Evas* main_win)
    evas_object_resize(main_canvas_edje, w, h);
 }
 
-static void main_win_signal_handler(void* param, Evas_Object* o, const char* emission, const char* source)
-{
-//   printf("%s -> %s\n", source, emission);
-}
-
-static void main_win_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
+static void main_win_key_handler(void* param, Evas* e __UNUSED__, Evas_Object* o, void* event_info)
 {
     Evas_Event_Key_Down* ev = (Evas_Event_Key_Down*)event_info;
 
@@ -105,7 +102,7 @@ void show_message(char *text, void *handler)
 
 	Evas_Object* main_canvas_edje = eoi_create_themed_edje(main_canvas, "fbreader_messagebox", "message");
 	evas_object_name_set(main_canvas_edje, "main_canvas_edje");
-	edje_object_signal_callback_add(main_canvas_edje, "*", "*", main_win_signal_handler, NULL);
+//	edje_object_signal_callback_add(main_canvas_edje, "*", "*", main_win_signal_handler, NULL);
 	edje_object_part_text_set(main_canvas_edje, "text", text);
 	evas_object_move(main_canvas_edje, 0, 0);
 	evas_object_resize(main_canvas_edje, 600, 800);
@@ -152,7 +149,7 @@ struct entry_number {
 	int cnt;
 };
 
-static void entry_win_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
+static void entry_win_key_handler(void* param, Evas* e __UNUSED__, Evas_Object* o, void* event_info)
 {
     Evas_Event_Key_Down* ev = (Evas_Event_Key_Down*)event_info;
 
@@ -170,7 +167,7 @@ static void entry_win_key_handler(void* param, Evas* e, Evas_Object* o, void* ev
 
 		char *t;
 		if(number->number > 0)
-			asprintf(&t, "%s: %-*d", number->text, MAXDIGITS, number->number);
+			asprintf(&t, "%s: %-*ld", number->text, MAXDIGITS, number->number);
 		else
 			asprintf(&t, "%s: %-*c", number->text, MAXDIGITS, 0);
 		edje_object_part_text_set(o, "entrytext", t);
@@ -183,7 +180,7 @@ static void entry_win_key_handler(void* param, Evas* e, Evas_Object* o, void* ev
 
 			char *t;
 			if(number->number > 0)
-				asprintf(&t, "%s: %-*d", number->text, MAXDIGITS, number->number);
+				asprintf(&t, "%s: %-*ld", number->text, MAXDIGITS, number->number);
 			else
 				asprintf(&t, "%s: %-*c", number->text, MAXDIGITS, 0);
 			edje_object_part_text_set(o, "entrytext", t);
@@ -221,7 +218,7 @@ long read_number(char *text)
 
 	Evas_Object* main_canvas_edje = eoi_create_themed_edje(main_canvas, "fbreader_entrybox", "entrybox");
 	evas_object_name_set(main_canvas_edje, "main_canvas_edje");
-	edje_object_signal_callback_add(main_canvas_edje, "*", "*", main_win_signal_handler, NULL);
+//	edje_object_signal_callback_add(main_canvas_edje, "*", "*", main_win_signal_handler, NULL);
 	evas_object_move(main_canvas_edje, 0, 0);
 	evas_object_resize(main_canvas_edje, 600, 800);
 
@@ -230,7 +227,7 @@ long read_number(char *text)
 	edje_object_part_text_set(main_canvas_edje, "entrytext", t);
 	free(t);
 
-	Evas_Coord x, y, w, h, x2, y2, w2, h2;
+	Evas_Coord x, y, w, h;
 	evas_object_geometry_get(
 			edje_object_part_object_get(main_canvas_edje, "entrytext"),
 			&x, &y, &w, &h);
@@ -270,7 +267,7 @@ long read_number(char *text)
 }
 
 static void
-entry_handler(Evas_Object *entry,
+entry_handler(Evas_Object *entry __UNUSED__,
         const char *text,
         void* param)
 {
@@ -282,13 +279,13 @@ entry_handler(Evas_Object *entry,
 	ecore_main_loop_quit();
 }
 
-static void text_entry_resized(Ecore_Evas *ee, Evas_Object *object, int w, int h,
-             void *param)
+static void text_entry_resized(Ecore_Evas *ee __UNUSED__, Evas_Object *object, int w, int h,
+             void *param __UNUSED__)
 {
 	evas_object_resize(object, w, h);
 }
 
-static void evas_object_callback_del(void *data, Evas *e, Evas_Object *obj, void *event_info)
+static void evas_object_callback_del(void *data __UNUSED__, Evas *e __UNUSED__, Evas_Object *obj __UNUSED__, void *event_info __UNUSED__)
 {
 	ecore_main_loop_quit();
 }

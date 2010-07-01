@@ -49,6 +49,8 @@ extern "C" {
 #include <libeoi_themes.h>
 }
 
+#define __UNUSED__ __attribute__((__unused__))
+
 #define _(x) x
 
 #define SETTINGS_LEFT_NAME "settings_left"
@@ -71,19 +73,19 @@ static bool reuse_fcb_win = false;
 
 static bool bookmark_delete_mode = false;
 
-void exit_all(void* param) {
+void exit_all(void* param __UNUSED__) {
 	emergency_exit = true;
 	ecore_main_loop_quit();
 }
 
-static int exit_handler(void* param, int ev_type, void* event)
+static int exit_handler(void* param __UNUSED__, int ev_type __UNUSED__, void* event __UNUSED__)
 {
 	ecore_main_loop_quit();
 
 	return 1;
 }
 
-static void lcb_win_close_handler(Ecore_Evas* main_win)
+static void lcb_win_close_handler(Ecore_Evas* main_win __UNUSED__)
 {
 	ecore_main_loop_quit();
 }
@@ -91,7 +93,7 @@ static void lcb_win_close_handler(Ecore_Evas* main_win)
 static void lcb_page_updated_handler(Evas_Object* choicebox,
 		int cur_page,
 		int total_pages,
-		void* param)
+		void* param __UNUSED__)
 {
     Evas* canvas = evas_object_evas_get(choicebox);
 	Evas_Object *settings_window = evas_object_name_find(canvas, "settings-left-window");
@@ -149,14 +151,12 @@ static void textblock_style_add_fsize(Evas_Object *item, int fsize)
 	free(c);
 }
 
-static void lcb_draw_handler(Evas_Object* choicebox,
+static void lcb_draw_handler(Evas_Object* choicebox __UNUSED__,
 		Evas_Object* item,
 		int item_num,
-		int page_position,
-		void* param)
+		int page_position __UNUSED__,
+		void* param __UNUSED__)
 {
-	char foo[256];
-
 	if(olists.empty())
 		return;
 
@@ -164,7 +164,7 @@ static void lcb_draw_handler(Evas_Object* choicebox,
 	if(!l)
 		return;
 
-	if(item_num >= l->items.size())
+	if(item_num >= (int)l->items.size())
 		return;
 
 	cb_olist_item *i = &l->items.at(item_num);
@@ -190,8 +190,8 @@ static void lcb_draw_handler(Evas_Object* choicebox,
 				edje_object_part_text_set(item, "value",  i->current_value.text.c_str());
 			else if(i->values.size() <= 3) {
 				string s;
-				for(int z = 0; z < i->values.size(); z++)
-					if(z != i->curval_idx) {
+				for(unsigned int z = 0; z < i->values.size(); z++)
+					if((int)z != i->curval_idx) {
 						s += "  <inactive>";
 						s += i->values.at(z).text;
 						s += "</inactive>";
@@ -210,7 +210,7 @@ static void lcb_draw_handler(Evas_Object* choicebox,
 static void lcb_handler(Evas_Object* choicebox,
 		int item_num,
 		bool is_alt,
-		void* param)
+		void* param __UNUSED__)
 {
 //	printf("handle: choicebox: %p, item_num: %d, is_alt: %d, param: %p\n",
 //			choicebox, item_num, is_alt, param);
@@ -230,14 +230,14 @@ static void lcb_handler(Evas_Object* choicebox,
 		l->item_handler(item_num, is_alt);
 }
 
-static void lcb_win_resized(Ecore_Evas *ee, Evas_Object *object, int w, int h,
-             void *param)
+static void lcb_win_resized(Ecore_Evas *ee __UNUSED__, Evas_Object *object, int w, int h,
+             void *param __UNUSED__)
 {
 	evas_object_resize(object, w, h);
 }
 
 static void lcb_win_resized_2(Ecore_Evas *ee, Evas_Object *object, int w, int h,
-             void *param)
+             void *param __UNUSED__)
 {
 	if(edje_object_part_swallow_get(evas_object_name_find(ecore_evas_get(ee), "main-window"), "right-overlay"))
 		evas_object_resize(object, w/2, h);
@@ -245,7 +245,7 @@ static void lcb_win_resized_2(Ecore_Evas *ee, Evas_Object *object, int w, int h,
 		evas_object_resize(object, w, h);
 }
 
-static void choicebox_resized(Ecore_Evas *ee, Evas_Object *object, int w, int h,
+static void choicebox_resized(Ecore_Evas *ee __UNUSED__, Evas_Object *object, int w __UNUSED__, int h __UNUSED__,
              void *param)
 {
 	if(param) {
@@ -254,11 +254,6 @@ static void choicebox_resized(Ecore_Evas *ee, Evas_Object *object, int w, int h,
 			choicebox_set_selection(object, *select_item);
 		*select_item = -1;
 	}
-}
-
-static void lcb_win_signal_handler(void* param, Evas_Object* o, const char* emission, const char* source)
-{
-//	printf("%s -> %s\n", source, emission);
 }
 
 void cb_lcb_invalidate(int idx)
@@ -289,7 +284,7 @@ static void cb_lcb_destroy()
 		ecore_main_loop_quit();
 }
 
-static void lcb_win_key_up_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
+static void lcb_win_key_up_handler(void* param __UNUSED__, Evas* e, Evas_Object* o, void* event_info)
 {
 	int i;
 	Evas_Event_Key_Up* ev = (Evas_Event_Key_Up*)event_info;
@@ -328,7 +323,7 @@ static void lcb_win_key_up_handler(void* param, Evas* e, Evas_Object* o, void* e
 	choicebox_aux_key_up_handler(o, ev);
 }
 
-static void lcb_close_handler(Evas_Object* choicebox, void* param)
+static void lcb_close_handler(Evas_Object* choicebox __UNUSED__, void* param __UNUSED__)
 {
     cb_lcb_destroy();
 }
@@ -359,10 +354,12 @@ void cb_lcb_redraw()
 static Ecore_Idle_Enterer *idle_enterer = NULL;
 
 static int
-idle_render(void *data)
+idle_render(void *data __UNUSED__)
 {
 	void refresh_view();
 	refresh_view();
+
+	return 0;
 }
 
 void ee_init()
@@ -538,25 +535,23 @@ void cb_lcb_new(int select_item)
 static void rcb_page_updated_handler(Evas_Object* choicebox,
 		int cur_page,
 		int total_pages,
-		void* param)
+		void* param __UNUSED__)
 {
     Evas* canvas = evas_object_evas_get(choicebox);
 	Evas_Object *settings_window = evas_object_name_find(canvas, "settings-right-window");
 	choicebox_aux_edje_footer_handler(settings_window, "footer", cur_page, total_pages);
 }
 
-static void rcb_draw_handler(Evas_Object* choicebox,
+static void rcb_draw_handler(Evas_Object* choicebox __UNUSED__,
 		Evas_Object* item,
 		int item_num,
-		int page_position,
-		void* param)
+		int page_position __UNUSED__,
+		void* param __UNUSED__)
 {
-	char foo[256];
-
 	if(!vlist)
 		return;
 
-	if(item_num >= vlist->values.size())
+	if(item_num >= (int)vlist->values.size())
 		return;
 
 	cb_item_value *iv = &vlist->values.at(item_num);
@@ -590,10 +585,10 @@ static void rcb_draw_handler(Evas_Object* choicebox,
 //			choicebox, item, item_num, page_position, param);
 }
 
-static void rcb_handler(Evas_Object* choicebox,
+static void rcb_handler(Evas_Object* choicebox __UNUSED__,
 		int item_num,
 		bool is_alt,
-		void* param)
+		void* param __UNUSED__)
 {
 //	printf("rcb_handle: choicebox: %p, item_num: %d, is_alt: %d, param: %p\n",
 //			choicebox, item_num, is_alt, param);
@@ -606,12 +601,7 @@ static void rcb_handler(Evas_Object* choicebox,
 	cb_rcb_destroy();
 }
 
-static void rcb_win_signal_handler(void* param, Evas_Object* o, const char* emission, const char* source)
-{
-//	printf("%s -> %s\n", source, emission);
-}
-
-static void cb_rcb_destroy()
+static void __attribute__((__used__)) cb_rcb_destroy()
 {
 	Evas* e = ecore_evas_get(lcb_win);
 
@@ -667,7 +657,7 @@ static void cb_rcb_destroy()
 	set_refresh_flag();
 }
 
-static void rcb_close_handler(Evas_Object* choicebox, void* param)
+static void rcb_close_handler(Evas_Object* choicebox __UNUSED__, void* param __UNUSED__)
 {
     cb_rcb_destroy();
 }
@@ -741,26 +731,25 @@ void cb_rcb_new(int select_item)
 }
 
 // fcb
-static void fcb_win_close_handler(Ecore_Evas* main_win)
+static void fcb_win_close_handler(Ecore_Evas* main_win __UNUSED__)
 {
-//	fprintf(stderr, "main_win_close_handler\n");
 	ecore_main_loop_quit();
 }
 
 static void fcb_page_updated_handler(Evas_Object* choicebox,
 		int cur_page,
 		int total_pages,
-		void* param)
+		void* param __UNUSED__)
 {
     Evas* canvas = evas_object_evas_get(choicebox);
     Evas_Object* main_canvas_edje = evas_object_name_find(canvas, "fcb-window");
 	choicebox_aux_edje_footer_handler(main_canvas_edje, "footer", cur_page, total_pages);
 }
 
-static void fcb_draw_handler(Evas_Object* choicebox,
+static void fcb_draw_handler(Evas_Object* choicebox __UNUSED__,
 		Evas_Object* item,
 		int item_num,
-		int page_position,
+		int page_position __UNUSED__,
 		void* param)
 {
 	cb_list *l = (cb_list*)param;
@@ -788,7 +777,7 @@ static void fcb_draw_handler(Evas_Object* choicebox,
 //			choicebox, item, item_num, page_position, param);
 }
 
-static void fcb_handler(Evas_Object* choicebox,
+static void fcb_handler(Evas_Object* choicebox __UNUSED__,
 		int item_num,
 		bool is_alt,
 		void* param)
@@ -839,11 +828,6 @@ static int fcb_screen_change_handler(void *data, int type, void *event)
 	return 0;
 }
 
-static void fcb_win_signal_handler(void* param, Evas_Object* o, const char* emission, const char* source)
-{
-	printf("%s -> %s\n", source, emission);
-}
-
 static void cb_fcb_destroy()
 {
 //	if(l->destroy_handler != NULL)
@@ -859,7 +843,7 @@ static void fcb_win_key_up_handler(void* param, Evas* e, Evas_Object* o, void* e
 
 	const char *k = ev->key;
 
-	Evas_Object* r = evas_object_name_find(e, "cb_full");
+	//Evas_Object* r = evas_object_name_find(e, "cb_full");
 
     /* FIXME: in far future this should be made configurable */
 	if(!strcmp(k, "space")) {
@@ -890,7 +874,7 @@ static void fcb_win_key_up_handler(void* param, Evas* e, Evas_Object* o, void* e
     choicebox_aux_key_up_handler(o, ev);
 }
 
-static void fcb_close_handler(Evas_Object* choicebox, void* param)
+static void fcb_close_handler(Evas_Object* choicebox __UNUSED__, void* param __UNUSED__)
 {
     cb_fcb_destroy();
 }

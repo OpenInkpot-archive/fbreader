@@ -88,11 +88,11 @@ int ZLDialogManager::questionBox(const ZLResourceKey &key, const ZLResourceKey &
 	return questionBox(key, dialogMessage(key), button0, button1, button2);
 }
 
-shared_ptr<ZLProgressDialog> ZLDialogManager::createProgressDialog(const ZLResourceKey &key) const {
+shared_ptr<ZLProgressDialog> ZLDialogManager::createProgressDialog(const ZLResourceKey &key __attribute__ ((__unused__))) const {
 	return 0;
 }
 
-void ZLDialogManager::wait(const ZLResourceKey &key, ZLRunnable &runnable) const {
+void ZLDialogManager::wait(const ZLResourceKey &key __attribute__ ((__unused__)), ZLRunnable &runnable __attribute__ ((__unused__))) const {
 //FIXME later
 	runnable.run();
     /*
@@ -105,6 +105,6 @@ void ZLDialogManager::wait(const ZLResourceKey &key, ZLRunnable &runnable) const
     */
 }
 
-shared_ptr<ZLOpenFileDialog> ZLDialogManager::createOpenFileDialog(const std::string &directoryPath, const ZLOpenFileDialog::Filter &filter) const {
+shared_ptr<ZLOpenFileDialog> ZLDialogManager::createOpenFileDialog(const std::string &directoryPath __attribute__ ((__unused__)), const ZLOpenFileDialog::Filter &filter __attribute__ ((__unused__))) const {
 	return 0;
 }
