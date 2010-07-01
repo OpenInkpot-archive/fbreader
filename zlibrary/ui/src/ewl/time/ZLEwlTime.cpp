@@ -41,5 +41,5 @@ void ZLEwlTimeManager::removeTask(shared_ptr<ZLRunnable> task) {
 	}
 }
 
-void ZLEwlTimeManager::removeTaskInternal(shared_ptr<ZLRunnable> task) {
+void ZLEwlTimeManager::removeTaskInternal(shared_ptr<ZLRunnable> task __attribute__ ((__unused__))) {
 }

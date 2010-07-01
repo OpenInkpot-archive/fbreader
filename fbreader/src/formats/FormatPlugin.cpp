@@ -93,6 +93,6 @@ const std::string &FormatPlugin::tryOpen(const std::string&) const {
 	return EMPTY;
 }
 
-shared_ptr<ZLImage> FormatPlugin::coverImage(const Book &book) const {
+shared_ptr<ZLImage> FormatPlugin::coverImage(const Book &book __attribute__((__unused__))) const {
 	return 0;
 }

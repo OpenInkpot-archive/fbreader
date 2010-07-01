@@ -32,7 +32,7 @@ private:
 	bool accepts(const std::string &filePath) const;
 };
 
-bool BookFileFilter::accepts(const std::string &filePath) const {
+bool BookFileFilter::accepts(const std::string &filePath __attribute__((__unused__))) const {
 	return true;
 }
 

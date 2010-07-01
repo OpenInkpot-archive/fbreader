@@ -33,7 +33,7 @@ public:
 
 public:
 	int mirroredX(int x) const;
-	void invertRegion(int x0, int y0, int x1, int y1) { };
+	void invertRegion(int x0 __attribute__ ((__unused__)), int y0 __attribute__ ((__unused__)), int x1 __attribute__ ((__unused__)), int y1 __attribute__ ((__unused__))) { };
 
 private:
 	void clear(ZLColor color);

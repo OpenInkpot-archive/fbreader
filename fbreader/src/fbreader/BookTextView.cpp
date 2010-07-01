@@ -128,7 +128,7 @@ void BookTextView::setModel(shared_ptr<ZLTextModel> model, shared_ptr<Book> book
 	myBookmarks.clear();
 	myCurrentBookmarkSize = 0;
 	myCurrentBookmarkSize = ZLIntegerOption(ZLCategoryKey::BOOKMARKS, myBook->filePath(), BMK_SIZE, 0).value();
-	for(int i = 0; i < myCurrentBookmarkSize; i++) {
+	for(unsigned int i = 0; i < myCurrentBookmarkSize; i++) {
 		std::string bufferParagraph = BMK_PARAGRAPH_PREFIX;
 		std::string bufferWord = BMK_WORD_PREFIX;
 		std::string bufferPage = BMK_PAGE_PREFIX;
@@ -209,7 +209,7 @@ void BookTextView::saveBookmarks() {
 
 void BookTextView::addBookmark() {
 	const ZLTextWordCursor &cursor = textArea().startCursor();
-	const ZLTextParagraphCursor &paragraph = cursor.paragraphCursor();
+	//const ZLTextParagraphCursor &paragraph = cursor.paragraphCursor();
 
 	myBookmarks.push_back(std::make_pair(Position(cursor.paragraphCursor().index(), cursor.elementIndex(), 0), positionIndicator()->currentPage()));
 }
@@ -223,7 +223,7 @@ void BookTextView::gotoBookmark(unsigned int idx) {
 std::vector<std::pair<BookTextView::Position, std::pair<int, std::string> > > BookTextView::getBookmarks() {
 	BookmarkTextVector ret;
 
-	for(int i = 0; i < myBookmarks.size(); i++) {
+	for(unsigned int i = 0; i < myBookmarks.size(); i++) {
 		ZLTextWordCursor pos = textArea().startCursor();
 		pos.moveToParagraph(myBookmarks.at(i).first.Paragraph);
 		pos.moveTo(myBookmarks.at(i).first.Word, 0);
@@ -396,7 +396,7 @@ bool BookTextView::getHyperlinkInfo(const ZLTextElementRectangle &rectangle, std
 	return hyperlinkKind != REGULAR;
 }
 
-bool BookTextView::_onStylusPress(int x, int y) {
+bool BookTextView::_onStylusPress(int x __attribute__((__unused__)), int y __attribute__((__unused__))) {
 	return false;
 }
 

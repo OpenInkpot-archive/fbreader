@@ -193,11 +193,11 @@ void ZLEwlPaintContext::setFont(const std::string &family, int size, bool bold, 
 	}
 }
 
-void ZLEwlPaintContext::setColor(ZLColor color, LineStyle style) {
+void ZLEwlPaintContext::setColor(ZLColor color, LineStyle style __attribute__ ((__unused__))) {
 	fColor = 0.299 * color.Red + 0.587 * color.Green + 0.114 * color.Blue; 
 }
 
-void ZLEwlPaintContext::setFillColor(ZLColor color, FillStyle style) {
+void ZLEwlPaintContext::setFillColor(ZLColor color, FillStyle style __attribute__ ((__unused__))) {
 	//fColor = color;
     fColor = 0.299 * color.Red + 0.587 * color.Green + 0.114 * color.Blue;
 }
@@ -221,7 +221,7 @@ void ZLEwlPaintContext::setFillColor(ZLColor color, FillStyle style) {
 }
 */
 
-int ZLEwlPaintContext::stringWidth(const char *str, int len, bool rtl) const {
+int ZLEwlPaintContext::stringWidth(const char *str, int len, bool rtl __attribute__ ((__unused__))) const {
 	if(!len)
 		return 0;
 
@@ -402,7 +402,7 @@ int ZLEwlPaintContext::descent() const {
 }
 */
 
-void ZLEwlPaintContext::drawString(int x, int y, const char *str, int len, bool rtl) {
+void ZLEwlPaintContext::drawString(int x, int y, const char *str, int len, bool rtl __attribute__ ((__unused__))) {
 /*	FT_Face _face = pango_fc_font_lock_face((PangoFcFont*)myAnalysis.font);
 	FT_Face *face = &_face;
 
@@ -419,7 +419,7 @@ void ZLEwlPaintContext::drawString(int x, int y, const char *str, int len, bool 
 	FT_GlyphSlot  slot = face->glyph;
 	FT_BitmapGlyph glyph;
 	FT_BitmapGlyph *pglyph;
-	FT_Matrix     matrix;                 /* transformation matrix */
+	//FT_Matrix     matrix;                 /* transformation matrix */
 	FT_Vector     pen;                    /* untransformed origin  */
 
 	FT_UInt glyph_idx = 0;
@@ -547,14 +547,11 @@ void ZLEwlPaintContext::drawString(int x, int y, const char *str, int len, bool 
 
 ZLImageData *cover_image = NULL;
 
-void ZLEwlPaintContext::drawImage(int x, int y, const ZLImageData &image, int width, int height, ZLPaintContext::ScalingType type) {
+void ZLEwlPaintContext::drawImage(int x, int y, const ZLImageData &image, int width __attribute__ ((__unused__)), int height __attribute__ ((__unused__)), ZLPaintContext::ScalingType type __attribute__ ((__unused__))) {
 	drawImage(x, y, image);
 }
 
 void ZLEwlPaintContext::drawImage(int x, int y, const ZLImageData &image) {
-	char *c;
-	char *c_src;
-	int s, s_src;
 	int iW = image.width();
 	int iH = image.height();
 	float fscal = 1.0;
@@ -642,9 +639,7 @@ void ZLEwlPaintContext::drawLine(int x0, int y0, int x1, int y1) {
 }
 
 void ZLEwlPaintContext::drawLine(int x0, int y0, int x1, int y1, bool fill) {
-	int i, j;
-	int k, s;
-	int p;
+	int i, j, k;
 	bool done = false;
 
 	if(x1 != x0) {
@@ -708,10 +703,10 @@ void ZLEwlPaintContext::fillRectangle(int x0, int y0, int x1, int y1) {
 	} while(((y1 > y0) && (j <= y1)) || ((y1 < y0) && (j >= y1)));
 }
 
-void ZLEwlPaintContext::drawFilledCircle(int x, int y, int r) {
+void ZLEwlPaintContext::drawFilledCircle(int x __attribute__ ((__unused__)), int y  __attribute__ ((__unused__)), int r __attribute__ ((__unused__))) {
 }
 
-void ZLEwlPaintContext::clear(ZLColor color) {
+void ZLEwlPaintContext::clear(ZLColor color  __attribute__ ((__unused__))) {
 	memset(image->data, pal[255], image->width * image->height * image->bpp / 8);
 }
 
@@ -773,7 +768,6 @@ void ZLEwlPaintContext::drawGlyph(FT_Bitmap* bitmap, FT_Int x, FT_Int y)
 	FT_Int  y_max = y + bitmap->rows;
 	unsigned char val;
 	unsigned int white = pal[255];
-	int s;
 
 	for ( i = x, p = 0; i < x_max; i++, p++ ) {
 		for ( j = y, q = 0; j < y_max; j++, q++ ) {
@@ -802,7 +796,7 @@ void ZLEwlPaintContext::drawGlyph(FT_Bitmap* bitmap, FT_Int x, FT_Int y)
 
 void ZLEwlPaintContext::invertRegion(int x0, int y0, int x1, int y1)
 {
-	int pixel;
+	unsigned int pixel;
 	for(int i = x0; i <= x1; i++) {
 		for(int j = y0; j <= y1; j++) {
 			pixel = 0xffffff & xcb_image_get_pixel(im, i, j);

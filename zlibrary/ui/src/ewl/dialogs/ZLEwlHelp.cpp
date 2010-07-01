@@ -37,12 +37,14 @@ extern "C" {
 #include <Ecore_Evas.h>
 #include <Edje.h>
 
+#define __UNUSED__ __attribute__((__unused__))
+
 using namespace std;
 
 extern void ee_init();
 extern bool emergency_exit;
 
-static void die(const char* fmt, ...)
+static void __attribute__ ((__used__)) die(const char* fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
@@ -51,13 +53,13 @@ static void die(const char* fmt, ...)
     exit(EXIT_FAILURE);
 }
 
-static int exit_handler(void* param, int ev_type, void* event)
+static int __attribute__ ((__used__)) exit_handler(void* param __UNUSED__, int ev_type __UNUSED__, void* event __UNUSED__)
 {
     ecore_main_loop_quit();
     return 1;
 }
 
-static void main_win_close_handler(Ecore_Evas* main_win)
+static void __attribute__ ((__used__)) main_win_close_handler(Ecore_Evas* main_win __UNUSED__)
 {
     ecore_main_loop_quit();
 }
@@ -85,8 +87,8 @@ static void help_closed(Evas_Object* help)
 static void page_updated_handler(Evas_Object* tb,
         int cur_page,
         int total_pages,
-        const char* header,
-        void* param)
+        const char* header __UNUSED__,
+        void* param __UNUSED__)
 {
     Evas* canvas = evas_object_evas_get(tb);
     Evas_Object* rr = evas_object_name_find(canvas, "help-window");
@@ -131,7 +133,8 @@ void show_help()
             window);
 
     ecore_x_randr_events_select(ecore_evas_software_x11_window_get(main_win), 1);
-    Ecore_Event_Handler *sc_handler = ecore_event_handler_add(ECORE_X_EVENT_SCREEN_CHANGE, screen_change_handler, main_win);
+    //Ecore_Event_Handler *sc_handler = 
+	ecore_event_handler_add(ECORE_X_EVENT_SCREEN_CHANGE, screen_change_handler, main_win);
 
     ecore_evas_callback_resize_set(main_win, main_win_resize_handler);
 

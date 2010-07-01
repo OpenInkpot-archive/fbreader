@@ -71,6 +71,8 @@ extern "C" {
 #include <png.h>
 #include <gif_lib.h>
 
+#define __UNUSED__ __attribute__((__unused__))
+
 std::string cover_image_id;
 
 static const short dither_2bpp_8x8[] = {
@@ -248,7 +250,7 @@ void my_skip_input_data (j_decompress_ptr cinfo, long num_bytes)
 	src->pub.bytes_in_buffer -= num_bytes; 
 }
 
-boolean my_resync_to_restart (j_decompress_ptr cinfo, int desired)
+boolean my_resync_to_restart (j_decompress_ptr cinfo __UNUSED__, int desired __UNUSED__)
 {
 	return false;
 }
@@ -281,12 +283,12 @@ struct s_my_png {
 	int size;
 };
 
-static void mypng_error_func (png_structp png, png_const_charp msg)
+static void mypng_error_func (png_structp png, png_const_charp msg __UNUSED__)
 {
 	longjmp(png_jmpbuf(png), 1);
 }
 
-static void mypng_warning_func (png_structp png, png_const_charp msg)
+static void mypng_warning_func (png_structp png, png_const_charp msg __UNUSED__)
 {
 	longjmp(png_jmpbuf(png), 1);
 }
@@ -341,16 +343,11 @@ void ZLEwlImageData::setPixel(unsigned char r, unsigned char g, unsigned char b)
 	*myPosition = 0.299 * r + 0.587 * g + 0.114 * b;
 }
 
-void ZLEwlImageData::copyFrom(const ZLImageData &source, unsigned int targetX, unsigned int targetY) {
-	char *c;
-	char *c_src;
-	int s, s_src;
+void ZLEwlImageData::copyFrom(const ZLImageData &source, unsigned int targetX __UNUSED__, unsigned int targetY __UNUSED__) {
 	int sW = source.width();
 	int sH = source.height();
 
 	ZLEwlImageData *source_image = (ZLEwlImageData *)&source;
-
-	char *src = source_image->getImageData();
 
 	memcpy(myImageData, source_image->getImageData(), sW * sH);
 }
@@ -465,7 +462,7 @@ void ZLEwlImageManager::convertImageDirectJpeg(const std::string &stringData, ZL
 
 		if(dalgo == 1) {
 			unsigned char *s = (unsigned char*)buffer[0];
-			for(int i = 0; i < cinfo.output_width; i++)
+			for(unsigned int i = 0; i < cinfo.output_width; i++)
 				*c++ = Dither2BitColor(*s++, i, cinfo.output_scanline - 1);
 		} else
 			memcpy(c, (char*)buffer[0], cinfo.output_width);
@@ -558,7 +555,7 @@ void ZLEwlImageManager::convertImageDirectPng(const std::string &stringData, ZLI
 	register int dalgo = myDitherAlgo.value();
 	char *c;	
 	for(int pass = 0; pass < number_passes; pass++) {
-		for(int y = 0; y < height; y++) {
+		for(unsigned int y = 0; y < height; y++) {
 
 			png_read_rows(png_ptr, (unsigned char **)&row, png_bytepp_NULL, 1);
 
@@ -566,7 +563,7 @@ void ZLEwlImageManager::convertImageDirectPng(const std::string &stringData, ZLI
 
 			if(dalgo == 1) {
 				unsigned char *s = (unsigned char*)row;
-				for(int i = 0; i < width; i++)
+				for(unsigned int i = 0; i < width; i++)
 					*c++ = Dither2BitColor(*s++, i, y);
 			} else 
 				memcpy(c, (char*)row, width);
@@ -639,13 +636,11 @@ void ZLEwlImageManager::convertImageDirectGif(const std::string &stringData, ZLI
 		InterlacedOffset[] = { 0, 4, 2, 1 }, /* The way Interlaced image should. */
 		InterlacedJumps[] = { 8, 8, 4, 2 };    /* be read - offsets and jumps... */
 
-	int	i, j, Error, NumFiles, Size, Row, Col, Width, Height, ExtCode, Count;
+	int	i, j, Size, Row, Col, Width, Height, ExtCode, Count;
 	GifRecordType RecordType;
 	GifByteType *Extension;
 	GifRowType *ScreenBuffer;
 	ColorMapObject *ColorMap;
-
-	int transparent;
 
 	ScreenBuffer = (GifRowType *) malloc(GifFile->SHeight * sizeof(GifRowType *));
 
@@ -722,14 +717,12 @@ void ZLEwlImageManager::convertImageDirectGif(const std::string &stringData, ZLI
 
 	char *c;	
 	int p;
-	int pixel, s;
 
-	int MinIntensity, MaxIntensity, AvgIntensity;
-	unsigned long ValueMask;
 	GifColorType *ColorMapEntry = ColorMap->Colors;
 
 	/* Let find out what are the intensities in the color map: */
-	/*    MaxIntensity = 0;
+	/*    int MinIntensity, MaxIntensity, AvgIntensity;
+		  unsigned long ValueMask;
 		  MinIntensity = 256 * 100;
 		  for (i = 0; i < ColorMapSize; i++) {
 		  p = ColorMapEntry[i].Red * 30 +
@@ -799,11 +792,8 @@ int last_bit_set (int v)
 	static void
 rearrangePixels(unsigned char* buf, uint32 width, uint32 bit_count, int row, ZLImageData &data)
 {
-	char tmp;
 	uint32 i;
-
 	char *c;	
-	int pixel, s;
 
 	ZLIntegerOption myDitherAlgo(ZLCategoryKey::LOOK_AND_FEEL, "Options", "DitherAlgo", 0);
 	register int dalgo = myDitherAlgo.value();
@@ -831,7 +821,6 @@ rearrangePixels(unsigned char* buf, uint32 width, uint32 bit_count, int row, ZLI
 		case 32:
 			{
 				c = ((ZLEwlImageData&)data).getImageData() + width * row;
-				unsigned char* buf1 = buf;
 				for (i = 0; i < width; i++, buf += 4) {
 					unsigned char x = buf[2] * 0.299 +
 						buf[1] * 0.587 +
@@ -854,7 +843,6 @@ void ZLEwlImageManager::convertImageDirectBmp(const std::string &stringData, ZLI
 	int xres, yres, w, h, spp, bps;
 
 	const char *p = stringData.c_str();
-	struct stat instat;
 
 	BMPFileHeader file_hdr;
 	BMPInfoHeader info_hdr;
@@ -1066,7 +1054,7 @@ void ZLEwlImageManager::convertImageDirectBmp(const std::string &stringData, ZLI
 					goto bad1;
 				}
 
-				for (row = 0; row < h; row++) {
+				for (row = 0; row < (unsigned)h; row++) {
 					uint32 offset;
 
 					if (info_hdr.iHeight > 0)
@@ -1179,7 +1167,7 @@ void ZLEwlImageManager::convertImageDirectBmp(const std::string &stringData, ZLI
 					if ( comprbuf[i] ) {
 						runlength = comprbuf[i++];
 						for ( k = 0;
-								runlength > 0 && j < uncompr_size && i < compr_size && x < w;
+								runlength > 0 && j < uncompr_size && i < compr_size && (int)x < w;
 								++k, ++x) {
 							if (info_hdr.iBitCount == 8)
 								uncomprbuf[j++] = comprbuf[i];
@@ -1238,7 +1226,7 @@ void ZLEwlImageManager::convertImageDirectBmp(const std::string &stringData, ZLI
 				}
 
 				// TODO: suboptimal, later improve the above to yield the corrent orientation natively
-				for (row = 0; row < h; ++row) {
+				for (row = 0; (int)row < h; ++row) {
 					memcpy (xdata + row * w, uncomprbuf + (h - 1 - row) * w, w);
 					rearrangePixels(xdata + row * w, w, info_hdr.iBitCount, row, data);
 				}

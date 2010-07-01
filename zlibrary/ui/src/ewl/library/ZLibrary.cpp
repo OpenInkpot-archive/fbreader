@@ -148,7 +148,7 @@ void set_busy_cursor(bool set)
 		xcb_free_cursor(connection, cursor);
 }
 
-char *get_rotated_key(char **keys)
+const char *get_rotated_key(const char **keys)
 {
 	xcb_randr_get_screen_info_cookie_t cookie;
 	xcb_randr_get_screen_info_reply_t *reply;
@@ -239,7 +239,7 @@ void ZLEwlLibraryImplementation::init(int &argc, char **&argv) {
 			break;
 		}
 
-		char *p;
+		const char *p;
 		if(argc > 1)
 			p = argv[1];
 		else
@@ -284,13 +284,13 @@ ZLPaintContext *ZLEwlLibraryImplementation::createContext() {
 	return (ZLPaintContext *)pc;
 }
 
-static char *cursor_keys[] = { "Up", "Right", "Down", "Left", "Up", "Right", "Down", "Left" };
-static char *jog_keys[] = { "Prior", "Next", "Next", "Prior", "Next", "Prior", "Prior", "Next" };
+static const char *cursor_keys[] = { "Up", "Right", "Down", "Left", "Up", "Right", "Down", "Left" };
+static const char *jog_keys[] = { "Prior", "Next", "Next", "Prior", "Next", "Prior", "Prior", "Next" };
 
 struct _key {
 	int keynum;
 	const char *keyname;
-	char **rotkeys;
+	const char **rotkeys;
 };
 
 static struct _key _keys[] = {
@@ -428,7 +428,7 @@ void main_loop(ZLApplication *application)
 			efifo.push_back(e);
 		}
 
-		while(e = xcb_poll_for_event(connection))
+		while((e = xcb_poll_for_event(connection)))
 			efifo.push_back(e);
 
 		if(xcb_connection_has_error(connection)) {
@@ -449,7 +449,7 @@ void main_loop(ZLApplication *application)
 					{
 						xcb_key_press_event_t *ev = (xcb_key_press_event_t *)e;
 
-						if(!alt_pressed && kmap[ev->detail]->keyname == "Alt_L")
+						if(!alt_pressed && !strncmp(kmap[ev->detail]->keyname, "Alt_L", strlen("Alt_L")))
 							alt_pressed = true;
 
 						break;
@@ -458,7 +458,7 @@ void main_loop(ZLApplication *application)
 					{
 						xcb_key_release_event_t *ev = (xcb_key_release_event_t *)e;
 
-						if(alt_pressed && kmap[ev->detail]->keyname == "Alt_L") {
+						if(alt_pressed && !strncmp(kmap[ev->detail]->keyname, "Alt_L", strlen("Alt_L"))) {
 							alt_pressed = false;
 							continue;
 						}
@@ -493,7 +493,7 @@ void main_loop(ZLApplication *application)
 						if(count_if(efifo.begin(), efifo.end(), isExpose) > 0)
 							break;
 
-						xcb_expose_event_t *expose = (xcb_expose_event_t *)e;
+						//xcb_expose_event_t *expose = (xcb_expose_event_t *)e;
 
 						if(visibility != XCB_VISIBILITY_FULLY_OBSCURED) {
 							((FBReader*)application)->_refreshWindow();
@@ -549,23 +549,23 @@ void main_loop(ZLApplication *application)
 }
 
 static struct atom {
-	char *name;
+	const char *name;
 	xcb_atom_t atom;
 } atoms[] = {
-	"UTF8_STRING", 0,
-	"ACTIVE_DOC_AUTHOR", 0,
-	"ACTIVE_DOC_TITLE", 0,
-	"ACTIVE_DOC_FILENAME", 0,
-	"ACTIVE_DOC_FILEPATH", 0,
-	"ACTIVE_DOC_SERIES", 0,
-	"ACTIVE_DOC_SERIES_NUMBER", 0,
-	"ACTIVE_DOC_TYPE", 0,
-	"ACTIVE_DOC_SIZE", 0,
-	"ACTIVE_DOC_CURRENT_POSITION", 0,
-	"ACTIVE_DOC_CURRENT_PAGE", 0,
-	"ACTIVE_DOC_PAGES_COUNT", 0,
-	"ACTIVE_DOC_WINDOW_ID", 0,
-	"ACTIVE_DOC_COVER_IMAGE", 0,
+	{ "UTF8_STRING", 0 },
+	{ "ACTIVE_DOC_AUTHOR", 0 },
+	{ "ACTIVE_DOC_TITLE", 0 },
+	{ "ACTIVE_DOC_FILENAME", 0 },
+	{ "ACTIVE_DOC_FILEPATH", 0 },
+	{ "ACTIVE_DOC_SERIES", 0 },
+	{ "ACTIVE_DOC_SERIES_NUMBER", 0 },
+	{ "ACTIVE_DOC_TYPE", 0 },
+	{ "ACTIVE_DOC_SIZE", 0 },
+	{ "ACTIVE_DOC_CURRENT_POSITION", 0 },
+	{ "ACTIVE_DOC_CURRENT_PAGE", 0 },
+	{ "ACTIVE_DOC_PAGES_COUNT", 0 },
+	{ "ACTIVE_DOC_WINDOW_ID", 0 },
+	{ "ACTIVE_DOC_COVER_IMAGE", 0 },
 };
 
 static void init_properties()
@@ -618,7 +618,7 @@ void set_properties()
 	}
 
 	std::string authors;
-	for(int j = 0; j < book->authors().size(); j++) {
+	for(unsigned int j = 0; j < book->authors().size(); j++) {
 		if(!authors.empty())
 			authors += ", ";
 

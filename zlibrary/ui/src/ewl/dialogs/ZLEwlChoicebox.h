@@ -149,7 +149,7 @@ extern cb_vlist *vlist;
 		i.curval_idx = -1;	\
 		{	\
 			char *t;	\
-			asprintf(&t, "%d", __value);	\
+			asprintf(&t, "%ld", __value);	\
 			i.current_value.text = t; \
 			free(t);	\
 		}	\

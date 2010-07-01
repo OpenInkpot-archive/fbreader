@@ -210,7 +210,7 @@ void ZLTextArea::drawTextLine(Style &style, const ZLTextLineInfo &info, int y, s
 //		const ZLTextElement &element = paragraph[it->ElementIndex];
 		ZLTextElement::Kind kind = element.kind();
 
-		if ((pos.elementIndex() == it->ElementIndex) && ((kind == ZLTextElement::WORD_ELEMENT) || (kind == ZLTextElement::IMAGE_ELEMENT))) {
+		if (((int)pos.elementIndex() == it->ElementIndex) && ((kind == ZLTextElement::WORD_ELEMENT) || (kind == ZLTextElement::IMAGE_ELEMENT))) {
 			style.setTextStyle(it->Style, it->BidiLevel);
 			const int wx = it->XStart;
 			const int wy = it->YEnd - style.elementDescent(element) - style.textStyle()->verticalShift();
