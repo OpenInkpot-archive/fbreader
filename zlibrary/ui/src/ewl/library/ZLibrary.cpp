@@ -472,6 +472,11 @@ void main_loop(ZLApplication *application)
 						else
 							pressed_key = s_key->keyname;
 
+						if(((FBReader*)application)->mode() == FBReader::DICT_MODE && s_key->keynum >= 10 && s_key->keynum <= 18) {
+							((FBReader*)application)->highlightWordOnLineAtY((s_key->keynum - 10) * 78 + 49);
+							break;
+						}
+
 						in_main_loop = false;
 						if(alt_pressed)
 							application->doActionByKey(std::string("Alt+") + pressed_key);

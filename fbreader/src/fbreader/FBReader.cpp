@@ -553,6 +553,23 @@ void FBReader::highlightPrevLineWord()
 	word_it = w;
 }
 
+void FBReader::highlightWordOnLineAtY(int ycoord)
+{
+	const ZLTextElementMap &elementMap = ((ZLTextView&)*myBookTextView).textArea().myTextElementMap;
+
+	for (ZLTextElementIterator w = elementMap.begin(); w != elementMap.end(); ++w) {
+		if(!isword(w))
+			continue;
+
+		if(w->YStart > ycoord) {
+			invertRegion(*word_it);
+			word_it = w;
+			invertRegion(*word_it);
+			return;
+		}
+	}
+}
+
 void FBReader::openDict()
 {
 	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
