@@ -141,6 +141,7 @@ public:
 	void highlightCurrentLink();
 	void highlightNextLink();
 	void highlightPrevLink();
+	void highlightWordOnLineAtY(int ycoord);
 	void openHyperlink();
 
 	inline bool isword(ZLTextElementIterator e);
