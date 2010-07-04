@@ -1,3 +1,12 @@
+fbreader (0.12.10-2) zelazny; urgency=low
+
+  * Mark selected font family and font size in choicebox
+  * get rid of warnings
+  * dictionary mode: choose line using number keys
+  * Adjustment to new ecore API
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sun, 04 Jul 2010 23:44:29 +0200
+
 fbreader (0.12.10-1) zelazny; urgency=low
 
   * merged new upstream version (0.12.10)
