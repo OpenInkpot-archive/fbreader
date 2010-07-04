@@ -78,7 +78,7 @@ void exit_all(void* param __UNUSED__) {
 	ecore_main_loop_quit();
 }
 
-static int exit_handler(void* param __UNUSED__, int ev_type __UNUSED__, void* event __UNUSED__)
+static Eina_Bool exit_handler(void* param __UNUSED__, int ev_type __UNUSED__, void* event __UNUSED__)
 {
 	ecore_main_loop_quit();
 
@@ -353,7 +353,7 @@ void cb_lcb_redraw()
 
 static Ecore_Idle_Enterer *idle_enterer = NULL;
 
-static int
+static Eina_Bool
 idle_render(void *data __UNUSED__)
 {
 	void refresh_view();
@@ -385,7 +385,7 @@ void ee_init()
 	}
 }
 
-static int lcb_screen_change_handler(void *data, int type, void *event)
+static Eina_Bool lcb_screen_change_handler(void *data, int type, void *event)
 {
 	if(type != ECORE_X_EVENT_SCREEN_CHANGE)
 		return 0;
@@ -804,7 +804,7 @@ static void fcb_handler(Evas_Object* choicebox __UNUSED__,
 	}
 }
 
-static int fcb_screen_change_handler(void *data, int type, void *event)
+static Eina_Bool fcb_screen_change_handler(void *data, int type, void *event)
 {
 	if(type != ECORE_X_EVENT_SCREEN_CHANGE)
 		return 0;

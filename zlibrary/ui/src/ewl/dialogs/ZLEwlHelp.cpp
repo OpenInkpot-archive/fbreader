@@ -95,7 +95,7 @@ static void page_updated_handler(Evas_Object* tb,
     choicebox_aux_edje_footer_handler(rr, "footer", cur_page, total_pages);
 }
 
-static int screen_change_handler(void *data, int type, void *event)
+static Eina_Bool screen_change_handler(void *data, int type, void *event)
 {
     if(type != ECORE_X_EVENT_SCREEN_CHANGE)
         return 0;
