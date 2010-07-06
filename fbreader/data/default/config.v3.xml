@@ -15,4 +15,7 @@
 	  <option name="Base:fontSize" value="12"/>
 	  <option name="Base:lineSpacingPercent" value="100"/>
   </group>
+  <group name="Indicator">
+	  <option name="fontFamily" value="Liberation Sans"/>
+  </group>
 </config>

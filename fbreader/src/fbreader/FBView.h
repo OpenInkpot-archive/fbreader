@@ -36,6 +36,8 @@ public:
 	ZLIntegerRangeOption HeightOption;
 	ZLIntegerRangeOption OffsetOption;
 	ZLIntegerRangeOption FontSizeOption;
+	ZLStringOption FontFamilyOption;
+	ZLBooleanOption BoldOption;
 
 public:
 	FBIndicatorStyle();
@@ -49,6 +51,8 @@ public:
 	int height() const;
 	int offset() const;
 	int fontSize() const;
+	const std::string &fontFamily() const;
+	bool bold() const;
 };
 
 class FBView : public ZLTextView {

@@ -114,7 +114,7 @@ size_t ZLTextView::PositionIndicator::endTextIndex() const {
 }
 
 void ZLTextView::PositionIndicator::drawExtraText(const std::string &text) {
-	context().setFont(myTextView.baseStyle()->fontFamily(), myInfo.fontSize(), false, false);
+	context().setFont(myInfo.fontFamily(), myInfo.fontSize(), myInfo.bold(), false);
 	context().setColor(myTextView.color());
 
 	int width = context().stringWidth(text.data(), text.length(), false);

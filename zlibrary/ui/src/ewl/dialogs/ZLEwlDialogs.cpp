@@ -565,6 +565,18 @@ void indicator_height_handler(int idx, bool is_alt __UNUSED__)
 	do_refresh = 2;
 }
 
+void indicator_font_family_handler(int idx, bool is_alt __UNUSED__)
+{
+	ZLStringOption &option = FBView::commonIndicatorInfo().FontFamilyOption;
+	option.setValue(myContext->fontFamilies().at(idx));
+	
+	cb_item_value &iv = olists.back()->items.at(vlist->parent_item_idx).current_value;
+	iv.text = iv.sval = option.value();
+
+	cb_lcb_invalidate(vlist->parent_item_idx);
+	do_refresh = 2;
+}
+
 void indicator_font_size_handler(int idx, bool is_alt __UNUSED__)
 {
 	ZLIntegerRangeOption &option = FBView::commonIndicatorInfo().FontSizeOption;
@@ -850,6 +862,19 @@ void indicator_handler(int idx, bool is_alt __UNUSED__)
 		
 		cb_rcb_new();
 	} else if(7 == idx) {
+		INIT_VLIST(_("Font Family"), indicator_font_family_handler);
+		vlist->font_list = true;
+
+		ZLStringOption &option = indicatorInfo.FontFamilyOption;
+		int optnum = -1;
+		for(unsigned int i = 0; i < myContext->fontFamilies().size(); i++) {
+			ADD_VALUE_STRING(myContext->fontFamilies().at(i).c_str());
+			if(myContext->fontFamilies().at(i) == option.value())
+				optnum = i;
+		}
+		
+		cb_rcb_new(optnum);
+	} else if(8 == idx) {
 		INIT_VLIST(_("Indicator Font Size"), indicator_font_size_handler);
 		vlist->fsize_list = true;
 
@@ -1217,7 +1242,9 @@ void settings_dialog_handler(int idx, bool is_alt __UNUSED__)
 		ADD_OPTION_BOOL_H(	_("Show Battery"), indicatorInfo.ShowBatteryOption.value(), ZLBooleanOption_handler, &indicatorInfo.ShowBatteryOption);
 		ADD_OPTION_INT(		_("Indicator Height"), indicatorInfo.HeightOption.value());
 		ADD_OPTION_INT(		_("Offset From Text"), indicatorInfo.OffsetOption.value());
+		ADD_OPTION_STRING(	_("Font Family"), indicatorInfo.FontFamilyOption.value());
 		ADD_OPTION_INT_F(	_("Font Size"), indicatorInfo.FontSizeOption.value(), _("%ldpt"));
+		ADD_OPTION_BOOL_H(	_("Bold"), indicatorInfo.BoldOption.value(), ZLBooleanOption_handler, &indicatorInfo.BoldOption);
 
 		cb_lcb_redraw();
 	} else if(2 == idx) {

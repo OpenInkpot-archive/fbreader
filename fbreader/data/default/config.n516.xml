@@ -26,4 +26,7 @@
 	  <option name="Base:bold" value="true"/>
 	  <option name="Base:lineSpacingPercent" value="100"/>
   </group>
+  <group name="Indicator">
+	  <option name="fontFamily" value="Liberation Sans"/>
+  </group>
 </config>
