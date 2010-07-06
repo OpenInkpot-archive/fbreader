@@ -42,7 +42,9 @@ FBIndicatorStyle::FBIndicatorStyle() :
 	ColorOption(ZLCategoryKey::LOOK_AND_FEEL, INDICATOR, "Color", ZLColor(127, 127, 127)),
 	HeightOption(ZLCategoryKey::LOOK_AND_FEEL, INDICATOR, "Height", 1, 100, 10),
 	OffsetOption(ZLCategoryKey::LOOK_AND_FEEL, INDICATOR, "Offset", 0, 100, 3),
-	FontSizeOption(ZLCategoryKey::LOOK_AND_FEEL, INDICATOR, "FontSize", 4, 72, 6) {
+	FontSizeOption(ZLCategoryKey::LOOK_AND_FEEL, INDICATOR, "FontSize", 4, 72, 6),
+	FontFamilyOption(ZLCategoryKey::LOOK_AND_FEEL, INDICATOR, "fontFamily", ""),
+	BoldOption(ZLCategoryKey::LOOK_AND_FEEL, INDICATOR, "bold", false) {
 }
 
 ZLTextPositionIndicatorInfo::Type FBIndicatorStyle::type() const {
@@ -79,6 +81,14 @@ int FBIndicatorStyle::offset() const {
 
 int FBIndicatorStyle::fontSize() const {
 	return FontSizeOption.value();
+}
+
+const std::string &FBIndicatorStyle::fontFamily() const {
+	return FontFamilyOption.value();
+}
+
+bool FBIndicatorStyle::bold() const {
+	return BoldOption.value();
 }
 
 shared_ptr<ZLTextPositionIndicatorInfo> FBView::ourIndicatorInfo;
