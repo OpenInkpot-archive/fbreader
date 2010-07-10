@@ -572,8 +572,9 @@ void FBReader::highlightWordOnLineAtY(int ycoord)
 
 void FBReader::openDict()
 {
+	const ZLTextArea &area = ((ZLTextView&)*myBookTextView).textArea();
 	ZLTextSelectionModel &sm = ((BookTextView*)&*myBookTextView)->selectionModel();
-	sm.selectWord(word_it->XStart, word_it->YStart);
+	sm.selectWord(word_it->XStart + area.hOffset(), word_it->YStart + area.vOffset());
 	if(isDictionarySupported())
 		openInDictionary(ZLUnicodeUtil::toLower(sm.text()));
 	sm.clear();
