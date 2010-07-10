@@ -1,3 +1,16 @@
+fbreader (0.12.1-22.bradbury.2) bradbury; urgency=low
+
+  * backported following changes from master:
+  * merge with 0.12.10
+  * Fixed width of first space in string started from '-'(or
+    equivalents). Patch by GrayNM
+  * Mark selected font family and font size in choicebox
+  * dictionary mode: choose line using number keys
+  * Make indicator font adjustable. Ticket #164.
+  * Fix word selection in dictionary mode
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 10 Jul 2010 14:05:30 +0200
+
 fbreader (0.12.1-22.bradbury.1) bradbury; urgency=low
 
   * bradbury branch
