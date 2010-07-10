@@ -1,3 +1,10 @@
+fbreader (0.12.10-3) zelazny; urgency=low
+
+  * Make indicator font adjustable. Ticket #164.
+  * Fix word selection in dictionary mode
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 10 Jul 2010 14:03:16 +0200
+
 fbreader (0.12.10-2) zelazny; urgency=low
 
   * Mark selected font family and font size in choicebox
