@@ -1,9 +1,9 @@
 # FBReader translation file.
-#
+# 
 # Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
 # This file is distributed under the same license as the FBReader package.
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FBreader\n"
@@ -51,11 +51,6 @@ msgstr "Zur Seite"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
 msgid "Show Table of Contents"
 msgstr "Inhaltsverzeichnis zeigen"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1599
-msgid "Dictionary"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
 msgid "Go to Home"
@@ -122,23 +117,6 @@ msgstr "Position anzeigen/verbergen"
 #, fuzzy
 msgid "Show Settings"
 msgstr "buchspezifische Einstellungen"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
-msgid "Cancel/Quit"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
-msgid "Show Local Menu"
-msgstr ""
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
-#, fuzzy
-msgid "Show Help"
-msgstr "Uhr anzeigen"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
-msgid "Show font size dialog"
-msgstr ""
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "Arabic"
@@ -438,11 +416,6 @@ msgstr "Sprache des Buchs"
 msgid "Break Paragraph At"
 msgstr "Absatz bei"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1145
-#, fuzzy, c-format
-msgid "Key %s"
-msgstr "Taste %d"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1174
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1440
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1479
@@ -541,177 +514,197 @@ msgstr "An"
 msgid "Off"
 msgstr "Aus"
 
-#: fbreader/data/default/keydefs.n516.tmpl:4
-#: fbreader/data/default/keydefs.v3.tmpl:4
-msgid "0"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:24
+msgid "Up"
+msgstr "Hoch"
 
-#: fbreader/data/default/keydefs.n516.tmpl:5
-#: fbreader/data/default/keydefs.v3.tmpl:5
-msgid "1"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:23
+msgid "Down"
+msgstr "Runter"
 
-#: fbreader/data/default/keydefs.n516.tmpl:6
-#: fbreader/data/default/keydefs.v3.tmpl:6
-msgid "2"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:22
+msgid "LP Prior"
+msgstr "Blätter-Rad hoch (lang)"
 
-#: fbreader/data/default/keydefs.n516.tmpl:7
-#: fbreader/data/default/keydefs.v3.tmpl:7
-msgid "3"
-msgstr ""
+#: fbreader/data/default/keydefs.n516.tmpl:21
+msgid "LP Next"
+msgstr "Blätter-Rad runter (lang)"
 
-#: fbreader/data/default/keydefs.n516.tmpl:8
-#: fbreader/data/default/keydefs.v3.tmpl:8
-msgid "4"
-msgstr ""
+#: fbreader/data/default/keydefs.v3.tmpl:14
+msgid "LP 0"
+msgstr "0 (lang)"
+
+#: fbreader/data/default/keydefs.n516.tmpl:28
+msgid "Zoom"
+msgstr "Zoom"
+
+#: fbreader/data/default/keydefs.n516.tmpl:26
+#: fbreader/data/default/keydefs.v3.tmpl:30
+msgid "Left"
+msgstr "Rechts"
+
+#: fbreader/data/default/keydefs.n516.tmpl:25
+#: fbreader/data/default/keydefs.v3.tmpl:28
+msgid "Right"
+msgstr "Links"
+
+#: fbreader/data/default/keydefs.v3.tmpl:16
+msgid "LP 2"
+msgstr "2 (lang)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:15
+msgid "LP 1"
+msgstr "1 (lang)"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1599
+msgid "Dictionary"
+msgstr "Wörterbuch"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1145
+#, c-format
+msgid "Key %s"
+msgstr "Taste %s"
 
 #: fbreader/data/default/keydefs.n516.tmpl:9
 #: fbreader/data/default/keydefs.v3.tmpl:9
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: fbreader/data/default/keydefs.n516.tmpl:10
 #: fbreader/data/default/keydefs.v3.tmpl:10
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: fbreader/data/default/keydefs.n516.tmpl:11
 #: fbreader/data/default/keydefs.v3.tmpl:11
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #: fbreader/data/default/keydefs.n516.tmpl:12
 #: fbreader/data/default/keydefs.v3.tmpl:12
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #: fbreader/data/default/keydefs.n516.tmpl:13
 #: fbreader/data/default/keydefs.v3.tmpl:13
 msgid "9"
-msgstr ""
+msgstr "9"
 
 #: fbreader/data/default/keydefs.n516.tmpl:14
-#, fuzzy
 msgid "M/Bookmark"
-msgstr "Lesezeichen"
+msgstr "M/Bookmark"
 
 #: fbreader/data/default/keydefs.n516.tmpl:17
 #: fbreader/data/default/keydefs.v3.tmpl:24
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: fbreader/data/default/keydefs.n516.tmpl:18
 msgid "Back"
-msgstr ""
+msgstr "Zurück"
 
 #: fbreader/data/default/keydefs.n516.tmpl:19
-#, fuzzy
 msgid "Next"
-msgstr "Nächste Seite"
+msgstr "Blätter-Rad runter"
 
 #: fbreader/data/default/keydefs.n516.tmpl:20
 msgid "Prior"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:21
-msgid "LP Next"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:22
-msgid "LP Prior"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:23
-msgid "Down"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:24
-msgid "Up"
-msgstr ""
-
-#: fbreader/data/default/keydefs.n516.tmpl:25
-#: fbreader/data/default/keydefs.v3.tmpl:28
-#, fuzzy
-msgid "Right"
-msgstr "rechtsbündig"
-
-#: fbreader/data/default/keydefs.n516.tmpl:26
-#: fbreader/data/default/keydefs.v3.tmpl:30
-#, fuzzy
-msgid "Left"
-msgstr "linksbündig"
-
-#: fbreader/data/default/keydefs.n516.tmpl:28
-msgid "Zoom"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:14
-msgid "LP 0"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:15
-msgid "LP 1"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:16
-msgid "LP 2"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:17
-msgid "LP 3"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:18
-msgid "LP 4"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:19
-msgid "LP 5"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:20
-msgid "LP 6"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:21
-msgid "LP 7"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:22
-msgid "LP 8"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:23
-msgid "LP 9"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:25
-msgid "LP OK"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:26
-msgid "C"
-msgstr ""
-
-#: fbreader/data/default/keydefs.v3.tmpl:29
-#, fuzzy
-msgid "LP Right"
-msgstr "rechtsbündig"
-
-#: fbreader/data/default/keydefs.v3.tmpl:31
-msgid "LP Left"
-msgstr ""
+msgstr "Blätter-Rad hoch"
 
 #: fbreader/data/default/keydefs.v3.tmpl:32
 msgid "+"
-msgstr ""
+msgstr "+"
+
+#: fbreader/data/default/keydefs.v3.tmpl:31
+msgid "LP Left"
+msgstr "Links (lang)"
 
 #: fbreader/data/default/keydefs.v3.tmpl:33
 msgid "-"
-msgstr ""
+msgstr "-"
 
-#, fuzzy
+#: fbreader/data/default/keydefs.n516.tmpl:8
+#: fbreader/data/default/keydefs.v3.tmpl:8
+msgid "4"
+msgstr "4"
+
+#: fbreader/data/default/keydefs.n516.tmpl:7
+#: fbreader/data/default/keydefs.v3.tmpl:7
+msgid "3"
+msgstr "3"
+
+#: fbreader/data/default/keydefs.n516.tmpl:4
+#: fbreader/data/default/keydefs.v3.tmpl:4
+msgid "0"
+msgstr "0"
+
+#: fbreader/data/default/keydefs.n516.tmpl:6
+#: fbreader/data/default/keydefs.v3.tmpl:6
+msgid "2"
+msgstr "2"
+
+#: fbreader/data/default/keydefs.n516.tmpl:5
+#: fbreader/data/default/keydefs.v3.tmpl:5
+msgid "1"
+msgstr "1"
+
+#: fbreader/data/default/keydefs.v3.tmpl:23
+msgid "LP 9"
+msgstr "9 (lang)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:25
+msgid "LP OK"
+msgstr "OK (lang)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:21
+msgid "LP 7"
+msgstr "7 (lang)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:22
+msgid "LP 8"
+msgstr "8 (lang)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:19
+msgid "LP 5"
+msgstr "5 (lang)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:20
+msgid "LP 6"
+msgstr "6 (lang)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:17
+msgid "LP 3"
+msgstr "3 (lang)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:18
+msgid "LP 4"
+msgstr "4 (lang)"
+
+#: fbreader/data/default/keydefs.v3.tmpl:26
+msgid "C"
+msgstr "C"
+
+#: fbreader/data/default/keydefs.v3.tmpl:29
+msgid "LP Right"
+msgstr "Rechts (lang)"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
+msgid "Cancel/Quit"
+msgstr "Abbrechen"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
+msgid "Show Local Menu"
+msgstr "Lokales menü"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
+msgid "Show Help"
+msgstr "Hilfe"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
+msgid "Show font size dialog"
+msgstr "Schriftgröße"
+
 #~ msgid "Menu"
 #~ msgstr "Buchmenü"
 
