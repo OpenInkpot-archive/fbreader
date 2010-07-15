@@ -104,19 +104,9 @@ msgstr "Schrift vergrößern"
 msgid "Decrease Font Size"
 msgstr "Schrift verkleinern"
 
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:102
-#, fuzzy
-msgid "Toggle Bold Font"
-msgstr "Fettschrift umschalten"
-
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
 msgid "Toggle Position Indicator"
 msgstr "Position anzeigen/verbergen"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
-#, fuzzy
-msgid "Show Settings"
-msgstr "buchspezifische Einstellungen"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:118
 msgid "Arabic"
@@ -704,6 +694,14 @@ msgstr "Hilfe"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
 msgid "Show font size dialog"
 msgstr "Schriftgröße"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:102
+msgid "Toggle Bold Font"
+msgstr "Fettschrift umschalten"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
+msgid "Show Settings"
+msgstr "Einstellungen"
 
 #~ msgid "Menu"
 #~ msgstr "Buchmenü"
