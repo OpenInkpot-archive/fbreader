@@ -679,9 +679,21 @@ msgstr "C"
 msgid "LP Right"
 msgstr "Rechts (lang)"
 
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:102
+msgid "Toggle Bold Font"
+msgstr "Fettschrift umschalten"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
+msgid "Show font size dialog"
+msgstr "Schriftgröße anpassen"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
+msgid "Show Settings"
+msgstr "Einstellungen"
+
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:106
 msgid "Cancel/Quit"
-msgstr "Abbrechen"
+msgstr "Abbrechen/Verlassen"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:108
 msgid "Show Local Menu"
@@ -690,18 +702,6 @@ msgstr "Lokales menü"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
 msgid "Show Help"
 msgstr "Hilfe"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
-msgid "Show font size dialog"
-msgstr "Schriftgröße"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:102
-msgid "Toggle Bold Font"
-msgstr "Fettschrift umschalten"
-
-#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
-msgid "Show Settings"
-msgstr "Einstellungen"
 
 #~ msgid "Menu"
 #~ msgstr "Buchmenü"
