@@ -359,7 +359,7 @@ idle_render(void *data __UNUSED__)
 	void refresh_view();
 	refresh_view();
 
-	return 0;
+	return 1;
 }
 
 void ee_init()
