@@ -191,38 +191,13 @@ ZLEwlViewWidget::ZLEwlViewWidget(ZLApplication *application, ZLView::Angle initi
 	colormap = screen->default_colormap;
 
 	xcb_alloc_color_reply_t *rep;
-/*	rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, 0, 0, 0), NULL);
-	pal_[0] = rep->pixel;
-	free(rep);
-	rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, 0x55<<8, 0x55<<8, 0x55<<8), NULL);
-	pal_[1] = rep->pixel;
-	free(rep);
-	rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, 0xaa<<8, 0xaa<<8, 0xaa<<8), NULL);
-	pal_[2] = rep->pixel;
-	free(rep);
-	rep = xcb_alloc_color_reply (connection, xcb_alloc_color (connection, colormap, 0xff<<8, 0xff<<8, 0xff<<8), NULL);
-	pal_[3] = rep->pixel;
-	free(rep);
-*/
-
 	xcb_alloc_color_cookie_t color_rq[256];
 	xcb_pal_colours = 1;
 
-	for (int i = 0; i < 256; i++) {
-		// FIXME: workaround for broken palette on n516
-		if (i < 8)
-			continue;
-
+	for (int i = 0; i < 256; i++)
 		color_rq[i] = xcb_alloc_color(connection, colormap, i<<8, i<<8, i<<8);
-	}
 
 	for (int i = 0; i < 256; i++) {
-		// FIXME: workaround for broken palette on n516
-		if (i < 8) {
-			pal_[i] = 0;
-			continue;
-		}
-
 		rep = xcb_alloc_color_reply(connection, color_rq[i], NULL);
 		pal_[i] = rep->pixel;
 
@@ -231,8 +206,6 @@ ZLEwlViewWidget::ZLEwlViewWidget(ZLApplication *application, ZLView::Angle initi
 
 		free(rep);
 	}
-
-	fprintf(stderr, "xcb_pal_colours %d\n", xcb_pal_colours);
 
 	pal = pal_;
 
