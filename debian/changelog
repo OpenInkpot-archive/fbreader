@@ -1,3 +1,10 @@
+fbreader (0.12.10-4) zelazny; urgency=low
+
+  * Fix returning value in idle_render
+  * Palette is fixed now, removing workaround
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 20 Jul 2010 19:26:05 +0200
+
 fbreader (0.12.10-3) zelazny; urgency=low
 
   * Make indicator font adjustable. Ticket #164.
