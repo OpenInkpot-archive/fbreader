@@ -452,10 +452,10 @@ void cb_lcb_new(int select_item)
 
 	extern xcb_window_t window;
 	ecore_x_icccm_transient_for_set(
-			ecore_evas_software_x11_window_get(lcb_win),
+			ecore_evas_software_x11_8_window_get(lcb_win),
 			window);
 
-	ecore_x_randr_events_select(ecore_evas_software_x11_window_get(lcb_win), 1);
+	ecore_x_randr_events_select(ecore_evas_software_x11_8_window_get(lcb_win), 1);
 	Ecore_Event_Handler *sc_handler = ecore_event_handler_add(ECORE_X_EVENT_SCREEN_CHANGE, lcb_screen_change_handler, lcb_win);
 
 	ecore_evas_resize(lcb_win, w/2, h);
@@ -524,7 +524,7 @@ void cb_lcb_new(int select_item)
 
 	if(lcb_win) {
 		ecore_event_handler_del(sc_handler);
-		ecore_x_randr_events_select(ecore_evas_software_x11_window_get(lcb_win), 0);
+		ecore_x_randr_events_select(ecore_evas_software_x11_8_window_get(lcb_win), 0);
 		ecore_evas_hide(lcb_win);
 		ecore_evas_free(lcb_win);
 		lcb_win = NULL;
@@ -950,10 +950,10 @@ void cb_fcb_new(cb_list *list, int select_item)
 
         extern xcb_window_t window;
         ecore_x_icccm_transient_for_set(
-                ecore_evas_software_x11_window_get(fcb_win),
+                ecore_evas_software_x11_8_window_get(fcb_win),
                 window);
 
-        ecore_x_randr_events_select(ecore_evas_software_x11_window_get(fcb_win), 1);
+        ecore_x_randr_events_select(ecore_evas_software_x11_8_window_get(fcb_win), 1);
         sc_handler = ecore_event_handler_add(ECORE_X_EVENT_SCREEN_CHANGE, fcb_screen_change_handler, fcb_win);
 		main_canvas_edje = eoi_main_window_create(main_canvas);
 		fprintf(stderr, "main_canvas_edje: %p\n", main_canvas_edje);

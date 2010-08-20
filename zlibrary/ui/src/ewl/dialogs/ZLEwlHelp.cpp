@@ -129,10 +129,10 @@ void show_help()
 
     extern xcb_window_t window;
     ecore_x_icccm_transient_for_set(
-            ecore_evas_software_x11_window_get(main_win),
+            ecore_evas_software_x11_8_window_get(main_win),
             window);
 
-    ecore_x_randr_events_select(ecore_evas_software_x11_window_get(main_win), 1);
+    ecore_x_randr_events_select(ecore_evas_software_x11_8_window_get(main_win), 1);
     //Ecore_Event_Handler *sc_handler = 
 	ecore_event_handler_add(ECORE_X_EVENT_SCREEN_CHANGE, screen_change_handler, main_win);
 

@@ -93,7 +93,7 @@ void show_message(char *text, void *handler)
 
 	extern xcb_window_t window;
 	ecore_x_icccm_transient_for_set(
-			ecore_evas_software_x11_window_get(main_win),
+			ecore_evas_software_x11_8_window_get(main_win),
 			window);
 
 	Evas* main_canvas = ecore_evas_get(main_win);
@@ -209,7 +209,7 @@ long read_number(char *text)
 
 	extern xcb_window_t window;
 	ecore_x_icccm_transient_for_set(
-			ecore_evas_software_x11_window_get(main_win),
+			ecore_evas_software_x11_8_window_get(main_win),
 			window);
 
 	Evas* main_canvas = ecore_evas_get(main_win);
@@ -300,7 +300,7 @@ Ecore_Evas *text_entry(char *text, void (*handler)(const char*))
 
 	extern xcb_window_t window;
 	ecore_x_icccm_transient_for_set(
-			ecore_evas_software_x11_window_get(main_win),
+			ecore_evas_software_x11_8_window_get(main_win),
 			window);
 
 	Evas* main_canvas = ecore_evas_get(main_win);
