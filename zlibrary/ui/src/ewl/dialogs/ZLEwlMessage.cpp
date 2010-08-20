@@ -87,7 +87,7 @@ void show_message(char *text, void *handler)
 {
 	ee_init();
 
-	Ecore_Evas* main_win = ecore_evas_software_x11_new(0, 0, 0, 0, 600, 800);
+	Ecore_Evas* main_win = ecore_evas_software_x11_8_new(0, 0, 0, 0, 600, 800);
 	ecore_evas_title_set(main_win, "MB");
 	ecore_evas_name_class_set(main_win, "MB", "MB");
 
@@ -203,7 +203,7 @@ long read_number(char *text)
 	number.number = -1;
 	number.cnt = 0;
 
-	Ecore_Evas* main_win = ecore_evas_software_x11_new(0, 0, 0, 0, 600, 800);
+	Ecore_Evas* main_win = ecore_evas_software_x11_8_new(0, 0, 0, 0, 600, 800);
 	ecore_evas_title_set(main_win, "EB");
 	ecore_evas_name_class_set(main_win, "EB", "EB");
 
@@ -294,7 +294,7 @@ Ecore_Evas *text_entry(char *text, void (*handler)(const char*))
 {
 	ee_init();
 
-	Ecore_Evas* main_win = ecore_evas_software_x11_new(0, 0, 0, 0, 600, 800);
+	Ecore_Evas* main_win = ecore_evas_software_x11_8_new(0, 0, 0, 0, 600, 800);
 	ecore_evas_title_set(main_win, "TE");
 	ecore_evas_name_class_set(main_win, "TE", "TE");
 

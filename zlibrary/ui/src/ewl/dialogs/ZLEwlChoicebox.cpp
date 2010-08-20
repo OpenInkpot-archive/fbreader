@@ -445,7 +445,7 @@ void cb_lcb_new(int select_item)
 	ecore_x_window_size_get(window, &w, &h);
 
 
-	lcb_win = ecore_evas_software_x11_new(0, 0, 0, 0, w, h);
+	lcb_win = ecore_evas_software_x11_8_new(0, 0, 0, 0, w, h);
 
 	ecore_evas_title_set(lcb_win, "LCB");
 	ecore_evas_name_class_set(lcb_win, "LCB", "LCB");
@@ -939,7 +939,7 @@ void cb_fcb_new(cb_list *list, int select_item)
 		ecore_x_drawable_geometry_get_fetch();
 		ecore_x_window_size_get(window, &w, &h);
 
-		fcb_win = ecore_evas_software_x11_new(0, 0, 0, 0, w, h);
+		fcb_win = ecore_evas_software_x11_8_new(0, 0, 0, 0, w, h);
 
 		ecore_evas_title_set(fcb_win, "FCB");
 		ecore_evas_name_class_set(fcb_win, "FCB", "FCB");

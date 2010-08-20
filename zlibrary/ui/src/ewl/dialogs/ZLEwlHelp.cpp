@@ -122,7 +122,7 @@ void show_help()
 {
     ee_init();
 
-    Ecore_Evas *main_win = ecore_evas_software_x11_new(0, 0, 0, 0, 600, 800);
+    Ecore_Evas *main_win = ecore_evas_software_x11_8_new(0, 0, 0, 0, 600, 800);
     ecore_evas_borderless_set(main_win, 0);
     ecore_evas_title_set(main_win, gettext("FBReader: Help"));
     ecore_evas_name_class_set(main_win, "fbreader_help", "fbreader_help");
