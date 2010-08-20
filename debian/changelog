@@ -1,3 +1,9 @@
+fbreader (0.12.10-6) zelazny; urgency=low
+
+  * Fix calls to ecore_evas_software_x11_window_get
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Fri, 20 Aug 2010 16:11:05 +0200
+
 fbreader (0.12.10-5) zelazny; urgency=low
 
   * Use 8bpp engine
