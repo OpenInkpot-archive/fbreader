@@ -1,3 +1,10 @@
+fbreader (0.12.10-5) zelazny; urgency=low
+
+  * Use 8bpp engine
+  * Update translations
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Fri, 20 Aug 2010 15:26:59 +0200
+
 fbreader (0.12.10-4) zelazny; urgency=low
 
   * Fix returning value in idle_render
