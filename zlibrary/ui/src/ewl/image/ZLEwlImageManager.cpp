@@ -527,7 +527,11 @@ void ZLEwlImageManager::convertImageDirectPng(const std::string &stringData, ZLI
 
 	if (bit_depth == 16) png_set_strip_16(png_ptr);
 
-	png_set_strip_alpha(png_ptr);
+	png_color_16 bg = {0, 0xffff, 0xffff, 0xffff, 0xffff};
+	png_set_background(png_ptr, &bg, PNG_BACKGROUND_GAMMA_SCREEN, 0, 0.0);
+
+	if (! (color_type & PNG_COLOR_MASK_ALPHA))
+		png_set_strip_alpha(png_ptr);
 
 	if (bit_depth < 8)
 		png_set_packing(png_ptr);
