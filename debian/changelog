@@ -1,3 +1,11 @@
+fbreader (0.12.10-8) zelazny; urgency=low
+
+  * Fix rendering transparent images (PNG)
+  * Fix uninitialized variable. #1002
+  * Fix key handling in dictionary mode. #976
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sun, 28 Nov 2010 22:23:56 +0100
+
 fbreader (0.12.10-7) zelazny; urgency=low
 
   * Add depend on madshelf-positions-fbreader
