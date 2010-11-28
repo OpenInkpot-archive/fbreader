@@ -147,6 +147,7 @@ public:
 
 	virtual shared_ptr<ZLKeyBindings> keyBindings();	
 	void doActionByKey(const std::string &key);
+	void doActionByName(const std::string &actionID);
 
 	void quit();
 	virtual bool closeView();

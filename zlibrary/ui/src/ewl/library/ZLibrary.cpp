@@ -322,6 +322,11 @@ static struct _key _keys[] = {
 //	{ 161, "XF86RotateWindows", NULL },
 	{ 172, "XF86AudioPlay", NULL },
 	{ 225, "XF86Search", NULL },
+       { 98, "Up", &cursor_keys[0] },
+       { 104, "Down", &cursor_keys[2] },
+       { 100, "Left", &cursor_keys[3] },
+       { 102, "Right", &cursor_keys[1] },
+
 	{ 0, NULL, NULL }
 };
 
@@ -472,8 +477,35 @@ void main_loop(ZLApplication *application)
 						else
 							pressed_key = s_key->keyname;
 
-						if(((FBReader*)application)->mode() == FBReader::DICT_MODE && s_key->keynum >= 10 && s_key->keynum <= 18) {
-							((FBReader*)application)->highlightWordOnLineAtY((s_key->keynum - 10) * 78 + 49);
+						if(((FBReader*)application)->mode() == FBReader::DICT_MODE) {
+							if(s_key->keynum >= 10 && s_key->keynum <= 18)
+								((FBReader*)application)->highlightWordOnLineAtY((s_key->keynum - 10) * 78 + 49);
+							else if(s_key->keynum == 19)
+								((FBReader*)application)->highlightWordOnLineAtY(49);
+							else {
+								std::string action = "";
+
+								if(pressed_key == "Return")
+									action = "okAction";
+								if(pressed_key == "Down")
+									action = "downAction";
+								if(pressed_key == "Up")
+									action = "upAction";
+								if(pressed_key == "Left")
+									action = "leftAction";
+								if(pressed_key == "Right")
+									action = "rightAction";
+								if(pressed_key == "Escape")
+									action = "cancel";
+
+								if(action.size())
+									application->doActionByName(action);
+							}
+
+							break;
+						}
+						if(((FBReader*)application)->mode() == FBReader::HYPERLINK_NAV_MODE && pressed_key == "Return") {
+							application->doActionByName("okAction");
 							break;
 						}
 
