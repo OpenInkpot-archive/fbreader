@@ -232,7 +232,7 @@ int ZLEwlPaintContext::stringWidth(const char *str, int len, bool rtl __attribut
 	unsigned char         in_code;
 	int                   expect;
 	FT_UInt glyph_idx = 0;
-	FT_UInt previous;
+	FT_UInt previous = 0;
 	FT_Bool use_kerning;
 	FT_Vector delta; 
 	int kerning = 0;
