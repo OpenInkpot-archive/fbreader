@@ -1,46 +1,65 @@
+# Automake crap added in
 PACKAGE = fbreader
- 
-POFILES = $(wildcard *.po)
-MOFILES = $(patsubst %.po,%.mo,$(POFILES))
- 
-ROOTDIR = $(CURDIR)/..
-MAKEFILESDIR = $(ROOTDIR)/makefiles
-include $(MAKEFILESDIR)/config.mk
+datadir=$(SHAREDIR)
+mkdir_p=mkdir -p
+srcdir=.
+INSTALL=install
+DESTDIR=$(DEST_DIR)
+VERSION="@VERSION@"
+PACKAGE_BUGREPORT="@PACKAGE_BUGREPORT@"
+abs_srcdir = $(abspath .)
+# End
 
 top_builddir = ..
-localedir=$(SHAREDIR)/locale
- 
+
+# -- Build
+
+POFILES = $(wildcard *.po)
+MOFILES = $(patsubst %.po,%.mo,$(POFILES)) 
+
+CLEANFILES = $(MOFILES)
+
+localedir=$(datadir)/locale
+
 MSGFMT = msgfmt
- 
+
 all: $(MOFILES)
- 
+
 %.mo: %.po
-	@echo "$(MSGFMT) -o $@ $<"; $(MSGFMT) -o t-$@ $< && mv t-$@ $@
+	$(MSGFMT) -o t-$@ $< && mv t-$@ $@
 
-update-po:
-	rm -f $(PACKAGE).pot
-	pwd
-	xgettext -k_ -d $(PACKAGE) \
-	  --foreign-user \
-	  --package-name="$(PACKAGE)" --package-version="@VERSION@" \
-	  --msgid-bugs-address="@PACKAGE_BUGREPORT@" \
-	  -f POTFILES -D $(ROOTDIR) -o $(PACKAGE).pot
-	for cat in "" $(POFILES); do \
+install-data-hook: $(MOFILES)
+	for cat in "" $(MOFILES); do \
 	  if test -z "$$cat"; then continue; fi; \
-	  msgmerge -o tmp-$$cat $$cat $(PACKAGE).pot && \
-	  mv -f tmp-$$cat $$cat; \
-	done
- 
-do_install: $(MOFILES)
-	@for cat in "" $(MOFILES); do \
-		if test -z "$$cat"; then continue; fi; \
-		cat=`basename $$cat`; \
-		lang=`echo $$cat | sed -e 's/\.mo$$//'`; \
-		dir=$(localedir)/$$lang/LC_MESSAGES; \
-		mkdir -p $(DEST_DIR)$$dir; \
-		if test -r $$cat; then realcat=$$cat; else realcat=$(srcdir)/$$cat; fi; \
-		install -m 0644 $$realcat $(DEST_DIR)$$dir/$(PACKAGE).mo; \
-	done
+	  cat=`basename $$cat`; \
+	  lang=`echo $$cat | sed -e 's/\.mo$$//'`; \
+	  dir=$(localedir)/$$lang/LC_MESSAGES; \
+	  $(mkdir_p) $(DESTDIR)$$dir; \
+	  if test -r $$cat; then realcat=$$cat; else realcat=$(srcdir)/$$cat; fi; \
+	  $(INSTALL) -m 644 $$realcat $(DESTDIR)$$dir/$(PACKAGE).mo; \
+	 done
 
-clean:
-	$(RM) $(MOFILES)
+# -- Manage translations
+
+SOURCES = $(shell cd $(top_builddir); find . -name '*.[hc]' -o -name '*.cpp' -o -name '*.tmpl')
+
+$(PACKAGE).pot:
+	cd $(top_builddir); xgettext -k_ -kN_ -d $(PACKAGE) \
+		--from-code=UTF-8 \
+		--foreign-user \
+		--package-name="$(PACKAGE)" --package-version="$(VERSION)" \
+		--msgid-bugs-address="$(PACKAGE_BUGREPORT)" \
+		-o $(abs_srcdir)/$@ $(SOURCES)
+
+# .tx
+
+push-source: $(PACKAGE).pot
+	tx push -s
+
+push-translations:
+	if [ "$fORCE" = yes ]; then tx push -t; fi
+
+pull-translations:
+	tx pull -a
+
+.PHONY: $(PACKAGE).pot
