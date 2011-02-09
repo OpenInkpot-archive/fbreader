@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fbreader @VERSION@\n"
 "Report-Msgid-Bugs-To: @PACKAGE_BUGREPORT@\n"
 "POT-Creation-Date: 2010-03-04 10:45+0100\n"
-"PO-Revision-Date: 2010-04-27 08:45+0100\n"
+"PO-Revision-Date: 2010-08-31 11:15+0100\n"
 "Last-Translator: Sven Bring <sven.bring@yahoo.se>\n"
 "Language-Team: Swedish <openinkpot-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -78,7 +78,7 @@ msgstr "Gå till föregående avsnitt"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
 msgid "Next Page"
-msgstr "Nästa sida	"
+msgstr "Nästa sida\t"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
 msgid "Previous Page"
@@ -278,6 +278,11 @@ msgstr "Bokmärke tillagt"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:380
 msgid "<- Search ->"
 msgstr "<- Sök ->"
+
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:356
+#: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:382
+msgid "Search ->"
+msgstr "Sök ->"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:358
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:384
