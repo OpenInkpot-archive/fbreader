@@ -1,3 +1,19 @@
+fbreader (0.12.10-9) zelazny; urgency=low
+
+  [ Sven Bring ]
+  * l10n: Updates to Swedish (sv) translation
+
+  [ Alexander Kerner ]
+  * Fix transparent images again
+
+  [ Nikolay Pultsin ]
+  * #330 has been fixed
+
+  [ Mikhail Gusarov ]
+  * Move translations to Tx.net
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 11 Apr 2011 23:48:10 +0200
+
 fbreader (0.12.10-8) zelazny; urgency=low
 
   * Fix rendering transparent images (PNG)
