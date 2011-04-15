@@ -199,11 +199,12 @@ std::string ZLTextView::PositionIndicator::batteryString() const {
     int x;
     FILE *f_cf, *f_cn;
 
-    if((f_cn = fopen("/sys/class/power_supply/n516-battery/charge_now", "r")) != NULL)
+	if((f_cn = fopen("/sys/class/power_supply/n516-battery/charge_now", "r")) != NULL) {
 		f_cf = fopen("/sys/class/power_supply/n516-battery/charge_full_design", "r");
-	else {
-		f_cn = fopen("/sys/class/power_supply/lbookv3_battery/charge_now", "r");
+	} else if (f_cn = fopen("/sys/class/power_supply/lbookv3_battery/charge_now", "r")) {
 		f_cf = fopen("/sys/class/power_supply/lbookv3_battery/charge_full_design", "r");
+	} else if (f_cn = fopen("/sys/class/power_supply/eb600_battery/charge_now", "r")) {
+		f_cf = fopen("/sys/class/power_supply/eb600_battery/charge_full_design", "r");
 	}
 
     if((f_cn != NULL) && (f_cf != NULL)) {
