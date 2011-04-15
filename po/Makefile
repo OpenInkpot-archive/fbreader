@@ -28,7 +28,8 @@ all: $(MOFILES)
 %.mo: %.po
 	$(MSGFMT) -o t-$@ $< && mv t-$@ $@
 
-install-data-hook: $(MOFILES)
+#install-data-hook: $(MOFILES)
+do_install: $(MOFILES)
 	for cat in "" $(MOFILES); do \
 	  if test -z "$$cat"; then continue; fi; \
 	  cat=`basename $$cat`; \

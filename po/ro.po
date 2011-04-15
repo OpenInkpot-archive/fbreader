@@ -7,194 +7,194 @@ msgstr ""
 "Project-Id-Version: OpenInkpot\n"
 "Report-Msgid-Bugs-To: http://openinkpot.org/report/\n"
 "POT-Creation-Date: 2011-02-03 02:16+0300\n"
-"PO-Revision-Date: 2011-03-22 16:04+0000\n"
-"Last-Translator: djjack <dj.jack90@gmail.com>\n"
+"PO-Revision-Date: 2011-03-27 19:28+0000\n"
+"Last-Translator: Radu_Balauta <vorrachao@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: ro\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1))\n"
 
 #: fbreader/data/default/keydefs.v3.tmpl:4
 #: fbreader/data/default/keydefs.n516.tmpl:4
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: fbreader/data/default/keydefs.v3.tmpl:5
 #: fbreader/data/default/keydefs.n516.tmpl:5
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: fbreader/data/default/keydefs.v3.tmpl:6
 #: fbreader/data/default/keydefs.n516.tmpl:6
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: fbreader/data/default/keydefs.v3.tmpl:7
 #: fbreader/data/default/keydefs.n516.tmpl:7
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: fbreader/data/default/keydefs.v3.tmpl:8
 #: fbreader/data/default/keydefs.n516.tmpl:8
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #: fbreader/data/default/keydefs.v3.tmpl:9
 #: fbreader/data/default/keydefs.n516.tmpl:9
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: fbreader/data/default/keydefs.v3.tmpl:10
 #: fbreader/data/default/keydefs.n516.tmpl:10
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: fbreader/data/default/keydefs.v3.tmpl:11
 #: fbreader/data/default/keydefs.n516.tmpl:11
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #: fbreader/data/default/keydefs.v3.tmpl:12
 #: fbreader/data/default/keydefs.n516.tmpl:12
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #: fbreader/data/default/keydefs.v3.tmpl:13
 #: fbreader/data/default/keydefs.n516.tmpl:13
 msgid "9"
-msgstr ""
+msgstr "9"
 
 #: fbreader/data/default/keydefs.v3.tmpl:14
 msgid "LP 0"
-msgstr ""
+msgstr "Apasare lunga 0"
 
 #: fbreader/data/default/keydefs.v3.tmpl:15
 msgid "LP 1"
-msgstr ""
+msgstr "Apasare lunga 1"
 
 #: fbreader/data/default/keydefs.v3.tmpl:16
 msgid "LP 2"
-msgstr ""
+msgstr "Apasare lunga 2"
 
 #: fbreader/data/default/keydefs.v3.tmpl:17
 msgid "LP 3"
-msgstr ""
+msgstr "Apasare lunga 3"
 
 #: fbreader/data/default/keydefs.v3.tmpl:18
 msgid "LP 4"
-msgstr ""
+msgstr "Apasare lunga 4"
 
 #: fbreader/data/default/keydefs.v3.tmpl:19
 msgid "LP 5"
-msgstr ""
+msgstr "Apasare lunga 5"
 
 #: fbreader/data/default/keydefs.v3.tmpl:20
 msgid "LP 6"
-msgstr ""
+msgstr "Apasare lunga 6"
 
 #: fbreader/data/default/keydefs.v3.tmpl:21
 msgid "LP 7"
-msgstr ""
+msgstr "Apasare lunga 7"
 
 #: fbreader/data/default/keydefs.v3.tmpl:22
 msgid "LP 8"
-msgstr ""
+msgstr "Apasare lunga 8"
 
 #: fbreader/data/default/keydefs.v3.tmpl:23
 msgid "LP 9"
-msgstr ""
+msgstr "Apasare lunga 9"
 
 #: fbreader/data/default/keydefs.v3.tmpl:24
 #: fbreader/data/default/keydefs.n516.tmpl:17
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: fbreader/data/default/keydefs.v3.tmpl:25
 msgid "LP OK"
-msgstr ""
+msgstr "Apasare lunga OK"
 
 #: fbreader/data/default/keydefs.v3.tmpl:26
 msgid "C"
-msgstr ""
+msgstr "C"
 
 #: fbreader/data/default/keydefs.v3.tmpl:28
 #: fbreader/data/default/keydefs.n516.tmpl:25
 msgid "Right"
-msgstr ""
+msgstr "Dreapta"
 
 #: fbreader/data/default/keydefs.v3.tmpl:29
 msgid "LP Right"
-msgstr ""
+msgstr "Apasare lunga Dreapta"
 
 #: fbreader/data/default/keydefs.v3.tmpl:30
 #: fbreader/data/default/keydefs.n516.tmpl:26
 msgid "Left"
-msgstr ""
+msgstr "Stanga"
 
 #: fbreader/data/default/keydefs.v3.tmpl:31
 msgid "LP Left"
-msgstr ""
+msgstr "Apasare lunga Stanga"
 
 #: fbreader/data/default/keydefs.v3.tmpl:32
 msgid "+"
-msgstr ""
+msgstr "+"
 
 #: fbreader/data/default/keydefs.v3.tmpl:33
 msgid "-"
-msgstr ""
+msgstr "-"
 
 #: fbreader/data/default/keydefs.n516.tmpl:14
 msgid "M/Bookmark"
-msgstr ""
+msgstr "M/Semn de carte"
 
 #: fbreader/data/default/keydefs.n516.tmpl:18
 msgid "Back"
-msgstr ""
+msgstr "Inapoi"
 
 #: fbreader/data/default/keydefs.n516.tmpl:19
 msgid "Next"
-msgstr ""
+msgstr "Urmatoarea"
 
 #: fbreader/data/default/keydefs.n516.tmpl:20
 msgid "Prior"
-msgstr ""
+msgstr "Precedenta"
 
 #: fbreader/data/default/keydefs.n516.tmpl:21
 msgid "LP Next"
-msgstr ""
+msgstr "Apasare lunga Urmatoarea"
 
 #: fbreader/data/default/keydefs.n516.tmpl:22
 msgid "LP Prior"
-msgstr ""
+msgstr "Apasare lunga Precedenta"
 
 #: fbreader/data/default/keydefs.n516.tmpl:23
 msgid "Down"
-msgstr ""
+msgstr "Jos"
 
 #: fbreader/data/default/keydefs.n516.tmpl:24
 msgid "Up"
-msgstr ""
+msgstr "Sus"
 
 #: fbreader/data/default/keydefs.n516.tmpl:28
 msgid "Zoom"
-msgstr ""
+msgstr "Zoom"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:189
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:211
 msgid "On"
-msgstr "Acceso"
+msgstr "Pornit"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:192
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.h:214
 msgid "Off"
-msgstr "Spento"
+msgstr "Oprit"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.cpp:182
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.cpp:575
 msgid "ABCabc"
-msgstr ""
+msgstr "ABCabc"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.cpp:318
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:707
@@ -203,78 +203,78 @@ msgstr ""
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1482
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1728
 msgid "Font Size"
-msgstr "Dimensione dei caratteri"
+msgstr "Dimensiune font"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
 msgid "None"
-msgstr "Nessuno"
+msgstr "Nici unul"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:84
 msgid "Add Bookmark"
-msgstr "Aggiungi segnalibro"
+msgstr "Adaugare semn de carte"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:85
 msgid "Show Bookmarks"
-msgstr "Visualizza segnalibri"
+msgstr "Afisare semne de carte"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:86
 msgid "Hyperlinks mode"
-msgstr "Modo collegamenti ipertestuali"
+msgstr "Mod hyperlinks"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:87
 msgid "Show Footnotes"
-msgstr "Visualizza note a piè di pagina"
+msgstr "Afisare Note de subsol"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:88
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:160
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1628
 msgid "Go To Page"
-msgstr "Vai a pagina"
+msgstr "Mergi la pagina"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:89
 msgid "Show Table of Contents"
-msgstr "Mostra lista dei contenuti"
+msgstr "Arata tabla de materii"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:90
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1634
 msgid "Dictionary"
-msgstr "Dizionario"
+msgstr "Dictionar"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:91
 msgid "Go to Home"
-msgstr "Vai all'inizio"
+msgstr "Catre Acasa"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:92
 msgid "Go to Start of Section"
-msgstr "Vai a inizio sezione"
+msgstr "Catre inceputul sectiunii"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:93
 msgid "Go to End of Section"
-msgstr "Vai a fine sezione"
+msgstr "Catre finalul sectiunii "
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:94
 msgid "Go to Next TOC Section"
-msgstr "Vai alla prossima sezione dei contenuti"
+msgstr "Catre sectiunea TOC urmatoare"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:95
 msgid "Go to Previous TOC Section"
-msgstr "Vai alla sezione dei contenuti precedente"
+msgstr "Catre sectiunea TOC precedenta"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:96
 msgid "Next Page"
-msgstr "Pagina successiva"
+msgstr "Pagina urmatoare"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:97
 msgid "Previous Page"
-msgstr "Pagina precedente"
+msgstr "Pagina precedenta"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:98
 msgid "Undo"
-msgstr "Annulla"
+msgstr "Anulare"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:99
 msgid "Redo"
-msgstr "Ripeti"
+msgstr "Refacere"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:100
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:361
@@ -282,67 +282,67 @@ msgstr "Ripeti"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:415
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1637
 msgid "Search"
-msgstr "Trova"
+msgstr "Cautare"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:101
 msgid "Increase Font Size"
-msgstr "Aumenta la dimensione dei caratteri"
+msgstr "Creste dimensiunea fontului"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:102
 msgid "Decrease Font Size"
-msgstr "Riduci la dimensione dei caratteri"
+msgstr "Scade dimensiunea fontului"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
 msgid "Toggle Bold Font"
-msgstr "Caratteri in grassetto"
+msgstr "Activare/dezactivare aldine"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
 msgid "Toggle Position Indicator"
-msgstr "Cambia l'indicatore di posizione"
+msgstr "Activare/dezactivare indicator de pozitie"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:105
 msgid "Show Settings"
-msgstr "Visualizza impostazioni"
+msgstr "Afiseaza setari"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:107
 msgid "Cancel/Quit"
-msgstr "Annulla/Esci"
+msgstr "Oprire/Iesire"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:109
 msgid "Show Local Menu"
-msgstr "Mostra menu locale"
+msgstr "Afiseaza meniu local"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:110
 msgid "Show Help"
-msgstr "Visualizza aiuto"
+msgstr "Afiseaza Help"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:111
 msgid "Show font size dialog"
-msgstr "Visualizza finestra dimensione carattere"
+msgstr "Afiseaza optiuni marime font"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
 msgid "Arabic"
-msgstr "Arabo"
+msgstr "Araba"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:120
 msgid "Czech"
-msgstr "Cecoslovacco"
+msgstr "Ceha"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:121
 msgid "German"
-msgstr "Tedesco"
+msgstr "Germana"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:122
 msgid "German (traditional orthography)"
-msgstr "Tedesco (ortografia tradizionale)"
+msgstr "Germana (ortografie traditionala)"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:123
 msgid "Greek"
-msgstr "Greco"
+msgstr "Greaca"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:124
 msgid "English"
-msgstr "Inglese"
+msgstr "Engleza"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:125
 msgid "Esperanto"
@@ -350,132 +350,132 @@ msgstr "Esperanto"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:126
 msgid "Spanish"
-msgstr "Spagnolo"
+msgstr "Spaniola"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:127
 msgid "Finnish"
-msgstr "Finlandese"
+msgstr "Finlandeza"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:128
 msgid "French"
-msgstr "Francese"
+msgstr "Franceza"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:129
 msgid "Hebrew"
-msgstr "Ebraico"
+msgstr "Ebraica"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:130
 msgid "Indonesian"
-msgstr "Indonesiano"
+msgstr "Indoneziana"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:131
 msgid "Italian"
-msgstr "Italiano"
+msgstr "Italiana"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:132
 msgid "Norwegian"
-msgstr "Norvegese"
+msgstr "Norvegiana"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:133
 msgid "Portuguese"
-msgstr "Portoghese"
+msgstr "Portugheza"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:134
 msgid "Russian"
-msgstr "Russo"
+msgstr "Rusa"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:135
 msgid "Swedish"
-msgstr "Svedese"
+msgstr "Suedeza"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:136
 msgid "Turkish"
-msgstr "Turco"
+msgstr "Turca"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:137
 msgid "Ukrainian"
-msgstr "Ucraino"
+msgstr "Ucraineana"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:138
 msgid "Chinese"
-msgstr "Cinese"
+msgstr "Chineza "
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:139
 msgid "Other"
-msgstr "Altro"
+msgstr "Alta"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:143
 msgid "undefined"
-msgstr "indefinito"
+msgstr "nedefinit"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:143
 msgid "left"
-msgstr "sinistra"
+msgstr "stanga"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:143
 msgid "right"
-msgstr "destra"
+msgstr "dreapta"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:143
 msgid "center"
-msgstr "centro"
+msgstr "centru"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:143
 msgid "justify"
-msgstr "giustificato"
+msgstr "aliniaza central"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:144
 msgid "New Line"
-msgstr "Nuova riga"
+msgstr "Rand nou"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:144
 msgid "Empty Line"
-msgstr "Riga vuota"
+msgstr "Rand gol"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:144
 msgid "Line With Indent"
-msgstr "Linea indentata"
+msgstr "Rand cu indent"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:238
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1631
 msgid "Table Of Contents"
-msgstr "Lista dei contenuti"
+msgstr "Tabla de materii"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:303
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1640
 msgid "Bookmarks"
-msgstr "Segnalibri"
+msgstr "Semne de carte"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:304
 msgid "Delete"
-msgstr "Cancella"
+msgstr "Sterge"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:312
 msgid "Page "
-msgstr "Pagina "
+msgstr "Pagina"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:326
 msgid "Bookmark added"
-msgstr "Segnalibro aggiunto"
+msgstr "Semn de carte adaugat"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:355
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:381
 msgid "<- Search ->"
-msgstr "<- Trova ->"
+msgstr "<- Cautare ->"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:357
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:383
 msgid "Search ->"
-msgstr "Trova ->"
+msgstr "Cautare ->"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:359
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:385
 msgid "<- Search"
-msgstr "<- Trova"
+msgstr "<- Cautare"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:368
 msgid "Text not found"
-msgstr "Testo non trovato"
+msgstr "Textul nu a fost gasit"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:502
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:719
@@ -494,22 +494,22 @@ msgstr "%dpt"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:652
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:744
 msgid "Left Margin"
-msgstr "Margine Sinistro"
+msgstr "Margine stanga"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:655
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:745
 msgid "Right Margin"
-msgstr "Margine Destro"
+msgstr "Margine dreapta"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:658
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:746
 msgid "Top Margin"
-msgstr "Margine Superiore"
+msgstr "Margine superioara"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:661
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:747
 msgid "Bottom Margin"
-msgstr "Margine Inferiore"
+msgstr "Margine inferioara"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:694
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:865
@@ -517,19 +517,19 @@ msgstr "Margine Inferiore"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1245
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1481
 msgid "Font Family"
-msgstr "Tipo di caratteri"
+msgstr "Familie de fonturi"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:716
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1216
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1484
 msgid "Line Spacing"
-msgstr "Interlinea"
+msgstr "Spatiere randuri"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:723
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1217
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1485
 msgid "Alignment"
-msgstr "Allineamento"
+msgstr "Aliniere"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:733
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1218
@@ -541,178 +541,178 @@ msgstr "Margini"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1219
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1487
 msgid "First Line Indent"
-msgstr "Rientro prima riga"
+msgstr "Indentare prim rand"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:765
 msgid "Book Settings"
-msgstr "Preferenze Libro"
+msgstr "Setari carte"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:781
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1254
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1513
 msgid "Language"
-msgstr "Lingua"
+msgstr "Limba"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:784
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:794
 msgid "Encoding"
-msgstr "Codifica"
+msgstr "Encodare"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:793
 msgid "Encoding Set"
-msgstr "Set di codifica"
+msgstr "Set encodare"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:829
 msgid "Break Paragraph at"
-msgstr "Interrompi il paragrafo a"
+msgstr "Opreste paragraful la"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:851
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1243
 msgid "Indicator Height"
-msgstr "Altezza Indicatore"
+msgstr "Indicator inaltime"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:858
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1244
 msgid "Offset From Text"
-msgstr "Distanza dal Testo"
+msgstr "Deviatie de la text"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:878
 msgid "Indicator Font Size"
-msgstr "Dimensione Testo Indicatore"
+msgstr "Indicator dimensiune font"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:953
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1275
 msgid "Default Language"
-msgstr "Lingua Predefinita"
+msgstr "Limba de baza"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:961
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1114
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1284
 msgid "Default Encoding Set"
-msgstr "Set di codifica predefinito"
+msgstr "Set de encodare din fabrica"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:968
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1121
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1285
 msgid "Default Encoding"
-msgstr "Codifica predefinita"
+msgstr "Encodare din fabrica"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1103
 msgid "Book Language"
-msgstr "Lingua del libro"
+msgstr "Limba carte"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1147
 msgid "Break Paragraph At"
-msgstr "Interrompi il paragrafo a"
+msgstr "Opreste paragraf la"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1175
 #, c-format
 msgid "Key %s"
-msgstr "Tasto %s"
+msgstr "Tasta %s"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1204
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1472
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1511
 msgid "Format & Style"
-msgstr "Formato e stile"
+msgstr "Format si stil"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1214
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1246
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1482
 #, c-format
 msgid "%ldpt"
-msgstr ""
+msgstr "%ldpt"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1215
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1247
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1483
 msgid "Bold"
-msgstr "Grassetto"
+msgstr "Aldine"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1216
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1484
 #, c-format
 msgid "%ld%%"
-msgstr ""
+msgstr "%ld%%"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1220
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1488
 msgid "Auto Hyphenations"
-msgstr "Sillabazione automatica"
+msgstr "Introducere automata cratime"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1229
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1512
 msgid "Indicator"
-msgstr "Indicatore"
+msgstr "Indicator"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1238
 msgid "Show Indicator"
-msgstr "Mostra indicatore"
+msgstr "Afiseaza indicator"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1239
 msgid "Show TOC Marks"
-msgstr "Mostra indicatori di lista contenuti"
+msgstr "Afiseaza marcaje TOC"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1240
 msgid "Show Position"
-msgstr "Mostra posizione"
+msgstr "Afiseaza pozitie"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1241
 msgid "Show Time"
-msgstr "Visualizza orario"
+msgstr "Afiseaza ora"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1242
 msgid "Show Battery"
-msgstr "Visualizza batteria"
+msgstr "Afiseaza starea bateriei"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1266
 msgid "Detect Language and Encoding"
-msgstr "Rileva lingua e codifica"
+msgstr "Detecteaza limbaj si encodare"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1376
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1514
 msgid "Keys"
-msgstr "Chiavi"
+msgstr "Taste"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1489
 msgid "Book settings"
-msgstr "Preferenze Libro"
+msgstr "Setari carte"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1502
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1643
 msgid "Settings"
-msgstr "Preferenze"
+msgstr "Setari"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1528
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1625
 msgid "Book Info"
-msgstr "Informazioni sul Libro"
+msgstr "Informatii carte"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1543
 msgid "File: "
-msgstr "File: "
+msgstr "Fisier:"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1545
 msgid "Title: "
-msgstr "Titolo: "
+msgstr "Titlu:"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1554
 msgid "Author: "
-msgstr "Autore: "
+msgstr "Autor:"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1557
 msgid "Series: "
-msgstr "Serie: "
+msgstr "Serie:"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1560
 msgid "Book number: "
-msgstr "Numero del libro: "
+msgstr "Numar carte:"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1620
 msgid "Book Menu"
-msgstr "Menu del Libro"
+msgstr "Meniu carte"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:127
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:145
 msgid "FBReader: Help"
-msgstr "FBReader: Aiuto"
+msgstr "FBReader: Ajutor"
