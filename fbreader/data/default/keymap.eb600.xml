@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<keymap>
+	<binding key="Delete" action="toggleIndicator"/>
+	<binding key="Alt+Delete" action="toggleTurbo"/>
+	<binding key="Play" action="addBookmark"/>
+	<binding key="Alt+Play" action="showBookmarks"/>
+	<binding key="Alt+Left" action="previousTOCSection"/>
+	<binding key="Alt+Right" action="nextTOCSection"/>
+	<binding key="Alt+Down" action="showFootnotes"/>
+	<binding key="Alt+Up" action="dictionary"/>
+	<binding key="Return" action="menu"/> 
+	<binding key="Alt+Return" action="preferences"/> 
+	<binding key="Escape" action="cancel"/>
+	<binding key="Right" action="pageForward"/>
+	<binding key="Left" action="pageBackward"/>
+	<binding key="+" action="increaseFont"/>
+	<binding key="-" action="decreaseFont"/>
+</keymap>
