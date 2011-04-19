@@ -1,6 +1,6 @@
 # Automake crap added in
 PACKAGE = fbreader
-datadir=$(SHAREDIR)
+datadir=/usr/share
 mkdir_p=mkdir -p
 srcdir=.
 INSTALL=install
