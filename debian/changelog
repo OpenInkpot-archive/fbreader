@@ -1,3 +1,9 @@
+fbreader (0.12.10-11) zelazny; urgency=low
+
+  * Fix the location of locale files
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Fri, 29 Apr 2011 22:41:33 +0200
+
 fbreader (0.12.10-10) zelazny; urgency=low
 
   [ Sven Bring ]
