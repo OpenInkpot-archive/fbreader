@@ -194,7 +194,7 @@ msgstr "Aus"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.cpp:182
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.cpp:575
 msgid "ABCabc"
-msgstr ""
+msgstr "ABCabc"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.cpp:318
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:707
@@ -621,7 +621,7 @@ msgstr "Formatierung und Stil"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1482
 #, c-format
 msgid "%ldpt"
-msgstr ""
+msgstr "%ldpt"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1215
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1247
@@ -633,7 +633,7 @@ msgstr "Fett"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1484
 #, c-format
 msgid "%ld%%"
-msgstr ""
+msgstr "%ld%%"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1220
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1488
