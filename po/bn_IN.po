@@ -1,13 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenInkpot\n"
 "Report-Msgid-Bugs-To: http://openinkpot.org/report/\n"
 "POT-Creation-Date: 2011-02-03 02:16+0300\n"
-"PO-Revision-Date: 2011-04-15 16:54+0000\n"
+"PO-Revision-Date: 2011-06-06 21:30+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -716,3 +715,5 @@ msgstr ""
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:145
 msgid "FBReader: Help"
 msgstr ""
+
+
