@@ -1,14 +1,16 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
+# Translators:
+#   <damman@wxs.nl>, 2011.
+# Mikhail Gusarov <dottedmag@dottedmag.net>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenInkpot\n"
 "Report-Msgid-Bugs-To: http://openinkpot.org/report/\n"
 "POT-Creation-Date: 2011-02-03 02:16+0300\n"
-"PO-Revision-Date: 2011-03-22 16:04+0000\n"
-"Last-Translator: dottedmag <dottedmag@dottedmag.net>\n"
+"PO-Revision-Date: 2011-07-30 16:11+0000\n"
+"Last-Translator: RoyD <damman@wxs.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -194,7 +196,7 @@ msgstr "Uit"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.cpp:182
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.cpp:575
 msgid "ABCabc"
-msgstr ""
+msgstr "ABCabc"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlChoicebox.cpp:318
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:707
@@ -203,7 +205,7 @@ msgstr ""
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1482
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1728
 msgid "Font Size"
-msgstr "Font grootte"
+msgstr "Fontgrootte"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:83
 msgid "None"
@@ -294,11 +296,11 @@ msgstr "Verklein Font"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:103
 msgid "Toggle Bold Font"
-msgstr "Font Bold aan/uit"
+msgstr "Omschakelen Font Vet"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:104
 msgid "Toggle Position Indicator"
-msgstr "Positie Indicator aan/uit"
+msgstr "Omschakelen Positieindicator"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:105
 msgid "Show Settings"
@@ -318,7 +320,7 @@ msgstr "Toon tijd"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:111
 msgid "Show font size dialog"
-msgstr "Toon font grote menu "
+msgstr "Toon fontgrootte menu "
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:119
 msgid "Arabic"
@@ -406,7 +408,7 @@ msgstr "Anders"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:143
 msgid "undefined"
-msgstr "niet gedefinieerd"
+msgstr "ongedefinieerd"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:143
 msgid "left"
@@ -517,7 +519,7 @@ msgstr "Ondermarge"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1245
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1481
 msgid "Font Family"
-msgstr "Font type"
+msgstr "Fonttype"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:716
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1216
@@ -545,7 +547,7 @@ msgstr "Eerste regel inspringen"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:765
 msgid "Book Settings"
-msgstr "Boek Instellingen"
+msgstr "Boekinstellingen"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:781
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1254
@@ -569,7 +571,7 @@ msgstr "Breek paragraaf af op"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:851
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1243
 msgid "Indicator Height"
-msgstr "Indicator hoogte"
+msgstr "Indicatorhoogte"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:858
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1244
@@ -578,7 +580,7 @@ msgstr "Afstand van tekst"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:878
 msgid "Indicator Font Size"
-msgstr "Indicator Font Grootte"
+msgstr "Indicator Fontgrootte"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:953
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1275
@@ -614,14 +616,14 @@ msgstr "Toets %s"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1472
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1511
 msgid "Format & Style"
-msgstr "Formaat & Style"
+msgstr "Formaat & Stijl"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1214
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1246
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1482
 #, c-format
 msgid "%ldpt"
-msgstr ""
+msgstr "%ldpt"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1215
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1247
@@ -633,7 +635,7 @@ msgstr "Vet"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1484
 #, c-format
 msgid "%ld%%"
-msgstr ""
+msgstr "%ld%%"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1220
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1488
@@ -663,7 +665,7 @@ msgstr "Toon Tijd"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1242
 msgid "Show Battery"
-msgstr "Toon Battery status"
+msgstr "Toon Batterijstatus"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1266
 msgid "Detect Language and Encoding"
@@ -676,7 +678,7 @@ msgstr "Toetsen"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1489
 msgid "Book settings"
-msgstr "Boek instellingen"
+msgstr "Boekinstellingen"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1502
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1643
@@ -686,7 +688,7 @@ msgstr "Instellingen"
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1528
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1625
 msgid "Book Info"
-msgstr "Boek informatie"
+msgstr "Boekinformatie"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1543
 msgid "File: "
@@ -706,13 +708,15 @@ msgstr "Serie:"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1560
 msgid "Book number: "
-msgstr "Boek nummer:"
+msgstr "Boeknummer:"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlDialogs.cpp:1620
 msgid "Book Menu"
-msgstr "Boek menu:"
+msgstr "Boekmenu:"
 
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:127
 #: zlibrary/ui/src/ewl/dialogs/ZLEwlHelp.cpp:145
 msgid "FBReader: Help"
 msgstr "FBReader: Help"
+
+
