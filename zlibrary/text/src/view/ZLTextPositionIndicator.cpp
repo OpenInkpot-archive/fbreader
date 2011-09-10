@@ -194,35 +194,47 @@ std::string ZLTextView::PositionIndicator::textPositionString() const {
 std::string ZLTextView::PositionIndicator::batteryString() const {
 	std::string buffer;
 
-    char b[10];
-    int charge;
-    int x;
-    FILE *f_cf, *f_cn;
+	char b[10];
+	int charge;
+	int x;
+	FILE *f_cf = NULL, *f_cn = NULL;
 
-	if((f_cn = fopen("/sys/class/power_supply/n516-battery/charge_now", "r")) != NULL) {
-		f_cf = fopen("/sys/class/power_supply/n516-battery/charge_full_design", "r");
-	} else if (f_cn = fopen("/sys/class/power_supply/lbookv3_battery/charge_now", "r")) {
-		f_cf = fopen("/sys/class/power_supply/lbookv3_battery/charge_full_design", "r");
-	} else if (f_cn = fopen("/sys/class/power_supply/eb600_battery/charge_now", "r")) {
-		f_cf = fopen("/sys/class/power_supply/eb600_battery/charge_full_design", "r");
+	const char *batteries[] = {
+		"n516-battery",
+		"lbookv3_battery",
+		"eb600_battery",
+		"prs505-battery",
+		NULL
+	};
+
+	const char **bname = batteries;
+
+	while (*bname != NULL) {
+		std::string fname("/sys/class/power_supply/");
+		fname += *bname;
+		if (f_cn = fopen((fname + "/charge_now").c_str(), "r")) {
+			f_cf = fopen((fname + "/charge_full_design").c_str(), "r");
+			break;
+		}
+		bname++;
 	}
 
-    if((f_cn != NULL) && (f_cf != NULL)) {
-        fgets(b, 10, f_cn);
-        charge = atoi(b);
-        fgets(b, 10, f_cf);
-        x = atoi(b);
-        if(x > 0)
-            charge = charge * 100 / atoi(b);
-    } else
-        charge = 0;
+	if((f_cn != NULL) && (f_cf != NULL)) {
+		fgets(b, 10, f_cn);
+		charge = atoi(b);
+		fgets(b, 10, f_cf);
+		x = atoi(b);
+		if(x > 0)
+			charge = charge * 100 / atoi(b);
+	} else
+		charge = 0;
 
-    if(f_cn != NULL)
-        fclose(f_cn);
-    if(f_cf != NULL)
-        fclose(f_cf);
+	if(f_cn != NULL)
+		fclose(f_cn);
+	if(f_cf != NULL)
+		fclose(f_cf);
 
-    sprintf(b, " <%d\%%>", charge);
+	sprintf(b, " <%d\%%>", charge);
 
 	buffer += std::string(b);
 
