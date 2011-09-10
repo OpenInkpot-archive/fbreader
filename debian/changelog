@@ -1,3 +1,9 @@
+fbreader (0.12.10-13) zelazny; urgency=low
+
+  * Add new keys for PRS505
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 10 Sep 2011 20:51:04 +0200
+
 fbreader (0.12.10-12) zelazny; urgency=low
 
   * Add settings for PRS505
