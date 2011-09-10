@@ -286,6 +286,7 @@ ZLPaintContext *ZLEwlLibraryImplementation::createContext() {
 
 static const char *cursor_keys[] = { "Up", "Right", "Down", "Left", "Up", "Right", "Down", "Left" };
 static const char *jog_keys[] = { "Prior", "Next", "Next", "Prior", "Next", "Prior", "Prior", "Next" };
+static const char *jog_keys_2[] = { "XF86Back", "XF86Forward", "XF86Forward", "XF86Back", "XF86Forward", "XF86Back", "XF86Back", "XF86Forward" };
 
 struct _key {
 	int keynum;
@@ -322,10 +323,13 @@ static struct _key _keys[] = {
 //	{ 161, "XF86RotateWindows", NULL },
 	{ 172, "XF86AudioPlay", NULL },
 	{ 225, "XF86Search", NULL },
-       { 98, "Up", &cursor_keys[0] },
-       { 104, "Down", &cursor_keys[2] },
-       { 100, "Left", &cursor_keys[3] },
-       { 102, "Right", &cursor_keys[1] },
+	{ 98, "Up", &cursor_keys[0] },
+	{ 104, "Down", &cursor_keys[2] },
+	{ 100, "Left", &cursor_keys[3] },
+	{ 102, "Right", &cursor_keys[1] },
+	{ 185, "XF86Forward", &jog_keys_2[4] },
+	{ 186, "XF86Back", &jog_keys_2[0] },
+	{ 243, "XF86AddFavorite", NULL},
 
 	{ 0, NULL, NULL }
 };
