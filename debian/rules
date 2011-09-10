@@ -8,7 +8,7 @@ CC=$(DEB_HOST_GNU_TYPE)-gcc
 LD=$(DEB_HOST_GNU_TYPE)-g++
 MAKE := CC=$(CC) LD=$(LD) $(MAKE)
 
-flavours := v3 n516 eb600
+flavours := v3 n516 eb600 prs505
 
 clean:
 		dh_testdir

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<keymap>
+	<binding key="0" action="help"/>
+	<binding key="1" action="redo"/>
+	<binding key="2" action="gotoPageNumber"/>
+	<binding key="3" action="addBookmark"/>
+	<binding key="4" action="previousTOCSection"/>
+	<binding key="5" action="nextTOCSection"/>
+	<binding key="6" action="showFootnotes"/>
+	<binding key="7" action="toc"/>
+	<binding key="8" action="hyperlinkNavStart"/>
+	<binding key="9" action="dictionary"/>
+
+	<binding key="Return" action="menu"/>
+	<binding key="XF86AddFavorite" action="cancel"/>
+
+	<binding key="Next" action="pageForward"/>
+	<binding key="Prior" action="pageBackward"/>
+	<binding key="Down" action="pageForward"/>
+	<binding key="Up" action="pageBackward"/>
+	<binding key="Right" action="pageForward"/>
+	<binding key="Left" action="pageBackward"/>
+
+	<binding key="XF86Forward" action="pageForward"/>
+	<binding key="XF86Back" action="pageBackward"/>
+	<binding key="XF86Search" action="fontSizeDialog"/>
+</keymap>

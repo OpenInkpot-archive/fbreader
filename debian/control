@@ -53,6 +53,16 @@ Replaces: fbreader-settings
 Description: n516 specific settings
  This package contains n516 specific settings: keybindings, styles, etc.
 
+Package: fbreader-settings-prs505
+Priority: optional
+Architecture: all
+Depends: fbreader (>= 0.12.1-9)
+Provides: fbreader-settings
+Conflicts: fbreader-settings, fbreader (< 0.12.1-9)
+Replaces: fbreader-settings
+Description: prs505 specific settings
+ This package contains prs505 specific settings: keybindings, styles, etc.
+
 Package: fbreader-settings-eb600
 Priority: optional
 Architecture: all
